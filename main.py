@@ -20,8 +20,8 @@ MAX_CONCURRENT_HTTP = 50
 MAX_CONCURRENT_PING = 200
 
 PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
-# Улучшенная регулярка - обрезаем всё, что не URL (включая эмодзи)
-PROXY_REGEX = re.compile(r'(' + '|'.join(PROXY_SCHEMES) + r')://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
+# ИСПРАВЛЕНО: используем non-capturing group (?:...) вместо (...)
+PROXY_REGEX = re.compile(r'(?:' + '|'.join(PROXY_SCHEMES) + r')://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
 BLACKLIST_DOMAINS = ['t.me', 'telegram.org', 'telegram.me', 'telegra.ph', 'github.com', 'youtube.com', 'youtu.be', 'instagram.com', 'twitter.com', 'x.com']
@@ -47,7 +47,7 @@ def is_valid_url(url):
         result = urlparse(url)
         if not all([result.scheme, result.netloc]):
             return False
-        if result.scheme == 'tg':  # Фильтруем tg:// ссылки
+        if result.scheme == 'tg':
             return False
         if any(d in result.netloc for d in BLACKLIST_DOMAINS):
             return False
@@ -56,17 +56,25 @@ def is_valid_url(url):
         return False
 
 def clean_url(url):
-    """Убирает мусор с конца URL (эмодзи и пр.)"""
-    # Обрезаем на первом не-ASCII символе
+    """Убирает мусор с конца URL (эмодзи, лишние скобки и пр.)"""
+    # Убираем не-ASCII символы
     for i, char in enumerate(url):
         if ord(char) > 127:
-            return url[:i]
+            url = url[:i]
+            break
+    
+    # Убираем лишние закрывающие скобки в конце
+    while url.endswith(')') and url.count(')') > url.count('('):
+        url = url[:-1]
+    
+    # Убираем другие типичные "прилипшие" символы
+    url = url.rstrip('.,;:!?')
+    
     return url
 
 def extract_from_element(element):
     proxies, urls = [], []
     
-    # Извлекаем из <a> тегов
     if hasattr(element, 'find_all'):
         for a in element.find_all('a', href=True):
             href = clean_url(a['href'].strip())
@@ -75,14 +83,11 @@ def extract_from_element(element):
             elif href.startswith('http'):
                 urls.append(href)
     
-    # Извлекаем из текста
     text = element.get_text() if hasattr(element, 'get_text') else str(element)
     
-    # Ищем прокси
     for match in PROXY_REGEX.finditer(text):
         proxies.append(clean_url(match.group(0)))
     
-    # Ищем URL
     for match in URL_REGEX.finditer(text):
         url = clean_url(match.group(0))
         if is_valid_url(url):
@@ -93,7 +98,6 @@ def extract_from_element(element):
 async def fetch(session, url, sem):
     async with sem:
         try:
-            # Фильтруем не-HTTP схемы
             if not url.startswith(('http://', 'https://')):
                 return ""
             
@@ -294,12 +298,9 @@ async def main():
             if not src.startswith('http'):
                 continue
             if src.startswith('https://t.me/'):
-                # Проверяем, это топик или канал
                 if re.search(r'/\d+$', src):
-                    # Топик - используем embed формат
                     web_url = f"{src}?embed=1&mode=tme"
                 else:
-                    # Канал - используем /s/
                     web_url = src.replace('https://t.me/', 'https://t.me/s/')
                 source_tasks.append((web_url, fetch(session, web_url, http_sem)))
             else:
@@ -324,9 +325,11 @@ async def main():
         for res in sub_results:
             all_proxies.extend(res)
 
-    # Уникализация
     all_proxies = [p for p in set(all_proxies) if p and '://' in p]
     print(f"[{time.time()-start_time:.1f}s] Найдено сырых прокси: {len(all_proxies)}")
+    
+    if all_proxies:
+        debug_log(f"Примеры прокси: {all_proxies[:3]}")
 
     happ_links = []
     proxies_to_ping = []
@@ -355,7 +358,6 @@ async def main():
                 
     print(f"[{time.time()-start_time:.1f}s] Живых серверов: {len(alive_proxies)}")
 
-    # Сохранение
     alive_uris = [uri for uri, _ in alive_proxies]
     all_uris = alive_uris + happ_links 
     
