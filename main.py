@@ -2,26 +2,29 @@ import os
 import re
 import base64
 import asyncio
-import requests
 import yaml
 import json
-from bs4 import BeautifulSoup
+import time
 from datetime import datetime, timezone, timedelta
-from urllib.parse import parse_qs, unquote
+from urllib.parse import parse_qs, unquote, urlparse
+from bs4 import BeautifulSoup
+import aiohttp
 
 # --- КОНФИГУРАЦИЯ ---
 SOURCES_FILE = 'sources.txt'
 OUT_TXT = 'proxy.txt'
 OUT_YAML = 'proxy.yaml'
 MAX_DAYS = 10
-TIMEOUT_REQ = 10
-TIMEOUT_PING = 3.0
+TIMEOUT = aiohttp.ClientTimeout(total=7, connect=5)  # Жесткие таймауты
+MAX_CONCURRENT_HTTP = 50   # Не больше 50 одновременных HTTP-запросов
+MAX_CONCURRENT_PING = 200  # Не больше 200 одновременных пингов
 
 PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
-PROXY_REGEX = re.compile(r'(' + '|'.join(PROXY_SCHEMES) + r')://[^\s<>"\'`]+', re.IGNORECASE)
-URL_REGEX = re.compile(r'https?://[^\s<>"\'`]+', re.IGNORECASE)
+PROXY_REGEX = re.compile(r'(' + '|'.join(PROXY_SCHEMES) + r')://[^\s<>"\'`,)]+', re.IGNORECASE)
+URL_REGEX = re.compile(r'https?://[^\s<>"\'`,)]+', re.IGNORECASE)
 
-visited_subs = set()
+# Домены, которые мы не ходим проверять (чтобы не тратить время)
+BLACKLIST_DOMAINS = ['t.me', 'telegram.org', 'telegram.me', 'telegra.ph', 'github.com', 'youtube.com', 'youtu.be', 'instagram.com', 'twitter.com', 'x.com']
 
 def decode_base64(s):
     s = s.strip().replace('-', '+').replace('_', '/')
@@ -32,59 +35,60 @@ def decode_base64(s):
     except Exception:
         return ""
 
-def fetch_content(url):
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+def is_valid_url(url):
+    """Быстрая валидация URL, чтобы не ходить по мусору"""
     try:
-        resp = requests.get(url, headers=headers, timeout=TIMEOUT_REQ, allow_redirects=True)
-        return resp.text
+        result = urlparse(url)
+        if not all([result.scheme, result.netloc]):
+            return False
+        if any(d in result.netloc for d in BLACKLIST_DOMAINS):
+            return False
+        return True
     except Exception:
-        return ""
+        return False
 
 def extract_from_element(element):
-    """Извлекает прокси и URL подписок из HTML элемента сообщения"""
     proxies, urls = [], []
-    
     if hasattr(element, 'find_all'):
         for a in element.find_all('a', href=True):
             href = a['href']
             if href.startswith(tuple(f"{s}://" for s in PROXY_SCHEMES)):
-                proxies.append(href)
-            elif href.startswith('http') and 't.me' not in href and 'telegram' not in href:
-                urls.append(href)
-                
-    text = element.get_text() if hasattr(element, 'get_text') else str(element)
-    proxies.extend(PROXY_REGEX.findall(text))
+                proxies.append(href.strip())
+            elif is_valid_url(href):
+                urls.append(href.strip())
     
-    for u in URL_REGEX.findall(text):
-        if not any(d in u for d in ['t.me', 'telegram.org', 'telegram.me', 'telegra.ph']):
-            urls.append(u)
-            
+    text = element.get_text() if hasattr(element, 'get_text') else str(element)
+    proxies.extend([p.strip() for p in PROXY_REGEX.findall(text)])
+    urls.extend([u.strip() for u in URL_REGEX.findall(text) if is_valid_url(u)])
+    
     return list(set(proxies)), list(set(urls))
 
-def extract_from_topic_or_channel(url):
-    """
-    Парсит топик (тему) или канал целиком.
-    Собирает только сообщения за последние MAX_DAYS дней.
-    """
-    html = fetch_content(url)
-    if not html:
-        return [], []
-        
+async def fetch(session, url, sem):
+    """Асинхронный HTTP-запрос с семафором"""
+    async with sem:
+        try:
+            async with session.get(url, allow_redirects=True) as resp:
+                if resp.status == 200:
+                    return await resp.text()
+        except Exception:
+            pass
+        return ""
+
+def extract_messages_data(html, cutoff_date):
+    """Парсит HTML (топик или канал), возвращает сообщения только за последние N дней"""
     soup = BeautifulSoup(html, 'html.parser')
     messages = soup.find_all('div', class_='tgme_widget_message')
     
     all_proxies, all_urls = [], []
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS)
     
     for msg in messages:
-        # Проверка даты для каждого сообщения
         time_tag = msg.find('time')
         if time_tag and time_tag.get('datetime'):
             try:
                 dt_str = time_tag['datetime'].replace('Z', '+00:00')
                 post_time = datetime.fromisoformat(dt_str)
                 if post_time < cutoff_date:
-                    continue # Пропускаем старые посты
+                    continue
             except Exception:
                 pass
                 
@@ -94,48 +98,47 @@ def extract_from_topic_or_channel(url):
         
     return all_proxies, all_urls
 
-def process_subscription(url):
-    """Скачивает подписку, декодирует Base64 и возвращает список прокси"""
-    if url in visited_subs: return []
+async def process_subscription(url, session, sem, visited_subs):
+    """Скачивает и декодирует подписку"""
+    if url in visited_subs:
+        return []
     visited_subs.add(url)
     
-    if url.startswith('happ://'): return [url]
-    
-    text = fetch_content(url)
-    if not text: return []
+    if url.startswith('happ://'):
+        return [url]
+        
+    text = await fetch(session, url, sem)
+    if not text:
+        return []
     
     proxies = []
-    
-    # Декодируем Base64 (стандарт для панелей типа 3x-ui)
     decoded = decode_base64(text)
     search_text = decoded if decoded and PROXY_REGEX.search(decoded) else text
     
-    proxies.extend(PROXY_REGEX.findall(search_text))
-    
-    # Рекурсия 1 уровня
-    for sub_url in URL_REGEX.findall(search_text):
-        if sub_url.startswith('http'):
-            proxies.extend(process_subscription(sub_url))
-            
-    return list(set(proxies))
+    proxies.extend([p.strip() for p in PROXY_REGEX.findall(search_text)])
+    return proxies
 
-async def check_proxy_tcp(host, port):
-    try:
-        port_int = int(port)
-        _, writer = await asyncio.wait_for(asyncio.open_connection(host, port_int), timeout=TIMEOUT_PING)
-        writer.close()
-        await writer.wait_closed()
-        return True
-    except Exception:
-        return False
+async def check_proxy_tcp(host, port, sem):
+    """Быстрый асинхронный TCP-пинг"""
+    async with sem:
+        try:
+            port_int = int(port)
+            _, writer = await asyncio.wait_for(
+                asyncio.open_connection(host, port_int), 
+                timeout=2.0  # 2 секунды на пинг
+            )
+            writer.close()
+            await writer.wait_closed()
+            return True
+        except Exception:
+            return False
 
 def parse_uri_for_clash(uri):
     try:
         scheme, rest = uri.split('://', 1)
         scheme = scheme.lower()
-        
         if scheme == 'happ': return None
-            
+        
         if scheme == 'vmess':
             data = json.loads(decode_base64(rest))
             return {
@@ -182,6 +185,8 @@ def parse_uri_for_clash(uri):
     return None
 
 async def main():
+    start_time = time.time()
+    
     if not os.path.exists(SOURCES_FILE):
         print("Файл sources.txt не найден!")
         return
@@ -189,50 +194,83 @@ async def main():
     with open(SOURCES_FILE, 'r', encoding='utf-8') as f:
         sources = [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
+    http_sem = asyncio.Semaphore(MAX_CONCURRENT_HTTP)
+    ping_sem = asyncio.Semaphore(MAX_CONCURRENT_PING)
+    cutoff_date = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS)
+    
     all_proxies = []
-    
-    print(f"Начинаем сбор из {len(sources)} источников...")
-    for src in sources:
-        if not src.startswith('http'): continue
+    sub_urls = set()
+    visited_subs = set()
+
+    async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
+        # --- ШАГ 1: Параллельно скачиваем HTML всех источников ---
+        print(f"[{time.time()-start_time:.1f}s] Скачиваем {len(sources)} источников...")
         
-        if src.startswith('https://t.me/'):
-            # Преобразуем в формат для web-preview: https://t.me/s/...
-            web_url = src.replace('https://t.me/', 'https://t.me/s/')
-            print(f"Парсим: {web_url}")
-            p, u = extract_from_topic_or_channel(web_url)
-            all_proxies.extend(p)
-            for link in u:
-                all_proxies.extend(process_subscription(link))
-        else:
-            # Прямая ссылка на подписку
-            all_proxies.extend(process_subscription(src))
+        source_tasks = []
+        for src in sources:
+            if not src.startswith('http'):
+                continue
+            if src.startswith('https://t.me/'):
+                web_url = src.replace('https://t.me/', 'https://t.me/s/')
+                source_tasks.append((web_url, fetch(session, web_url, http_sem)))
+            else:
+                sub_urls.add(src) # Прямые подписки
+        
+        # Выполняем все запросы параллельно
+        results = await asyncio.gather(*[t[1] for t in source_tasks])
+        
+        # Парсим результаты
+        for (url, _), html in zip(source_tasks, results):
+            if html:
+                p, u = extract_messages_data(html, cutoff_date)
+                all_proxies.extend(p)
+                for link in u:
+                    sub_urls.add(link)
+        
+        print(f"[{time.time()-start_time:.1f}s] Найдено ссылок на подписки: {len(sub_urls)}")
 
-    all_proxies = [p.strip() for p in set(all_proxies) if p and '://' in p]
-    print(f"Найдено сырых ссылок: {len(all_proxies)}")
+        # --- ШАГ 2: Параллельно скачиваем все подписки ---
+        print(f"[{time.time()-start_time:.1f}s] Обрабатываем подписки...")
+        sub_tasks = [process_subscription(url, session, http_sem, visited_subs) for url in sub_urls]
+        sub_results = await asyncio.gather(*sub_tasks)
+        
+        for res in sub_results:
+            all_proxies.extend(res)
 
-    proxies_to_ping, happ_links = [], []
+    # Уникализация
+    all_proxies = [p for p in set(all_proxies) if p and '://' in p]
+    print(f"[{time.time()-start_time:.1f}s] Найдено сырых прокси: {len(all_proxies)}")
+
+    # Разделяем happ и обычные
+    happ_links = []
+    proxies_to_ping = []
     for uri in all_proxies:
-        if uri.lower().startswith('happ://'): happ_links.append(uri)
-        else: proxies_to_ping.append(uri)
+        if uri.lower().startswith('happ://'):
+            happ_links.append(uri)
+        else:
+            proxies_to_ping.append(uri)
 
-    print(f"Проверяем доступность {len(proxies_to_ping)} серверов (TCP Ping)...")
+    # --- ШАГ 3: Параллельный пинг ---
+    print(f"[{time.time()-start_time:.1f}s] Пингуем {len(proxies_to_ping)} серверов...")
     alive_proxies = []
+    ping_tasks = []
+    proxy_map = {}
     
-    tasks, proxy_map = [], {}
     for uri in proxies_to_ping:
         parsed = parse_uri_for_clash(uri)
         if parsed and parsed.get('server') and parsed.get('port'):
-            tasks.append(check_proxy_tcp(parsed['server'], parsed['port']))
-            proxy_map[len(tasks)-1] = (uri, parsed)
+            ping_tasks.append(check_proxy_tcp(parsed['server'], parsed['port'], ping_sem))
+            proxy_map[len(ping_tasks)-1] = (uri, parsed)
             
-    if tasks:
-        results = await asyncio.gather(*tasks)
+    if ping_tasks:
+        results = await asyncio.gather(*ping_tasks)
         for i, is_alive in enumerate(results):
-            if is_alive: alive_proxies.append(proxy_map[i])
-            
-    print(f"Живых серверов: {len(alive_proxies)}")
+            if is_alive:
+                alive_proxies.append(proxy_map[i])
+                
+    print(f"[{time.time()-start_time:.1f}s] Живых серверов: {len(alive_proxies)}")
 
-    # Сохранение в proxy.txt (Base64)
+    # --- Сохранение результатов ---
     alive_uris = [uri for uri, _ in alive_proxies]
     all_uris = alive_uris + happ_links 
     
@@ -241,7 +279,6 @@ async def main():
     with open(OUT_TXT, 'w', encoding='utf-8') as f:
         f.write(b64_txt)
         
-    # Сохранение в proxy.yaml (Clash)
     clash_proxies = [p for _, p in alive_proxies]
     proxy_names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
     
@@ -258,7 +295,7 @@ async def main():
     with open(OUT_YAML, 'w', encoding='utf-8') as f:
         yaml.dump(clash_config, f, sort_keys=False, allow_unicode=True)
         
-    print("Готово! Файлы proxy.txt и proxy.yaml обновлены.")
+    print(f"✅ Готово за {time.time()-start_time:.1f} секунд!")
 
 if __name__ == '__main__':
     asyncio.run(main())
