@@ -20,8 +20,9 @@ MAX_CONCURRENT_HTTP = 50
 MAX_CONCURRENT_PING = 200
 
 PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
-PROXY_REGEX = re.compile(r'(' + '|'.join(PROXY_SCHEMES) + r')://[^\s<>"\'`,)]+', re.IGNORECASE)
-URL_REGEX = re.compile(r'https?://[^\s<>"\'`,)]+', re.IGNORECASE)
+# Улучшенная регулярка - обрезаем всё, что не URL (включая эмодзи)
+PROXY_REGEX = re.compile(r'(' + '|'.join(PROXY_SCHEMES) + r')://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
+URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
 BLACKLIST_DOMAINS = ['t.me', 'telegram.org', 'telegram.me', 'telegra.ph', 'github.com', 'youtube.com', 'youtu.be', 'instagram.com', 'twitter.com', 'x.com']
 
@@ -46,40 +47,65 @@ def is_valid_url(url):
         result = urlparse(url)
         if not all([result.scheme, result.netloc]):
             return False
+        if result.scheme == 'tg':  # Фильтруем tg:// ссылки
+            return False
         if any(d in result.netloc for d in BLACKLIST_DOMAINS):
             return False
         return True
     except Exception:
         return False
 
+def clean_url(url):
+    """Убирает мусор с конца URL (эмодзи и пр.)"""
+    # Обрезаем на первом не-ASCII символе
+    for i, char in enumerate(url):
+        if ord(char) > 127:
+            return url[:i]
+    return url
+
 def extract_from_element(element):
     proxies, urls = [], []
+    
+    # Извлекаем из <a> тегов
     if hasattr(element, 'find_all'):
         for a in element.find_all('a', href=True):
-            href = a['href']
-            if href.startswith(tuple(f"{s}://" for s in PROXY_SCHEMES)):
-                proxies.append(href.strip())
-            elif is_valid_url(href):
-                urls.append(href.strip())
+            href = clean_url(a['href'].strip())
+            if any(href.startswith(f"{s}://") for s in PROXY_SCHEMES):
+                proxies.append(href)
+            elif href.startswith('http'):
+                urls.append(href)
     
+    # Извлекаем из текста
     text = element.get_text() if hasattr(element, 'get_text') else str(element)
-    proxies.extend([p.strip() for p in PROXY_REGEX.findall(text)])
-    urls.extend([u.strip() for u in URL_REGEX.findall(text) if is_valid_url(u)])
+    
+    # Ищем прокси
+    for match in PROXY_REGEX.finditer(text):
+        proxies.append(clean_url(match.group(0)))
+    
+    # Ищем URL
+    for match in URL_REGEX.finditer(text):
+        url = clean_url(match.group(0))
+        if is_valid_url(url):
+            urls.append(url)
     
     return list(set(proxies)), list(set(urls))
 
 async def fetch(session, url, sem):
     async with sem:
         try:
-            async with session.get(url, allow_redirects=True) as resp:
+            # Фильтруем не-HTTP схемы
+            if not url.startswith(('http://', 'https://')):
+                return ""
+            
+            async with session.get(url, allow_redirects=True, ssl=False) as resp:
                 if resp.status == 200:
                     text = await resp.text()
-                    debug_log(f"Скачано {url}: {len(text)} символов")
+                    debug_log(f"✓ Скачано {url[:80]}: {len(text)} символов")
                     return text
                 else:
-                    debug_log(f"Ошибка {resp.status} для {url}")
+                    debug_log(f"✗ Ошибка {resp.status} для {url[:80]}")
         except Exception as e:
-            debug_log(f"Исключение при скачивании {url}: {type(e).__name__}: {str(e)[:100]}")
+            debug_log(f"✗ Исключение {url[:80]}: {type(e).__name__}")
         return ""
 
 def extract_messages_data(html, cutoff_date):
@@ -87,7 +113,7 @@ def extract_messages_data(html, cutoff_date):
     messages = soup.find_all('div', class_='tgme_widget_message')
     
     all_proxies, all_urls = [], []
-    debug_log(f"Найдено сообщений в HTML: {len(messages)}")
+    debug_log(f"Найдено сообщений: {len(messages)}")
     
     for msg in messages:
         time_tag = msg.find('time')
@@ -112,32 +138,26 @@ async def process_subscription(url, session, sem, visited_subs):
     visited_subs.add(url)
     
     if url.startswith('happ://'):
-        debug_log(f"Happ link: {url[:50]}...")
         return [url]
+    
+    if not url.startswith(('http://', 'https://')):
+        return []
         
     text = await fetch(session, url, sem)
     if not text:
         return []
     
     proxies = []
-    decoded = decode_base64(text)
     
-    if decoded:
-        debug_log(f"Base64 декодирован: {len(decoded)} символов, начинается с: {decoded[:100]}")
-        if PROXY_REGEX.search(decoded):
-            found = [p.strip() for p in PROXY_REGEX.findall(decoded)]
-            debug_log(f"Найдено прокси в декодированном: {len(found)}")
-            proxies.extend(found)
-        else:
-            debug_log(f"В декодированном нет прокси-ссылок")
-    else:
-        debug_log(f"Не удалось декодировать как Base64")
-        if PROXY_REGEX.search(text):
-            found = [p.strip() for p in PROXY_REGEX.findall(text)]
-            debug_log(f"Найдено прокси в сыром тексте: {len(found)}")
-            proxies.extend(found)
-        else:
-            debug_log(f"В сыром тексте нет прокси-ссылок. Первые 100 символов: {text[:100]}")
+    # Пробуем base64
+    decoded = decode_base64(text)
+    search_text = decoded if decoded and len(decoded) > 50 else text
+    
+    # Ищем прокси
+    found = [clean_url(p) for p in PROXY_REGEX.findall(search_text)]
+    if found:
+        debug_log(f"✓ Найдено {len(found)} прокси в {url[:60]}")
+        proxies.extend(found)
     
     return proxies
 
@@ -274,24 +294,28 @@ async def main():
             if not src.startswith('http'):
                 continue
             if src.startswith('https://t.me/'):
-                web_url = src.replace('https://t.me/', 'https://t.me/s/')
+                # Проверяем, это топик или канал
+                if re.search(r'/\d+$', src):
+                    # Топик - используем embed формат
+                    web_url = f"{src}?embed=1&mode=tme"
+                else:
+                    # Канал - используем /s/
+                    web_url = src.replace('https://t.me/', 'https://t.me/s/')
                 source_tasks.append((web_url, fetch(session, web_url, http_sem)))
             else:
-                sub_urls.add(src)
+                sub_urls.add(clean_url(src))
         
         results = await asyncio.gather(*[t[1] for t in source_tasks])
         
         for (url, _), html in zip(source_tasks, results):
             if html:
                 p, u = extract_messages_data(html, cutoff_date)
-                debug_log(f"Из {url}: {len(p)} прокси, {len(u)} URL подписок")
+                debug_log(f"Из {url[:60]}: {len(p)} прокси, {len(u)} URL подписок")
                 all_proxies.extend(p)
                 for link in u:
-                    sub_urls.add(link)
+                    sub_urls.add(clean_url(link))
         
         print(f"[{time.time()-start_time:.1f}s] Найдено ссылок на подписки: {len(sub_urls)}")
-        if sub_urls:
-            debug_log(f"Примеры ссылок: {list(sub_urls)[:5]}")
 
         print(f"[{time.time()-start_time:.1f}s] Обрабатываем подписки...")
         sub_tasks = [process_subscription(url, session, http_sem, visited_subs) for url in sub_urls]
@@ -300,10 +324,9 @@ async def main():
         for res in sub_results:
             all_proxies.extend(res)
 
+    # Уникализация
     all_proxies = [p for p in set(all_proxies) if p and '://' in p]
     print(f"[{time.time()-start_time:.1f}s] Найдено сырых прокси: {len(all_proxies)}")
-    if all_proxies:
-        debug_log(f"Примеры: {all_proxies[:3]}")
 
     happ_links = []
     proxies_to_ping = []
@@ -332,6 +355,7 @@ async def main():
                 
     print(f"[{time.time()-start_time:.1f}s] Живых серверов: {len(alive_proxies)}")
 
+    # Сохранение
     alive_uris = [uri for uri, _ in alive_proxies]
     all_uris = alive_uris + happ_links 
     
