@@ -20,13 +20,12 @@ MAX_CONCURRENT_HTTP = 50
 MAX_CONCURRENT_PING = 200
 
 PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
-# ИСПРАВЛЕНО: используем non-capturing group (?:...) вместо (...)
 PROXY_REGEX = re.compile(r'(?:' + '|'.join(PROXY_SCHEMES) + r')://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
 BLACKLIST_DOMAINS = ['t.me', 'telegram.org', 'telegram.me', 'telegra.ph', 'github.com', 'youtube.com', 'youtu.be', 'instagram.com', 'twitter.com', 'x.com']
 
-DEBUG = True
+DEBUG = False  # Поставьте True для отладки
 
 def debug_log(msg):
     if DEBUG:
@@ -328,7 +327,7 @@ async def main():
     all_proxies = [p for p in set(all_proxies) if p and '://' in p]
     print(f"[{time.time()-start_time:.1f}s] Найдено сырых прокси: {len(all_proxies)}")
     
-    if all_proxies:
+    if all_proxies and DEBUG:
         debug_log(f"Примеры прокси: {all_proxies[:3]}")
 
     happ_links = []
@@ -358,14 +357,25 @@ async def main():
                 
     print(f"[{time.time()-start_time:.1f}s] Живых серверов: {len(alive_proxies)}")
 
+    # === СОХРАНЕНИЕ В PROXY.TXT (PLAIN TEXT) ===
     alive_uris = [uri for uri, _ in alive_proxies]
-    all_uris = alive_uris + happ_links 
+    all_uris = alive_uris + happ_links
     
-    raw_txt = "\n".join(all_uris)
-    b64_txt = base64.b64encode(raw_txt.encode('utf-8')).decode('utf-8')
+    # Добавляем информативную шапку (клиенты её игнорируют)
+    update_time = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+    header = [
+        f"# Обновлено: {update_time}",
+        f"# Живых серверов: {len(alive_uris)}",
+        f"# Happ ссылок: {len(happ_links)}",
+        f"# Всего ссылок: {len(all_uris)}",
+        "#"
+    ]
+    
+    raw_txt = "\n".join(header + all_uris)
     with open(OUT_TXT, 'w', encoding='utf-8') as f:
-        f.write(b64_txt)
-        
+        f.write(raw_txt)
+    
+    # === СОХРАНЕНИЕ В PROXY.YAML (CLASH) ===
     clash_proxies = [p for _, p in alive_proxies]
     proxy_names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
     
@@ -397,6 +407,7 @@ async def main():
         yaml.dump(clash_config, f, sort_keys=False, allow_unicode=True)
         
     print(f"✅ Готово за {time.time()-start_time:.1f} секунд!")
+    print(f"📄 Файлы обновлены: {OUT_TXT}, {OUT_YAML}")
 
 if __name__ == '__main__':
     asyncio.run(main())
