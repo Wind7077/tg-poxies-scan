@@ -4,24 +4,29 @@ import base64
 import asyncio
 import requests
 import yaml
-from bs4 import BeautifulSoup
-from datetime import datetime, timezone
-from urllib.parse import parse_qs, unquote
 import json
+from bs4 import BeautifulSoup
+from datetime import datetime, timezone, timedelta
+from urllib.parse import parse_qs, unquote
 
 # --- КОНФИГУРАЦИЯ ---
 SOURCES_FILE = 'sources.txt'
 OUT_TXT = 'proxy.txt'
 OUT_YAML = 'proxy.yaml'
 MAX_DAYS = 10
+TIMEOUT_REQ = 10
 TIMEOUT_PING = 3.0
 
-# Регулярки для поиска
-PROXY_REGEX = re.compile(r'(vless|vmess|trojan|ss|hysteria2?|hy2|tuic|happ)://[^\s<>"\']+', re.IGNORECASE)
-URL_REGEX = re.compile(r'https?://[^\s<>"\']+', re.IGNORECASE)
+# Поддерживаемые схемы
+PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
+PROXY_REGEX = re.compile(r'(' + '|'.join(PROXY_SCHEMES) + r')://[^\s<>"\'`]+', re.IGNORECASE)
+URL_REGEX = re.compile(r'https?://[^\s<>"\'`]+', re.IGNORECASE)
+
+# Кэш посещенных URL подписок, чтобы не ходить по кругу
+visited_subs = set()
 
 def decode_base64(s):
-    s = s.replace('-', '+').replace('_', '/')
+    s = s.strip().replace('-', '+').replace('_', '/')
     padding = len(s) % 4
     if padding: s += '=' * (4 - padding)
     try:
@@ -32,116 +37,99 @@ def decode_base64(s):
 def fetch_content(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
     try:
-        resp = requests.get(url, headers=headers, timeout=10)
+        resp = requests.get(url, headers=headers, timeout=TIMEOUT_REQ, allow_redirects=True)
         return resp.text
-    except Exception as e:
-        # print(f"Ошибка загрузки {url}: {e}")
+    except Exception:
         return ""
 
-def extract_from_message(msg_element):
-    """Извлекает ссылки и прокси из HTML элемента сообщения Telegram"""
+def extract_from_element(element):
+    """Извлекает прокси и URL подписок из HTML элемента сообщения"""
     proxies = []
     urls = []
     
-    # 1. Ищем все <a href="..."> (надежный способ для Telegram Web)
-    if hasattr(msg_element, 'find_all'):
-        for a in msg_element.find_all('a', href=True):
+    # 1. Ищем гиперссылки <a href="...">
+    if hasattr(element, 'find_all'):
+        for a in element.find_all('a', href=True):
             href = a['href']
-            if href.startswith(('vless://', 'vmess://', 'ss://', 'trojan://', 'hysteria', 'tuic://', 'happ://')):
+            if href.startswith(tuple(f"{s}://" for s in PROXY_SCHEMES)):
                 proxies.append(href)
-            elif href.startswith('http'):
+            elif href.startswith('http') and 't.me' not in href and 'telegram' not in href:
                 urls.append(href)
-            
+                
     # 2. Ищем в самом тексте сообщения (на случай если ссылки просто вставлены текстом)
-    text_div = msg_element.find('div', class_='tgme_widget_message_text') if hasattr(msg_element, 'find') else None
-    text = text_div.get_text() if text_div else msg_element.get_text()
-    
-    found_proxies = PROXY_REGEX.findall(text)
-    proxies.extend(found_proxies)
+    text = element.get_text() if hasattr(element, 'get_text') else str(element)
+    proxies.extend(PROXY_REGEX.findall(text))
     
     found_urls = URL_REGEX.findall(text)
     for u in found_urls:
-        # Исключаем ссылки на сам Telegram и системные
-        if 't.me' not in u and 'telegram.org' not in u and 'telegram.me' not in u and 'telegra.ph' not in u:
+        # Исключаем ссылки на сам Telegram
+        if not any(d in u for d in ['t.me', 'telegram.org', 'telegram.me', 'telegra.ph']):
             urls.append(u)
             
     return list(set(proxies)), list(set(urls))
 
 def extract_from_channel(html):
-    """Парсит страницу канала t.me/s/channel и собирает посты за последние 10 дней"""
+    """Парсит страницу канала t.me/s/channel (с проверкой даты 10 дней)"""
     soup = BeautifulSoup(html, 'html.parser')
     messages = soup.find_all('div', class_='tgme_widget_message')
     
-    all_proxies = []
-    all_urls = []
+    all_proxies, all_urls = [], []
+    cutoff_date = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS)
     
     for msg in messages:
-        # Проверка даты для канала
         time_tag = msg.find('time')
         if time_tag and time_tag.get('datetime'):
             try:
                 post_time = datetime.fromisoformat(time_tag['datetime'].replace('Z', '+00:00'))
-                if (datetime.now(timezone.utc) - post_time).days > MAX_DAYS:
+                if post_time < cutoff_date:
                     continue # Пропускаем старые посты
             except:
                 pass
                 
-        proxies, urls = extract_from_message(msg)
-        all_proxies.extend(proxies)
-        all_urls.extend(urls)
+        p, u = extract_from_element(msg)
+        all_proxies.extend(p)
+        all_urls.extend(u)
         
     return all_proxies, all_urls
 
 def extract_from_html(html):
-    """Парсит embed HTML конкретного поста (без проверки даты, так как это может быть обновляемый закреп)"""
+    """Парсит embed HTML конкретного поста (без проверки даты, т.к. это может быть обновляемый закреп)"""
     soup = BeautifulSoup(html, 'html.parser')
-    msg = soup.find('div', class_='tgme_widget_message')
-    if not msg: msg = soup
-    return extract_from_message(msg)
+    msg = soup.find('div', class_='tgme_widget_message') or soup
+    return extract_from_element(msg)
 
-def fetch_and_parse_subscription(url):
-    """Скачивает подписку (txt/sub) и достает из нее прокси"""
-    try:
-        if url.startswith('happ://'):
-            return [url] # Deep link, сохраняем как есть
+def process_subscription(url):
+    """Скачивает подписку, декодирует Base64 и возвращает список прокси"""
+    if url in visited_subs: return []
+    visited_subs.add(url)
+    
+    if url.startswith('happ://'): return [url]
+    
+    text = fetch_content(url)
+    if not text: return []
+    
+    proxies = []
+    
+    # 1. Пробуем декодировать как Base64 (стандарт для панелей типа 3x-ui)
+    decoded = decode_base64(text)
+    search_text = decoded if decoded and PROXY_REGEX.search(decoded) else text
+    
+    # 2. Извлекаем прокси
+    proxies.extend(PROXY_REGEX.findall(search_text))
+    
+    # 3. Рекурсия (1 уровень): если внутри подписки есть ссылки на другие подписки
+    found_urls = URL_REGEX.findall(search_text)
+    for sub_url in found_urls:
+        if sub_url.startswith('http'):
+            proxies.extend(process_subscription(sub_url))
             
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-        resp = requests.get(url, headers=headers, timeout=10, allow_redirects=True)
-        text = resp.text
-        
-        proxies = []
-        
-        # 1. Пробуем Base64 декодировать весь текст (часто подписки заворачивают в base64)
-        decoded = decode_base64(text.strip())
-        if decoded and len(decoded) > 10 and PROXY_REGEX.search(decoded):
-            text = decoded
-            
-        # 2. Ищем все прокси
-        found = PROXY_REGEX.findall(text)
-        proxies.extend(found)
-        
-        # 3. Рекурсия 1 уровня: если внутри подписки есть ссылки на другие подписки
-        found_urls = URL_REGEX.findall(text)
-        for sub_url in found_urls:
-            if sub_url.startswith('http') and 't.me' not in sub_url and 'telegram' not in sub_url:
-                try:
-                    sub_resp = requests.get(sub_url, headers=headers, timeout=5)
-                    sub_text = sub_resp.text
-                    sub_decoded = decode_base64(sub_text.strip())
-                    if sub_decoded and PROXY_REGEX.search(sub_decoded):
-                        sub_text = sub_decoded
-                    proxies.extend(PROXY_REGEX.findall(sub_text))
-                except:
-                    pass
-                    
-        return list(set(proxies))
-    except Exception:
-        return []
+    return list(set(proxies))
 
 async def check_proxy_tcp(host, port):
     """Быстрый TCP пинг"""
     try:
-        _, writer = await asyncio.wait_for(asyncio.open_connection(host, port), timeout=TIMEOUT_PING)
+        port_int = int(port)
+        _, writer = await asyncio.wait_for(asyncio.open_connection(host, port_int), timeout=TIMEOUT_PING)
         writer.close()
         await writer.wait_closed()
         return True
@@ -154,17 +142,17 @@ def parse_uri_for_clash(uri):
         scheme, rest = uri.split('://', 1)
         scheme = scheme.lower()
         
-        if scheme == 'happ':
-            return None # Clash не поддерживает happ://
+        if scheme == 'happ': return None # Clash не ест happ://
             
         if scheme == 'vmess':
             data = json.loads(decode_base64(rest))
             return {
                 'name': data.get('ps', f"VMess-{data.get('add')}"),
                 'type': 'vmess', 'server': data.get('add'),
-                'port': int(data.get('port')), 'uuid': data.get('id'),
+                'port': int(data.get('port', 0)), 'uuid': data.get('id', ''),
                 'alterId': int(data.get('aid', 0)), 'cipher': 'auto',
                 'tls': data.get('tls') == 'tls', 'network': data.get('net', 'tcp'),
+                'udp': True
             }
         elif scheme == 'trojan':
             password, rest2 = rest.split('@', 1)
@@ -189,7 +177,7 @@ def parse_uri_for_clash(uri):
                     host, port = hostport.split(':', 1)
                     if ':' in userinfo: cipher, password = userinfo.split(':', 1)
                     else: cipher, password = 'aes-256-gcm', decode_base64(userinfo)
-                    return {'name': f"SS-{host}", 'type': 'ss', 'server': host, 'port': int(port.split('#')[0]), 'cipher': cipher, 'password': password}
+                    return {'name': f"SS-{host}", 'type': 'ss', 'server': host, 'port': int(port.split('#')[0]), 'cipher': cipher, 'password': password, 'udp': True}
         elif scheme in ['hysteria', 'hysteria2', 'hy2']:
             auth_rest, params_name = rest.split('?', 1) if '?' in rest else (rest, '')
             if '@' in auth_rest: password, host_port = auth_rest.split('@', 1)
@@ -220,27 +208,27 @@ async def main():
         
         if src.startswith('https://t.me/') and not src.startswith('https://t.me/s/'):
             if is_specific_post:
-                # Конкретный пост (возможно, обновляемый закреп)
+                # Конкретный пост (возможно, обновляемый закреп) - дату не проверяем!
                 url = f"{src}?embed=1&mode=tme"
                 html = fetch_content(url)
                 if html:
-                    proxies, urls = extract_from_html(html)
-                    all_proxies.extend(proxies)
-                    for u in urls: all_proxies.extend(fetch_and_parse_subscription(u))
+                    p, u = extract_from_html(html)
+                    all_proxies.extend(p)
+                    for link in u: all_proxies.extend(process_subscription(link))
             else:
                 # Весь канал (с проверкой даты 10 дней)
                 url = src.replace('https://t.me/', 'https://t.me/s/')
                 html = fetch_content(url)
                 if html:
-                    proxies, urls = extract_from_channel(html)
-                    all_proxies.extend(proxies)
-                    for u in urls: all_proxies.extend(fetch_and_parse_subscription(u))
+                    p, u = extract_from_channel(html)
+                    all_proxies.extend(p)
+                    for link in u: all_proxies.extend(process_subscription(link))
         else:
-            # Прямая ссылка на подписку
-            all_proxies.extend(fetch_and_parse_subscription(src))
+            # Прямая ссылка на подписку (не Telegram)
+            all_proxies.extend(process_subscription(src))
 
     # Уникализация и очистка
-    all_proxies = [p for p in set(all_proxies) if p and '://' in p]
+    all_proxies = [p.strip() for p in set(all_proxies) if p and '://' in p]
     print(f"Найдено сырых ссылок: {len(all_proxies)}")
 
     proxies_to_ping = []
@@ -274,7 +262,8 @@ async def main():
 
     # --- Сохранение в proxy.txt (Base64 для V2Ray / NekoBox / Happ) ---
     alive_uris = [uri for uri, _ in alive_proxies]
-    all_uris = alive_uris + happ_links # Добавляем happ:// ссылки
+    # Складываем чистые живые сервера + happ:// ссылки
+    all_uris = alive_uris + happ_links 
     
     raw_txt = "\n".join(all_uris)
     b64_txt = base64.b64encode(raw_txt.encode('utf-8')).decode('utf-8')
@@ -284,12 +273,15 @@ async def main():
     # --- Сохранение в proxy.yaml (Clash Meta / Clash) ---
     clash_proxies = [p for _, p in alive_proxies] # Только те, что понимает Clash
     
+    # Если серверов нет, добавляем DIRECT, чтобы YAML был валидным
+    proxy_names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
+    
     clash_config = {
         'mixed-port': 7890, 'allow-lan': False, 'mode': 'Rule', 'log-level': 'info',
         'external-controller': '127.0.0.1:9090', 'proxies': clash_proxies,
         'proxy-groups': [
-            {'name': '♻️ Auto', 'type': 'url-test', 'proxies': [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT'], 'url': 'http://www.gstatic.com/generate_204', 'interval': 300},
-            {'name': '🚀 Proxy', 'type': 'select', 'proxies': ['♻️ Auto'] + [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']}
+            {'name': '♻️ Auto', 'type': 'url-test', 'proxies': proxy_names, 'url': 'http://www.gstatic.com/generate_204', 'interval': 300},
+            {'name': '🚀 Proxy', 'type': 'select', 'proxies': ['♻️ Auto'] + proxy_names}
         ],
         'rules': ['MATCH,🚀 Proxy']
     }
