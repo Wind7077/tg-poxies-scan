@@ -2,7 +2,7 @@ name: Update Proxies
 
 on:
   schedule:
-    - cron: '0 */5 * * *' # Запуск каждые 5 часов
+    - cron: '0 */1 * * *' # Запуск каждые 5 часов
   workflow_dispatch: # Кнопка для ручного запуска во вкладке Actions
 
 jobs:
