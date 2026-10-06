@@ -35,22 +35,22 @@ PROXY_REGEX = re.compile(r'(?:' + '|'.join(PROXY_SCHEMES) + r')://[a-zA-Z0-9\-._
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
 BLACKLIST_DOMAINS = [
-    # Telegram и соцсети
     't.me', 'telegram.org', 'telegram.me', 'telegra.ph',
     'github.com', 'youtube.com', 'youtu.be',
     'instagram.com', 'twitter.com', 'x.com',
     'vk.com', 'ok.ru', 'pikabu.ru', 'habr.com',
     'dzen.ru', 'yandex.ru', 'mail.ru', 'rambler.ru',
-    # Новости и мусор
     'meduza.io', 'kommersant.ru', 'cnews.ru', 'iz.ru',
     'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru',
     'max.ru', 'git.a9fm.best', 'ria.ru', 'lenta.ru',
     'rbc.ru', 'vedomosti.ru', 'tass.ru',
-    # Стабильно падающие домены (не тратим время)
     'git.arturlamaev.workers.dev', 'cyb-portal.org', 'gidroksi.fun',
     'h1cloud.net'
 ]
+
+# Слова, которые часто "прилипают" к URL в текстах постов
+STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 
 DEBUG = True
 
@@ -75,7 +75,6 @@ def is_valid_url(url):
     except: return False
 
 def is_useless_tme(url):
-    """Фильтр бесполезных страниц t.me: боты, MTProto шар-ссылки, инвайты"""
     if not ('t.me' in url or 'telegram.me' in url): return False
     if '/proxy?' in url or '/webproxy?' in url: return True
     if '/+' in url.split('//', 1)[-1][:10]: return True
@@ -84,10 +83,6 @@ def is_useless_tme(url):
     return False
 
 def split_glued(url):
-    """
-    Разрезает склеенные URL: ...txthttps://... -> ...txt
-    НЕ режет прокладки типа p.kfwl.lol/.../https://target
-    """
     base = 8 if url.startswith('https://') else 7
     rest = url[base:]
     
@@ -108,14 +103,22 @@ def split_glued(url):
     
     return url
 
+def remove_sticky_words(url):
+    """Убирает прилипшие слова типа Gemini, Claude в конце URL"""
+    for word in STICKY_WORDS:
+        if url.endswith(word):
+            url = url[:-len(word)]
+    return url.rstrip('/')
+
 def clean_url(url):
     for i, c in enumerate(url):
         if ord(c) > 127: url = url[:i]; break
     while url.endswith(')') and url.count(')') > url.count('('): url = url[:-1]
-    return split_glued(url.rstrip('.,;:!?'))
+    url = split_glued(url.rstrip('.,;:!?'))
+    url = remove_sticky_words(url)
+    return url
 
 def collect_url(raw, urls):
-    """Единая точка сбора URL с фильтрами"""
     u = clean_url(raw)
     if not u: return
     if 't.me' in u or 'telegram.me' in u:
@@ -154,9 +157,10 @@ async def fetch(session, url, sem, retry_count=2):
                 headers['Referer'] = 'https://t.me/'
             
             timeout = TIMEOUT
+            # УВЕЛИЧЕН таймаут для проблемных доменов (было 20, стало 30)
             problem_domains = ['kfwl.lol', 'pozor.bond', 'atlanta-subs.ru', 'astra-sub.com', 'taurus-sync.com', 'net4.su']
             if any(d in url for d in problem_domains):
-                timeout = aiohttp.ClientTimeout(total=20, connect=8)
+                timeout = aiohttp.ClientTimeout(total=30, connect=10)
             
             for attempt in range(retry_count + 1):
                 try:
@@ -192,14 +196,6 @@ async def fetch(session, url, sem, retry_count=2):
         except Exception as e:
             debug_log(f"✗ {url[:80]}: {type(e).__name__}")
         return ""
-
-def extract_real_url_from_kfwl(url):
-    match = re.search(r'https?://(?:p|pp)\.kfwl\.lol(?::\d+)?/[^/]+/(https?://.+)', url)
-    if match:
-        real_url = match.group(1)
-        debug_log(f"📤 Извлечён реальный URL: {real_url[:60]}")
-        return real_url
-    return None
 
 def extract_messages_data(html, cutoff_date):
     soup = BeautifulSoup(html, 'html.parser')
@@ -310,7 +306,7 @@ async def process_subscription(url, session, sem, visited):
     if is_useless_tme(url): return []
     
     if 'kfwl.lol' in url:
-        # Меньше retry для прокладок - они часто тупят из-за Cloudflare
+        # retry=1 (быстро), но таймаут 30 сек (больше времени на ответ)
         text = await fetch(session, url, sem, retry_count=1)
         if not text or len(text) < 50:
             return []
@@ -431,7 +427,6 @@ async def main():
             debug_log(f"⚠️ Telethon не настроен, пропускаем {len(telethon_sources)} источников")
     
     if sub_urls:
-        # Чистим дубли и нормализуем URL (убираем trailing /)
         clean_subs = set()
         for url in sub_urls:
             u = url.rstrip('/')
