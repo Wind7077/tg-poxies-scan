@@ -72,23 +72,40 @@ def is_valid_url(url):
 def is_useless_tme(url):
     """Фильтр бесполезных страниц t.me: боты, MTProto шар-ссылки, инвайты"""
     if not ('t.me' in url or 'telegram.me' in url): return False
-    if '/proxy?' in url or '/webproxy?' in url: return True   # MTProto шар-ссылки
-    if '/+' in url.split('//', 1)[-1][:10]: return True        # инвайты t.me/+xxx
+    if '/proxy?' in url or '/webproxy?' in url: return True
+    if '/+' in url.split('//', 1)[-1][:10]: return True
     path = urlparse(url).path.strip('/')
-    if '/' not in path and path.lower().endswith('bot'): return True  # страницы ботов
+    if '/' not in path and path.lower().endswith('bot'): return True
     return False
 
 def split_glued(url):
-    """Разрезает склеенные URL: ...txthttps://... -> ...txt"""
+    """
+    Разрезает склеенные URL: ...txthttps://... -> ...txt
+    НЕ режет прокладки типа p.kfwl.lol/.../https://target
+    """
     base = 8 if url.startswith('https://') else 7
-    m = re.search(r'https?://', url[base:])
-    if m:
-        return url[:base + m.start()]
-    # случай http://host@bot@bot@bot -> http://host
+    rest = url[base:]
+    
+    # Ищем второй http:// или https:// в остатке URL
+    for proto in ['https://', 'http://']:
+        idx = rest.find(proto)
+        if idx > 0:
+            # Смотрим что стоит ПЕРЕД вторым протоколом
+            char_before = rest[idx-1]
+            if char_before != '/':
+                # Это склейка (буква, точка, цифра перед http) - режем
+                return url[:base + idx]
+            # Если '/' - это прокладка kfwl.lol, НЕ режем
+    
+    # Обработка склейки с @ (http://host@bot@bot@bot -> http://host)
     if url.count('@') >= 2:
-        head = url[base:]
-        if '@' in head and ':' not in head.split('@')[0] and '/' not in head.split('@')[0]:
-            return url[:base + head.index('@')]
+        head = rest
+        if '@' in head:
+            at_idx = head.index('@')
+            part_before_at = head[:at_idx]
+            if '/' not in part_before_at and ':' not in part_before_at:
+                return url[:base + at_idx]
+    
     return url
 
 def clean_url(url):
@@ -126,7 +143,6 @@ async def fetch(session, url, sem, retry_count=2):
         try:
             if not url.startswith(('http://', 'https://')): return ""
             
-            # Заголовки БЕЗ Accept-Encoding (brotli ломал ответы!)
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -146,7 +162,6 @@ async def fetch(session, url, sem, retry_count=2):
                 try:
                     async with session.get(url, headers=headers, allow_redirects=True, ssl=False, timeout=timeout) as resp:
                         if resp.status == 200:
-                            # Читаем байтами + decode ignore = нет UnicodeDecodeError
                             data = await resp.read()
                             text = data.decode('utf-8', errors='ignore')
                             debug_log(f"✓ {url[:80]}: {len(text)} симв.")
@@ -292,7 +307,7 @@ async def process_subscription(url, session, sem, visited):
     
     if url.startswith('happ://'): return [url]
     if not url.startswith(('http://', 'https://')): return []
-    if is_useless_tme(url): return []  # боты и MTProto шар-ссылки не парсим
+    if is_useless_tme(url): return []
     
     if 'kfwl.lol' in url:
         text = await fetch(session, url, sem, retry_count=3)
