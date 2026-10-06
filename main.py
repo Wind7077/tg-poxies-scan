@@ -24,7 +24,7 @@ OUT_YAML = 'proxy.yaml'
 MAX_DAYS = 10
 TIMEOUT = aiohttp.ClientTimeout(total=12, connect=7)
 MAX_CONCURRENT_HTTP = 50
-MAX_CONCURRENT_PING = 200
+MAX_CONCURRENT_PING = 500
 
 API_ID = int(os.getenv('TELEGRAM_API_ID', '0'))
 API_HASH = os.getenv('TELEGRAM_API_HASH', '')
@@ -35,16 +35,21 @@ PROXY_REGEX = re.compile(r'(?:' + '|'.join(PROXY_SCHEMES) + r')://[a-zA-Z0-9\-._
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
 BLACKLIST_DOMAINS = [
+    # Telegram и соцсети
     't.me', 'telegram.org', 'telegram.me', 'telegra.ph',
     'github.com', 'youtube.com', 'youtu.be',
     'instagram.com', 'twitter.com', 'x.com',
     'vk.com', 'ok.ru', 'pikabu.ru', 'habr.com',
     'dzen.ru', 'yandex.ru', 'mail.ru', 'rambler.ru',
+    # Новости и мусор
     'meduza.io', 'kommersant.ru', 'cnews.ru', 'iz.ru',
     'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru',
     'max.ru', 'git.a9fm.best', 'ria.ru', 'lenta.ru',
-    'rbc.ru', 'vedomosti.ru', 'tass.ru'
+    'rbc.ru', 'vedomosti.ru', 'tass.ru',
+    # Стабильно падающие домены (не тратим время)
+    'git.arturlamaev.workers.dev', 'cyb-portal.org', 'gidroksi.fun',
+    'h1cloud.net'
 ]
 
 DEBUG = True
@@ -86,18 +91,13 @@ def split_glued(url):
     base = 8 if url.startswith('https://') else 7
     rest = url[base:]
     
-    # Ищем второй http:// или https:// в остатке URL
     for proto in ['https://', 'http://']:
         idx = rest.find(proto)
         if idx > 0:
-            # Смотрим что стоит ПЕРЕД вторым протоколом
             char_before = rest[idx-1]
             if char_before != '/':
-                # Это склейка (буква, точка, цифра перед http) - режем
                 return url[:base + idx]
-            # Если '/' - это прокладка kfwl.lol, НЕ режем
     
-    # Обработка склейки с @ (http://host@bot@bot@bot -> http://host)
     if url.count('@') >= 2:
         head = rest
         if '@' in head:
@@ -154,9 +154,9 @@ async def fetch(session, url, sem, retry_count=2):
                 headers['Referer'] = 'https://t.me/'
             
             timeout = TIMEOUT
-            problem_domains = ['kfwl.lol', 'h1cloud.net', 'pozor.bond', 'atlanta-subs.ru', 'astra-sub.com']
+            problem_domains = ['kfwl.lol', 'pozor.bond', 'atlanta-subs.ru', 'astra-sub.com', 'taurus-sync.com', 'net4.su']
             if any(d in url for d in problem_domains):
-                timeout = aiohttp.ClientTimeout(total=25, connect=10)
+                timeout = aiohttp.ClientTimeout(total=20, connect=8)
             
             for attempt in range(retry_count + 1):
                 try:
@@ -310,14 +310,10 @@ async def process_subscription(url, session, sem, visited):
     if is_useless_tme(url): return []
     
     if 'kfwl.lol' in url:
-        text = await fetch(session, url, sem, retry_count=3)
+        # Меньше retry для прокладок - они часто тупят из-за Cloudflare
+        text = await fetch(session, url, sem, retry_count=1)
         if not text or len(text) < 50:
-            real_url = extract_real_url_from_kfwl(url)
-            if real_url and real_url not in visited:
-                debug_log(f"🔄 Пробуем реальный URL: {real_url[:60]}")
-                visited.add(real_url)
-                text = await fetch(session, real_url, sem, retry_count=2)
-        if not text: return []
+            return []
         
         decoded = decode_base64(text)
         search_text = decoded if decoded and len(decoded) > 50 else text
@@ -435,9 +431,16 @@ async def main():
             debug_log(f"⚠️ Telethon не настроен, пропускаем {len(telethon_sources)} источников")
     
     if sub_urls:
-        print(f"[{time.time()-start:.1f}s] Обрабатываем {len(sub_urls)} подписок...")
+        # Чистим дубли и нормализуем URL (убираем trailing /)
+        clean_subs = set()
+        for url in sub_urls:
+            u = url.rstrip('/')
+            if u not in clean_subs:
+                clean_subs.add(u)
+        
+        print(f"[{time.time()-start:.1f}s] Обрабатываем {len(clean_subs)} подписок (было {len(sub_urls)} с дублями)...")
         async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
-            tasks = [process_subscription(url, session, http_sem, visited) for url in sub_urls]
+            tasks = [process_subscription(url, session, http_sem, visited) for url in clean_subs]
             results = await asyncio.gather(*tasks)
             for r in results: all_proxies.extend(r)
     
