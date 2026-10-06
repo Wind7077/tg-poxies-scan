@@ -107,18 +107,27 @@ def extract_messages_data(html, cutoff_date):
     debug_log(f"Найдено сообщений: {len(messages)}")
     return p, u
 
-# ===== TELETHON: Парсинг закрытых групп =====
+# ===== TELETHON: Парсинг закрытых групп (ИСПРАВЛЕННАЯ ВЕРСИЯ) =====
 async def parse_with_telethon(source_url, cutoff_date):
     """Читает сообщения из закрытых групп через MTProto API"""
     if not SESSION_B64 or not TELETHON_OK or API_ID == 0:
         debug_log("Telethon не настроен (нет API ключей или сессии)")
         return [], []
     
-    match = re.match(r'https?://t\.me/([a-zA-Z0-9_]+)(?:/(\d+))?', source_url)
+    # Парсим URL, поддерживаем формат /c/ID для приватных чатов
+    match = re.match(r'https?://t\.me/(?:c/)?([a-zA-Z0-9_]+)(?:/(\d+))?', source_url)
     if not match: return [], []
     
-    chat_name = match.group(1)
+    chat_id = match.group(1)
     topic_id = int(match.group(2)) if match.group(2) else None
+    
+    # Для приватных чатов (был /c/ в URL) преобразуем ID
+    is_private = '/c/' in source_url
+    if is_private:
+        try:
+            chat_id = int(f"-100{chat_id}")
+        except:
+            pass
     
     # Восстанавливаем сессию из Base64
     session_file = 'tg_session'
@@ -132,55 +141,81 @@ async def parse_with_telethon(source_url, cutoff_date):
         return [], []
     
     proxies, urls = [], []
+    client = None
     try:
+        # Создаем клиент
         client = TelegramClient(session_file, API_ID, API_HASH)
+        
+        # ВАЖНО: используем connect() вместо start() для GitHub Actions
         await client.connect()
         
-        # Проверяем авторизацию
+        # Проверяем что сессия авторизована
         if not await client.is_user_authorized():
-            debug_log("❌ Сессия не авторизована!")
-            await client.disconnect()
+            debug_log("❌ Сессия не авторизована! Возможно, протухла.")
             return [], []
         
-        debug_log(f"Telethon: читаем {chat_name} (топик {topic_id})...")
-        entity = await client.get_entity(chat_name)
+        debug_log(f"Telethon: читаем {chat_id} (топик {topic_id})...")
+        
+        # Получаем entity (чат)
+        try:
+            entity = await client.get_entity(chat_id)
+        except Exception as e:
+            debug_log(f"❌ Не удалось получить entity {chat_id}: {type(e).__name__}: {e}")
+            return [], []
+        
+        # Параметры для iter_messages
+        iter_kwargs = {'limit': 300}
+        # Примечание: reply_to для топиков может не работать во всех версиях
+        # если topic_id: iter_kwargs['reply_to'] = topic_id
         
         msg_count = 0
-        async for msg in client.iter_messages(entity, limit=500):
-            if not msg.date: continue
-            msg_date = msg.date.replace(tzinfo=timezone.utc)
-            if msg_date < cutoff_date: 
-                debug_log(f"Достигнут cutoff (прошло {msg_count} сообщений)")
-                break
-            
-            msg_count += 1
-            text = msg.text or msg.message or ''
-            
-            # Ищем прокси
-            for m in PROXY_REGEX.finditer(text):
-                proxies.append(clean_url(m.group(0)))
-            
-            # Ищем URL подписок
-            for m in URL_REGEX.finditer(text):
-                u = clean_url(m.group(0))
-                if is_valid_url(u): urls.append(u)
-            
-            # Ссылки в entities
-            if msg.entities:
-                for ent in msg.entities:
-                    if isinstance(ent, MessageEntityTextUrl) and ent.url:
-                        u = clean_url(ent.url)
-                        if is_valid_url(u): urls.append(u)
-                        elif any(u.startswith(f"{s}://") for s in PROXY_SCHEMES): proxies.append(u)
+        try:
+            async for msg in client.iter_messages(entity, **iter_kwargs):
+                if not msg.date: continue
+                msg_date = msg.date.replace(tzinfo=timezone.utc)
+                if msg_date < cutoff_date: 
+                    debug_log(f"Достигнут cutoff ({msg_count} сообщений)")
+                    break
+                
+                msg_count += 1
+                text = msg.text or msg.message or ''
+                
+                # Ищем прокси в тексте
+                for m in PROXY_REGEX.finditer(text):
+                    proxies.append(clean_url(m.group(0)))
+                
+                # Ищем URL подписок
+                for m in URL_REGEX.finditer(text):
+                    u = clean_url(m.group(0))
+                    if is_valid_url(u): urls.append(u)
+                
+                # Ссылки в entities (если есть)
+                if msg.entities:
+                    for ent in msg.entities:
+                        if isinstance(ent, MessageEntityTextUrl) and ent.url:
+                            u = clean_url(ent.url)
+                            if is_valid_url(u): urls.append(u)
+                            elif any(u.startswith(f"{s}://") for s in PROXY_SCHEMES): proxies.append(u)
+        except Exception as e:
+            debug_log(f"❌ Ошибка итерации сообщений: {type(e).__name__}: {e}")
         
-        await client.disconnect()
-        debug_log(f"Telethon ✅: {len(proxies)} прокси, {len(urls)} URL из {chat_name} ({msg_count} сообщений)")
+        debug_log(f"Telethon ✅: {len(proxies)} прокси, {len(urls)} URL из {chat_id} ({msg_count} сообщений)")
+        
     except Exception as e:
-        debug_log(f"❌ Telethon ошибка для {chat_name}: {type(e).__name__}: {e}")
-    
-    # Удаляем временный файл сессии
-    try: os.remove(session_file + '.session')
-    except: pass
+        debug_log(f"❌ Telethon ошибка: {type(e).__name__}: {e}")
+    finally:
+        # Всегда отключаемся от сервера
+        if client:
+            try:
+                await client.disconnect()
+            except:
+                pass
+        
+        # Удаляем временный файл сессии
+        try: 
+            os.remove(session_file + '.session')
+        except: 
+            pass
     
     return list(set(proxies)), list(set(urls))
 
@@ -288,7 +323,7 @@ async def main():
                     all_proxies.extend(p)
                     for l in u2: sub_urls.add(clean_url(l))
     
-    # Telethon (для LowiKForum)
+    # Telethon (для LowiKForum и других закрытых чатов)
     if telethon_sources:
         if TELETHON_OK and SESSION_B64 and API_ID != 0:
             print(f"[{time.time()-start:.1f}s] Парсим через Telethon ({len(telethon_sources)} источников)...")
@@ -299,7 +334,7 @@ async def main():
         else:
             debug_log(f"⚠️ Telethon не настроен, пропускаем {len(telethon_sources)} источников")
     
-    # Подписки
+    # Обрабатываем подписки
     if sub_urls:
         print(f"[{time.time()-start:.1f}s] Обрабатываем {len(sub_urls)} подписок...")
         async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
@@ -328,7 +363,7 @@ async def main():
             if ok: alive.append(pmap[i])
     print(f"[{time.time()-start:.1f}s] Живых: {len(alive)}")
     
-    # Сохранение
+    # Сохранение в proxy.txt (plain text)
     alive_uris = [u for u, _ in alive]
     all_uris = alive_uris + happ
     ts = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
@@ -336,6 +371,7 @@ async def main():
     with open(OUT_TXT, 'w', encoding='utf-8') as f:
         f.write("\n".join(header + all_uris))
     
+    # Сохранение в proxy.yaml (Clash)
     clash_proxies = [p for _, p in alive]
     names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
     clash_config = {
