@@ -2,14 +2,14 @@ name: Update Proxies
 
 on:
   schedule:
-    - cron: '0 */2 * * *' # Запуск каждые 5 часов
-  workflow_dispatch: # Кнопка для ручного запуска во вкладке Actions
+    - cron: '0 */5 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Важно: дает право пушить изменения в репозиторий
+      contents: write
     
     steps:
       - name: Checkout repository
@@ -26,12 +26,14 @@ jobs:
           pip install -r requirements.txt
           
       - name: Run parser script
+        env:
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
         run: python main.py
         
       - name: Commit and push changes
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add proxy.txt proxy.yaml
-          # Коммитим только если есть изменения
-          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update proxies [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🔄 Update proxies [skip ci]" && git push)
