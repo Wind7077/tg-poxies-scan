@@ -22,14 +22,10 @@ SOURCES_FILE = 'sources.txt'
 OUT_TXT = 'proxy.txt'
 OUT_YAML = 'proxy.yaml'
 MAX_DAYS = 10
-
-# Увеличенный таймаут для медленных серверов
 TIMEOUT = aiohttp.ClientTimeout(total=12, connect=7)
-
 MAX_CONCURRENT_HTTP = 50
 MAX_CONCURRENT_PING = 200
 
-# Telegram API (из Secrets GitHub)
 API_ID = int(os.getenv('TELEGRAM_API_ID', '0'))
 API_HASH = os.getenv('TELEGRAM_API_HASH', '')
 SESSION_B64 = os.getenv('TELEGRAM_SESSION', '')
@@ -38,19 +34,16 @@ PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2
 PROXY_REGEX = re.compile(r'(?:' + '|'.join(PROXY_SCHEMES) + r')://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
-# Расширенный чёрный список (мусорные домены)
 BLACKLIST_DOMAINS = [
-    # Telegram и соцсети
     't.me', 'telegram.org', 'telegram.me', 'telegra.ph',
     'github.com', 'youtube.com', 'youtu.be',
     'instagram.com', 'twitter.com', 'x.com',
     'vk.com', 'ok.ru', 'pikabu.ru', 'habr.com',
     'dzen.ru', 'yandex.ru', 'mail.ru', 'rambler.ru',
-    # Новостные и мусорные сайты из постов
     'meduza.io', 'kommersant.ru', 'cnews.ru', 'iz.ru',
     'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru',
-    'max.ru', 'git.a9fm.best', ' ria.ru', 'lenta.ru',
+    'max.ru', 'git.a9fm.best', 'ria.ru', 'lenta.ru',
     'rbc.ru', 'vedomosti.ru', 'tass.ru'
 ]
 
@@ -76,60 +69,89 @@ def is_valid_url(url):
         return True
     except: return False
 
+def is_useless_tme(url):
+    """Фильтр бесполезных страниц t.me: боты, MTProto шар-ссылки, инвайты"""
+    if not ('t.me' in url or 'telegram.me' in url): return False
+    if '/proxy?' in url or '/webproxy?' in url: return True   # MTProto шар-ссылки
+    if '/+' in url.split('//', 1)[-1][:10]: return True        # инвайты t.me/+xxx
+    path = urlparse(url).path.strip('/')
+    if '/' not in path and path.lower().endswith('bot'): return True  # страницы ботов
+    return False
+
+def split_glued(url):
+    """Разрезает склеенные URL: ...txthttps://... -> ...txt"""
+    base = 8 if url.startswith('https://') else 7
+    m = re.search(r'https?://', url[base:])
+    if m:
+        return url[:base + m.start()]
+    # случай http://host@bot@bot@bot -> http://host
+    if url.count('@') >= 2:
+        head = url[base:]
+        if '@' in head and ':' not in head.split('@')[0] and '/' not in head.split('@')[0]:
+            return url[:base + head.index('@')]
+    return url
+
 def clean_url(url):
     for i, c in enumerate(url):
         if ord(c) > 127: url = url[:i]; break
     while url.endswith(')') and url.count(')') > url.count('('): url = url[:-1]
-    return url.rstrip('.,;:!?')
+    return split_glued(url.rstrip('.,;:!?'))
+
+def collect_url(raw, urls):
+    """Единая точка сбора URL с фильтрами"""
+    u = clean_url(raw)
+    if not u: return
+    if 't.me' in u or 'telegram.me' in u:
+        if not is_useless_tme(u): urls.append(u)
+    elif is_valid_url(u):
+        urls.append(u)
 
 def extract_from_element(element):
     proxies, urls = [], []
     if hasattr(element, 'find_all'):
         for a in element.find_all('a', href=True):
-            href = clean_url(a['href'].strip())
-            if any(href.startswith(f"{s}://") for s in PROXY_SCHEMES): proxies.append(href)
-            elif href.startswith('http'): urls.append(href)
+            href = a['href'].strip()
+            if any(href.startswith(f"{s}://") for s in PROXY_SCHEMES):
+                proxies.append(clean_url(href))
+            elif href.startswith('http'):
+                collect_url(href, urls)
     text = element.get_text() if hasattr(element, 'get_text') else str(element)
     proxies.extend([clean_url(m.group(0)) for m in PROXY_REGEX.finditer(text)])
-    urls.extend([clean_url(m.group(0)) for m in URL_REGEX.finditer(text) if is_valid_url(clean_url(m.group(0)))])
+    for m in URL_REGEX.finditer(text):
+        collect_url(m.group(0), urls)
     return list(set(proxies)), list(set(urls))
 
-# ===== УЛУЧШЕННАЯ ФУНКЦИЯ FETCH С RETRY И ЗАГОЛОВКАМИ =====
 async def fetch(session, url, sem, retry_count=2):
     async with sem:
         try:
             if not url.startswith(('http://', 'https://')): return ""
             
-            # Заголовки для обхода Cloudflare/антиботов
+            # Заголовки БЕЗ Accept-Encoding (brotli ломал ответы!)
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
-                'Accept-Encoding': 'gzip, deflate, br',
                 'Connection': 'keep-alive',
                 'Upgrade-Insecure-Requests': '1',
             }
-            
-            # Для kfwl.lol добавляем Referer
             if 'kfwl.lol' in url:
                 headers['Referer'] = 'https://t.me/'
             
-            # Увеличенный таймаут для проблемных доменов
             timeout = TIMEOUT
             problem_domains = ['kfwl.lol', 'h1cloud.net', 'pozor.bond', 'atlanta-subs.ru', 'astra-sub.com']
             if any(d in url for d in problem_domains):
                 timeout = aiohttp.ClientTimeout(total=25, connect=10)
             
-            # Retry логика
             for attempt in range(retry_count + 1):
                 try:
                     async with session.get(url, headers=headers, allow_redirects=True, ssl=False, timeout=timeout) as resp:
                         if resp.status == 200:
-                            text = await resp.text()
+                            # Читаем байтами + decode ignore = нет UnicodeDecodeError
+                            data = await resp.read()
+                            text = data.decode('utf-8', errors='ignore')
                             debug_log(f"✓ {url[:80]}: {len(text)} симв.")
                             return text
                         elif resp.status in [403, 429, 503]:
-                            # Cloudflare/антибот — пробуем ещё раз
                             if attempt < retry_count:
                                 debug_log(f"⏳ {resp.status} для {url[:60]}, retry {attempt+1}...")
                                 await asyncio.sleep(2 * (attempt + 1))
@@ -156,9 +178,7 @@ async def fetch(session, url, sem, retry_count=2):
             debug_log(f"✗ {url[:80]}: {type(e).__name__}")
         return ""
 
-# ===== ИЗВЛЕЧЕНИЕ РЕАЛЬНОГО URL ИЗ ПРОКЛАДКИ =====
 def extract_real_url_from_kfwl(url):
-    """Извлекает реальный URL из прокладки p.kfwl.lol/ip=ru/https://..."""
     match = re.search(r'https?://(?:p|pp)\.kfwl\.lol(?::\d+)?/[^/]+/(https?://.+)', url)
     if match:
         real_url = match.group(1)
@@ -182,9 +202,7 @@ def extract_messages_data(html, cutoff_date):
     debug_log(f"Найдено сообщений: {len(messages)}")
     return p, u
 
-# ===== TELETHON: Парсинг закрытых групп =====
 async def parse_with_telethon(source_url, cutoff_date):
-    """Читает сообщения из закрытых групп через MTProto API"""
     if not SESSION_B64 or not TELETHON_OK or API_ID == 0:
         debug_log("Telethon не настроен (нет API ключей или сессии)")
         return [], []
@@ -195,12 +213,9 @@ async def parse_with_telethon(source_url, cutoff_date):
     chat_id = match.group(1)
     topic_id = int(match.group(2)) if match.group(2) else None
     
-    is_private = '/c/' in source_url
-    if is_private:
-        try:
-            chat_id = int(f"-100{chat_id}")
-        except:
-            pass
+    if '/c/' in source_url:
+        try: chat_id = int(f"-100{chat_id}")
+        except: pass
     
     session_file = 'tg_session'
     try:
@@ -230,14 +245,12 @@ async def parse_with_telethon(source_url, cutoff_date):
             debug_log(f"❌ Не удалось получить entity {chat_id}: {type(e).__name__}: {e}")
             return [], []
         
-        iter_kwargs = {'limit': 300}
-        
         msg_count = 0
         try:
-            async for msg in client.iter_messages(entity, **iter_kwargs):
+            async for msg in client.iter_messages(entity, limit=300):
                 if not msg.date: continue
                 msg_date = msg.date.replace(tzinfo=timezone.utc)
-                if msg_date < cutoff_date: 
+                if msg_date < cutoff_date:
                     debug_log(f"Достигнут cutoff ({msg_count} сообщений)")
                     break
                 
@@ -246,17 +259,17 @@ async def parse_with_telethon(source_url, cutoff_date):
                 
                 for m in PROXY_REGEX.finditer(text):
                     proxies.append(clean_url(m.group(0)))
-                
                 for m in URL_REGEX.finditer(text):
-                    u = clean_url(m.group(0))
-                    if is_valid_url(u): urls.append(u)
+                    collect_url(m.group(0), urls)
                 
                 if msg.entities:
                     for ent in msg.entities:
                         if isinstance(ent, MessageEntityTextUrl) and ent.url:
                             u = clean_url(ent.url)
-                            if is_valid_url(u): urls.append(u)
-                            elif any(u.startswith(f"{s}://") for s in PROXY_SCHEMES): proxies.append(u)
+                            if any(u.startswith(f"{s}://") for s in PROXY_SCHEMES):
+                                proxies.append(u)
+                            else:
+                                collect_url(ent.url, urls)
         except Exception as e:
             debug_log(f"❌ Ошибка итерации сообщений: {type(e).__name__}: {e}")
         
@@ -266,51 +279,39 @@ async def parse_with_telethon(source_url, cutoff_date):
         debug_log(f"❌ Telethon ошибка: {type(e).__name__}: {e}")
     finally:
         if client:
-            try:
-                await client.disconnect()
-            except:
-                pass
-        
-        try: 
-            os.remove(session_file + '.session')
-        except: 
-            pass
+            try: await client.disconnect()
+            except: pass
+        try: os.remove(session_file + '.session')
+        except: pass
     
     return list(set(proxies)), list(set(urls))
 
-# ===== УЛУЧШЕННАЯ ОБРАБОТКА ПОДПИСОК =====
 async def process_subscription(url, session, sem, visited):
     if url in visited: return []
     visited.add(url)
     
     if url.startswith('happ://'): return [url]
     if not url.startswith(('http://', 'https://')): return []
+    if is_useless_tme(url): return []  # боты и MTProto шар-ссылки не парсим
     
-    # Специальная обработка для kfwl.lol прокладок
     if 'kfwl.lol' in url:
-        # Пробуем через прокладку с retry
         text = await fetch(session, url, sem, retry_count=3)
         if not text or len(text) < 50:
-            # Если прокладка не сработала — пробуем реальный URL
             real_url = extract_real_url_from_kfwl(url)
             if real_url and real_url not in visited:
                 debug_log(f"🔄 Пробуем реальный URL: {real_url[:60]}")
                 visited.add(real_url)
                 text = await fetch(session, real_url, sem, retry_count=2)
-        
         if not text: return []
         
         decoded = decode_base64(text)
         search_text = decoded if decoded and len(decoded) > 50 else text
         found = [clean_url(p) for p in PROXY_REGEX.findall(search_text)]
-        
         if len(found) == 0 and 'net4.su' in url:
             debug_log(f"⚠️ Форма вместо прокси в {url[:60]}")
-        
         if found: debug_log(f"✓ {len(found)} прокси в {url[:60]}")
         return found
     
-    # Обычная обработка
     text = await fetch(session, url, sem)
     if not text: return []
     decoded = decode_base64(text)
@@ -378,7 +379,6 @@ async def main():
     
     all_proxies, sub_urls, visited = [], set(), set()
     
-    # Разделяем: web preview vs telethon
     web_sources, telethon_sources = [], []
     for src in sources:
         if not src.startswith('http'): continue
@@ -392,7 +392,6 @@ async def main():
     
     print(f"[{time.time()-start:.1f}s] Web: {len(web_sources)}, Telethon: {len(telethon_sources)}")
     
-    # Web preview
     if web_sources:
         async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
             tasks = []
@@ -410,7 +409,6 @@ async def main():
                     all_proxies.extend(p)
                     for l in u2: sub_urls.add(clean_url(l))
     
-    # Telethon (для закрытых чатов)
     if telethon_sources:
         if TELETHON_OK and SESSION_B64 and API_ID != 0:
             print(f"[{time.time()-start:.1f}s] Парсим через Telethon ({len(telethon_sources)} источников)...")
@@ -421,7 +419,6 @@ async def main():
         else:
             debug_log(f"⚠️ Telethon не настроен, пропускаем {len(telethon_sources)} источников")
     
-    # Обрабатываем подписки
     if sub_urls:
         print(f"[{time.time()-start:.1f}s] Обрабатываем {len(sub_urls)} подписок...")
         async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
@@ -450,7 +447,6 @@ async def main():
             if ok: alive.append(pmap[i])
     print(f"[{time.time()-start:.1f}s] Живых: {len(alive)}")
     
-    # Сохранение в proxy.txt (plain text)
     alive_uris = [u for u, _ in alive]
     all_uris = alive_uris + happ
     ts = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
@@ -458,7 +454,6 @@ async def main():
     with open(OUT_TXT, 'w', encoding='utf-8') as f:
         f.write("\n".join(header + all_uris))
     
-    # Сохранение в proxy.yaml (Clash)
     clash_proxies = [p for _, p in alive]
     names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
     clash_config = {
