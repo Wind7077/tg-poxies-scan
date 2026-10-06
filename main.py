@@ -12,24 +12,24 @@ import aiohttp
 
 try:
     from telethon import TelegramClient
-    from telethon.tl.types import MessageMediaDocument, MessageEntityUrl, MessageEntityTextUrl
-    TELETHON_AVAILABLE = True
+    from telethon.tl.types import MessageEntityUrl, MessageEntityTextUrl
+    TELETHON_OK = True
 except ImportError:
-    TELETHON_AVAILABLE = False
+    TELETHON_OK = False
 
 # --- КОНФИГУРАЦИЯ ---
 SOURCES_FILE = 'sources.txt'
 OUT_TXT = 'proxy.txt'
 OUT_YAML = 'proxy.yaml'
-SESSION_FILE = 'telegram_session'
 MAX_DAYS = 10
 TIMEOUT = aiohttp.ClientTimeout(total=7, connect=5)
 MAX_CONCURRENT_HTTP = 50
 MAX_CONCURRENT_PING = 200
 
-# Telethon API (заполните своими данными)
+# Telegram API (из Secrets GitHub)
 API_ID = int(os.getenv('TELEGRAM_API_ID', '0'))
 API_HASH = os.getenv('TELEGRAM_API_HASH', '')
+SESSION_B64 = os.getenv('TELEGRAM_SESSION', '')
 
 PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
 PROXY_REGEX = re.compile(r'(?:' + '|'.join(PROXY_SCHEMES) + r')://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
@@ -46,441 +46,311 @@ def debug_log(msg):
 def decode_base64(s):
     s = s.strip().replace('-', '+').replace('_', '/')
     padding = len(s) % 4
-    if padding:
-        s += '=' * (4 - padding)
-    try:
-        return base64.b64decode(s).decode('utf-8', errors='ignore')
-    except Exception:
-        return ""
+    if padding: s += '=' * (4 - padding)
+    try: return base64.b64decode(s).decode('utf-8', errors='ignore')
+    except: return ""
 
 def is_valid_url(url):
     try:
-        result = urlparse(url)
-        if not all([result.scheme, result.netloc]):
-            return False
-        if result.scheme == 'tg':
-            return False
-        if any(d in result.netloc for d in BLACKLIST_DOMAINS):
-            return False
+        r = urlparse(url)
+        if not all([r.scheme, r.netloc]): return False
+        if r.scheme == 'tg': return False
+        if any(d in r.netloc for d in BLACKLIST_DOMAINS): return False
         return True
-    except Exception:
-        return False
+    except: return False
 
 def clean_url(url):
-    for i, char in enumerate(url):
-        if ord(char) > 127:
-            url = url[:i]
-            break
-    while url.endswith(')') and url.count(')') > url.count('('):
-        url = url[:-1]
-    url = url.rstrip('.,;:!?')
-    return url
-
-# ========================================
-# ЧАСТЬ 1: ПАРСИНГ ЧЕРЕЗ WEB PREVIEW
-# (для публичных каналов)
-# ========================================
+    for i, c in enumerate(url):
+        if ord(c) > 127: url = url[:i]; break
+    while url.endswith(')') and url.count(')') > url.count('('): url = url[:-1]
+    return url.rstrip('.,;:!?')
 
 def extract_from_element(element):
     proxies, urls = [], []
     if hasattr(element, 'find_all'):
         for a in element.find_all('a', href=True):
             href = clean_url(a['href'].strip())
-            if any(href.startswith(f"{s}://") for s in PROXY_SCHEMES):
-                proxies.append(href)
-            elif href.startswith('http'):
-                urls.append(href)
+            if any(href.startswith(f"{s}://") for s in PROXY_SCHEMES): proxies.append(href)
+            elif href.startswith('http'): urls.append(href)
     text = element.get_text() if hasattr(element, 'get_text') else str(element)
-    for match in PROXY_REGEX.finditer(text):
-        proxies.append(clean_url(match.group(0)))
-    for match in URL_REGEX.finditer(text):
-        url = clean_url(match.group(0))
-        if is_valid_url(url):
-            urls.append(url)
+    proxies.extend([clean_url(m.group(0)) for m in PROXY_REGEX.finditer(text)])
+    urls.extend([clean_url(m.group(0)) for m in URL_REGEX.finditer(text) if is_valid_url(clean_url(m.group(0)))])
     return list(set(proxies)), list(set(urls))
 
 async def fetch(session, url, sem):
     async with sem:
         try:
-            if not url.startswith(('http://', 'https://')):
-                return ""
+            if not url.startswith(('http://', 'https://')): return ""
             async with session.get(url, allow_redirects=True, ssl=False) as resp:
                 if resp.status == 200:
                     text = await resp.text()
-                    debug_log(f"✓ Скачано {url[:80]}: {len(text)} символов")
+                    debug_log(f"✓ {url[:80]}: {len(text)} симв.")
                     return text
-                else:
-                    debug_log(f"✗ Ошибка {resp.status} для {url[:80]}")
+                debug_log(f"✗ {resp.status} для {url[:80]}")
         except Exception as e:
-            debug_log(f"✗ Исключение {url[:80]}: {type(e).__name__}")
+            debug_log(f"✗ {url[:80]}: {type(e).__name__}")
         return ""
 
 def extract_messages_data(html, cutoff_date):
     soup = BeautifulSoup(html, 'html.parser')
     messages = soup.find_all('div', class_='tgme_widget_message')
-    all_proxies, all_urls = [], []
-    debug_log(f"Найдено сообщений: {len(messages)}")
+    p, u = [], []
     for msg in messages:
         time_tag = msg.find('time')
         if time_tag and time_tag.get('datetime'):
             try:
-                dt_str = time_tag['datetime'].replace('Z', '+00:00')
-                post_time = datetime.fromisoformat(dt_str)
-                if post_time < cutoff_date:
-                    continue
-            except Exception:
-                pass
-        p, u = extract_from_element(msg)
-        all_proxies.extend(p)
-        all_urls.extend(u)
-    return all_proxies, all_urls
+                dt = datetime.fromisoformat(time_tag['datetime'].replace('Z', '+00:00'))
+                if dt < cutoff_date: continue
+            except: pass
+        px, ur = extract_from_element(msg)
+        p.extend(px); u.extend(ur)
+    debug_log(f"Найдено сообщений: {len(messages)}")
+    return p, u
 
-# ========================================
-# ЧАСТЬ 2: ПАРСИНГ ЧЕРЕЗ TELETHON (MTProto)
-# (для чатов, групп, закрытых каналов)
-# ========================================
-
+# ===== TELETHON: Парсинг закрытых групп =====
 async def parse_with_telethon(source_url, cutoff_date):
-    """
-    Парсит источник через Telethon (MTProto API).
-    Работает для чатов, групп, закрытых каналов, топиков.
-    """
-    if not TELETHON_AVAILABLE:
-        debug_log("Telethon не установлен, пропускаем")
+    """Читает сообщения из закрытых групп через MTProto API"""
+    if not SESSION_B64 or not TELETHON_OK or API_ID == 0:
+        debug_log("Telethon не настроен (нет API ключей или сессии)")
         return [], []
     
-    if API_ID == 0 or not API_HASH:
-        debug_log("API_ID/API_HASH не настроены, пропускаем Telethon")
-        return [], []
-    
-    # Определяем тип источника
     match = re.match(r'https?://t\.me/([a-zA-Z0-9_]+)(?:/(\d+))?', source_url)
-    if not match:
-        return [], []
+    if not match: return [], []
     
     chat_name = match.group(1)
     topic_id = int(match.group(2)) if match.group(2) else None
     
-    proxies, urls = [], []
-    
+    # Восстанавливаем сессию из Base64
+    session_file = 'tg_session'
     try:
-        # Подключаемся к Telegram
-        client = TelegramClient(SESSION_FILE, API_ID, API_HASH)
-        await client.start(bot_token=os.getenv('TELEGRAM_BOT_TOKEN'))
+        session_data = base64.b64decode(SESSION_B64)
+        with open(session_file + '.session', 'wb') as f:
+            f.write(session_data)
+        debug_log(f"Сессия восстановлена ({len(session_data)} байт)")
+    except Exception as e:
+        debug_log(f"Ошибка восстановления сессии: {e}")
+        return [], []
+    
+    proxies, urls = [], []
+    try:
+        client = TelegramClient(session_file, API_ID, API_HASH)
+        await client.connect()
         
-        # Получаем сущность чата
-        try:
-            entity = await client.get_entity(chat_name)
-        except Exception as e:
-            debug_log(f"Не удалось получить сущность {chat_name}: {e}")
+        # Проверяем авторизацию
+        if not await client.is_user_authorized():
+            debug_log("❌ Сессия не авторизована!")
             await client.disconnect()
             return [], []
         
-        debug_log(f"Подключились к {chat_name}, парсим сообщения...")
+        debug_log(f"Telethon: читаем {chat_name} (топик {topic_id})...")
+        entity = await client.get_entity(chat_name)
         
-        # Параметры для iter_messages
-        kwargs = {
-            'entity': entity,
-            'limit': 200,  # Последние 200 сообщений
-            'offset_date': datetime.now(timezone.utc),
-        }
-        
-        # Если это топик - добавляем topic_id
-        if topic_id:
-            kwargs['reply_to'] = topic_id  # Может не работать, пробуем
-        
-        # Итерируем по сообщениям
-        async for message in client.iter_messages(**kwargs):
-            # Проверка даты
-            if message.date and message.date.replace(tzinfo=timezone.utc) < cutoff_date:
-                break  # Сообщения идут от новых к старым, можно остановиться
+        msg_count = 0
+        async for msg in client.iter_messages(entity, limit=500):
+            if not msg.date: continue
+            msg_date = msg.date.replace(tzinfo=timezone.utc)
+            if msg_date < cutoff_date: 
+                debug_log(f"Достигнут cutoff (прошло {msg_count} сообщений)")
+                break
             
-            text = message.text or message.message or ''
+            msg_count += 1
+            text = msg.text or msg.message or ''
             
-            # Ищем прокси в тексте
-            for match in PROXY_REGEX.finditer(text):
-                proxies.append(clean_url(match.group(0)))
+            # Ищем прокси
+            for m in PROXY_REGEX.finditer(text):
+                proxies.append(clean_url(m.group(0)))
             
             # Ищем URL подписок
-            for match in URL_REGEX.finditer(text):
-                url = clean_url(match.group(0))
-                if is_valid_url(url):
-                    urls.append(url)
+            for m in URL_REGEX.finditer(text):
+                u = clean_url(m.group(0))
+                if is_valid_url(u): urls.append(u)
             
-            # Также проверяем entities (ссылки в тексте)
-            if message.entities:
-                for entity in message.entities:
-                    if isinstance(entity, (MessageEntityUrl, MessageEntityTextUrl)):
-                        if hasattr(entity, 'url') and entity.url:
-                            url = clean_url(entity.url)
-                            if is_valid_url(url):
-                                urls.append(url)
-                            elif any(url.startswith(f"{s}://") for s in PROXY_SCHEMES):
-                                proxies.append(url)
+            # Ссылки в entities
+            if msg.entities:
+                for ent in msg.entities:
+                    if isinstance(ent, MessageEntityTextUrl) and ent.url:
+                        u = clean_url(ent.url)
+                        if is_valid_url(u): urls.append(u)
+                        elif any(u.startswith(f"{s}://") for s in PROXY_SCHEMES): proxies.append(u)
         
         await client.disconnect()
-        debug_log(f"Из {chat_name} (Telethon): {len(proxies)} прокси, {len(urls)} URL")
-        
+        debug_log(f"Telethon ✅: {len(proxies)} прокси, {len(urls)} URL из {chat_name} ({msg_count} сообщений)")
     except Exception as e:
-        debug_log(f"Ошибка Telethon для {chat_name}: {type(e).__name__}: {e}")
+        debug_log(f"❌ Telethon ошибка для {chat_name}: {type(e).__name__}: {e}")
+    
+    # Удаляем временный файл сессии
+    try: os.remove(session_file + '.session')
+    except: pass
     
     return list(set(proxies)), list(set(urls))
 
-# ========================================
-# ОБЩАЯ ЛОГИКА
-# ========================================
-
-async def process_subscription(url, session, sem, visited_subs):
-    if url in visited_subs:
-        return []
-    visited_subs.add(url)
-    if url.startswith('happ://'):
-        return [url]
-    if not url.startswith(('http://', 'https://')):
-        return []
+async def process_subscription(url, session, sem, visited):
+    if url in visited: return []
+    visited.add(url)
+    if url.startswith('happ://'): return [url]
+    if not url.startswith(('http://', 'https://')): return []
     text = await fetch(session, url, sem)
-    if not text:
-        return []
-    proxies = []
+    if not text: return []
     decoded = decode_base64(text)
     search_text = decoded if decoded and len(decoded) > 50 else text
     found = [clean_url(p) for p in PROXY_REGEX.findall(search_text)]
-    if found:
-        debug_log(f"✓ Найдено {len(found)} прокси в {url[:60]}")
-        proxies.extend(found)
-    return proxies
+    if found: debug_log(f"✓ {len(found)} прокси в {url[:60]}")
+    return found
 
 async def check_proxy_tcp(host, port, sem):
     async with sem:
         try:
-            port_int = int(port)
-            _, writer = await asyncio.wait_for(
-                asyncio.open_connection(host, port_int), 
-                timeout=2.0
-            )
-            writer.close()
-            await writer.wait_closed()
+            _, w = await asyncio.wait_for(asyncio.open_connection(host, int(port)), timeout=2.0)
+            w.close(); await w.wait_closed()
             return True
-        except Exception:
-            return False
+        except: return False
 
 def parse_uri_for_clash(uri):
     try:
-        scheme, rest = uri.split('://', 1)
-        scheme = scheme.lower()
-        if scheme == 'happ':
-            return None
-        if scheme == 'vmess':
-            data = json.loads(decode_base64(rest))
-            return {
-                'name': data.get('ps', f"VMess-{data.get('add')}"),
-                'type': 'vmess', 'server': data.get('add'),
-                'port': int(data.get('port', 0)), 'uuid': data.get('id', ''),
-                'alterId': int(data.get('aid', 0)), 'cipher': 'auto',
-                'tls': data.get('tls') == 'tls', 'network': data.get('net', 'tcp'), 'udp': True
-            }
-        elif scheme == 'trojan':
-            password, rest2 = rest.split('@', 1)
-            host_port, params_name = rest2.split('?', 1) if '?' in rest2 else (rest2, '')
-            host, port = host_port.split(':', 1)
-            name = unquote(params_name.split('#', 1)[1]) if '#' in params_name else f"Trojan-{host}"
-            return {'name': name, 'type': 'trojan', 'server': host, 'port': int(port), 'password': password, 'udp': True}
-        elif scheme == 'vless':
-            uuid, rest2 = rest.split('@', 1)
-            host_port, params_name = rest2.split('?', 1) if '?' in rest2 else (rest2, '')
-            host, port = host_port.split(':', 1)
-            name = unquote(params_name.split('#', 1)[1]) if '#' in params_name else f"VLESS-{host}"
-            query = parse_qs(params_name.split('#')[0]) if '?' in params_name else {}
-            net = query.get('type', ['tcp'])[0]
-            p = {'name': name, 'type': 'vless', 'server': host, 'port': int(port), 'uuid': uuid, 'network': net, 'udp': True, 'tls': query.get('security', [''])[0] in ['tls', 'reality']}
-            if net == 'ws':
-                p['ws-opts'] = {'path': unquote(query.get('path', ['/'])[0])}
-            return p
-        elif scheme == 'ss':
+        s, rest = uri.split('://', 1); s = s.lower()
+        if s == 'happ': return None
+        if s == 'vmess':
+            d = json.loads(decode_base64(rest))
+            return {'name': d.get('ps', f"VM-{d.get('add')}"), 'type': 'vmess', 'server': d.get('add'), 'port': int(d.get('port', 0)), 'uuid': d.get('id', ''), 'alterId': int(d.get('aid', 0)), 'cipher': 'auto', 'tls': d.get('tls')=='tls', 'network': d.get('net', 'tcp'), 'udp': True}
+        elif s == 'trojan':
+            pw, r2 = rest.split('@', 1); hp, pn = r2.split('?', 1) if '?' in r2 else (r2, ''); h, p = hp.split(':', 1)
+            n = unquote(pn.split('#', 1)[1]) if '#' in pn else f"T-{h}"
+            return {'name': n, 'type': 'trojan', 'server': h, 'port': int(p), 'password': pw, 'udp': True}
+        elif s == 'vless':
+            u, r2 = rest.split('@', 1); hp, pn = r2.split('?', 1) if '?' in r2 else (r2, ''); h, p = hp.split(':', 1)
+            n = unquote(pn.split('#', 1)[1]) if '#' in pn else f"V-{h}"
+            q = parse_qs(pn.split('#')[0]) if '?' in pn else {}; nt = q.get('type', ['tcp'])[0]
+            res = {'name': n, 'type': 'vless', 'server': h, 'port': int(p), 'uuid': u, 'network': nt, 'udp': True, 'tls': q.get('security', [''])[0] in ['tls', 'reality']}
+            if nt == 'ws': res['ws-opts'] = {'path': unquote(q.get('path', ['/'])[0])}
+            return res
+        elif s == 'ss':
             if '@' in rest:
-                userinfo, hostport = rest.split('@', 1)
-                if ':' in hostport:
-                    host, port = hostport.split(':', 1)
-                    if ':' in userinfo:
-                        cipher, password = userinfo.split(':', 1)
-                    else:
-                        cipher, password = 'aes-256-gcm', decode_base64(userinfo)
-                    return {'name': f"SS-{host}", 'type': 'ss', 'server': host, 'port': int(port.split('#')[0]), 'cipher': cipher, 'password': password, 'udp': True}
-        elif scheme in ['hysteria', 'hysteria2', 'hy2']:
-            auth_rest, params_name = rest.split('?', 1) if '?' in rest else (rest, '')
-            if '@' in auth_rest:
-                password, host_port = auth_rest.split('@', 1)
-            else:
-                password, host_port = '', auth_rest
-            if ':' in host_port:
-                host, port = host_port.split(':', 1)
-                name = unquote(params_name.split('#', 1)[1]) if '#' in params_name else f"Hysteria-{host}"
-                return {'name': name, 'type': 'hysteria2' if scheme == 'hy2' else scheme, 'server': host, 'port': int(port), 'password': password, 'udp': True}
-    except Exception:
-        pass
+                ui, hp = rest.split('@', 1)
+                if ':' in hp:
+                    h, p = hp.split(':', 1)
+                    if ':' in ui: c, pw = ui.split(':', 1)
+                    else: c, pw = 'aes-256-gcm', decode_base64(ui)
+                    return {'name': f"SS-{h}", 'type': 'ss', 'server': h, 'port': int(p.split('#')[0]), 'cipher': c, 'password': pw, 'udp': True}
+        elif s in ['hysteria', 'hysteria2', 'hy2']:
+            ar, pn = rest.split('?', 1) if '?' in rest else (rest, '')
+            if '@' in ar: pw, hp = ar.split('@', 1)
+            else: pw, hp = '', ar
+            if ':' in hp:
+                h, p = hp.split(':', 1)
+                n = unquote(pn.split('#', 1)[1]) if '#' in pn else f"H-{h}"
+                return {'name': n, 'type': 'hysteria2' if s=='hy2' else s, 'server': h, 'port': int(p), 'password': pw, 'udp': True}
+    except: pass
     return None
 
-def is_public_channel(src):
-    """Проверяет, является ли канал публичным (можно парсить через web preview)"""
-    # Группы/чаты обычно имеют названия в нижнем регистре или специфические паттерны
-    # Но надёжнее — попробовать web preview и если не сработал, использовать Telethon
-    # Для простоты: считаем, что LowiKForum - это чат
-    chat_indicators = ['lowikforum', 'forum', 'chat', 'flood', 'talk']
-    return not any(ind in src.lower() for ind in chat_indicators)
-
 async def main():
-    start_time = time.time()
-    
+    start = time.time()
     if not os.path.exists(SOURCES_FILE):
-        print("Файл sources.txt не найден!")
-        return
+        print("sources.txt не найден!"); return
     
     with open(SOURCES_FILE, 'r', encoding='utf-8') as f:
-        sources = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+        sources = [l.strip() for l in f if l.strip() and not l.startswith('#')]
     
     http_sem = asyncio.Semaphore(MAX_CONCURRENT_HTTP)
     ping_sem = asyncio.Semaphore(MAX_CONCURRENT_PING)
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS)
+    cutoff = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS)
     
-    all_proxies = []
-    sub_urls = set()
-    visited_subs = set()
+    all_proxies, sub_urls, visited = [], set(), set()
     
-    # Разделяем источники на "публичные" и "приватные/чаты"
-    web_sources = []
-    telethon_sources = []
-    
+    # Разделяем: web preview vs telethon
+    web_sources, telethon_sources = [], []
     for src in sources:
-        if not src.startswith('http'):
-            continue
+        if not src.startswith('http'): continue
         if src.startswith('https://t.me/'):
-            # Эвристика: LowiKForum и подобные - это чаты
-            if 'LowiKForum' in src or '/c/' in src:  # /c/ - приватные каналы
+            if 'LowiKForum' in src or any(x in src.lower() for x in ['chat', 'forum']):
                 telethon_sources.append(src)
             else:
                 web_sources.append(src)
         else:
             sub_urls.add(clean_url(src))
     
-    print(f"[{time.time()-start_time:.1f}s] Источников: Web={len(web_sources)}, Telethon={len(telethon_sources)}")
+    print(f"[{time.time()-start:.1f}s] Web: {len(web_sources)}, Telethon: {len(telethon_sources)}")
     
-    # === WEB PREVIEW ПАРСИНГ ===
+    # Web preview
     if web_sources:
         async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
-            print(f"[{time.time()-start_time:.1f}s] Парсим через Web Preview...")
-            
-            source_tasks = []
+            tasks = []
             for src in web_sources:
                 if re.search(r'/\d+$', src):
-                    web_url = f"{src}?embed=1&mode=tme"
+                    url = f"{src}?embed=1&mode=tme"
                 else:
-                    web_url = src.replace('https://t.me/', 'https://t.me/s/')
-                source_tasks.append((web_url, fetch(session, web_url, http_sem)))
-            
-            results = await asyncio.gather(*[t[1] for t in source_tasks])
-            
-            for (url, _), html in zip(source_tasks, results):
+                    url = src.replace('https://t.me/', 'https://t.me/s/')
+                tasks.append((url, fetch(session, url, http_sem)))
+            results = await asyncio.gather(*[t[1] for t in tasks])
+            for (u, _), html in zip(tasks, results):
                 if html:
-                    p, u = extract_messages_data(html, cutoff_date)
-                    debug_log(f"Из {url[:60]}: {len(p)} прокси, {len(u)} URL подписок")
+                    p, u2 = extract_messages_data(html, cutoff)
+                    debug_log(f"Из {u[:60]}: {len(p)} прокси, {len(u2)} URL")
                     all_proxies.extend(p)
-                    for link in u:
-                        sub_urls.add(clean_url(link))
-            
-            # Обрабатываем подписки
-            sub_tasks = [process_subscription(url, session, http_sem, visited_subs) for url in sub_urls]
-            sub_results = await asyncio.gather(*sub_tasks)
-            for res in sub_results:
-                all_proxies.extend(res)
+                    for l in u2: sub_urls.add(clean_url(l))
     
-    # === TELETHON ПАРСИНГ (для чатов) ===
-    if telethon_sources and TELETHON_AVAILABLE and API_ID != 0:
-        print(f"[{time.time()-start_time:.1f}s] Парсим через Telethon (MTProto)...")
-        for src in telethon_sources:
-            p, u = await parse_with_telethon(src, cutoff_date)
-            all_proxies.extend(p)
-            for link in u:
-                sub_urls.add(clean_url(link))
-            
-            # Также обрабатываем найденные подписки
-            async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
-                for link in u:
-                    proxies_from_sub = await process_subscription(link, session, http_sem, visited_subs)
-                    all_proxies.extend(proxies_from_sub)
-    elif telethon_sources:
-        debug_log(f"Telethon не настроен, пропускаем {len(telethon_sources)} источников")
-    
-    # Уникализация
-    all_proxies = [p for p in set(all_proxies) if p and '://' in p]
-    print(f"[{time.time()-start_time:.1f}s] Найдено сырых прокси: {len(all_proxies)}")
-    
-    happ_links = []
-    proxies_to_ping = []
-    for uri in all_proxies:
-        if uri.lower().startswith('happ://'):
-            happ_links.append(uri)
+    # Telethon (для LowiKForum)
+    if telethon_sources:
+        if TELETHON_OK and SESSION_B64 and API_ID != 0:
+            print(f"[{time.time()-start:.1f}s] Парсим через Telethon ({len(telethon_sources)} источников)...")
+            for src in telethon_sources:
+                p, u = await parse_with_telethon(src, cutoff)
+                all_proxies.extend(p)
+                for l in u: sub_urls.add(clean_url(l))
         else:
-            proxies_to_ping.append(uri)
+            debug_log(f"⚠️ Telethon не настроен, пропускаем {len(telethon_sources)} источников")
     
-    print(f"[{time.time()-start_time:.1f}s] Пингуем {len(proxies_to_ping)} серверов...")
-    alive_proxies = []
-    ping_tasks = []
-    proxy_map = {}
+    # Подписки
+    if sub_urls:
+        print(f"[{time.time()-start:.1f}s] Обрабатываем {len(sub_urls)} подписок...")
+        async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
+            tasks = [process_subscription(url, session, http_sem, visited) for url in sub_urls]
+            results = await asyncio.gather(*tasks)
+            for r in results: all_proxies.extend(r)
     
-    for uri in proxies_to_ping:
-        parsed = parse_uri_for_clash(uri)
+    all_proxies = [p for p in set(all_proxies) if p and '://' in p]
+    print(f"[{time.time()-start:.1f}s] Сырых прокси: {len(all_proxies)}")
+    
+    happ, ping_list = [], []
+    for u in all_proxies:
+        (happ if u.lower().startswith('happ://') else ping_list).append(u)
+    
+    print(f"[{time.time()-start:.1f}s] Пингуем {len(ping_list)} серверов...")
+    alive = []
+    tasks, pmap = [], {}
+    for u in ping_list:
+        parsed = parse_uri_for_clash(u)
         if parsed and parsed.get('server') and parsed.get('port'):
-            ping_tasks.append(check_proxy_tcp(parsed['server'], parsed['port'], ping_sem))
-            proxy_map[len(ping_tasks)-1] = (uri, parsed)
+            tasks.append(check_proxy_tcp(parsed['server'], parsed['port'], ping_sem))
+            pmap[len(tasks)-1] = (u, parsed)
+    if tasks:
+        results = await asyncio.gather(*tasks)
+        for i, ok in enumerate(results):
+            if ok: alive.append(pmap[i])
+    print(f"[{time.time()-start:.1f}s] Живых: {len(alive)}")
     
-    if ping_tasks:
-        results = await asyncio.gather(*ping_tasks)
-        for i, is_alive in enumerate(results):
-            if is_alive:
-                alive_proxies.append(proxy_map[i])
-    
-    print(f"[{time.time()-start_time:.1f}s] Живых серверов: {len(alive_proxies)}")
-    
-    # Сохранение в proxy.txt (plain text)
-    alive_uris = [uri for uri, _ in alive_proxies]
-    all_uris = alive_uris + happ_links
-    
-    update_time = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
-    header = [
-        f"# Обновлено: {update_time}",
-        f"# Живых серверов: {len(alive_uris)}",
-        f"# Happ ссылок: {len(happ_links)}",
-        f"# Всего ссылок: {len(all_uris)}",
-        "#"
-    ]
-    
-    raw_txt = "\n".join(header + all_uris)
+    # Сохранение
+    alive_uris = [u for u, _ in alive]
+    all_uris = alive_uris + happ
+    ts = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+    header = [f"# Обновлено: {ts}", f"# Живых: {len(alive_uris)}", f"# Happ: {len(happ)}", "#"]
     with open(OUT_TXT, 'w', encoding='utf-8') as f:
-        f.write(raw_txt)
+        f.write("\n".join(header + all_uris))
     
-    # Сохранение в proxy.yaml (Clash)
-    clash_proxies = [p for _, p in alive_proxies]
-    proxy_names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
-    
+    clash_proxies = [p for _, p in alive]
+    names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
     clash_config = {
-        'mixed-port': 7890,
-        'allow-lan': False,
-        'mode': 'Rule',
-        'log-level': 'info',
-        'external-controller': '127.0.0.1:9090',
-        'proxies': clash_proxies,
+        'mixed-port': 7890, 'allow-lan': False, 'mode': 'Rule', 'log-level': 'info',
+        'external-controller': '127.0.0.1:9090', 'proxies': clash_proxies,
         'proxy-groups': [
-            {'name': '♻️ Auto', 'type': 'url-test', 'proxies': proxy_names, 'url': 'http://www.gstatic.com/generate_204', 'interval': 300},
-            {'name': '🚀 Proxy', 'type': 'select', 'proxies': ['♻️ Auto'] + proxy_names}
+            {'name': '♻️ Auto', 'type': 'url-test', 'proxies': names, 'url': 'http://www.gstatic.com/generate_204', 'interval': 300},
+            {'name': '🚀 Proxy', 'type': 'select', 'proxies': ['♻️ Auto'] + names}
         ],
         'rules': ['MATCH,🚀 Proxy']
     }
-    
     with open(OUT_YAML, 'w', encoding='utf-8') as f:
         yaml.dump(clash_config, f, sort_keys=False, allow_unicode=True)
     
-    print(f"✅ Готово за {time.time()-start_time:.1f} секунд!")
-    print(f"📄 Файлы обновлены: {OUT_TXT}, {OUT_YAML}")
+    print(f"✅ Готово за {time.time()-start:.1f} сек!")
 
 if __name__ == '__main__':
     asyncio.run(main())
