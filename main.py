@@ -37,8 +37,7 @@ PROXY_REGEX = re.compile(r'(?:' + '|'.join(PROXY_SCHEMES) + r')://[a-zA-Z0-9\-._
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
 BLACKLIST_DOMAINS = [
-    't.me', 'telegram.org', 'telegram.me', 'telegra.ph',
-    'github.com', 'youtube.com', 'youtu.be',
+    'youtube.com', 'youtu.be',
     'instagram.com', 'twitter.com', 'x.com',
     'vk.com', 'ok.ru', 'pikabu.ru', 'habr.com',
     'dzen.ru', 'yandex.ru', 'mail.ru', 'rambler.ru',
@@ -46,8 +45,7 @@ BLACKLIST_DOMAINS = [
     'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru',
     'max.ru', 'git.a9fm.best', 'ria.ru', 'lenta.ru',
-    'rbc.ru', 'vedomosti.ru', 'tass.ru',
-    'git.arturlamaev.workers.dev', 'cyb-portal.org', 'gidroksi.fun',
+    'rbc.ru', 'vedomosti.ru', 'tass.ru'
     'h1cloud.net'
 ]
 
@@ -59,12 +57,12 @@ STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 
 # Протоколы
 ENABLE_VLESS = True
-ENABLE_VMESS = True
-ENABLE_SS = True
-ENABLE_TROJAN = True
-ENABLE_HYSTERIA = True
+ENABLE_VMESS = False
+ENABLE_SS = False
+ENABLE_TROJAN = False
+ENABLE_HYSTERIA = False
 ENABLE_HYSTERIA2 = True
-ENABLE_TUIC = True
+ENABLE_TUIC = False
 
 # Фильтрация по ключевым словам
 ENABLE_KEYWORD_FILTER = True
@@ -90,8 +88,6 @@ WHITELIST_KEYWORDS = [
     'глушилка', 'глушилки', 'глушилок',
     'обход белого', 'обход глушилок',
     'обход блокировок', 'обход ркн',
-    'anti-censor', 'anticensor', 'no-censor',
-    'rkn', 'fuck.rkn', 'роскомнадзор',
     'обход',
     
     # ===== СПЕЦИАЛЬНЫЕ МАРКЕРЫ ПРОКСИ-ПРОВАЙДЕРОВ =====
@@ -122,14 +118,6 @@ WHITELIST_KEYWORDS = [
     'tinkoff', 'тинькофф', 'тенькофф', 'тинькоф',
     'alfabank', 'альфабанк', 'альфа-банк', 'альфа',
     'gosuslugi', 'госуслуги',
-    
-    # ===== МЕЖДУНАРОДНЫЕ БЕЛЫЕ SNI =====
-    'apple.com', 'tesla.com', 'amazon.com',
-    'microsoft.com', 'cloudflare.com',
-    'google.com', 'googleapis.com', 'google-analytics',
-    'speedtest.net', 'speedtest',
-    'youtube.com', 'ytimg.com',
-    'netflix.com', 'disney.com',
     
     # ===== СТРАНЫ / ФЛАГИ =====
     'russia', 'россия', 'россия', 'ru-', 'rus-',
