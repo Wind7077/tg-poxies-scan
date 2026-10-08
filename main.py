@@ -46,7 +46,8 @@ BLACKLIST_DOMAINS = [
     'max.ru', 'git.a9fm.best', 'ria.ru', 'lenta.ru',
     'rbc.ru', 'vedomosti.ru', 'tass.ru',
     'git.arturlamaev.workers.dev', 'cyb-portal.org', 'gidroksi.fun',
-    'h1cloud.net'
+    'h1cloud.net', 'reddit.com', 'discord.com', 'virustotal.com',
+    'synthid.com', 'detector404.ru', 'x0.at', 'codex.sale'
 ]
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
@@ -125,6 +126,7 @@ def collect_url(raw, urls):
         urls.append(u)
 
 def make_names_unique(proxies):
+    """Делает имена прокси уникальными для Clash/FlClash"""
     used = {}
     renamed = 0
     for p in proxies:
@@ -354,13 +356,19 @@ async def check_proxy_tcp(host, port, sem):
         except: return False
 
 def parse_uri_for_clash(uri):
+    def safe_int(s, default=0):
+        """Безопасное преобразование в int (убирает слэши и мусор)"""
+        s = str(s).split('/')[0].split('#')[0].split('?')[0].strip()
+        try: return int(s)
+        except: return default
+    
     try:
         s, rest = uri.split('://', 1)
         s = s.lower()
         if s == 'happ':
             return None
         
-        # ===== VLESS (ИСПРАВЛЕНО: обработка # в URL) =====
+        # ===== VLESS =====
         if s == 'vless':
             uuid, rest2 = rest.split('@', 1)
             
@@ -374,9 +382,16 @@ def parse_uri_for_clash(uri):
             else:
                 hp, query_str = hp_params, ''
             
+            # Убираем path после host:port (host:443/path -> host:443)
+            if '/' in hp:
+                hp = hp.split('/')[0]
+            
             if ':' not in hp:
                 return None
-            h, p = hp.split(':', 1)
+            h, p_str = hp.split(':', 1)
+            p = safe_int(p_str)
+            if not p:
+                return None
             
             name = unquote(name_part) if name_part else f"VLESS-{h}"
             q = parse_qs(query_str) if query_str else {}
@@ -386,7 +401,7 @@ def parse_uri_for_clash(uri):
                 'name': name,
                 'type': 'vless',
                 'server': h,
-                'port': int(p),
+                'port': p,
                 'uuid': uuid,
                 'network': nt,
                 'udp': True,
@@ -416,24 +431,29 @@ def parse_uri_for_clash(uri):
         
         # ===== VMESS =====
         elif s == 'vmess':
-            d = json.loads(decode_base64(rest))
-            res = {
-                'name': d.get('ps', f"VM-{d.get('add')}"),
-                'type': 'vmess',
-                'server': d.get('add'),
-                'port': int(d.get('port', 0)),
-                'uuid': d.get('id', ''),
-                'alterId': int(d.get('aid', 0)),
-                'cipher': 'auto',
-                'tls': d.get('tls') == 'tls',
-                'network': d.get('net', 'tcp'),
-                'udp': True
-            }
-            if res['tls']:
-                res['servername'] = d.get('sni', d.get('host', ''))
-            return res
+            try:
+                d = json.loads(decode_base64(rest))
+                if not isinstance(d, dict):
+                    return None
+                res = {
+                    'name': d.get('ps', f"VM-{d.get('add', 'unknown')}"),
+                    'type': 'vmess',
+                    'server': d.get('add'),
+                    'port': safe_int(str(d.get('port', 0))),
+                    'uuid': d.get('id', ''),
+                    'alterId': safe_int(str(d.get('aid', 0))),
+                    'cipher': 'auto',
+                    'tls': d.get('tls') == 'tls',
+                    'network': d.get('net', 'tcp'),
+                    'udp': True
+                }
+                if res['tls']:
+                    res['servername'] = d.get('sni', d.get('host', ''))
+                return res
+            except (json.JSONDecodeError, ValueError):
+                return None
         
-        # ===== TROJAN (ИСПРАВЛЕНО) =====
+        # ===== TROJAN =====
         elif s == 'trojan':
             password, rest2 = rest.split('@', 1)
             
@@ -447,9 +467,15 @@ def parse_uri_for_clash(uri):
             else:
                 hp, query_str = hp_params, ''
             
+            if '/' in hp:
+                hp = hp.split('/')[0]
+            
             if ':' not in hp:
                 return None
-            h, p = hp.split(':', 1)
+            h, p_str = hp.split(':', 1)
+            p = safe_int(p_str)
+            if not p:
+                return None
             
             name = unquote(name_part) if name_part else f"Trojan-{h}"
             q = parse_qs(query_str) if query_str else {}
@@ -458,7 +484,7 @@ def parse_uri_for_clash(uri):
                 'name': name,
                 'type': 'trojan',
                 'server': h,
-                'port': int(p),
+                'port': p,
                 'password': password,
                 'udp': True
             }
@@ -470,7 +496,7 @@ def parse_uri_for_clash(uri):
             
             return res
         
-        # ===== SS (ИСПРАВЛЕНО) =====
+        # ===== SS =====
         elif s == 'ss':
             if '@' in rest:
                 userinfo, hp_name = rest.split('@', 1)
@@ -480,8 +506,14 @@ def parse_uri_for_clash(uri):
                 else:
                     hp, name_part = hp_name, ''
                 
+                if '/' in hp:
+                    hp = hp.split('/')[0]
+                
                 if ':' in hp:
-                    h, p = hp.split(':', 1)
+                    h, p_str = hp.split(':', 1)
+                    p = safe_int(p_str)
+                    if not p:
+                        return None
                     if ':' in userinfo:
                         cipher, password = userinfo.split(':', 1)
                     else:
@@ -493,13 +525,13 @@ def parse_uri_for_clash(uri):
                         'name': name,
                         'type': 'ss',
                         'server': h,
-                        'port': int(p),
+                        'port': p,
                         'cipher': cipher,
                         'password': password,
                         'udp': True
                     }
         
-        # ===== HYSTERIA / HYSTERIA2 (ИСПРАВЛЕНО) =====
+        # ===== HYSTERIA / HYSTERIA2 =====
         elif s in ['hysteria', 'hysteria2', 'hy2']:
             if '#' in rest:
                 params_auth, name_part = rest.split('#', 1)
@@ -516,8 +548,14 @@ def parse_uri_for_clash(uri):
             else:
                 password, hp = '', auth
             
+            if '/' in hp:
+                hp = hp.split('/')[0]
+            
             if ':' in hp:
-                h, p = hp.split(':', 1)
+                h, p_str = hp.split(':', 1)
+                p = safe_int(p_str)
+                if not p:
+                    return None
                 name = unquote(name_part) if name_part else f"Hysteria-{h}"
                 
                 q = parse_qs(query_str) if query_str else {}
@@ -525,7 +563,7 @@ def parse_uri_for_clash(uri):
                     'name': name,
                     'type': 'hysteria2' if s == 'hy2' else s,
                     'server': h,
-                    'port': int(p),
+                    'port': p,
                     'password': password,
                     'udp': True
                 }
@@ -533,7 +571,7 @@ def parse_uri_for_clash(uri):
                     res['sni'] = q['sni'][0]
                 return res
         
-        # ===== TUIC (ИСПРАВЛЕНО) =====
+        # ===== TUIC =====
         elif s == 'tuic':
             if '@' in rest:
                 userinfo, rest2 = rest.split('@', 1)
@@ -547,8 +585,14 @@ def parse_uri_for_clash(uri):
                 else:
                     hp, query_str = hp_params, ''
                 
+                if '/' in hp:
+                    hp = hp.split('/')[0]
+                
                 if ':' in hp:
-                    h, p = hp.split(':', 1)
+                    h, p_str = hp.split(':', 1)
+                    p = safe_int(p_str)
+                    if not p:
+                        return None
                     if ':' in userinfo:
                         uuid, password = userinfo.split(':', 1)
                     else:
@@ -561,7 +605,7 @@ def parse_uri_for_clash(uri):
                         'name': name,
                         'type': 'tuic',
                         'server': h,
-                        'port': int(p),
+                        'port': p,
                         'uuid': uuid,
                         'password': password,
                         'congestion-controller': q.get('congestion_control', ['bbr'])[0],
@@ -569,8 +613,8 @@ def parse_uri_for_clash(uri):
                         'udp': True,
                         'sni': q.get('sni', [h])[0]
                     }
-    except Exception as e:
-        debug_log(f"⚠️ Parse error for {uri[:60]}: {type(e).__name__}: {e}")
+    except Exception:
+        pass
     return None
 
 async def main():
@@ -661,7 +705,7 @@ async def main():
             parse_errors += 1
     
     if parse_errors:
-        debug_log(f"⚠️ Не удалось распарсить {parse_errors} прокси (не vless/vmess/ss/trojan/hysteria/tuic)")
+        debug_log(f"⚠️ Не удалось распарсить {parse_errors} прокси")
     
     if tasks:
         results = await asyncio.gather(*tasks)
