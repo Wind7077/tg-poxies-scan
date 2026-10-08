@@ -19,8 +19,10 @@ except ImportError:
 
 # --- КОНФИГУРАЦИЯ ---
 SOURCES_FILE = 'sources.txt'
-OUT_TXT = 'proxy.txt'
-OUT_YAML = 'proxy.yaml'
+OUT_TXT = 'proxy.txt'           # белосписочные
+OUT_YAML = 'proxy.yaml'         # белосписочные
+OUT_ALL_TXT = 'proxy-all.txt'   # все
+OUT_ALL_YAML = 'proxy-all.yaml' # все
 MAX_DAYS = 10
 TIMEOUT = aiohttp.ClientTimeout(total=12, connect=7)
 MAX_CONCURRENT_HTTP = 50
@@ -55,40 +57,95 @@ STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 # 🎯 ФИЛЬТРЫ (управление через true/false)
 # ======================================================================
 
-# Протоколы (true = собирать, false = игнорировать)
+# Протоколы
 ENABLE_VLESS = True
-ENABLE_VMESS = False
-ENABLE_SS = False
-ENABLE_TROJAN = False
-ENABLE_HYSTERIA = False
+ENABLE_VMESS = True
+ENABLE_SS = True
+ENABLE_TROJAN = True
+ENABLE_HYSTERIA = True
 ENABLE_HYSTERIA2 = True
-ENABLE_TUIC = False
+ENABLE_TUIC = True
 
 # Фильтрация по ключевым словам
 ENABLE_KEYWORD_FILTER = True
 
-# Ключевые слова для поиска (в имени, сервере, SNI)
+# Ключевые слова (все регистронезависимые)
 WHITELIST_KEYWORDS = [
-    # Русские
-    'белый', 'белые', 'белого', 'белых',
-    'глушилка', 'глушилки', 'глушилок',
-    'белый список', 'белый интернет',
+    # ===== ПРЯМЫЕ УКАЗАНИЯ НА БЕЛЫЙ СПИСОК =====
+    'белый', 'белые', 'белого', 'белых', 'белого списка',
+    'белый список', 'белые списки', 'белый интернет',
+    'белые списки', 'белый список',
     'обход белого',
+    'обход глушилок', 'обход блокировок',
     # Английские
-    'white', 'whitelist', 'white-list',
+    'white list', 'whitelist', 'white-list',
+    'white', 'wl',
+    
+    # ===== LTE / МОБИЛЬНЫЕ =====
     'lte', '4g', '5g',
-    'мобильный', 'mobile',
-    # Операторы
-    'мтс', 'билайн', 'мегафон', 'теле2', 'yota',
-    'mts', 'beeline', 'megafon', 'tele2',
-    # Специальные маркеры
-    'ru-', 'rus-', 'russia',
+    'мобильный', 'мобильные',
+    'авто выбор lte',
+    
+    # ===== ОБХОД БЛОКИРОВОК =====
+    'глушилка', 'глушилки', 'глушилок',
+    'обход белого', 'обход глушилок',
+    'обход блокировок', 'обход ркн',
     'anti-censor', 'anticensor', 'no-censor',
-    'roskom', 'rk',
+    'rkn', 'fuck.rkn', 'роскомнадзор',
+    'обход',
+    
+    # ===== СПЕЦИАЛЬНЫЕ МАРКЕРЫ ПРОКСИ-ПРОВАЙДЕРОВ =====
+    'ркт', 'ркп', '[#ркт]', '[#ркп]',
+    'ркл', 'ркн',
+    'lso', 'linspisokobhod', '#lso', '#linspisokobhod', 'lin spisok', 'lin-spisok',
+    '[bl]', 'bl server', '[wl]', 'wl server',
+    'aetrisvpn', 'aetris',
+    'clearq', 'clear q', 'clear-q',
+    'owpn', 'owpn.org',
+    'cyberportal', 'cyber portal', 'cyber-portal',
+    'dismissaltree', 'dismissal tree',
+    'unlisted', 'by unlisted',
+    
+    # ===== РОССИЙСКИЕ ОПЕРАТОРЫ =====
+    'мтс', 'билайн', 'мегафон', 'теле2', 'yota', 'ростелеком',
+    'мтс', 'билайн', 'мегафон', 'мтс', 'мегафон', 'теле2', 'йота',
+    'mts', 'beeline', 'megafon', 'tele2', 'yota', 'rostelecom',
+    
+    # ===== БЕЛЫЕ SNI-ДОМЕНЫ =====
+    'yandex', 'яндекс', 'яндех',
+    'passport.yandex', 'music.yandex', 'api.yandex',
+    'vk.com', 'vk.ru', 'vkontakte', 'вконтакте',
+    'st.vk', 'eh.vk', 'id.vk',
+    'max.ru', 'www.max.ru', 'max.ru',
+    'mail.ru', 'ok.ru', 'odnoklassniki', 'одноклассники',
+    'sberbank', 'сбербанк', 'сбер',
+    'tinkoff', 'тинькофф', 'тенькофф', 'тинькоф',
+    'alfabank', 'альфабанк', 'альфа-банк', 'альфа',
+    'gosuslugi', 'госуслуги',
+    
+    # ===== МЕЖДУНАРОДНЫЕ БЕЛЫЕ SNI =====
+    'apple.com', 'tesla.com', 'amazon.com',
+    'microsoft.com', 'cloudflare.com',
+    'google.com', 'googleapis.com', 'google-analytics',
+    'speedtest.net', 'speedtest',
+    'youtube.com', 'ytimg.com',
+    'netflix.com', 'disney.com',
+    
+    # ===== СТРАНЫ / ФЛАГИ =====
+    'russia', 'россия', 'россия', 'ru-', 'rus-',
+    'ru', 'рус',
+    '🇷🇺',  # Флаг России
+    'россия', 'россия',
+    
+    # ===== ПРОЧИЕ МАРКЕРЫ =====
+    'неорган', 'neorgan', 'neorgames', 'notorgames',
+    'linspisok', 'lin-spisok',
+    'lso', 'lso',
+    'notorgames_0', 'notorgames',
 ]
 
-# Режим работы: 'include' (сохранять с совпадениями) или 'exclude' (отбрасывать с совпадениями)
-KEYWORD_MODE = 'include'
+# Режим работы
+KEYWORD_MODE = 'include'  # 'include' = только с совпадениями, 'exclude' = без совпадений
 
 # ======================================================================
 
@@ -197,78 +254,81 @@ def make_names_unique(proxies):
     return proxies
 
 # ======================================================================
-# 🎯 ФИЛЬТРАЦИЯ ПРОКСИ
+# 🎯 ФУНКЦИИ ФИЛЬТРАЦИИ
 # ======================================================================
-def filter_proxies(proxies):
-    """Фильтрует прокси по протоколам и ключевым словам"""
+def get_enabled_protocols():
+    """Возвращает множество включённых протоколов"""
+    protocols = set()
+    if ENABLE_VLESS: protocols.add('vless')
+    if ENABLE_VMESS: protocols.add('vmess')
+    if ENABLE_SS: protocols.add('ss')
+    if ENABLE_TROJAN: protocols.add('trojan')
+    if ENABLE_HYSTERIA: protocols.add('hysteria')
+    if ENABLE_HYSTERIA2: protocols.add('hysteria2')
+    if ENABLE_TUIC: protocols.add('tuic')
+    return protocols
+
+def matches_keywords(p):
+    """Проверяет, соответствует ли прокси фильтру по ключевым словам"""
+    if not ENABLE_KEYWORD_FILTER or not WHITELIST_KEYWORDS:
+        return True  # фильтр выключен - все проходят
     
-    # Карта флагов протоколов
-    protocol_flags = {
-        'vless': ENABLE_VLESS,
-        'vmess': ENABLE_VMESS,
-        'ss': ENABLE_SS,
-        'trojan': ENABLE_TROJAN,
-        'hysteria': ENABLE_HYSTERIA,
-        'hysteria2': ENABLE_HYSTERIA2,
-        'tuic': ENABLE_TUIC,
-    }
+    searchable = ' '.join([
+        str(p.get('name', '')),
+        str(p.get('server', '')),
+        str(p.get('sni', '')),
+        str(p.get('server-name', '')),
+    ]).lower()
     
-    stats = {
-        'total_in': len(proxies),
-        'by_protocol': {},
-        'by_keyword': {},
-        'protocol_dropped': 0,
-        'keyword_dropped': 0,
-        'total_out': 0,
-    }
+    has_match = any(kw.lower() in searchable for kw in WHITELIST_KEYWORDS)
     
-    # Компилируем regex для ключевых слов
-    keyword_patterns = []
-    if ENABLE_KEYWORD_FILTER and WHITELIST_KEYWORDS:
-        escaped = [re.escape(kw) for kw in WHITELIST_KEYWORDS if kw]
-        if escaped:
-            pattern = re.compile('|'.join(escaped), re.IGNORECASE)
-            keyword_patterns.append(pattern)
-    
+    if KEYWORD_MODE == 'include':
+        return has_match
+    else:  # exclude
+        return not has_match
+
+def filter_by_protocol(proxies):
+    """Фильтрует только по протоколам"""
+    enabled = get_enabled_protocols()
+    stats = {'total_in': len(proxies), 'by_protocol': {}, 'dropped': 0, 'total_out': 0}
     result = []
     for p in proxies:
         ptype = p.get('type', '')
-        
-        # --- Фильтр по протоколу ---
-        if ptype in protocol_flags and not protocol_flags[ptype]:
+        if ptype not in enabled:
             stats['by_protocol'][ptype] = stats['by_protocol'].get(ptype, 0) + 1
-            stats['protocol_dropped'] += 1
+            stats['dropped'] += 1
             continue
-        
-        # --- Фильтр по ключевым словам ---
-        if ENABLE_KEYWORD_FILTER and keyword_patterns:
-            searchable = ' '.join([
-                str(p.get('name', '')),
-                str(p.get('server', '')),
-                str(p.get('sni', '')),
-                str(p.get('server-name', '')),
-            ]).lower()
-            
-            matches = []
-            for pat in keyword_patterns:
-                matches.extend(pat.findall(searchable))
-            
-            if KEYWORD_MODE == 'include':
-                if not matches:
-                    stats['keyword_dropped'] += 1
-                    continue
-                for match in set(matches):
-                    match_lower = match.lower()
-                    stats['by_keyword'][match_lower] = stats['by_keyword'].get(match_lower, 0) + 1
-            else:  # exclude
-                if matches:
-                    stats['keyword_dropped'] += 1
-                    continue
-        
         result.append(p)
-    
     stats['total_out'] = len(result)
     return result, stats
+
+def filter_by_keywords(proxies):
+    """Фильтрует по ключевым словам"""
+    stats = {'total_in': len(proxies), 'dropped': 0, 'total_out': 0}
+    result = []
+    for p in proxies:
+        if matches_keywords(p):
+            result.append(p)
+        else:
+            stats['dropped'] += 1
+    stats['total_out'] = len(result)
+    return result, stats
+
+def validate_all(proxies):
+    """Валидирует список прокси, возвращает только валидные"""
+    valid = []
+    invalid = 0
+    for idx, p in enumerate(proxies):
+        ok, reason = validate_proxy(p)
+        if ok:
+            valid.append(p)
+        else:
+            invalid += 1
+            if invalid <= 10:
+                debug_log(f"🚫 [{idx}] Отброшен: {p.get('name','?')[:35]} | {reason}")
+    if invalid:
+        debug_log(f"🚫 Всего отброшено невалидных: {invalid}")
+    return valid
 
 def sanitize_proxy(p):
     net = p.get('network')
@@ -787,6 +847,28 @@ def _str_repr(dumper, data):
 
 QuoteDumper.add_representer(str, _str_repr)
 
+def write_yaml(filename, clash_proxies):
+    """Записывает прокси в YAML файл"""
+    names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
+    clash_config = {
+        'mixed-port': 7890, 'allow-lan': False, 'mode': 'Rule', 'log-level': 'info',
+        'external-controller': '127.0.0.1:9090', 'proxies': clash_proxies,
+        'proxy-groups': [
+            {'name': '♻️ Auto', 'type': 'url-test', 'proxies': names, 'url': 'http://www.gstatic.com/generate_204', 'interval': 300},
+            {'name': '🚀 Proxy', 'type': 'select', 'proxies': ['♻️ Auto'] + names}
+        ],
+        'rules': ['MATCH,🚀 Proxy']
+    }
+    with open(filename, 'w', encoding='utf-8') as f:
+        yaml.dump(clash_config, f, Dumper=QuoteDumper, sort_keys=False, allow_unicode=True)
+
+def write_txt(filename, uris, count_alive):
+    """Записывает прокси в TXT файл"""
+    ts = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+    header = [f"# Обновлено: {ts}", f"# Живых: {count_alive}", "#"]
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write("\n".join(header + uris))
+
 async def main():
     start = time.time()
     if not os.path.exists(SOURCES_FILE):
@@ -872,63 +954,69 @@ async def main():
         t = p.get('type', 'unknown')
         type_stats[t] = type_stats.get(t, 0) + 1
     debug_log(f"📊 Типы живых прокси: {type_stats}")
-    alive_uris = [u for u, _ in alive]
-    all_uris = alive_uris + happ
-    ts = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
-    header = [f"# Обновлено: {ts}", f"# Живых: {len(alive_uris)}", f"# Happ: {len(happ)}", "#"]
-    with open(OUT_TXT, 'w', encoding='utf-8') as f:
-        f.write("\n".join(header + all_uris))
-
-    clash_proxies = [p for _, p in alive]
-    clash_proxies = [sanitize_proxy(p) for p in clash_proxies]
-    clash_proxies, filter_stats = filter_proxies(clash_proxies)
-    debug_log(f"🎯 ФИЛЬТР: было {filter_stats['total_in']}, стало {filter_stats['total_out']}")
-    if filter_stats['protocol_dropped']:
-        debug_log(f"   ❌ Отброшено по протоколу: {filter_stats['protocol_dropped']}")
-        for ptype, count in sorted(filter_stats['by_protocol'].items()):
-            debug_log(f"      - {ptype}: {count}")
-    if filter_stats['keyword_dropped']:
-        mode_name = 'не найдено в белом списке' if KEYWORD_MODE == 'include' else 'содержат из чёрного списка'
-        debug_log(f"   ❌ Отброшено по ключевым словам ({mode_name}): {filter_stats['keyword_dropped']}")
-    if filter_stats['by_keyword']:
-        debug_log(f"   ✅ Совпадения по ключевым словам:")
-        for kw, count in sorted(filter_stats['by_keyword'].items(), key=lambda x: -x[1])[:15]:
-            debug_log(f"      - '{kw}': {count} прокси")
     
-    valid_proxies = []
-    invalid_count = 0
-    for idx, p in enumerate(clash_proxies):
-        ok, reason = validate_proxy(p)
-        if ok:
-            valid_proxies.append(p)
-        else:
-            invalid_count += 1
-            if invalid_count <= 15:
-                debug_log(f"🚫 [{idx}] Отброшен: {p.get('name','?')[:35]} | {reason}")
-    if invalid_count:
-        debug_log(f"🚫 Всего отброшено невалидных: {invalid_count}")
-    clash_proxies = valid_proxies
-
-    clash_proxies = make_names_unique(clash_proxies)
-    names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
+    # Все живые ссылки (для txt)
+    alive_uris_all = [u for u, _ in alive]
     
-    final_types = {}
-    for p in clash_proxies:
+    # ======================================================================
+    # 📄 ФОРМИРОВАНИЕ 4 ФАЙЛОВ
+    # ======================================================================
+    
+    # --- 1. PROXY-ALL (все прокси) ---
+    clash_all = [sanitize_proxy(p) for _, p in alive]
+    clash_all, _ = filter_by_protocol(clash_all)
+    clash_all = validate_all(clash_all)
+    clash_all = make_names_unique(clash_all)
+    
+    # TXT all (все живые включая happ)
+    all_txt_uris = alive_uris_all + happ
+    write_txt(OUT_ALL_TXT, all_txt_uris, len(alive))
+    # YAML all
+    write_yaml(OUT_ALL_YAML, clash_all)
+    debug_log(f"📄 proxy-all.txt: {len(all_txt_uris)} ссылок")
+    debug_log(f"📄 proxy-all.yaml: {len(clash_all)} прокси")
+    
+    # --- 2. PROXY (белосписочные) ---
+    clash_wl = [sanitize_proxy(p) for _, p in alive]
+    clash_wl, _ = filter_by_protocol(clash_wl)
+    
+    # Фильтр по ключевым словам
+    if ENABLE_KEYWORD_FILTER:
+        clash_wl, wl_stats = filter_by_keywords(clash_wl)
+        debug_log(f"🎯 ФИЛЬТР по словам: было {wl_stats['total_in']}, стало {wl_stats['total_out']}")
+    
+    clash_wl = validate_all(clash_wl)
+    clash_wl = make_names_unique(clash_wl)
+    
+    # TXT wl (фильтруем оригинальные ссылки)
+    wl_uris = []
+    enabled_protocols = get_enabled_protocols()
+    for uri, parsed in alive:
+        if parsed.get('type') not in enabled_protocols:
+            continue
+        if ENABLE_KEYWORD_FILTER:
+            if not matches_keywords(parsed):
+                continue
+        wl_uris.append(uri)
+    
+    write_txt(OUT_TXT, wl_uris, len(wl_uris))
+    write_yaml(OUT_YAML, clash_wl)
+    debug_log(f"📄 proxy.txt: {len(wl_uris)} ссылок")
+    debug_log(f"📄 proxy.yaml: {len(clash_wl)} прокси")
+    
+    # Финальная статистика
+    final_types_all = {}
+    for p in clash_all:
         t = p.get('type', 'unknown')
-        final_types[t] = final_types.get(t, 0) + 1
-    debug_log(f"📊 ИТОГО в YAML: {len(clash_proxies)} прокси {final_types}")
+        final_types_all[t] = final_types_all.get(t, 0) + 1
+    debug_log(f"📊 ИТОГО в proxy-all.yaml: {len(clash_all)} прокси {final_types_all}")
     
-    clash_config = {
-        'mixed-port': 7890, 'allow-lan': False, 'mode': 'Rule', 'log-level': 'info',
-        'external-controller': '127.0.0.1:9090', 'proxies': clash_proxies,
-        'proxy-groups': [
-            {'name': '♻️ Auto', 'type': 'url-test', 'proxies': names, 'url': 'http://www.gstatic.com/generate_204', 'interval': 300},
-            {'name': '🚀 Proxy', 'type': 'select', 'proxies': ['♻️ Auto'] + names}
-        ],
-        'rules': ['MATCH,🚀 Proxy']
-    }
-    with open(OUT_YAML, 'w', encoding='utf-8') as f:
-        yaml.dump(clash_config, f, Dumper=QuoteDumper, sort_keys=False, allow_unicode=True)
+    final_types_wl = {}
+    for p in clash_wl:
+        t = p.get('type', 'unknown')
+        final_types_wl[t] = final_types_wl.get(t, 0) + 1
+    debug_log(f"📊 ИТОГО в proxy.yaml: {len(clash_wl)} прокси {final_types_wl}")
+    
     print(f"✅ Готово за {time.time()-start:.1f} сек!")
 
 if __name__ == '__main__':
