@@ -2,7 +2,7 @@ name: Update Proxies
 
 on:
   schedule:
-    # Каждые 1 час в 23 минуты (по UTC)
+    # Каждый час в 23 минуты (по UTC)
     - cron: '23 * * * *'
   workflow_dispatch:
 
@@ -33,13 +33,11 @@ jobs:
           TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
         run: python main.py
         
-      - name: Update timestamp
-        run: |
-          echo "Last update: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > .github/last-run.txt
-          
-            - name: Commit and push changes
+      - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # Добавляем все 4 файла: белосписочные и все
           git add proxy.txt proxy.yaml proxy-all.txt proxy-all.yaml
-          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update [skip ci]" && git push)
+          # Коммитим только если есть изменения
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update proxies [skip ci]" && git push)
