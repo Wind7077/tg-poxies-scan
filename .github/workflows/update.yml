@@ -1,47 +1,4 @@
-name: Update Proxies
-
 on:
   schedule:
-    # Каждые 2 часа по UTC (в 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 часов)
-   - cron: '23 */2 * * *'
-    # Запуск в 15 и 45 минут каждого часа (для более частых обновлений)
-    # - cron: '15,45 */2 * * *'
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-          
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          
-      - name: Run parser script
-        env:
-          TELEGRAM_SESSION: ${{ secrets.TELEGRAM_SESSION }}
-          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
-          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
-        run: python main.py
-        
-      - name: Update timestamp
-        run: |
-          echo "Last update: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > .github/last-run.txt
-          
-      - name: Commit and push changes
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add proxy.txt proxy.yaml .github/last-run.txt
-          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update [skip ci]" && git push)
+    # Комментарий
+   - cron: '23 */2 * * *'   ❌ НЕПРАВИЛЬНО! (1 пробел перед -)
