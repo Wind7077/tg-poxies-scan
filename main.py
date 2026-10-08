@@ -51,7 +51,6 @@ BLACKLIST_DOMAINS = [
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 
-# Валидные значения для Clash
 VALID_CIPHERS = {
     'aes-128-gcm', 'aes-192-gcm', 'aes-256-gcm',
     'aes-128-cfb', 'aes-192-cfb', 'aes-256-cfb',
@@ -59,9 +58,12 @@ VALID_CIPHERS = {
     'rc4-md5', 'chacha20', 'chacha20-ietf', 'xchacha20',
     'chacha20-ietf-poly1305', 'xchacha20-ietf-poly1305',
     '2022-blake3-aes-128-gcm', '2022-blake3-aes-256-gcm',
-    '2022-blake3-chacha20-poly1305', 'none', 'plain', 'dummy'
+    '2022-blake3-chacha20-poly1305', 'none', 'plain', 'dummy', 'auto'
 }
 VALID_NETWORKS = {'tcp', 'ws', 'grpc', 'h2', 'http', 'httpupgrade'}
+VALID_FINGERPRINTS = {'chrome', 'firefox', 'safari', 'ios', 'android', 'edge', 'random'}
+VALID_FLOWS = {'xtls-rprx-vision', 'xtls-rprx-vision-udp443'}
+UUID_RE = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
 
 DEBUG = True
 
@@ -152,18 +154,55 @@ def make_names_unique(proxies):
         debug_log(f"🏷️ Переименовано дубликатов имён: {renamed}")
     return proxies
 
-# ===== НОВОЕ: ВАЛИДАЦИЯ ПРОКСИ ДЛЯ CLASH =====
+# ===== САНИТАЦИЯ: автоисправление прокси под требования Clash =====
+def sanitize_proxy(p):
+    # network -> валидный или tcp
+    net = p.get('network')
+    if net not in VALID_NETWORKS:
+        p['network'] = 'tcp'
+        net = 'tcp'
+    # убрать opts не своего транспорта
+    if net != 'ws' and 'ws-opts' in p: del p['ws-opts']
+    if net != 'grpc' and 'grpc-opts' in p: del p['grpc-opts']
+    if net != 'h2' and 'h2-opts' in p: del p['h2-opts']
+    if net != 'http' and 'http-opts' in p: del p['http-opts']
+    # ws path должен начинаться с /
+    if 'ws-opts' in p and isinstance(p['ws-opts'], dict):
+        path = p['ws-opts'].get('path', '/')
+        if not isinstance(path, str) or not path.startswith('/'):
+            p['ws-opts']['path'] = '/'
+    # fingerprint только валидный
+    fp = p.get('client-fingerprint')
+    if fp and fp not in VALID_FINGERPRINTS:
+        p['client-fingerprint'] = 'chrome'
+    elif not fp and p.get('tls'):
+        p['client-fingerprint'] = 'chrome'
+    # flow только валидный и только для vless
+    flow = p.get('flow')
+    if flow and (flow not in VALID_FLOWS or p.get('type') != 'vless'):
+        del p['flow']
+    # server-name обязателен при tls
+    if p.get('tls'):
+        sn = p.get('server-name') or p.get('servername')
+        if not sn:
+            p['server-name'] = p.get('server', '')
+        p.pop('servername', None)
+    # uuid: чистим от мусора
+    uuid = p.get('uuid', '')
+    if isinstance(uuid, str):
+        cleaned = re.sub(r'[^0-9a-fA-F-]', '', uuid)
+        p['uuid'] = cleaned
+    return p
+
+# ===== ВАЛИДАЦИЯ: строгая проверка для FlClash =====
 def validate_proxy(p):
-    """Проверяет что прокси валиден для Clash/FlClash"""
     if not isinstance(p, dict):
         return False, 'not dict'
-    
     ptype = p.get('type')
     server = p.get('server')
     port = p.get('port')
     name = p.get('name')
     
-    # Базовые проверки
     if not name or not isinstance(name, str):
         return False, 'empty name'
     if not server or not isinstance(server, str):
@@ -175,21 +214,19 @@ def validate_proxy(p):
     if not isinstance(port, int) or not (1 <= port <= 65535):
         return False, 'bad port'
     
-    # Проверки по типам
-    if ptype == 'vless':
+    if ptype in ('vless', 'vmess'):
         uuid = p.get('uuid', '')
-        if not uuid or len(uuid) < 8:
-            return False, 'bad uuid'
+        if not uuid or not UUID_RE.match(uuid):
+            return False, 'bad uuid format'
         if p.get('network') not in VALID_NETWORKS:
             return False, 'bad network'
-    elif ptype == 'vmess':
-        uuid = p.get('uuid', '')
-        if not uuid or len(uuid) < 8:
-            return False, 'bad uuid'
-        if p.get('network') not in VALID_NETWORKS:
-            return False, 'bad network'
-        if not isinstance(p.get('alterId'), int):
-            return False, 'bad alterId'
+        if ptype == 'vmess':
+            if not isinstance(p.get('alterId'), int) or p.get('alterId') < 0:
+                return False, 'bad alterId'
+            if p.get('cipher') not in ('auto', 'aes-128-gcm', 'chacha20-poly1305', 'none'):
+                return False, 'bad vmess cipher'
+        if ptype == 'vless' and p.get('flow') and not p.get('tls'):
+            return False, 'flow without tls'
     elif ptype == 'trojan':
         if not p.get('password'):
             return False, 'empty password'
@@ -197,15 +234,25 @@ def validate_proxy(p):
         if not p.get('password'):
             return False, 'empty password'
         if p.get('cipher') not in VALID_CIPHERS:
-            return False, f"bad cipher: {p.get('cipher')}"
+            return False, f"bad cipher"
     elif ptype in ('hysteria', 'hysteria2'):
         if not p.get('password'):
             return False, 'empty password'
     elif ptype == 'tuic':
-        if not p.get('uuid') or not p.get('password'):
-            return False, 'bad uuid/password'
+        if not p.get('uuid') or not UUID_RE.match(p.get('uuid', '')):
+            return False, 'bad uuid'
+        if not p.get('password'):
+            return False, 'empty password'
     else:
-        return False, f'unknown type: {ptype}'
+        return False, f'unknown type'
+    
+    # reality требует public-key
+    if 'reality-opts' in p:
+        ro = p['reality-opts']
+        if not ro.get('public-key'):
+            return False, 'reality without pbk'
+        if not p.get('server-name'):
+            return False, 'reality without sni'
     
     return True, ''
 
@@ -399,12 +446,10 @@ def parse_uri_for_clash(uri):
         s = s.split('/')[0].split('#')[0].split('?')[0].strip()
         try: return int(s)
         except: return default
-    
     def safe_str(values_list, default=''):
         if not values_list: return default
         val = values_list[0]
         return val if val else default
-    
     def is_valid_hex(s):
         if not s: return False
         try:
@@ -412,14 +457,12 @@ def parse_uri_for_clash(uri):
             return True
         except:
             return False
-    
     try:
         s, rest = uri.split('://', 1)
         s = s.lower()
         if s == 'happ':
             return None
         
-        # ===== VLESS =====
         if s == 'vless':
             uuid, rest2 = rest.split('@', 1)
             if '#' in rest2:
@@ -442,19 +485,13 @@ def parse_uri_for_clash(uri):
             q = parse_qs(query_str) if query_str else {}
             nt = safe_str(q.get('type'), 'tcp')
             res = {
-                'name': name,
-                'type': 'vless',
-                'server': h,
-                'port': p,
-                'uuid': uuid,
-                'network': nt,
-                'udp': True,
+                'name': name, 'type': 'vless', 'server': h, 'port': p,
+                'uuid': uuid, 'network': nt, 'udp': True,
             }
             security = safe_str(q.get('security'), '')
             sni = safe_str(q.get('sni'), '')
-            fp = safe_str(q.get('fp'), 'chrome')
+            fp = safe_str(q.get('fp'), '')
             flow = safe_str(q.get('flow'), '')
-            
             if security == 'reality':
                 pbk = safe_str(q.get('pbk'), '')
                 sid = safe_str(q.get('sid'), '')
@@ -462,24 +499,22 @@ def parse_uri_for_clash(uri):
                     return None
                 res['tls'] = True
                 res['server-name'] = sni if sni else h
-                res['client-fingerprint'] = fp
                 reality_opts = {'public-key': pbk}
                 if sid and is_valid_hex(sid):
                     reality_opts['short-id'] = sid
                 elif sid:
                     return None
                 res['reality-opts'] = reality_opts
-                if flow:
-                    res['flow'] = flow
+                if fp: res['client-fingerprint'] = fp
+                if flow: res['flow'] = flow
             elif security == 'tls':
                 res['tls'] = True
                 res['server-name'] = sni if sni else h
-                res['client-fingerprint'] = fp
-            
+                if fp: res['client-fingerprint'] = fp
             if nt == 'ws':
                 path = safe_str(q.get('path'), '/')
                 host_ws = safe_str(q.get('host'), '')
-                ws_opts = {'path': unquote(path)}
+                ws_opts = {'path': unquote(path) if unquote(path).startswith('/') else '/' + unquote(path)}
                 if host_ws:
                     ws_opts['headers'] = {'Host': host_ws}
                 res['ws-opts'] = ws_opts
@@ -487,12 +522,8 @@ def parse_uri_for_clash(uri):
                 service = safe_str(q.get('serviceName'), '')
                 if service:
                     res['grpc-opts'] = {'grpc-service-name': service}
-            elif nt == 'tcp' and flow:
-                res['flow'] = flow
-            
             return res
         
-        # ===== VMESS =====
         elif s == 'vmess':
             try:
                 d = json.loads(decode_base64(rest))
@@ -500,8 +531,7 @@ def parse_uri_for_clash(uri):
                     return None
                 res = {
                     'name': d.get('ps', f"VM-{d.get('add', 'unknown')}"),
-                    'type': 'vmess',
-                    'server': d.get('add'),
+                    'type': 'vmess', 'server': d.get('add'),
                     'port': safe_int(str(d.get('port', 0))),
                     'uuid': d.get('id', ''),
                     'alterId': safe_int(str(d.get('aid', 0))),
@@ -511,12 +541,11 @@ def parse_uri_for_clash(uri):
                     'udp': True
                 }
                 if res['tls']:
-                    res['servername'] = d.get('sni', d.get('host', ''))
+                    res['server-name'] = d.get('sni', d.get('host', '')) or res['server']
                 return res
             except (json.JSONDecodeError, ValueError):
                 return None
         
-        # ===== TROJAN =====
         elif s == 'trojan':
             password, rest2 = rest.split('@', 1)
             if '#' in rest2:
@@ -538,21 +567,17 @@ def parse_uri_for_clash(uri):
             name = unquote(name_part) if name_part else f"Trojan-{h}"
             q = parse_qs(query_str) if query_str else {}
             res = {
-                'name': name,
-                'type': 'trojan',
-                'server': h,
-                'port': p,
-                'password': password,
-                'udp': True
+                'name': name, 'type': 'trojan', 'server': h, 'port': p,
+                'password': password, 'udp': True
             }
             sni = safe_str(q.get('sni'), '')
             if sni:
                 res['sni'] = sni
             if safe_str(q.get('security'), '') in ['tls', 'xtls']:
                 res['tls'] = True
+                res['server-name'] = sni if sni else h
             return res
         
-        # ===== SS =====
         elif s == 'ss':
             if '@' in rest:
                 userinfo, hp_name = rest.split('@', 1)
@@ -574,16 +599,10 @@ def parse_uri_for_clash(uri):
                         password = decode_base64(userinfo)
                     name = unquote(name_part) if name_part else f"SS-{h}"
                     return {
-                        'name': name,
-                        'type': 'ss',
-                        'server': h,
-                        'port': p,
-                        'cipher': cipher,
-                        'password': password,
-                        'udp': True
+                        'name': name, 'type': 'ss', 'server': h, 'port': p,
+                        'cipher': cipher, 'password': password, 'udp': True
                     }
         
-        # ===== HYSTERIA / HYSTERIA2 =====
         elif s in ['hysteria', 'hysteria2', 'hy2']:
             if '#' in rest:
                 params_auth, name_part = rest.split('#', 1)
@@ -607,19 +626,14 @@ def parse_uri_for_clash(uri):
                 name = unquote(name_part) if name_part else f"Hysteria-{h}"
                 q = parse_qs(query_str) if query_str else {}
                 res = {
-                    'name': name,
-                    'type': 'hysteria2' if s == 'hy2' else s,
-                    'server': h,
-                    'port': p,
-                    'password': password,
-                    'udp': True
+                    'name': name, 'type': 'hysteria2' if s == 'hy2' else s,
+                    'server': h, 'port': p, 'password': password, 'udp': True
                 }
                 sni = safe_str(q.get('sni'), '')
                 if sni:
                     res['sni'] = sni
                 return res
         
-        # ===== TUIC =====
         elif s == 'tuic':
             if '@' in rest:
                 userinfo, rest2 = rest.split('@', 1)
@@ -645,16 +659,11 @@ def parse_uri_for_clash(uri):
                     name = unquote(name_part) if name_part else f"TUIC-{h}"
                     q = parse_qs(query_str) if query_str else {}
                     return {
-                        'name': name,
-                        'type': 'tuic',
-                        'server': h,
-                        'port': p,
-                        'uuid': uuid,
-                        'password': password,
+                        'name': name, 'type': 'tuic', 'server': h, 'port': p,
+                        'uuid': uuid, 'password': password,
                         'congestion-controller': safe_str(q.get('congestion_control'), 'bbr'),
                         'udp-relay-mode': safe_str(q.get('udp_relay_mode'), 'native'),
-                        'udp': True,
-                        'sni': safe_str(q.get('sni'), h)
+                        'udp': True, 'sni': safe_str(q.get('sni'), h)
                     }
     except Exception:
         pass
@@ -752,20 +761,21 @@ async def main():
     with open(OUT_TXT, 'w', encoding='utf-8') as f:
         f.write("\n".join(header + all_uris))
     
-    # ===== ВАЛИДАЦИЯ ПЕРЕД ЗАПИСЬЮ В YAML =====
+    # ===== САНИТАЦИЯ + ВАЛИДАЦИЯ ПЕРЕД YAML =====
     clash_proxies = [p for _, p in alive]
+    clash_proxies = [sanitize_proxy(p) for p in clash_proxies]
     valid_proxies = []
     invalid_count = 0
-    for p in clash_proxies:
+    for idx, p in enumerate(clash_proxies):
         ok, reason = validate_proxy(p)
         if ok:
             valid_proxies.append(p)
         else:
             invalid_count += 1
-            if invalid_count <= 10:
-                debug_log(f"🚫 Отброшен: {p.get('name', '?')[:40]} | причина: {reason}")
+            if invalid_count <= 15:
+                debug_log(f"🚫 [{idx}] Отброшен: {p.get('name','?')[:35]} | {reason}")
     if invalid_count:
-        debug_log(f"🚫 Всего отброшено невалидных для Clash: {invalid_count}")
+        debug_log(f"🚫 Всего отброшено невалидных: {invalid_count}")
     clash_proxies = valid_proxies
     
     clash_proxies = make_names_unique(clash_proxies)
