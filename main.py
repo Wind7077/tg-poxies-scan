@@ -671,6 +671,21 @@ def parse_uri_for_clash(uri):
         pass
     return None
 
+# Go-парсеры (mihomo) читают '1e025404' как float, PyYAML — как строку без кавычек.
+# Принудительно квотим числоподобные строки и yaml-слова.
+_GO_NUM_RE = re.compile(r'^[-+]?(\.[0-9]+|[0-9]+(\.[0-9]*)?)([eE][-+]?[0-9]+)?$')
+_YAML_WORDS = {'y', 'n', 'yes', 'no', 'on', 'off', 'true', 'false', 'null', '~'}
+
+class QuoteDumper(yaml.SafeDumper):
+    pass
+
+def _str_repr(dumper, data):
+    if _GO_NUM_RE.match(data) or data.lower() in _YAML_WORDS:
+        return dumper.represent_scalar('tag:yaml.org,2002:str', data, style="'")
+    return dumper.represent_scalar('tag:yaml.org,2002:str', data)
+
+QuoteDumper.add_representer(str, _str_repr)
+
 async def main():
     start = time.time()
     if not os.path.exists(SOURCES_FILE):
@@ -792,7 +807,7 @@ async def main():
         'rules': ['MATCH,🚀 Proxy']
     }
     with open(OUT_YAML, 'w', encoding='utf-8') as f:
-        yaml.dump(clash_config, f, sort_keys=False, allow_unicode=True)
+        yaml.dump(clash_config, f, Dumper=QuoteDumper, sort_keys=False, allow_unicode=True)
     print(f"✅ Готово за {time.time()-start:.1f} сек!")
 
 if __name__ == '__main__':
