@@ -51,6 +51,18 @@ BLACKLIST_DOMAINS = [
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 
+# Валидные значения для Clash
+VALID_CIPHERS = {
+    'aes-128-gcm', 'aes-192-gcm', 'aes-256-gcm',
+    'aes-128-cfb', 'aes-192-cfb', 'aes-256-cfb',
+    'aes-128-ctr', 'aes-192-ctr', 'aes-256-ctr',
+    'rc4-md5', 'chacha20', 'chacha20-ietf', 'xchacha20',
+    'chacha20-ietf-poly1305', 'xchacha20-ietf-poly1305',
+    '2022-blake3-aes-128-gcm', '2022-blake3-aes-256-gcm',
+    '2022-blake3-chacha20-poly1305', 'none', 'plain', 'dummy'
+}
+VALID_NETWORKS = {'tcp', 'ws', 'grpc', 'h2', 'http', 'httpupgrade'}
+
 DEBUG = True
 
 def debug_log(msg):
@@ -139,6 +151,63 @@ def make_names_unique(proxies):
     if renamed:
         debug_log(f"🏷️ Переименовано дубликатов имён: {renamed}")
     return proxies
+
+# ===== НОВОЕ: ВАЛИДАЦИЯ ПРОКСИ ДЛЯ CLASH =====
+def validate_proxy(p):
+    """Проверяет что прокси валиден для Clash/FlClash"""
+    if not isinstance(p, dict):
+        return False, 'not dict'
+    
+    ptype = p.get('type')
+    server = p.get('server')
+    port = p.get('port')
+    name = p.get('name')
+    
+    # Базовые проверки
+    if not name or not isinstance(name, str):
+        return False, 'empty name'
+    if not server or not isinstance(server, str):
+        return False, 'empty server'
+    if any(c.isspace() for c in server):
+        return False, 'space in server'
+    if '/' in server or '%' in server or '@' in server:
+        return False, 'bad char in server'
+    if not isinstance(port, int) or not (1 <= port <= 65535):
+        return False, 'bad port'
+    
+    # Проверки по типам
+    if ptype == 'vless':
+        uuid = p.get('uuid', '')
+        if not uuid or len(uuid) < 8:
+            return False, 'bad uuid'
+        if p.get('network') not in VALID_NETWORKS:
+            return False, 'bad network'
+    elif ptype == 'vmess':
+        uuid = p.get('uuid', '')
+        if not uuid or len(uuid) < 8:
+            return False, 'bad uuid'
+        if p.get('network') not in VALID_NETWORKS:
+            return False, 'bad network'
+        if not isinstance(p.get('alterId'), int):
+            return False, 'bad alterId'
+    elif ptype == 'trojan':
+        if not p.get('password'):
+            return False, 'empty password'
+    elif ptype == 'ss':
+        if not p.get('password'):
+            return False, 'empty password'
+        if p.get('cipher') not in VALID_CIPHERS:
+            return False, f"bad cipher: {p.get('cipher')}"
+    elif ptype in ('hysteria', 'hysteria2'):
+        if not p.get('password'):
+            return False, 'empty password'
+    elif ptype == 'tuic':
+        if not p.get('uuid') or not p.get('password'):
+            return False, 'bad uuid/password'
+    else:
+        return False, f'unknown type: {ptype}'
+    
+    return True, ''
 
 def extract_from_element(element):
     proxies, urls = [], []
@@ -332,13 +401,11 @@ def parse_uri_for_clash(uri):
         except: return default
     
     def safe_str(values_list, default=''):
-        """Безопасное извлечение строки из parse_qs результата"""
         if not values_list: return default
         val = values_list[0]
         return val if val else default
     
     def is_valid_hex(s):
-        """Проверяет что строка - валидный hex"""
         if not s: return False
         try:
             int(s, 16)
@@ -355,31 +422,25 @@ def parse_uri_for_clash(uri):
         # ===== VLESS =====
         if s == 'vless':
             uuid, rest2 = rest.split('@', 1)
-            
             if '#' in rest2:
                 hp_params, name_part = rest2.split('#', 1)
             else:
                 hp_params, name_part = rest2, ''
-            
             if '?' in hp_params:
                 hp, query_str = hp_params.split('?', 1)
             else:
                 hp, query_str = hp_params, ''
-            
             if '/' in hp:
                 hp = hp.split('/')[0]
-            
             if ':' not in hp:
                 return None
             h, p_str = hp.split(':', 1)
             p = safe_int(p_str)
             if not p:
                 return None
-            
             name = unquote(name_part) if name_part else f"VLESS-{h}"
             q = parse_qs(query_str) if query_str else {}
             nt = safe_str(q.get('type'), 'tcp')
-            
             res = {
                 'name': name,
                 'type': 'vless',
@@ -389,49 +450,32 @@ def parse_uri_for_clash(uri):
                 'network': nt,
                 'udp': True,
             }
-            
-            # Определяем тип TLS
             security = safe_str(q.get('security'), '')
             sni = safe_str(q.get('sni'), '')
             fp = safe_str(q.get('fp'), 'chrome')
             flow = safe_str(q.get('flow'), '')
             
-            # ===== REALITY (ИСПРАВЛЕНО!) =====
             if security == 'reality':
                 pbk = safe_str(q.get('pbk'), '')
                 sid = safe_str(q.get('sid'), '')
-                
-                # КРИТИЧНО: Reality требует валидный public-key (base64-like)
                 if not pbk:
-                    return None  # Недействительный Reality - пропускаем
-                
+                    return None
                 res['tls'] = True
                 res['server-name'] = sni if sni else h
                 res['client-fingerprint'] = fp
-                
-                # reality-opts: добавляем только непустые поля
-                reality_opts = {
-                    'public-key': pbk
-                }
-                # short-id может быть пустым (это нормально) или hex строкой
+                reality_opts = {'public-key': pbk}
                 if sid and is_valid_hex(sid):
                     reality_opts['short-id'] = sid
-                # Если sid есть но не hex - пропускаем (невалидный)
                 elif sid:
                     return None
-                
                 res['reality-opts'] = reality_opts
-                
                 if flow:
                     res['flow'] = flow
-            
-            # ===== TLS (обычный) =====
             elif security == 'tls':
                 res['tls'] = True
                 res['server-name'] = sni if sni else h
                 res['client-fingerprint'] = fp
             
-            # ===== Транспорты =====
             if nt == 'ws':
                 path = safe_str(q.get('path'), '/')
                 host_ws = safe_str(q.get('host'), '')
@@ -707,7 +751,23 @@ async def main():
     header = [f"# Обновлено: {ts}", f"# Живых: {len(alive_uris)}", f"# Happ: {len(happ)}", "#"]
     with open(OUT_TXT, 'w', encoding='utf-8') as f:
         f.write("\n".join(header + all_uris))
+    
+    # ===== ВАЛИДАЦИЯ ПЕРЕД ЗАПИСЬЮ В YAML =====
     clash_proxies = [p for _, p in alive]
+    valid_proxies = []
+    invalid_count = 0
+    for p in clash_proxies:
+        ok, reason = validate_proxy(p)
+        if ok:
+            valid_proxies.append(p)
+        else:
+            invalid_count += 1
+            if invalid_count <= 10:
+                debug_log(f"🚫 Отброшен: {p.get('name', '?')[:40]} | причина: {reason}")
+    if invalid_count:
+        debug_log(f"🚫 Всего отброшено невалидных для Clash: {invalid_count}")
+    clash_proxies = valid_proxies
+    
     clash_proxies = make_names_unique(clash_proxies)
     names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
     clash_config = {
