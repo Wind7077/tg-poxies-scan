@@ -51,6 +51,47 @@ BLACKLIST_DOMAINS = [
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 
+# ======================================================================
+# 🎯 ФИЛЬТРЫ (управление через true/false)
+# ======================================================================
+
+# Протоколы (true = собирать, false = игнорировать)
+ENABLE_VLESS = True
+ENABLE_VMESS = True
+ENABLE_SS = True
+ENABLE_TROJAN = True
+ENABLE_HYSTERIA = True
+ENABLE_HYSTERIA2 = True
+ENABLE_TUIC = True
+
+# Фильтрация по ключевым словам
+ENABLE_KEYWORD_FILTER = True
+
+# Ключевые слова для поиска (в имени, сервере, SNI)
+WHITELIST_KEYWORDS = [
+    # Русские
+    'белый', 'белые', 'белого', 'белых',
+    'глушилка', 'глушилки', 'глушилок',
+    'белый список', 'белый интернет',
+    'обход белого',
+    # Английские
+    'white', 'whitelist', 'white-list',
+    'lte', '4g', '5g',
+    'мобильный', 'mobile',
+    # Операторы
+    'мтс', 'билайн', 'мегафон', 'теле2', 'yota',
+    'mts', 'beeline', 'megafon', 'tele2',
+    # Специальные маркеры
+    'ru-', 'rus-', 'russia',
+    'anti-censor', 'anticensor', 'no-censor',
+    'roskom', 'rk',
+]
+
+# Режим работы: 'include' (сохранять с совпадениями) или 'exclude' (отбрасывать с совпадениями)
+KEYWORD_MODE = 'include'
+
+# ======================================================================
+
 VALID_CIPHERS = {
     'aes-128-gcm', 'aes-192-gcm', 'aes-256-gcm',
     'aes-128-cfb', 'aes-192-cfb', 'aes-256-cfb',
@@ -64,7 +105,6 @@ VALID_NETWORKS = {'tcp', 'ws', 'grpc', 'h2', 'http', 'httpupgrade'}
 VALID_FINGERPRINTS = {'chrome', 'firefox', 'safari', 'ios', 'android', 'edge', 'random'}
 VALID_FLOWS = {'xtls-rprx-vision', 'xtls-rprx-vision-udp443'}
 UUID_RE = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
-# reality short-id: чистый hex, чётная длина, 0..8 байт (0..16 символов)
 SID_RE = re.compile(r'^(?:[0-9a-fA-F]{2}){0,8}$')
 
 DEBUG = True
@@ -156,47 +196,112 @@ def make_names_unique(proxies):
         debug_log(f"🏷️ Переименовано дубликатов имён: {renamed}")
     return proxies
 
-# ===== САНИТАЦИЯ: автоисправление прокси под требования Clash =====
+# ======================================================================
+# 🎯 ФИЛЬТРАЦИЯ ПРОКСИ
+# ======================================================================
+def filter_proxies(proxies):
+    """Фильтрует прокси по протоколам и ключевым словам"""
+    
+    # Карта флагов протоколов
+    protocol_flags = {
+        'vless': ENABLE_VLESS,
+        'vmess': ENABLE_VMESS,
+        'ss': ENABLE_SS,
+        'trojan': ENABLE_TROJAN,
+        'hysteria': ENABLE_HYSTERIA,
+        'hysteria2': ENABLE_HYSTERIA2,
+        'tuic': ENABLE_TUIC,
+    }
+    
+    stats = {
+        'total_in': len(proxies),
+        'by_protocol': {},
+        'by_keyword': {},
+        'protocol_dropped': 0,
+        'keyword_dropped': 0,
+        'total_out': 0,
+    }
+    
+    # Компилируем regex для ключевых слов
+    keyword_patterns = []
+    if ENABLE_KEYWORD_FILTER and WHITELIST_KEYWORDS:
+        escaped = [re.escape(kw) for kw in WHITELIST_KEYWORDS if kw]
+        if escaped:
+            pattern = re.compile('|'.join(escaped), re.IGNORECASE)
+            keyword_patterns.append(pattern)
+    
+    result = []
+    for p in proxies:
+        ptype = p.get('type', '')
+        
+        # --- Фильтр по протоколу ---
+        if ptype in protocol_flags and not protocol_flags[ptype]:
+            stats['by_protocol'][ptype] = stats['by_protocol'].get(ptype, 0) + 1
+            stats['protocol_dropped'] += 1
+            continue
+        
+        # --- Фильтр по ключевым словам ---
+        if ENABLE_KEYWORD_FILTER and keyword_patterns:
+            searchable = ' '.join([
+                str(p.get('name', '')),
+                str(p.get('server', '')),
+                str(p.get('sni', '')),
+                str(p.get('server-name', '')),
+            ]).lower()
+            
+            matches = []
+            for pat in keyword_patterns:
+                matches.extend(pat.findall(searchable))
+            
+            if KEYWORD_MODE == 'include':
+                if not matches:
+                    stats['keyword_dropped'] += 1
+                    continue
+                for match in set(matches):
+                    match_lower = match.lower()
+                    stats['by_keyword'][match_lower] = stats['by_keyword'].get(match_lower, 0) + 1
+            else:  # exclude
+                if matches:
+                    stats['keyword_dropped'] += 1
+                    continue
+        
+        result.append(p)
+    
+    stats['total_out'] = len(result)
+    return result, stats
+
 def sanitize_proxy(p):
-    # network -> валидный или tcp
     net = p.get('network')
     if net not in VALID_NETWORKS:
         p['network'] = 'tcp'
         net = 'tcp'
-    # убрать opts не своего транспорта
     if net != 'ws' and 'ws-opts' in p: del p['ws-opts']
     if net != 'grpc' and 'grpc-opts' in p: del p['grpc-opts']
     if net != 'h2' and 'h2-opts' in p: del p['h2-opts']
     if net != 'http' and 'http-opts' in p: del p['http-opts']
-    # ws path должен начинаться с /
     if 'ws-opts' in p and isinstance(p['ws-opts'], dict):
         path = p['ws-opts'].get('path', '/')
         if not isinstance(path, str) or not path.startswith('/'):
             p['ws-opts']['path'] = '/'
-    # fingerprint только валидный
     fp = p.get('client-fingerprint')
     if fp and fp not in VALID_FINGERPRINTS:
         p['client-fingerprint'] = 'chrome'
     elif not fp and p.get('tls'):
         p['client-fingerprint'] = 'chrome'
-    # flow только валидный и только для vless
     flow = p.get('flow')
     if flow and (flow not in VALID_FLOWS or p.get('type') != 'vless'):
         del p['flow']
-    # server-name обязателен при tls
     if p.get('tls'):
         sn = p.get('server-name') or p.get('servername')
         if not sn:
             p['server-name'] = p.get('server', '')
         p.pop('servername', None)
-    # uuid: чистим от мусора
     uuid = p.get('uuid', '')
     if isinstance(uuid, str):
         cleaned = re.sub(r'[^0-9a-fA-F-]', '', uuid)
         p['uuid'] = cleaned
     return p
 
-# ===== ВАЛИДАЦИЯ: строгая проверка для FlClash =====
 def validate_proxy(p):
     if not isinstance(p, dict):
         return False, 'not dict'
@@ -248,7 +353,6 @@ def validate_proxy(p):
     else:
         return False, f'unknown type'
 
-    # reality требует public-key и корректный short-id
     if 'reality-opts' in p:
         ro = p['reality-opts']
         if not ro.get('public-key'):
@@ -447,7 +551,6 @@ async def check_proxy_tcp(host, port, sem):
         except: return False
 
 def is_valid_hex(s):
-    """short-id: чистый hex, чётная длина, до 16 символов."""
     return bool(s) and bool(SID_RE.match(s))
 
 def parse_uri_for_clash(uri):
@@ -671,8 +774,6 @@ def parse_uri_for_clash(uri):
         pass
     return None
 
-# Go-парсеры (mihomo) читают '1e025404' как float, PyYAML — как строку без кавычек.
-# Принудительно квотим числоподобные строки и yaml-слова.
 _GO_NUM_RE = re.compile(r'^[-+]?(\.[0-9]+|[0-9]+(\.[0-9]*)?)([eE][-+]?[0-9]+)?$')
 _YAML_WORDS = {'y', 'n', 'yes', 'no', 'on', 'off', 'true', 'false', 'null', '~'}
 
@@ -778,9 +879,22 @@ async def main():
     with open(OUT_TXT, 'w', encoding='utf-8') as f:
         f.write("\n".join(header + all_uris))
 
-    # ===== САНИТАЦИЯ + ВАЛИДАЦИЯ ПЕРЕД YAML =====
     clash_proxies = [p for _, p in alive]
     clash_proxies = [sanitize_proxy(p) for p in clash_proxies]
+    clash_proxies, filter_stats = filter_proxies(clash_proxies)
+    debug_log(f"🎯 ФИЛЬТР: было {filter_stats['total_in']}, стало {filter_stats['total_out']}")
+    if filter_stats['protocol_dropped']:
+        debug_log(f"   ❌ Отброшено по протоколу: {filter_stats['protocol_dropped']}")
+        for ptype, count in sorted(filter_stats['by_protocol'].items()):
+            debug_log(f"      - {ptype}: {count}")
+    if filter_stats['keyword_dropped']:
+        mode_name = 'не найдено в белом списке' if KEYWORD_MODE == 'include' else 'содержат из чёрного списка'
+        debug_log(f"   ❌ Отброшено по ключевым словам ({mode_name}): {filter_stats['keyword_dropped']}")
+    if filter_stats['by_keyword']:
+        debug_log(f"   ✅ Совпадения по ключевым словам:")
+        for kw, count in sorted(filter_stats['by_keyword'].items(), key=lambda x: -x[1])[:15]:
+            debug_log(f"      - '{kw}': {count} прокси")
+    
     valid_proxies = []
     invalid_count = 0
     for idx, p in enumerate(clash_proxies):
@@ -797,6 +911,13 @@ async def main():
 
     clash_proxies = make_names_unique(clash_proxies)
     names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
+    
+    final_types = {}
+    for p in clash_proxies:
+        t = p.get('type', 'unknown')
+        final_types[t] = final_types.get(t, 0) + 1
+    debug_log(f"📊 ИТОГО в YAML: {len(clash_proxies)} прокси {final_types}")
+    
     clash_config = {
         'mixed-port': 7890, 'allow-lan': False, 'mode': 'Rule', 'log-level': 'info',
         'external-controller': '127.0.0.1:9090', 'proxies': clash_proxies,
