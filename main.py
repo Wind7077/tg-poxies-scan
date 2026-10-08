@@ -57,12 +57,12 @@ STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 
 # Протоколы (true = собирать, false = игнорировать)
 ENABLE_VLESS = True
-ENABLE_VMESS = True
-ENABLE_SS = True
-ENABLE_TROJAN = True
-ENABLE_HYSTERIA = True
+ENABLE_VMESS = False
+ENABLE_SS = False
+ENABLE_TROJAN = False
+ENABLE_HYSTERIA = False
 ENABLE_HYSTERIA2 = True
-ENABLE_TUIC = True
+ENABLE_TUIC = False
 
 # Фильтрация по ключевым словам
 ENABLE_KEYWORD_FILTER = True
