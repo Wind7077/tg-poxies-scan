@@ -125,7 +125,6 @@ def collect_url(raw, urls):
         urls.append(u)
 
 def make_names_unique(proxies):
-    """Делает имена прокси уникальными для Clash/FlClash"""
     used = {}
     renamed = 0
     for p in proxies:
@@ -356,39 +355,222 @@ async def check_proxy_tcp(host, port, sem):
 
 def parse_uri_for_clash(uri):
     try:
-        s, rest = uri.split('://', 1); s = s.lower()
-        if s == 'happ': return None
-        if s == 'vmess':
-            d = json.loads(decode_base64(rest))
-            return {'name': d.get('ps', f"VM-{d.get('add')}"), 'type': 'vmess', 'server': d.get('add'), 'port': int(d.get('port', 0)), 'uuid': d.get('id', ''), 'alterId': int(d.get('aid', 0)), 'cipher': 'auto', 'tls': d.get('tls')=='tls', 'network': d.get('net', 'tcp'), 'udp': True}
-        elif s == 'trojan':
-            pw, r2 = rest.split('@', 1); hp, pn = r2.split('?', 1) if '?' in r2 else (r2, ''); h, p = hp.split(':', 1)
-            n = unquote(pn.split('#', 1)[1]) if '#' in pn else f"T-{h}"
-            return {'name': n, 'type': 'trojan', 'server': h, 'port': int(p), 'password': pw, 'udp': True}
-        elif s == 'vless':
-            u, r2 = rest.split('@', 1); hp, pn = r2.split('?', 1) if '?' in r2 else (r2, ''); h, p = hp.split(':', 1)
-            n = unquote(pn.split('#', 1)[1]) if '#' in pn else f"V-{h}"
-            q = parse_qs(pn.split('#')[0]) if '?' in pn else {}; nt = q.get('type', ['tcp'])[0]
-            res = {'name': n, 'type': 'vless', 'server': h, 'port': int(p), 'uuid': u, 'network': nt, 'udp': True, 'tls': q.get('security', [''])[0] in ['tls', 'reality']}
-            if nt == 'ws': res['ws-opts'] = {'path': unquote(q.get('path', ['/'])[0])}
+        s, rest = uri.split('://', 1)
+        s = s.lower()
+        if s == 'happ':
+            return None
+        
+        # ===== VLESS (ИСПРАВЛЕНО: обработка # в URL) =====
+        if s == 'vless':
+            uuid, rest2 = rest.split('@', 1)
+            
+            if '#' in rest2:
+                hp_params, name_part = rest2.split('#', 1)
+            else:
+                hp_params, name_part = rest2, ''
+            
+            if '?' in hp_params:
+                hp, query_str = hp_params.split('?', 1)
+            else:
+                hp, query_str = hp_params, ''
+            
+            if ':' not in hp:
+                return None
+            h, p = hp.split(':', 1)
+            
+            name = unquote(name_part) if name_part else f"VLESS-{h}"
+            q = parse_qs(query_str) if query_str else {}
+            nt = q.get('type', ['tcp'])[0]
+            
+            res = {
+                'name': name,
+                'type': 'vless',
+                'server': h,
+                'port': int(p),
+                'uuid': uuid,
+                'network': nt,
+                'udp': True,
+                'tls': q.get('security', [''])[0] in ['tls', 'reality']
+            }
+            
+            if nt == 'ws':
+                res['ws-opts'] = {'path': unquote(q.get('path', ['/'])[0])}
+            elif nt == 'grpc':
+                res['grpc-opts'] = {'grpc-service-name': q.get('serviceName', [''])[0]}
+            
+            if q.get('security', [''])[0] == 'reality':
+                res['reality-opts'] = {
+                    'public-key': q.get('pbk', [''])[0],
+                    'short-id': q.get('sid', [''])[0]
+                }
+                res['server-name'] = q.get('sni', [h])[0]
+                res['client-fingerprint'] = q.get('fp', ['chrome'])[0]
+            elif q.get('security', [''])[0] == 'tls':
+                res['server-name'] = q.get('sni', [h])[0]
+                res['client-fingerprint'] = q.get('fp', ['chrome'])[0]
+            
+            if q.get('flow'):
+                res['flow'] = q['flow'][0]
+            
             return res
+        
+        # ===== VMESS =====
+        elif s == 'vmess':
+            d = json.loads(decode_base64(rest))
+            res = {
+                'name': d.get('ps', f"VM-{d.get('add')}"),
+                'type': 'vmess',
+                'server': d.get('add'),
+                'port': int(d.get('port', 0)),
+                'uuid': d.get('id', ''),
+                'alterId': int(d.get('aid', 0)),
+                'cipher': 'auto',
+                'tls': d.get('tls') == 'tls',
+                'network': d.get('net', 'tcp'),
+                'udp': True
+            }
+            if res['tls']:
+                res['servername'] = d.get('sni', d.get('host', ''))
+            return res
+        
+        # ===== TROJAN (ИСПРАВЛЕНО) =====
+        elif s == 'trojan':
+            password, rest2 = rest.split('@', 1)
+            
+            if '#' in rest2:
+                hp_params, name_part = rest2.split('#', 1)
+            else:
+                hp_params, name_part = rest2, ''
+            
+            if '?' in hp_params:
+                hp, query_str = hp_params.split('?', 1)
+            else:
+                hp, query_str = hp_params, ''
+            
+            if ':' not in hp:
+                return None
+            h, p = hp.split(':', 1)
+            
+            name = unquote(name_part) if name_part else f"Trojan-{h}"
+            q = parse_qs(query_str) if query_str else {}
+            
+            res = {
+                'name': name,
+                'type': 'trojan',
+                'server': h,
+                'port': int(p),
+                'password': password,
+                'udp': True
+            }
+            
+            if q.get('sni'):
+                res['sni'] = q['sni'][0]
+            if q.get('security', [''])[0] in ['tls', 'xtls']:
+                res['tls'] = True
+            
+            return res
+        
+        # ===== SS (ИСПРАВЛЕНО) =====
         elif s == 'ss':
             if '@' in rest:
-                ui, hp = rest.split('@', 1)
+                userinfo, hp_name = rest.split('@', 1)
+                
+                if '#' in hp_name:
+                    hp, name_part = hp_name.split('#', 1)
+                else:
+                    hp, name_part = hp_name, ''
+                
                 if ':' in hp:
                     h, p = hp.split(':', 1)
-                    if ':' in ui: c, pw = ui.split(':', 1)
-                    else: c, pw = 'aes-256-gcm', decode_base64(ui)
-                    return {'name': f"SS-{h}", 'type': 'ss', 'server': h, 'port': int(p.split('#')[0]), 'cipher': c, 'password': pw, 'udp': True}
+                    if ':' in userinfo:
+                        cipher, password = userinfo.split(':', 1)
+                    else:
+                        cipher = 'aes-256-gcm'
+                        password = decode_base64(userinfo)
+                    
+                    name = unquote(name_part) if name_part else f"SS-{h}"
+                    return {
+                        'name': name,
+                        'type': 'ss',
+                        'server': h,
+                        'port': int(p),
+                        'cipher': cipher,
+                        'password': password,
+                        'udp': True
+                    }
+        
+        # ===== HYSTERIA / HYSTERIA2 (ИСПРАВЛЕНО) =====
         elif s in ['hysteria', 'hysteria2', 'hy2']:
-            ar, pn = rest.split('?', 1) if '?' in rest else (rest, '')
-            if '@' in ar: pw, hp = ar.split('@', 1)
-            else: pw, hp = '', ar
+            if '#' in rest:
+                params_auth, name_part = rest.split('#', 1)
+            else:
+                params_auth, name_part = rest, ''
+            
+            if '?' in params_auth:
+                auth, query_str = params_auth.split('?', 1)
+            else:
+                auth, query_str = params_auth, ''
+            
+            if '@' in auth:
+                password, hp = auth.split('@', 1)
+            else:
+                password, hp = '', auth
+            
             if ':' in hp:
                 h, p = hp.split(':', 1)
-                n = unquote(pn.split('#', 1)[1]) if '#' in pn else f"H-{h}"
-                return {'name': n, 'type': 'hysteria2' if s=='hy2' else s, 'server': h, 'port': int(p), 'password': pw, 'udp': True}
-    except: pass
+                name = unquote(name_part) if name_part else f"Hysteria-{h}"
+                
+                q = parse_qs(query_str) if query_str else {}
+                res = {
+                    'name': name,
+                    'type': 'hysteria2' if s == 'hy2' else s,
+                    'server': h,
+                    'port': int(p),
+                    'password': password,
+                    'udp': True
+                }
+                if q.get('sni'):
+                    res['sni'] = q['sni'][0]
+                return res
+        
+        # ===== TUIC (ИСПРАВЛЕНО) =====
+        elif s == 'tuic':
+            if '@' in rest:
+                userinfo, rest2 = rest.split('@', 1)
+                if '#' in rest2:
+                    hp_params, name_part = rest2.split('#', 1)
+                else:
+                    hp_params, name_part = rest2, ''
+                
+                if '?' in hp_params:
+                    hp, query_str = hp_params.split('?', 1)
+                else:
+                    hp, query_str = hp_params, ''
+                
+                if ':' in hp:
+                    h, p = hp.split(':', 1)
+                    if ':' in userinfo:
+                        uuid, password = userinfo.split(':', 1)
+                    else:
+                        uuid, password = userinfo, ''
+                    
+                    name = unquote(name_part) if name_part else f"TUIC-{h}"
+                    q = parse_qs(query_str) if query_str else {}
+                    
+                    return {
+                        'name': name,
+                        'type': 'tuic',
+                        'server': h,
+                        'port': int(p),
+                        'uuid': uuid,
+                        'password': password,
+                        'congestion-controller': q.get('congestion_control', ['bbr'])[0],
+                        'udp-relay-mode': q.get('udp_relay_mode', ['native'])[0],
+                        'udp': True,
+                        'sni': q.get('sni', [h])[0]
+                    }
+    except Exception as e:
+        debug_log(f"⚠️ Parse error for {uri[:60]}: {type(e).__name__}: {e}")
     return None
 
 async def main():
@@ -468,16 +650,31 @@ async def main():
     print(f"[{time.time()-start:.1f}s] Пингуем {len(ping_list)} серверов...")
     alive = []
     tasks, pmap = [], {}
+    
+    parse_errors = 0
     for u in ping_list:
         parsed = parse_uri_for_clash(u)
         if parsed and parsed.get('server') and parsed.get('port'):
             tasks.append(check_proxy_tcp(parsed['server'], parsed['port'], ping_sem))
             pmap[len(tasks)-1] = (u, parsed)
+        else:
+            parse_errors += 1
+    
+    if parse_errors:
+        debug_log(f"⚠️ Не удалось распарсить {parse_errors} прокси (не vless/vmess/ss/trojan/hysteria/tuic)")
+    
     if tasks:
         results = await asyncio.gather(*tasks)
         for i, ok in enumerate(results):
             if ok: alive.append(pmap[i])
     print(f"[{time.time()-start:.1f}s] Живых: {len(alive)}")
+    
+    # Статистика по типам
+    type_stats = {}
+    for _, p in alive:
+        t = p.get('type', 'unknown')
+        type_stats[t] = type_stats.get(t, 0) + 1
+    debug_log(f"📊 Типы живых прокси: {type_stats}")
     
     # Сохранение в proxy.txt (plain text)
     alive_uris = [u for u, _ in alive]
