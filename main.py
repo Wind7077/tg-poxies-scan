@@ -80,7 +80,8 @@ WHITELIST_KEYWORDS = [
     'white', 'wl',
     
     # ===== LTE / МОБИЛЬНЫЕ =====
-    'lte', 'мобильный', 'мобильные',
+    'lte', '4g', '5g',
+    'мобильный', 'мобильные',
     'авто выбор lte',
     
     # ===== ОБХОД БЛОКИРОВОК =====
@@ -89,8 +90,46 @@ WHITELIST_KEYWORDS = [
     'обход блокировок', 'обход ркн',
     'обход',
     
+    # ===== СПЕЦИАЛЬНЫЕ МАРКЕРЫ ПРОКСИ-ПРОВАЙДЕРОВ =====
+    'ркт', 'ркп', '[#ркт]', '[#ркп]',
+    'ркл', 'ркн',
+    'lso', 'linspisokobhod', '#lso', '#linspisokobhod', 'lin spisok', 'lin-spisok',
+    '[bl]', 'bl server', '[wl]', 'wl server',
+    'aetrisvpn', 'aetris',
+    'clearq', 'clear q', 'clear-q',
+    'owpn', 'owpn.org',
+    'cyberportal', 'cyber portal', 'cyber-portal',
+    'dismissaltree', 'dismissal tree',
+    'unlisted', 'by unlisted',
+    
+    # ===== РОССИЙСКИЕ ОПЕРАТОРЫ =====
+    'мтс', 'билайн', 'мегафон', 'теле2', 'yota', 'ростелеком',
+    'мтс', 'билайн', 'мегафон', 'мтс', 'мегафон', 'теле2', 'йота',
+    'mts', 'beeline', 'megafon', 'tele2', 'yota', 'rostelecom',
+    
+    # ===== БЕЛЫЕ SNI-ДОМЕНЫ =====
+    'yandex', 'яндекс', 'яндех',
+    'passport.yandex', 'music.yandex', 'api.yandex',
+    'vk.com', 'vk.ru', 'vkontakte', 'вконтакте',
+    'st.vk', 'eh.vk', 'id.vk',
+    'max.ru', 'www.max.ru', 'max.ru',
+    'mail.ru', 'ok.ru', 'odnoklassniki', 'одноклассники',
+    'sberbank', 'сбербанк', 'сбер',
+    'tinkoff', 'тинькофф', 'тенькофф', 'тинькоф',
+    'alfabank', 'альфабанк', 'альфа-банк', 'альфа',
+    'gosuslugi', 'госуслуги',
+    
+    # ===== СТРАНЫ / ФЛАГИ =====
+    'russia', 'россия', 'россия', 'ru-', 'rus-',
+    'ru', 'рус',
+    '🇷🇺',  # Флаг России
+    'россия', 'россия',
+    
     # ===== ПРОЧИЕ МАРКЕРЫ =====
-    'notorgames', 'notorgames_0', 'notorgames',
+    'неорган', 'neorgan', 'neorgames', 'notorgames',
+    'linspisok', 'lin-spisok',
+    'lso', 'lso',
+    'notorgames_0', 'notorgames',
 ]
 
 # Режим работы
