@@ -45,95 +45,106 @@ BLACKLIST_DOMAINS = [
     'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru',
     'max.ru', 'git.a9fm.best', 'ria.ru', 'lenta.ru',
-    'rbc.ru', 'vedomosti.ru', 'tass.ru'
+    'rbc.ru', 'vedomosti.ru', 'tass.ru',
     'h1cloud.net'
 ]
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 
 # ======================================================================
-# 🎯 ФИЛЬТРЫ (управление через true/false)
+# 🎯 ФИЛЬТРЫ
 # ======================================================================
 
-# Протоколы
 ENABLE_VLESS = True
-ENABLE_VMESS = False
-ENABLE_SS = False
-ENABLE_TROJAN = False
-ENABLE_HYSTERIA = False
+ENABLE_VMESS = True
+ENABLE_SS = True
+ENABLE_TROJAN = True
+ENABLE_HYSTERIA = True
 ENABLE_HYSTERIA2 = True
-ENABLE_TUIC = False
+ENABLE_TUIC = True
 
-# Фильтрация по ключевым словам
-ENABLE_KEYWORD_FILTER = True
+# Двухуровневая фильтрация
+ENABLE_KEYWORD_FILTER = True           # Текстовая (по словам в имени)
+ENABLE_TECHNICAL_FILTER = True         # Техническая (по SNI/порту)
+FILTER_MODE = 'or'                     # 'or' = любое условие, 'and' = оба условия
 
-# Ключевые слова (все регистронезависимые)
+# Текст в имени прокси
 WHITELIST_KEYWORDS = [
-    # ===== ПРЯМЫЕ УКАЗАНИЯ НА БЕЛЫЙ СПИСОК =====
-    'белый', 'белые', 'белого', 'белых', 'белого списка',
-    'белый список', 'белые списки', 'белый интернет',
-    'белые списки', 'белый список',
-    'обход белого',
-    'обход глушилок', 'обход блокировок',
-    # Английские
+    'белый', 'белые', 'белого', 'белых',
+    'белый список', 'белые списки',
+    'обход белого', 'обход глушилок', 'обход блокировок',
     'white list', 'whitelist', 'white-list',
-    'white', 'wl',
-    
-    # ===== LTE / МОБИЛЬНЫЕ =====
     'lte', '4g', '5g',
-    'мобильный', 'мобильные',
-    'авто выбор lte',
-    
-    # ===== ОБХОД БЛОКИРОВОК =====
+    'мобильный', 'mobile',
     'глушилка', 'глушилки', 'глушилок',
-    'обход белого', 'обход глушилок',
-    'обход блокировок', 'обход ркн',
-    'обход',
-    
-    # ===== СПЕЦИАЛЬНЫЕ МАРКЕРЫ ПРОКСИ-ПРОВАЙДЕРОВ =====
+    'rkn', 'fuck.rkn', 'роскомнадзор',
     'ркт', 'ркп', '[#ркт]', '[#ркп]',
-    'ркл', 'ркн',
-    'lso', 'linspisokobhod', '#lso', '#linspisokobhod', 'lin spisok', 'lin-spisok',
-    '[bl]', 'bl server', '[wl]', 'wl server',
-    'aetrisvpn', 'aetris',
-    'clearq', 'clear q', 'clear-q',
-    'owpn', 'owpn.org',
-    'cyberportal', 'cyber portal', 'cyber-portal',
-    'dismissaltree', 'dismissal tree',
-    'unlisted', 'by unlisted',
-    
-    # ===== РОССИЙСКИЕ ОПЕРАТОРЫ =====
+    'lso', 'linspisokobhod', '#lso', '#linspisokobhod',
+    '[bl]', '[wl]',
+    'aetrisvpn', 'aetris', 'clearq', 'owpn', 'cyberportal',
+    'dismissaltree', 'notorgames', 'neorgames',
+    'fronting', 'фронтинг',
+    'reality', 'disguise', 'маскировка',
     'мтс', 'билайн', 'мегафон', 'теле2', 'yota', 'ростелеком',
-    'мтс', 'билайн', 'мегафон', 'мтс', 'мегафон', 'теле2', 'йота',
-    'mts', 'beeline', 'megafon', 'tele2', 'yota', 'rostelecom',
-    
-    # ===== БЕЛЫЕ SNI-ДОМЕНЫ =====
-    'yandex', 'яндекс', 'яндех',
-    'passport.yandex', 'music.yandex', 'api.yandex',
-    'vk.com', 'vk.ru', 'vkontakte', 'вконтакте',
-    'st.vk', 'eh.vk', 'id.vk',
-    'max.ru', 'www.max.ru', 'max.ru',
-    'mail.ru', 'ok.ru', 'odnoklassniki', 'одноклассники',
-    'sberbank', 'сбербанк', 'сбер',
-    'tinkoff', 'тинькофф', 'тенькофф', 'тинькоф',
-    'alfabank', 'альфабанк', 'альфа-банк', 'альфа',
-    'gosuslugi', 'госуслуги',
-    
-    # ===== СТРАНЫ / ФЛАГИ =====
-    'russia', 'россия', 'россия', 'ru-', 'rus-',
-    'ru', 'рус',
-    '🇷🇺',  # Флаг России
-    'россия', 'россия',
-    
-    # ===== ПРОЧИЕ МАРКЕРЫ =====
-    'неорган', 'neorgan', 'neorgames', 'notorgames',
-    'linspisok', 'lin-spisok',
-    'lso', 'lso',
-    'notorgames_0', 'notorgames',
+    'mts', 'beeline', 'megafon', 'tele2', 'rostelecom',
 ]
 
-# Режим работы
-KEYWORD_MODE = 'include'  # 'include' = только с совпадениями, 'exclude' = без совпадений
+KEYWORD_MODE = 'include'
+
+# ======================================================================
+# 🔧 ТЕХНИЧЕСКИЕ КРИТЕРИИ БЕЛЫХ СПИСКОВ (4pda)
+# ======================================================================
+
+# Домены, входящие в белые списки российских провайдеров
+WHITELIST_SNI_DOMAINS = [
+    # Госуслуги и госсайты
+    'gosuslugi.ru', 'esia.gosuslugi.ru', 'gosweb.gosuslugi.ru',
+    'mos.ru', 'moscow.ru', 'government.ru', 'kremlin.ru',
+    'nalog.ru', 'fns.ru', 'sfr.gov.ru', 'pfr.gov.ru',
+    'zakupki.gov.ru', 'torgi.gov.ru',
+    
+    # Банки и платёжные системы
+    'sberbank.ru', 'sber.ru', 'sberbank-ast.ru',
+    'tinkoff.ru', 'tbank.ru',
+    'alfabank.ru', 'alfa-bank.ru',
+    'vtb.ru', 'gazprombank.ru', 'rsbank.ru',
+    'nspk.ru', 'mir-pay.ru', 'mir24.tv',
+    'sbp.nspk.ru', 'qr.nspk.ru',
+    
+    # Соцсети и медиа
+    'vk.com', 'vk.ru', 'vk.me', 'vkuseraudio.net',
+    'mail.ru', 'mail.ru.group', 'mycdn.me',
+    'ok.ru', 'odnoklassniki.ru',
+    'yandex.ru', 'yandex.net', 'ya.ru',
+    'rutube.ru', 'plvideo.ru',
+    
+    # Мессенджеры (белые)
+    'max.ru', 'team.mail.ru',
+    
+    # Операторы связи
+    'mts.ru', 'mts.link', 'mtstv.ru',
+    'beeline.ru', 'beeline.kz',
+    'megafon.ru', 'megafon.tv',
+    'tele2.ru', 't2.ru',
+    'yota.ru', 'yota.com',
+    'rostelecom.ru', 'rt.ru',
+    
+    # Крупные российские сервисы
+    'wildberries.ru', 'ozon.ru', 'avito.ru',
+    'aliexpress.ru', 'cdek.ru', 'pochta.ru',
+    '2gis.ru', 'sbermarket.ru', 'samokat.ru',
+    'ivi.ru', 'kinopoisk.ru',
+    'hh.ru', 'superjob.ru',
+    
+    # Международные (часто в белых списках как CDN)
+    'apple.com', 'icloud.com',
+    'microsoft.com', 'windows.net',
+    'cloudflare.com', 'cloudflare-dns.com',
+    'akamai.com', 'akamaiedge.net',
+]
+
+# Стандартные HTTPS порты (реже блокируются)
+WHITELIST_PORTS = {443, 8443, 8080, 2053, 2083, 2087, 2096}
 
 # ======================================================================
 
@@ -146,8 +157,8 @@ VALID_CIPHERS = {
     '2022-blake3-aes-128-gcm', '2022-blake3-aes-256-gcm',
     '2022-blake3-chacha20-poly1305', 'none', 'plain', 'dummy', 'auto'
 }
-VALID_NETWORKS = {'tcp', 'ws', 'grpc', 'h2', 'http', 'httpupgrade'}
-VALID_FINGERPRINTS = {'chrome', 'firefox', 'safari', 'ios', 'android', 'edge', 'random'}
+VALID_NETWORKS = {'tcp', 'ws', 'grpc', 'h2', 'http', 'httpupgrade', 'raw', 'xhttp'}
+VALID_FINGERPRINTS = {'chrome', 'firefox', 'safari', 'ios', 'android', 'edge', 'random', 'qq'}
 VALID_FLOWS = {'xtls-rprx-vision', 'xtls-rprx-vision-udp443'}
 UUID_RE = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
 SID_RE = re.compile(r'^(?:[0-9a-fA-F]{2}){0,8}$')
@@ -242,10 +253,91 @@ def make_names_unique(proxies):
     return proxies
 
 # ======================================================================
-# 🎯 ФУНКЦИИ ФИЛЬТРАЦИИ
+# 🔧 ТЕХНИЧЕСКАЯ ПРОВЕРКА "БЕЛОСПИСОЧНОСТИ"
+# ======================================================================
+def is_whitelist_capable(p):
+    """
+    Проверяет ТЕХНИЧЕСКУЮ способность прокси обойти белые списки.
+    Критерии с 4pda:
+    1. SNI содержит белый домен
+    2. Порт в белом списке (443, 8443)
+    3. Reality с валидным public-key
+    4. TLS с валидным SNI
+    """
+    if not isinstance(p, dict):
+        return False, 'not dict'
+    
+    # Получаем SNI из разных полей
+    sni = (p.get('server-name') or p.get('sni') or 
+           p.get('servername') or p.get('host') or '').lower()
+    server = (p.get('server') or '').lower()
+    port = p.get('port', 0)
+    ptype = p.get('type', '')
+    has_reality = 'reality-opts' in p
+    has_tls = p.get('tls', False)
+    
+    reasons = []
+    
+    # Критерий 1: SNI содержит белый домен
+    sni_match = False
+    matched_domain = ''
+    if sni:
+        for domain in WHITELIST_SNI_DOMAINS:
+            if domain in sni:
+                sni_match = True
+                matched_domain = domain
+                break
+    # Если SNI пуст, но server — известный белый домен
+    if not sni_match and server:
+        for domain in WHITELIST_SNI_DOMAINS:
+            if domain in server:
+                sni_match = True
+                matched_domain = domain
+                break
+    
+    if sni_match:
+        reasons.append(f'sni={matched_domain}')
+    
+    # Критерий 2: Порт в белом списке
+    port_ok = port in WHITELIST_PORTS
+    if port_ok:
+        reasons.append(f'port={port}')
+    
+    # Критерий 3: Reality (идеальная маскировка)
+    if has_reality and sni_match:
+        reasons.append('reality')
+    
+    # Критерий 4: TLS с правильным SNI
+    if has_tls and sni_match:
+        reasons.append('tls+sni')
+    
+    # Критерий 5: Фронтинг на белый домен (vless/vmess/trojan с host)
+    host = (p.get('host') or '').lower()
+    if host:
+        for domain in WHITELIST_SNI_DOMAINS:
+            if domain in host:
+                reasons.append(f'host={domain}')
+                break
+    
+    # Итоговое решение
+    # Для Reality достаточно sni_match (Reality сам по себе мощный)
+    # Для остальных нужно sni_match + port_ok
+    if has_reality and sni_match:
+        return True, ' | '.join(reasons)
+    if sni_match and port_ok:
+        return True, ' | '.join(reasons)
+    # Для SS/trojan с TLS + белый SNI тоже ок
+    if ptype in ('trojan', 'ss', 'vmess') and sni_match and has_tls:
+        return True, ' | '.join(reasons)
+    
+    if not reasons:
+        return False, 'no whitelist criteria'
+    return False, f'weak: {", ".join(reasons)}'
+
+# ======================================================================
+# 🎯 ФИЛЬТРЫ
 # ======================================================================
 def get_enabled_protocols():
-    """Возвращает множество включённых протоколов"""
     protocols = set()
     if ENABLE_VLESS: protocols.add('vless')
     if ENABLE_VMESS: protocols.add('vmess')
@@ -257,26 +349,36 @@ def get_enabled_protocols():
     return protocols
 
 def matches_keywords(p):
-    """Проверяет, соответствует ли прокси фильтру по ключевым словам"""
     if not ENABLE_KEYWORD_FILTER or not WHITELIST_KEYWORDS:
-        return True  # фильтр выключен - все проходят
-    
+        return True
     searchable = ' '.join([
         str(p.get('name', '')),
         str(p.get('server', '')),
         str(p.get('sni', '')),
         str(p.get('server-name', '')),
     ]).lower()
-    
     has_match = any(kw.lower() in searchable for kw in WHITELIST_KEYWORDS)
-    
     if KEYWORD_MODE == 'include':
         return has_match
-    else:  # exclude
-        return not has_match
+    return not has_match
+
+def passes_technical_filter(p):
+    if not ENABLE_TECHNICAL_FILTER:
+        return True
+    ok, _ = is_whitelist_capable(p)
+    return ok
+
+def passes_combined_filter(p):
+    """Основная функция фильтра — учитывает оба режима"""
+    kw_ok = matches_keywords(p)
+    tech_ok = passes_technical_filter(p)
+    
+    if FILTER_MODE == 'or':
+        return kw_ok or tech_ok
+    else:  # and
+        return kw_ok and tech_ok
 
 def filter_by_protocol(proxies):
-    """Фильтрует только по протоколам"""
     enabled = get_enabled_protocols()
     stats = {'total_in': len(proxies), 'by_protocol': {}, 'dropped': 0, 'total_out': 0}
     result = []
@@ -291,7 +393,6 @@ def filter_by_protocol(proxies):
     return result, stats
 
 def filter_by_keywords(proxies):
-    """Фильтрует по ключевым словам"""
     stats = {'total_in': len(proxies), 'dropped': 0, 'total_out': 0}
     result = []
     for p in proxies:
@@ -302,8 +403,43 @@ def filter_by_keywords(proxies):
     stats['total_out'] = len(result)
     return result, stats
 
+def filter_combined(proxies):
+    """Комбинированный фильтр (ключевые слова + технические критерии)"""
+    stats = {
+        'total_in': len(proxies),
+        'passed': 0,
+        'only_keywords': 0,
+        'only_technical': 0,
+        'both': 0,
+        'dropped': 0,
+        'total_out': 0,
+    }
+    result = []
+    for p in proxies:
+        kw_ok = matches_keywords(p)
+        tech_ok = passes_technical_filter(p)
+        
+        if FILTER_MODE == 'or':
+            if kw_ok or tech_ok:
+                result.append(p)
+                if kw_ok and tech_ok: stats['both'] += 1
+                elif kw_ok: stats['only_keywords'] += 1
+                else: stats['only_technical'] += 1
+                stats['passed'] += 1
+            else:
+                stats['dropped'] += 1
+        else:  # and
+            if kw_ok and tech_ok:
+                result.append(p)
+                stats['passed'] += 1
+                stats['both'] += 1
+            else:
+                stats['dropped'] += 1
+    
+    stats['total_out'] = len(result)
+    return result, stats
+
 def validate_all(proxies):
-    """Валидирует список прокси, возвращает только валидные"""
     valid = []
     invalid = 0
     for idx, p in enumerate(proxies):
@@ -327,6 +463,7 @@ def sanitize_proxy(p):
     if net != 'grpc' and 'grpc-opts' in p: del p['grpc-opts']
     if net != 'h2' and 'h2-opts' in p: del p['h2-opts']
     if net != 'http' and 'http-opts' in p: del p['http-opts']
+    if net != 'xhttp' and 'xhttp-opts' in p: del p['xhttp-opts']
     if 'ws-opts' in p and isinstance(p['ws-opts'], dict):
         path = p['ws-opts'].get('path', '/')
         if not isinstance(path, str) or not path.startswith('/'):
@@ -418,7 +555,7 @@ def extract_from_element(element):
     if hasattr(element, 'find_all'):
         for a in element.find_all('a', href=True):
             href = a['href'].strip()
-            if any(href.startswith(f"{s}://") for s in PROXY_SCHEMES):
+            if any(href.startswith(f"{s://") for s in PROXY_SCHEMES):
                 proxies.append(clean_url(href))
             elif href.startswith('http'):
                 collect_url(href, urls)
@@ -645,6 +782,7 @@ def parse_uri_for_clash(uri):
             sni = safe_str(q.get('sni'), '')
             fp = safe_str(q.get('fp'), '')
             flow = safe_str(q.get('flow'), '')
+            host_header = safe_str(q.get('host'), '')
             if security == 'reality':
                 pbk = safe_str(q.get('pbk'), '')
                 sid = safe_str(q.get('sid'), '').strip()
@@ -666,15 +804,16 @@ def parse_uri_for_clash(uri):
                 if fp: res['client-fingerprint'] = fp
             if nt == 'ws':
                 path = safe_str(q.get('path'), '/')
-                host_ws = safe_str(q.get('host'), '')
                 ws_opts = {'path': unquote(path) if unquote(path).startswith('/') else '/' + unquote(path)}
-                if host_ws:
-                    ws_opts['headers'] = {'Host': host_ws}
+                if host_header:
+                    ws_opts['headers'] = {'Host': host_header}
                 res['ws-opts'] = ws_opts
             elif nt == 'grpc':
                 service = safe_str(q.get('serviceName'), '')
                 if service:
                     res['grpc-opts'] = {'grpc-service-name': service}
+            elif nt == 'xhttp':
+                res['network'] = 'xhttp'
             return res
 
         elif s == 'vmess':
@@ -695,6 +834,9 @@ def parse_uri_for_clash(uri):
                 }
                 if res['tls']:
                     res['server-name'] = d.get('sni', d.get('host', '')) or res['server']
+                # Для VMess с ws host
+                if res['network'] == 'ws' and d.get('host'):
+                    res['ws-opts'] = {'headers': {'Host': d['host']}}
                 return res
             except (json.JSONDecodeError, ValueError):
                 return None
@@ -724,11 +866,15 @@ def parse_uri_for_clash(uri):
                 'password': password, 'udp': True
             }
             sni = safe_str(q.get('sni'), '')
+            host_header = safe_str(q.get('host'), '')
             if sni:
                 res['sni'] = sni
             if safe_str(q.get('security'), '') in ['tls', 'xtls']:
                 res['tls'] = True
                 res['server-name'] = sni if sni else h
+            # Host header для фронтинга
+            if host_header:
+                res['host'] = host_header
             return res
 
         elif s == 'ss':
@@ -785,6 +931,7 @@ def parse_uri_for_clash(uri):
                 sni = safe_str(q.get('sni'), '')
                 if sni:
                     res['sni'] = sni
+                    res['server-name'] = sni
                 return res
 
         elif s == 'tuic':
@@ -836,7 +983,6 @@ def _str_repr(dumper, data):
 QuoteDumper.add_representer(str, _str_repr)
 
 def write_yaml(filename, clash_proxies):
-    """Записывает прокси в YAML файл"""
     names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
     clash_config = {
         'mixed-port': 7890, 'allow-lan': False, 'mode': 'Rule', 'log-level': 'info',
@@ -851,7 +997,6 @@ def write_yaml(filename, clash_proxies):
         yaml.dump(clash_config, f, Dumper=QuoteDumper, sort_keys=False, allow_unicode=True)
 
 def write_txt(filename, uris, count_alive):
-    """Записывает прокси в TXT файл"""
     ts = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
     header = [f"# Обновлено: {ts}", f"# Живых: {count_alive}", "#"]
     with open(filename, 'w', encoding='utf-8') as f:
@@ -943,7 +1088,6 @@ async def main():
         type_stats[t] = type_stats.get(t, 0) + 1
     debug_log(f"📊 Типы живых прокси: {type_stats}")
     
-    # Все живые ссылки (для txt)
     alive_uris_all = [u for u, _ in alive]
     
     # ======================================================================
@@ -956,22 +1100,29 @@ async def main():
     clash_all = validate_all(clash_all)
     clash_all = make_names_unique(clash_all)
     
-    # TXT all (все живые включая happ)
     all_txt_uris = alive_uris_all + happ
     write_txt(OUT_ALL_TXT, all_txt_uris, len(alive))
-    # YAML all
     write_yaml(OUT_ALL_YAML, clash_all)
     debug_log(f"📄 proxy-all.txt: {len(all_txt_uris)} ссылок")
     debug_log(f"📄 proxy-all.yaml: {len(clash_all)} прокси")
     
-    # --- 2. PROXY (белосписочные) ---
+    # --- 2. PROXY (белосписочные - КОМБИНИРОВАННЫЙ ФИЛЬТР) ---
     clash_wl = [sanitize_proxy(p) for _, p in alive]
     clash_wl, _ = filter_by_protocol(clash_wl)
     
-    # Фильтр по ключевым словам
-    if ENABLE_KEYWORD_FILTER:
-        clash_wl, wl_stats = filter_by_keywords(clash_wl)
-        debug_log(f"🎯 ФИЛЬТР по словам: было {wl_stats['total_in']}, стало {wl_stats['total_out']}")
+    # Комбинированный фильтр (ключевые слова + технические критерии)
+    if ENABLE_KEYWORD_FILTER or ENABLE_TECHNICAL_FILTER:
+        clash_wl, combined_stats = filter_combined(clash_wl)
+        debug_log(f"🎯 КОМБИНИРОВАННЫЙ ФИЛЬТР (mode={FILTER_MODE}): было {combined_stats['total_in']}, стало {combined_stats['total_out']}")
+        if ENABLE_KEYWORD_FILTER and ENABLE_TECHNICAL_FILTER:
+            debug_log(f"   ✅ Только по словам: {combined_stats['only_keywords']}")
+            debug_log(f"   ✅ Только по тех. критериям: {combined_stats['only_technical']}")
+            debug_log(f"   ✅ Оба критерия: {combined_stats['both']}")
+            debug_log(f"   ❌ Отброшено: {combined_stats['dropped']}")
+        elif ENABLE_KEYWORD_FILTER:
+            debug_log(f"   ❌ Отброшено по словам: {combined_stats['dropped']}")
+        elif ENABLE_TECHNICAL_FILTER:
+            debug_log(f"   ❌ Отброшено по тех. критериям: {combined_stats['dropped']}")
     
     clash_wl = validate_all(clash_wl)
     clash_wl = make_names_unique(clash_wl)
@@ -982,9 +1133,8 @@ async def main():
     for uri, parsed in alive:
         if parsed.get('type') not in enabled_protocols:
             continue
-        if ENABLE_KEYWORD_FILTER:
-            if not matches_keywords(parsed):
-                continue
+        if not passes_combined_filter(parsed):
+            continue
         wl_uris.append(uri)
     
     write_txt(OUT_TXT, wl_uris, len(wl_uris))
@@ -1004,6 +1154,19 @@ async def main():
         t = p.get('type', 'unknown')
         final_types_wl[t] = final_types_wl.get(t, 0) + 1
     debug_log(f"📊 ИТОГО в proxy.yaml: {len(clash_wl)} прокси {final_types_wl}")
+    
+    # Примеры прокси прошедших по тех. критериям (первые 5)
+    tech_examples = []
+    for _, parsed in alive[:50]:
+        if passes_technical_filter(parsed) and not matches_keywords(parsed):
+            ok, reason = is_whitelist_capable(parsed)
+            tech_examples.append(f"{parsed.get('name', '?')[:30]} → {reason}")
+            if len(tech_examples) >= 5:
+                break
+    if tech_examples:
+        debug_log(f"💡 Примеры прокси прошедших ТОЛЬКО по тех. критериям:")
+        for ex in tech_examples:
+            debug_log(f"   • {ex}")
     
     print(f"✅ Готово за {time.time()-start:.1f} сек!")
 
