@@ -555,7 +555,7 @@ def extract_from_element(element):
     if hasattr(element, 'find_all'):
         for a in element.find_all('a', href=True):
             href = a['href'].strip()
-            if any(href.startswith(f"{s://") for s in PROXY_SCHEMES):
+            if any(href.startswith(f"{s}://") for s in PROXY_SCHEMES):
                 proxies.append(clean_url(href))
             elif href.startswith('http'):
                 collect_url(href, urls)
