@@ -62,10 +62,10 @@ WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mo
 # 🎯 ПРОТОКОЛЫ (true = собирать, false = игнорировать)
 # ======================================================================
 ENABLE_VLESS = True
-ENABLE_VMESS = True
-ENABLE_SS = True
-ENABLE_TROJAN = True
-ENABLE_HYSTERIA = True
+ENABLE_VMESS = False
+ENABLE_SS = False
+ENABLE_TROJAN = False
+ENABLE_HYSTERIA = False
 ENABLE_HYSTERIA2 = True
 ENABLE_TUIC = True
 
