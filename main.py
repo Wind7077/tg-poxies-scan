@@ -56,17 +56,17 @@ STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 # ======================================================================
 
 ENABLE_VLESS = True
-ENABLE_VMESS = True
-ENABLE_SS = True
-ENABLE_TROJAN = True
-ENABLE_HYSTERIA = True
+ENABLE_VMESS = False
+ENABLE_SS = False
+ENABLE_TROJAN = False
+ENABLE_HYSTERIA = False
 ENABLE_HYSTERIA2 = True
 ENABLE_TUIC = True
 
 # Двухуровневая фильтрация
 ENABLE_KEYWORD_FILTER = True           # Текстовая (по словам в имени)
 ENABLE_TECHNICAL_FILTER = True         # Техническая (по SNI/порту)
-FILTER_MODE = 'or'                     # 'or' = любое условие, 'and' = оба условия
+FILTER_MODE = 'and'                     # 'or' = любое условие, 'and' = оба условия
 
 # Текст в имени прокси
 WHITELIST_KEYWORDS = [
