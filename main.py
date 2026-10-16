@@ -7,7 +7,7 @@ import yaml
 import json
 import time
 from datetime import datetime, timezone, timedelta
-from urllib.parse import parse_qs, unquote, urlparse
+from urllib.parse import parse_qs, parse_qsl, quote, unquote, urlparse, urlsplit
 from bs4 import BeautifulSoup
 import aiohttp
 
@@ -28,12 +28,20 @@ TIMEOUT = aiohttp.ClientTimeout(total=12, connect=7)
 MAX_CONCURRENT_HTTP = 50
 MAX_CONCURRENT_PING = 500
 
+# 0 = без лимита; N = не больше N вариантов на один host:port (после дедупа по конфигу)
+MAX_PER_ENDPOINT = 3
+
 API_ID = int(os.getenv('TELEGRAM_API_ID', '0'))
 API_HASH = os.getenv('TELEGRAM_API_HASH', '')
 SESSION_B64 = os.getenv('TELEGRAM_SESSION', '')
 
 PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
-PROXY_REGEX = re.compile(r'(?:' + '|'.join(PROXY_SCHEMES) + r')://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
+_SCHEMES_ALT = '|'.join(PROXY_SCHEMES)
+_URL_CHARS = r"[a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%]"
+# Останавливается перед следующей схемой -> склеенные ссылки извлекаются по отдельности
+PROXY_REGEX = re.compile(
+    r'(?:' + _SCHEMES_ALT + r')://(?:(?!(?:' + _SCHEMES_ALT + r')://)' + _URL_CHARS + r')+',
+    re.IGNORECASE)
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
 BLACKLIST_DOMAINS = [
@@ -72,6 +80,14 @@ UUID_RE = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]
 SID_RE = re.compile(r'^(?:[0-9a-fA-F]{2}){0,8}$')
 
 _KEYWORD_ROOTS = [w.lower() for w in WHITELIST_ROOTS.split() if w]
+
+# --- дедуп по конфигу ---
+IGNORED_PARAMS = {'fp', 'alpn', 'extra', 'headertype', 'encryption', 'allowinsecure',
+                  'insecure', 'fm', 'packetencoding', 'spx', 'ed'}
+DEDUP_SCHEMES = {'vless', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic'}
+
+_AMP_RE = re.compile(r'&(?:amp|#0*38|#x0*26);', re.I)
+_RAW_RE = re.compile(r'([?&]type=)raw(?=[&#]|$)', re.I)
 
 DEBUG = True
 
@@ -128,9 +144,22 @@ def remove_sticky_words(url):
     return url.rstrip('/')
 
 def clean_url(url):
-    """Очистка URL БЕЗ декодирования HTML (только в источниках)"""
-    for i, c in enumerate(url):
-        if ord(c) > 127: url = url[:i]; break
+    """Очистка URL: &amp; -> &, имя после # кодируется (а не режется), type=raw -> tcp"""
+    # &amp; / &amp;amp; -> &
+    while _AMP_RE.search(url):
+        url = _AMP_RE.sub('&', url)
+    # не-ASCII до '#' (склеенный мусор) режем как раньше; имя после '#' кодируем в %XX
+    head, sep, frag = url.partition('#')
+    for i, c in enumerate(head):
+        if ord(c) > 127:
+            head, sep, frag = head[:i], '', ''
+            break
+    frag = quote(frag, safe="-._~:/?#[]@!$&'()*+,;=%")
+    if not frag:
+        sep = ''
+    url = head + sep + frag
+    # raw = новое имя tcp в Xray
+    url = _RAW_RE.sub(r'\1tcp', url)
     while url.endswith(')') and url.count(')') > url.count('('): url = url[:-1]
     url = split_glued(url.rstrip('.,;:!?'))
     url = remove_sticky_words(url)
@@ -168,7 +197,7 @@ def deduplicate_proxies(proxies):
     seen = set()
     result = []
     dupes = 0
-    
+
     for proxy in proxies:
         if not proxy:
             continue
@@ -177,10 +206,53 @@ def deduplicate_proxies(proxies):
             continue
         seen.add(proxy)
         result.append(proxy)
-    
+
     if dupes:
         debug_log(f"🔁 Дубликатов удалено: {dupes}")
-    
+
+    return result
+
+def _uri_parts(uri):
+    try:
+        u = urlsplit(uri)
+        q = {k.lower(): v for k, v in parse_qsl(u.query)}
+        return (u.scheme.lower(), u.username or '', u.password or '',
+                (u.hostname or '').lower(), u.port or 0,
+                u.path.rstrip('/'), q, unquote(u.fragment))
+    except ValueError:
+        return None
+
+def config_key(uri):
+    p = _uri_parts(uri)
+    if not p or p[0] not in DEDUP_SCHEMES or not p[3]:
+        return uri  # vmess/ss/happ и непарсящееся: только точные дубли
+    scheme, user, pwd, host, port, path, q, _ = p
+    q = {k: v for k, v in q.items() if v and k not in IGNORED_PARAMS}
+    if q.get('type') == 'raw': q['type'] = 'tcp'
+    q.setdefault('type', 'tcp')
+    if q.get('mode') == 'auto': del q['mode']
+    return (scheme, user, pwd, host, port, path, tuple(sorted(q.items())))
+
+def _rank(uri):
+    """Из дублей берём тот, чьё имя проходит WL-фильтр; затем более длинное имя"""
+    p = _uri_parts(uri)
+    if not p: return (False, 0)
+    return (matches_roots({'name': p[7], 'server': p[3], 'sni': p[6].get('sni', '')}), len(p[7]))
+
+def dedupe_by_config(uris):
+    groups = {}
+    for u in sorted(set(uris)):  # sorted -> результат детерминирован
+        groups.setdefault(config_key(u), []).append(u)
+    result = [max(g, key=_rank) for g in groups.values()]
+    if MAX_PER_ENDPOINT > 0:
+        per, capped = {}, []
+        for u in sorted(result, key=_rank, reverse=True):
+            p = _uri_parts(u)
+            ep = (p[3], p[4]) if p and p[3] else u
+            per[ep] = per.get(ep, 0) + 1
+            if per[ep] <= MAX_PER_ENDPOINT:
+                capped.append(u)
+        result = capped
     return result
 
 def matches_roots(p):
@@ -530,6 +602,7 @@ def parse_uri_for_clash(uri):
             name = unquote(name_part) if name_part else f"VLESS-{h}"
             q = parse_qs(query_str) if query_str else {}
             nt = safe_str(q.get('type'), 'tcp')
+            if nt == 'raw': nt = 'tcp'
             res = {
                 'name': name, 'type': 'vless', 'server': h, 'port': p,
                 'uuid': uuid, 'network': nt, 'udp': True,
@@ -801,6 +874,12 @@ async def main():
             for r in results: all_proxies.extend(r)
     all_proxies = [p for p in set(all_proxies) if p and '://' in p]
     print(f"[{time.time()-start:.1f}s] Сырых прокси: {len(all_proxies)}")
+
+    # дедуп по конфигу ДО пинга (меньше пингов, детерминированный порядок)
+    n0 = len(all_proxies)
+    all_proxies = dedupe_by_config(all_proxies)
+    debug_log(f"🔁 Дублей по конфигу удалено: {n0 - len(all_proxies)} (осталось {len(all_proxies)})")
+
     happ, ping_list = [], []
     for u in all_proxies:
         (happ if u.lower().startswith('happ://') else ping_list).append(u)
@@ -827,35 +906,35 @@ async def main():
         t = p.get('type', 'unknown')
         type_stats[t] = type_stats.get(t, 0) + 1
     debug_log(f"📊 Типы живых прокси: {type_stats}")
-    
+
     alive_uris_all = [u for u, _ in alive]
     enabled_protocols = get_enabled_protocols()
-    
+
     # PROXY-ALL
     clash_all = [sanitize_proxy(p) for _, p in alive]
     clash_all, _ = filter_by_protocol(clash_all)
     clash_all = validate_all(clash_all)
     clash_all = make_names_unique(clash_all)
-    
+
     all_txt_uris = alive_uris_all + happ
     all_txt_uris = deduplicate_proxies(all_txt_uris)
-    
+
     write_txt(OUT_ALL_TXT, all_txt_uris, len(alive))
     write_yaml(OUT_ALL_YAML, clash_all)
     debug_log(f"📄 proxy-all.txt: {len(all_txt_uris)} ссылок")
     debug_log(f"📄 proxy-all.yaml: {len(clash_all)} прокси")
-    
+
     # PROXY (белосписочные)
     clash_wl = [sanitize_proxy(p) for _, p in alive]
     clash_wl, _ = filter_by_protocol(clash_wl)
-    
+
     before_filter = len(clash_wl)
     clash_wl = [p for p in clash_wl if matches_roots(p)]
     debug_log(f"🎯 ФИЛЬТР по корням: было {before_filter}, стало {len(clash_wl)}")
-    
+
     clash_wl = validate_all(clash_wl)
     clash_wl = make_names_unique(clash_wl)
-    
+
     wl_uris = []
     for uri, parsed in alive:
         if parsed.get('type') not in enabled_protocols:
@@ -863,26 +942,26 @@ async def main():
         if not matches_roots(parsed):
             continue
         wl_uris.append(uri)
-    
+
     wl_uris = deduplicate_proxies(wl_uris)
-    
+
     write_txt(OUT_TXT, wl_uris, len(wl_uris))
     write_yaml(OUT_YAML, clash_wl)
     debug_log(f"📄 proxy.txt: {len(wl_uris)} ссылок")
     debug_log(f"📄 proxy.yaml: {len(clash_wl)} прокси")
-    
+
     final_types_all = {}
     for p in clash_all:
         t = p.get('type', 'unknown')
         final_types_all[t] = final_types_all.get(t, 0) + 1
     debug_log(f"📊 ИТОГО proxy-all.yaml: {len(clash_all)} прокси {final_types_all}")
-    
+
     final_types_wl = {}
     for p in clash_wl:
         t = p.get('type', 'unknown')
         final_types_wl[t] = final_types_wl.get(t, 0) + 1
     debug_log(f"📊 ИТОГО proxy.yaml: {len(clash_wl)} прокси {final_types_wl}")
-    
+
     print(f"✅ Готово за {time.time()-start:.1f} сек!")
 
 if __name__ == '__main__':
