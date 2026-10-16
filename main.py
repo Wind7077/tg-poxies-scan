@@ -85,7 +85,6 @@ VALID_FLOWS = {'xtls-rprx-vision', 'xtls-rprx-vision-udp443'}
 UUID_RE = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$')
 SID_RE = re.compile(r'^(?:[0-9a-fA-F]{2}){0,8}$')
 
-# Компилируем список корней один раз
 _KEYWORD_ROOTS = [w.lower() for w in WHITELIST_ROOTS.split() if w]
 
 DEBUG = True
@@ -144,7 +143,6 @@ def remove_sticky_words(url):
 
 def clean_url(url):
     """Очистка URL с обязательным декодированием HTML-сущностей"""
-    # 🔧 ПАТЧ: декодируем HTML-сущности (&amp; → &, &lt; → <, &quot; → " и т.д.)
     try:
         url = html.unescape(url)
     except Exception:
@@ -182,6 +180,60 @@ def make_names_unique(proxies):
     if renamed:
         debug_log(f"🏷️ Переименовано дубликатов имён: {renamed}")
     return proxies
+
+# ======================================================================
+# 🔁 ДЕДУПЛИКАЦИЯ ПРОКСИ (Уровень 1)
+# ======================================================================
+def deduplicate_proxies(proxies):
+    """
+    Убирает:
+    1. Полные дубликаты строк
+    2. Дубликаты по UUID + server:port (один аккаунт на разных серверах)
+    
+    НЕ убирает: разные UUID на одном сервере (разные аккаунты/тарифы)
+    """
+    seen_keys = set()
+    seen_full = set()
+    result = []
+    full_dupes = 0
+    uuid_dupes = 0
+    
+    for proxy in proxies:
+        if not proxy:
+            continue
+        
+        # Проверка полного дубликата
+        if proxy in seen_full:
+            full_dupes += 1
+            continue
+        seen_full.add(proxy)
+        
+        # Извлечение ключа UUID + server:port
+        try:
+            protocol, rest = proxy.split('://', 1)
+            uuid_part, server_part = rest.split('@', 1)
+            # UUID до параметров (? или #)
+            uuid = uuid_part.split('?')[0].split('#')[0]
+            # server:port до параметров
+            server_port = server_part.split('?')[0].split('#')[0]
+            
+            key = f"{protocol.lower()}:{uuid}@{server_port}"
+            
+            if key in seen_keys:
+                uuid_dupes += 1
+                continue
+            seen_keys.add(key)
+            result.append(proxy)
+        except Exception:
+            # Если не удалось распарсить - просто проверяем полные дубли
+            result.append(proxy)
+    
+    if full_dupes:
+        debug_log(f"🔁 Полных дубликатов строк удалено: {full_dupes}")
+    if uuid_dupes:
+        debug_log(f"🔁 Дубликатов UUID+server удалено: {uuid_dupes}")
+    
+    return result
 
 # ======================================================================
 # 🎯 ПРОСТАЯ ФИЛЬТРАЦИЯ ПО КОРНЯМ СЛОВ
@@ -337,7 +389,6 @@ def extract_from_element(element):
     if hasattr(element, 'find_all'):
         for a in element.find_all('a', href=True):
             href = a['href'].strip()
-            # 🔧 ПАТЧ: декодируем HTML-сущности из href
             try:
                 href = html.unescape(href)
             except Exception:
@@ -346,7 +397,6 @@ def extract_from_element(element):
                 proxies.append(clean_url(href))
             elif href.startswith('http'):
                 collect_url(href, urls)
-    # 🔧 ПАТЧ: декодируем HTML-сущности из текста элемента
     try:
         raw_text = element.get_text() if hasattr(element, 'get_text') else str(element)
         text = html.unescape(raw_text)
@@ -468,7 +518,6 @@ async def parse_with_telethon(source_url, cutoff_date):
                     debug_log(f"Достигнут cutoff ({msg_count} сообщений)")
                     break
                 msg_count += 1
-                # 🔧 ПАТЧ: декодируем HTML-сущности из текста сообщения
                 try:
                     raw_text = msg.text or msg.message or ''
                     text = html.unescape(raw_text)
@@ -510,7 +559,6 @@ async def process_subscription(url, session, sem, visited):
         if not text or len(text) < 50:
             return []
         decoded = decode_base64(text)
-        # 🔧 ПАТЧ: декодируем HTML-сущности из текста подписки
         try:
             search_text = html.unescape(decoded if decoded and len(decoded) > 50 else text)
         except Exception:
@@ -523,7 +571,6 @@ async def process_subscription(url, session, sem, visited):
     text = await fetch(session, url, sem)
     if not text: return []
     decoded = decode_base64(text)
-    # 🔧 ПАТЧ: декодируем HTML-сущности из текста подписки
     try:
         search_text = html.unescape(decoded if decoded and len(decoded) > 50 else text)
     except Exception:
@@ -902,7 +949,12 @@ async def main():
     clash_all = validate_all(clash_all)
     clash_all = make_names_unique(clash_all)
     
+    # 🔁 Дедупликация для TXT (все прокси)
     all_txt_uris = alive_uris_all + happ
+    before_dedup_all = len(all_txt_uris)
+    all_txt_uris = deduplicate_proxies(all_txt_uris)
+    debug_log(f"🔁 Дедупликация proxy-all: {before_dedup_all} → {len(all_txt_uris)}")
+    
     write_txt(OUT_ALL_TXT, all_txt_uris, len(alive))
     write_yaml(OUT_ALL_YAML, clash_all)
     debug_log(f"📄 proxy-all.txt: {len(all_txt_uris)} ссылок")
@@ -921,6 +973,7 @@ async def main():
     clash_wl = validate_all(clash_wl)
     clash_wl = make_names_unique(clash_wl)
     
+    # TXT wl с дедупликацией
     wl_uris = []
     for uri, parsed in alive:
         if parsed.get('type') not in enabled_protocols:
@@ -928,6 +981,11 @@ async def main():
         if not matches_roots(parsed):
             continue
         wl_uris.append(uri)
+    
+    # 🔁 Дедупликация для TXT (белосписочные)
+    before_dedup_wl = len(wl_uris)
+    wl_uris = deduplicate_proxies(wl_uris)
+    debug_log(f"🔁 Дедупликация proxy: {before_dedup_wl} → {len(wl_uris)}")
     
     write_txt(OUT_TXT, wl_uris, len(wl_uris))
     write_yaml(OUT_YAML, clash_wl)
