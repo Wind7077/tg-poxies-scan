@@ -1,5 +1,6 @@
 import os
 import re
+import html  # для декодирования HTML-сущностей (&amp; → &)
 import base64
 import asyncio
 import yaml
@@ -54,18 +55,16 @@ STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 # ======================================================================
 # 🎯 КОРНИ СЛОВ ДЛЯ БЕЛОСПИСОЧНЫХ ПРОКСИ
 # ======================================================================
-# Одна строка через пробел — регистронезависимо, ищет подстроки.
-# Добавляй свои корни сюда при необходимости.
-WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс"
+WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil ркт ркн rkn front disgu wl white-list whitelist notorgames aetris clearq owpn cyberportal dismissaltree"
 
 # ======================================================================
 # 🎯 ПРОТОКОЛЫ (true = собирать, false = игнорировать)
 # ======================================================================
 ENABLE_VLESS = True
-ENABLE_VMESS = False
-ENABLE_SS = False
-ENABLE_TROJAN = False
-ENABLE_HYSTERIA = False
+ENABLE_VMESS = True
+ENABLE_SS = True
+ENABLE_TROJAN = True
+ENABLE_HYSTERIA = True
 ENABLE_HYSTERIA2 = True
 ENABLE_TUIC = True
 
@@ -144,6 +143,12 @@ def remove_sticky_words(url):
     return url.rstrip('/')
 
 def clean_url(url):
+    """Очистка URL с обязательным декодированием HTML-сущностей"""
+    # 🔧 ПАТЧ: декодируем HTML-сущности (&amp; → &, &lt; → <, &quot; → " и т.д.)
+    try:
+        url = html.unescape(url)
+    except Exception:
+        pass
     for i, c in enumerate(url):
         if ord(c) > 127: url = url[:i]; break
     while url.endswith(')') and url.count(')') > url.count('('): url = url[:-1]
@@ -332,11 +337,21 @@ def extract_from_element(element):
     if hasattr(element, 'find_all'):
         for a in element.find_all('a', href=True):
             href = a['href'].strip()
+            # 🔧 ПАТЧ: декодируем HTML-сущности из href
+            try:
+                href = html.unescape(href)
+            except Exception:
+                pass
             if any(href.startswith(f"{s}://") for s in PROXY_SCHEMES):
                 proxies.append(clean_url(href))
             elif href.startswith('http'):
                 collect_url(href, urls)
-    text = element.get_text() if hasattr(element, 'get_text') else str(element)
+    # 🔧 ПАТЧ: декодируем HTML-сущности из текста элемента
+    try:
+        raw_text = element.get_text() if hasattr(element, 'get_text') else str(element)
+        text = html.unescape(raw_text)
+    except Exception:
+        text = element.get_text() if hasattr(element, 'get_text') else str(element)
     proxies.extend([clean_url(m.group(0)) for m in PROXY_REGEX.finditer(text)])
     for m in URL_REGEX.finditer(text):
         collect_url(m.group(0), urls)
@@ -394,8 +409,8 @@ async def fetch(session, url, sem, retry_count=2):
             debug_log(f"✗ {url[:80]}: {type(e).__name__}")
         return ""
 
-def extract_messages_data(html, cutoff_date):
-    soup = BeautifulSoup(html, 'html.parser')
+def extract_messages_data(html_content, cutoff_date):
+    soup = BeautifulSoup(html_content, 'html.parser')
     messages = soup.find_all('div', class_='tgme_widget_message')
     p, u = [], []
     for msg in messages:
@@ -453,7 +468,12 @@ async def parse_with_telethon(source_url, cutoff_date):
                     debug_log(f"Достигнут cutoff ({msg_count} сообщений)")
                     break
                 msg_count += 1
-                text = msg.text or msg.message or ''
+                # 🔧 ПАТЧ: декодируем HTML-сущности из текста сообщения
+                try:
+                    raw_text = msg.text or msg.message or ''
+                    text = html.unescape(raw_text)
+                except Exception:
+                    text = msg.text or msg.message or ''
                 for m in PROXY_REGEX.finditer(text):
                     proxies.append(clean_url(m.group(0)))
                 for m in URL_REGEX.finditer(text):
@@ -490,7 +510,11 @@ async def process_subscription(url, session, sem, visited):
         if not text or len(text) < 50:
             return []
         decoded = decode_base64(text)
-        search_text = decoded if decoded and len(decoded) > 50 else text
+        # 🔧 ПАТЧ: декодируем HTML-сущности из текста подписки
+        try:
+            search_text = html.unescape(decoded if decoded and len(decoded) > 50 else text)
+        except Exception:
+            search_text = decoded if decoded and len(decoded) > 50 else text
         found = [clean_url(p) for p in PROXY_REGEX.findall(search_text)]
         if len(found) == 0 and 'net4.su' in url:
             debug_log(f"⚠️ Форма вместо прокси в {url[:60]}")
@@ -499,7 +523,11 @@ async def process_subscription(url, session, sem, visited):
     text = await fetch(session, url, sem)
     if not text: return []
     decoded = decode_base64(text)
-    search_text = decoded if decoded and len(decoded) > 50 else text
+    # 🔧 ПАТЧ: декодируем HTML-сущности из текста подписки
+    try:
+        search_text = html.unescape(decoded if decoded and len(decoded) > 50 else text)
+    except Exception:
+        search_text = decoded if decoded and len(decoded) > 50 else text
     found = [clean_url(p) for p in PROXY_REGEX.findall(search_text)]
     if found: debug_log(f"✓ {len(found)} прокси в {url[:60]}")
     return found
@@ -808,9 +836,9 @@ async def main():
                     url = src.replace('https://t.me/', 'https://t.me/s/')
                 tasks.append((url, fetch(session, url, http_sem)))
             results = await asyncio.gather(*[t[1] for t in tasks])
-            for (u, _), html in zip(tasks, results):
-                if html:
-                    p, u2 = extract_messages_data(html, cutoff)
+            for (u, _), html_content in zip(tasks, results):
+                if html_content:
+                    p, u2 = extract_messages_data(html_content, cutoff)
                     debug_log(f"Из {u[:60]}: {len(p)} прокси, {len(u2)} URL")
                     all_proxies.extend(p)
                     for l in u2: sub_urls.add(clean_url(l))
@@ -886,7 +914,6 @@ async def main():
     clash_wl = [sanitize_proxy(p) for _, p in alive]
     clash_wl, _ = filter_by_protocol(clash_wl)
     
-    # Фильтр по корням слов
     before_filter = len(clash_wl)
     clash_wl = [p for p in clash_wl if matches_roots(p)]
     debug_log(f"🎯 ФИЛЬТР по корням: было {before_filter}, стало {len(clash_wl)}")
@@ -894,7 +921,6 @@ async def main():
     clash_wl = validate_all(clash_wl)
     clash_wl = make_names_unique(clash_wl)
     
-    # TXT wl
     wl_uris = []
     for uri, parsed in alive:
         if parsed.get('type') not in enabled_protocols:
@@ -908,7 +934,6 @@ async def main():
     debug_log(f"📄 proxy.txt: {len(wl_uris)} ссылок")
     debug_log(f"📄 proxy.yaml: {len(clash_wl)} прокси")
     
-    # Финальная статистика
     final_types_all = {}
     for p in clash_all:
         t = p.get('type', 'unknown')
