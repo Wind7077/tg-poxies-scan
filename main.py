@@ -85,6 +85,8 @@ _KEYWORD_ROOTS = [w.lower() for w in WHITELIST_ROOTS.split() if w]
 IGNORED_PARAMS = {'fp', 'alpn', 'extra', 'headertype', 'encryption', 'allowinsecure',
                   'insecure', 'fm', 'packetencoding', 'spx', 'ed'}
 DEDUP_SCHEMES = {'vless', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic'}
+# True: vless-ссылки на один и тот же сервер, отличающиеся только uuid/short-id, считаются дублем
+DEDUP_IGNORE_USER = True
 
 _AMP_RE = re.compile(r'&(?:amp|#0*38|#x0*26);', re.I)
 _RAW_RE = re.compile(r'([?&]type=)raw(?=[&#]|$)', re.I)
@@ -231,6 +233,19 @@ def config_key(uri):
     if q.get('type') == 'raw': q['type'] = 'tcp'
     q.setdefault('type', 'tcp')
     if q.get('mode') == 'auto': del q['mode']
+    # TLS: sni и host - одно и то же, если задан только один из них или они равны
+    if q.get('security') == 'tls':
+        eff = q.get('sni') or q.get('host')
+        if eff:
+            q['sni'] = eff
+            if q.get('host') == eff: q.pop('host')
+    # чистый tcp: path/host ни на что не влияют
+    if q['type'] == 'tcp':
+        q.pop('path', None); q.pop('host', None)
+    # тот же сервер с другим uuid / short-id - для списка это дубль
+    if DEDUP_IGNORE_USER and scheme == 'vless':
+        user = ''
+        if q.get('security') == 'reality': q.pop('sid', None)
     return (scheme, user, pwd, host, port, path, tuple(sorted(q.items())))
 
 def _rank(uri):
