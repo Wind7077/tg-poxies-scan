@@ -29,7 +29,7 @@ MAX_CONCURRENT_HTTP = 50
 MAX_CONCURRENT_PING = 500
 
 # 0 = без лимита; N = не больше N вариантов на один host:port (после дедупа по конфигу)
-MAX_PER_ENDPOINT = 3
+MAX_PER_ENDPOINT = 5  # ✅ ПРАВКА: было 3
 
 API_ID = int(os.getenv('TELEGRAM_API_ID', '0'))
 API_HASH = os.getenv('TELEGRAM_API_HASH', '')
@@ -38,7 +38,6 @@ SESSION_B64 = os.getenv('TELEGRAM_SESSION', '')
 PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
 _SCHEMES_ALT = '|'.join(PROXY_SCHEMES)
 _URL_CHARS = r"[a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%]"
-# Останавливается перед следующей схемой -> склеенные ссылки извлекаются по отдельности
 PROXY_REGEX = re.compile(
     r'(?:' + _SCHEMES_ALT + r')://(?:(?!(?:' + _SCHEMES_ALT + r')://)' + _URL_CHARS + r')+',
     re.IGNORECASE)
@@ -85,8 +84,8 @@ _KEYWORD_ROOTS = [w.lower() for w in WHITELIST_ROOTS.split() if w]
 IGNORED_PARAMS = {'fp', 'alpn', 'extra', 'headertype', 'encryption', 'allowinsecure',
                   'insecure', 'fm', 'packetencoding', 'spx', 'ed'}
 DEDUP_SCHEMES = {'vless', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic'}
-# True: vless-ссылки на один и тот же сервер, отличающиеся только uuid/short-id, считаются дублем
-DEDUP_IGNORE_USER = True
+# ✅ ПРАВКА: False — не игнорируем uuid, т.к. разные uuid = разные аккаунты
+DEDUP_IGNORE_USER = False
 
 _AMP_RE = re.compile(r'&(?:amp|#0*38|#x0*26);', re.I)
 _RAW_RE = re.compile(r'([?&]type=)raw(?=[&#]|$)', re.I)
@@ -146,11 +145,11 @@ def remove_sticky_words(url):
     return url.rstrip('/')
 
 def clean_url(url):
-    """Очистка URL: &amp; -> &, имя после # кодируется (а не режется), type=raw -> tcp"""
+    """Очистка URL: &amp; -> &, имя после # кодируется"""
     # &amp; / &amp;amp; -> &
     while _AMP_RE.search(url):
         url = _AMP_RE.sub('&', url)
-    # не-ASCII до '#' (склеенный мусор) режем как раньше; имя после '#' кодируем в %XX
+    # не-ASCII до '#' режем; имя после '#' кодируем в %XX
     head, sep, frag = url.partition('#')
     for i, c in enumerate(head):
         if ord(c) > 127:
@@ -160,8 +159,7 @@ def clean_url(url):
     if not frag:
         sep = ''
     url = head + sep + frag
-    # raw = новое имя tcp в Xray
-    url = _RAW_RE.sub(r'\1tcp', url)
+    # ✅ ПРАВКА: УБРАЛИ raw→tcp (обрабатывается в parse_uri_for_clash)
     while url.endswith(')') and url.count(')') > url.count('('): url = url[:-1]
     url = split_glued(url.rstrip('.,;:!?'))
     url = remove_sticky_words(url)
@@ -227,36 +225,33 @@ def _uri_parts(uri):
 def config_key(uri):
     p = _uri_parts(uri)
     if not p or p[0] not in DEDUP_SCHEMES or not p[3]:
-        return uri  # vmess/ss/happ и непарсящееся: только точные дубли
+        return uri
     scheme, user, pwd, host, port, path, q, _ = p
     q = {k: v for k, v in q.items() if v and k not in IGNORED_PARAMS}
     if q.get('type') == 'raw': q['type'] = 'tcp'
     q.setdefault('type', 'tcp')
     if q.get('mode') == 'auto': del q['mode']
-    # TLS: sni и host - одно и то же, если задан только один из них или они равны
     if q.get('security') == 'tls':
         eff = q.get('sni') or q.get('host')
         if eff:
             q['sni'] = eff
             if q.get('host') == eff: q.pop('host')
-    # чистый tcp: path/host ни на что не влияют
     if q['type'] == 'tcp':
         q.pop('path', None); q.pop('host', None)
-    # тот же сервер с другим uuid / short-id - для списка это дубль
+    # DEDUP_IGNORE_USER=False — uuid сохраняется в ключе
     if DEDUP_IGNORE_USER and scheme == 'vless':
         user = ''
         if q.get('security') == 'reality': q.pop('sid', None)
     return (scheme, user, pwd, host, port, path, tuple(sorted(q.items())))
 
 def _rank(uri):
-    """Из дублей берём тот, чьё имя проходит WL-фильтр; затем более длинное имя"""
     p = _uri_parts(uri)
     if not p: return (False, 0)
     return (matches_roots({'name': p[7], 'server': p[3], 'sni': p[6].get('sni', '')}), len(p[7]))
 
 def dedupe_by_config(uris):
     groups = {}
-    for u in sorted(set(uris)):  # sorted -> результат детерминирован
+    for u in sorted(set(uris)):
         groups.setdefault(config_key(u), []).append(u)
     result = [max(g, key=_rank) for g in groups.values()]
     if MAX_PER_ENDPOINT > 0:
@@ -890,7 +885,7 @@ async def main():
     all_proxies = [p for p in set(all_proxies) if p and '://' in p]
     print(f"[{time.time()-start:.1f}s] Сырых прокси: {len(all_proxies)}")
 
-    # дедуп по конфигу ДО пинга (меньше пингов, детерминированный порядок)
+    # дедуп по конфигу ДО пинга
     n0 = len(all_proxies)
     all_proxies = dedupe_by_config(all_proxies)
     debug_log(f"🔁 Дублей по конфигу удалено: {n0 - len(all_proxies)} (осталось {len(all_proxies)})")
