@@ -55,7 +55,7 @@ BLACKLIST_DOMAINS = [
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 
-WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil ркт ркн rkn front disgu wl white-list whitelist notorgames aetris clearq owpn cyberportal dismissaltree"
+WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс"
 
 ENABLE_VLESS = True
 ENABLE_VMESS = False
