@@ -4,617 +4,6 @@ mode: Rule
 log-level: info
 external-controller: 127.0.0.1:9090
 proxies:
-- name: 🤖+Для+Claude+&+ChatGPT+#03+•+🇩🇪+[DE]+VLESS+(3469ms)
-  type: vless
-  server: 185.141.227.223
-  port: 443
-  uuid: c720cb74-4c84-4fce-b8ae-637dbaa16199
-  network: ws
-  udp: true
-  tls: true
-  server-name: z1q3pv4g78.rucdncomp.pro
-  client-fingerprint: ios
-  ws-opts:
-    path: /useraction/events/b892639b7195/
-    headers:
-      Host: z1q3pv4g78.rucdncomp.pro
-- name: 🇷🇺+RU+#03+•+VLESS+Reality+[Белый+список]+(433ms)
-  type: vless
-  server: 81.26.182.128
-  port: 443
-  uuid: 5d7e07ba-f460-4638-af79-bbcde67fcb6b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.samsung.com
-  reality-opts:
-    public-key: xlXuN8KDdbqGEsaj1m2D8NUnR5d2oeo5TT71RSMmfxY
-  client-fingerprint: ios
-  flow: xtls-rprx-vision
-- name: 🇷🇺+RU+#01+•+VLESS+TLS+[Белый+список]+(1461ms)
-  type: vless
-  server: 78.159.246.179
-  port: 2053
-  uuid: 95a608b6-bff1-4e10-bb61-0a39f221bb7d
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: randomquaint.net
-  client-fingerprint: ios
-- name: 🇷🇺+RU+#02+•+VLESS+TLS+[Белый+список]+(488ms)
-  type: vless
-  server: 81.94.148.208
-  port: 2053
-  uuid: 2c634977-584e-4e1f-b501-1b70c77a6743
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: summerculture.net
-  client-fingerprint: firefox
-- name: 🛡️+Белый+список+РФ+#06+•+VLESS+(1209ms)
-  type: vless
-  server: 178.172.227.124
-  port: 10444
-  uuid: 1af36694-b548-4b18-89a0-bc076eab4ed7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
-    short-id: 8debcf36f1cc69ff
-  client-fingerprint: edge
-  flow: xtls-rprx-vision
-- name: 🛡️+Белый+список+РФ+#05+•+VLESS+(1203ms)
-  type: vless
-  server: 200.165.231.138
-  port: 8444
-  uuid: a346c521-7a7f-452b-9356-a4893feb5982
-  network: grpc
-  udp: true
-  tls: true
-  server-name: github.com
-  reality-opts:
-    public-key: FWitre1jinQR7qz5HQ0q2Q4Gg9xA9B0SyizCziN7Ch0
-    short-id: 457fab2ac885dbe0
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: GunService
-- name: 🛡️+Белый+список+РФ+#04+•+VLESS+(572ms)
-  type: vless
-  server: 82.202.179.111
-  port: 15443
-  uuid: 1ba0439d-384c-4a6e-9560-0439698beb2a
-  network: tcp
-  udp: true
-  tls: true
-  server-name: smartcaptcha.yandexcloud.net
-  reality-opts:
-    public-key: MNmqM2p3nUYZIqo0sTMXRXGzB5HquF-czSycvdqn3U4
-    short-id: b74f54b7
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 🛡️+Белый+список+РФ+#01+•+VLESS+(657ms)
-  type: vless
-  server: 103.24.207.40
-  port: 8443
-  uuid: 258d8fc5-206c-48fd-88df-169dbbe44d3f
-  network: tcp
-  udp: true
-  tls: true
-  server-name: edge-fr.extazy.net
-  reality-opts:
-    public-key: ygxQyBcJzlLgpSl3MCRDDiFET4TT-3wxa4GdG1obkCY
-  client-fingerprint: edge
-  flow: xtls-rprx-vision
-- name: 🛡️+Белый+список+РФ+#08+•+VLESS+(697ms)
-  type: vless
-  server: 78.159.246.85
-  port: 8443
-  uuid: 6a2aff19-ff1f-4a13-96c8-a4d8986a9699
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: fitindoor.net
-  client-fingerprint: firefox
-- name: 🛡️+Белый+список+РФ+#02+•+VLESS+(944ms)
-  type: vless
-  server: 46.243.142.2
-  port: 443
-  uuid: 7c86240f-ac0c-4cfe-87c8-fa0dd69b2d25
-  network: ws
-  udp: true
-  tls: true
-  server-name: floweroom.vip
-  client-fingerprint: edge
-  ws-opts:
-    path: /cart/sync/g-jSjxyhq24P
-    headers:
-      Host: floweroom.vip
-- name: 🇷🇺 RU | CIDR | 719 | @ByeWhiteLists2
-  type: vless
-  server: 158.160.228.216
-  port: 443
-  uuid: 04913a93-529d-0208-9ffd-b37948df532b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: sYDQC1RUZKqtJau7wrl-i5yAYy613d9e72FRGAwvYUM
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 918 | @ByeWhiteLists2
-  type: vless
-  server: 158.160.228.216
-  port: 443
-  uuid: 04913a93-529d-0212-9ffd-b37948df532b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: sYDQC1RUZKqtJau7wrl-i5yAYy613d9e72FRGAwvYUM
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 841 | @ByeWhiteLists2
-  type: vless
-  server: 158.160.228.216
-  port: 443
-  uuid: 04913a93-529d-021c-9ffd-b37948df532b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: sYDQC1RUZKqtJau7wrl-i5yAYy613d9e72FRGAwvYUM
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 869 | @ByeWhiteLists2
-  type: vless
-  server: 158.160.228.216
-  port: 443
-  uuid: 04913a93-529d-0226-9ffd-b37948df532b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: sYDQC1RUZKqtJau7wrl-i5yAYy613d9e72FRGAwvYUM
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 895 | @ByeWhiteLists2
-  type: vless
-  server: 158.160.228.216
-  port: 443
-  uuid: 04913a93-529d-0230-9ffd-b37948df532b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: sYDQC1RUZKqtJau7wrl-i5yAYy613d9e72FRGAwvYUM
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 768 | @ByeWhiteLists2
-  type: vless
-  server: 89.208.87.128
-  port: 443
-  uuid: 49e96f3d-e670-4073-ba92-16b6a4a7b621
-  network: tcp
-  udp: true
-  tls: true
-  server-name: analytics.vk.ru
-  reality-opts:
-    public-key: kAfACVGlqkxdp5T0pF_8rP8ElZ6mYSNnpP1NDnSr9H8
-    short-id: deadbeefcafebaab
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 596 | @ByeWhiteLists2
-  type: vless
-  server: 89.208.87.128
-  port: 443
-  uuid: 49e96f3d-e670-4073-ba92-16b6a4a7b621
-  network: tcp
-  udp: true
-  tls: true
-  server-name: m.47news.ru
-  reality-opts:
-    public-key: kAfACVGlqkxdp5T0pF_8rP8ElZ6mYSNnpP1NDnSr9H8
-    short-id: f2e2d4c4b6a70788
-  client-fingerprint: random
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 818 | @ByeWhiteLists2
-  type: vless
-  server: 212.233.98.53
-  port: 443
-  uuid: 7d40449f-92df-4256-9607-679241455d49
-  network: tcp
-  udp: true
-  tls: true
-  server-name: eh.vk.com
-  reality-opts:
-    public-key: Z1SyOS7dAP5Kn28b7kRqN4-_9DrRudXeLor4h5VeYgE
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 664 | @ByeWhiteLists2
-  type: vless
-  server: 212.233.98.53
-  port: 443
-  uuid: 7d40449f-92df-4256-9607-679241455d49
-  network: tcp
-  udp: true
-  tls: true
-  server-name: max.ru
-  reality-opts:
-    public-key: Y8RAqYdWTe4NOiClYYU0AhvMWvVFnGtMpOpCnFrT9zM
-    short-id: d4625ace9798c186
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 440 | @ByeWhiteLists2
-  type: vless
-  server: 37.139.34.251
-  port: 443
-  uuid: 7d40449f-92df-4256-9607-679241455d49
-  network: tcp
-  udp: true
-  tls: true
-  server-name: max.ru
-  reality-opts:
-    public-key: J5QjEJEwCYH0DT4aLuWuVZ5X9UUtUOhyCbQ41iEmnk8
-    short-id: 568276f318726b0f
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 585 | @ByeWhiteLists2
-  type: vless
-  server: 37.139.34.251
-  port: 443
-  uuid: 7d40449f-92df-4256-9607-679241455d49
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yandex.ru
-  reality-opts:
-    public-key: uI8GuyTVaiWvWYQOuKY8AKx8acF0j107xFVWri1jfxA
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 632 | @ByeWhiteLists2
-  type: vless
-  server: 87.239.105.195
-  port: 443
-  uuid: b9e3afac-84df-47e0-93a9-8570616e737d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: m.vk.com
-  reality-opts:
-    public-key: oqRus6Z_Q1jqJaTEPu7ENbRL0-XKOw54K0jwCCGLtEk
-    short-id: 7e2a9d4c5f18b0
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 576 | @ByeWhiteLists2
-  type: vless
-  server: 146.185.243.18
-  port: 443
-  uuid: d6dba391-9247-4a51-9e9b-eae045378b90
-  network: tcp
-  udp: true
-  tls: true
-  server-name: max.ru
-  reality-opts:
-    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
-    short-id: 6ba85179e30d4fc2
-  flow: xtls-rprx-vision
-  client-fingerprint: chrome
-- name: 🇰🇿 KZ | — | 1014 | @ByeWhiteLists2
-  type: vless
-  server: raff-vpn-kz-server1.ru
-  port: 443
-  uuid: 6fdfdb73-51b0-4a14-89a5-c9355a0e0397
-  network: tcp
-  udp: true
-  tls: true
-  server-name: google.com
-  reality-opts:
-    public-key: vCxfuNNmogA1DlPkjvmKb7_hSgXqe4MboPfi2s1JZG0
-    short-id: b318242471ba4f5b
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇺🇸 US | — | 1013 | @ByeWhiteLists2
-  type: vless
-  server: us1.cvs-a.com
-  port: 443
-  uuid: e3479472-3d5d-4142-842a-44a32b501bd7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: us1.cvs-a.com
-  reality-opts:
-    public-key: vgmo5AxgVJfSME3mlK4ulM4HeVAn6eS2UO9wYEPNFiY
-    short-id: bb55683efa59799d
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇳🇱 NL | — | 1023 | @ByeWhiteLists2
-  type: vless
-  server: 77.239.112.180
-  port: 443
-  uuid: f724a901-b2a5-40f5-a160-8b42db9908e8
-  network: tcp
-  udp: true
-  tls: true
-  server-name: github.com
-  reality-opts:
-    public-key: KvXGx5NqnYnUxveJ3DSzQ2Zx_FlB6i-narUvQR-igX8
-  flow: xtls-rprx-vision
-  client-fingerprint: chrome
-- name: 🇪🇪 EE | — | 218 | @ByeWhiteLists2
-  type: vless
-  server: 95.85.224.28
-  port: 443
-  uuid: 0639f5a2-99b4-451d-9ba0-6f0a0597ac3b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: m.vkvideo.cs7777.vk.ru
-  reality-opts:
-    public-key: PzPuIsJG2yyrnO-9TKGyRxmo8DCJ6VCdpQ5l5l62QQQ
-  flow: xtls-rprx-vision
-  client-fingerprint: chrome
-- name: 🇱🇻 LV | — | 179 | @ByeWhiteLists2
-  type: vless
-  server: 31.170.22.68
-  port: 443
-  uuid: 46b81618-5d7f-4b65-b95f-7f782b8242be
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: nDq00UeDI5TKKFipI6rgdVCqiTO98ncHKn90Qp3EsBE
-    short-id: f2b78452f9233f26
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇱🇻 LV | — | 183 | @ByeWhiteLists2
-  type: vless
-  server: 31.170.22.68
-  port: 443
-  uuid: 46b81618-5d7f-4b65-b95f-7f782b8242be
-  network: tcp
-  udp: true
-  tls: true
-  server-name: download.max.ru
-  reality-opts:
-    public-key: nDq00UeDI5TKKFipI6rgdVCqiTO98ncHKn90Qp3EsBE
-    short-id: f2b78452f9233f26
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | — | 208 | @ByeWhiteLists2
-  type: vless
-  server: 5.129.200.113
-  port: 443
-  uuid: 46b81618-5d7f-4b65-b95f-7f782b8242be
-  network: tcp
-  udp: true
-  tls: true
-  server-name: br-any.eun1.prd.api.max.com
-  reality-opts:
-    public-key: nDq00UeDI5TKKFipI6rgdVCqiTO98ncHKn90Qp3EsBE
-    short-id: f2b78452f9233f26
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇪🇪 EE | — | 185 | @ByeWhiteLists2
-  type: vless
-  server: 69.12.83.228
-  port: 443
-  uuid: 595cc792-0257-4673-9079-4e1247519c6f
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ign.com
-  reality-opts:
-    public-key: 6Ra2AsVwORJlxqvQ9YHAfHFk8Z0HZIrWuXxlBEYpwQY
-    short-id: e7b5024fd83a16c9
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇺🇸 US | — | 973 | @ByeWhiteLists2
-  type: vless
-  server: us.whalon.top
-  port: 443
-  uuid: 645da6ec-876b-44c9-8fdc-2d0c4715ffd0
-  network: tcp
-  udp: true
-  tls: true
-  server-name: us.whalon.top
-  reality-opts:
-    public-key: v1IeaDFVRDohxTWfnsoiWI3-vZCj6pbli30r2az_TXU
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇺🇸 US | — | 971 | @ByeWhiteLists2
-  type: vless
-  server: 79.141.172.184
-  port: 443
-  uuid: 7d40449f-92df-4256-9607-679241455d49
-  network: tcp
-  udp: true
-  tls: true
-  server-name: stats.vk-portal.net
-  reality-opts:
-    public-key: 5DrNWT7Q8J_9XU8XJjJV0S9KF6OIM3cdg7MWsE9f-EI
-    short-id: e84357d853e378a3
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | — | 277 | @ByeWhiteLists2
-  type: vless
-  server: fi-bridge.sbrf-cdn342.ru
-  port: 443
-  uuid: c4f2dee2-14e3-4c02-91e9-31c7917e239c
-  network: tcp
-  udp: true
-  tls: true
-  server-name: sub.sbrf-cdn342.ru
-  client-fingerprint: qq
-- name: 🇷🇺 RU | — | 976 | @ByeWhiteLists2
-  type: vless
-  server: swe-bridge.sbrf-cdn342.ru
-  port: 443
-  uuid: c4f2dee2-14e3-4c02-91e9-31c7917e239c
-  network: tcp
-  udp: true
-  tls: true
-  server-name: sub.sbrf-cdn342.ru
-  client-fingerprint: qq
-- name: 🇷🇺 RU | — | 946 | @ByeWhiteLists2
-  type: vless
-  server: 178.250.243.56
-  port: 443
-  uuid: d6dba391-9247-4a51-9e9b-eae045378b90
-  network: tcp
-  udp: true
-  tls: true
-  server-name: max.ru
-  reality-opts:
-    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
-    short-id: 6ba85179e30d4fc2
-  flow: xtls-rprx-vision
-  client-fingerprint: chrome
-- name: 🇪🇸 ES | — | 958 | @ByeWhiteLists2
-  type: vless
-  server: es1.cvs-a.com
-  port: 443
-  uuid: e3479472-3d5d-4142-842a-44a32b501bd7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: es1.cvs-a.com
-  reality-opts:
-    public-key: vgmo5AxgVJfSME3mlK4ulM4HeVAn6eS2UO9wYEPNFiY
-    short-id: bb55683efa59799d
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇺🇸 US | — | 980 | @ByeWhiteLists2
-  type: vless
-  server: nl2.cvs-a.com
-  port: 443
-  uuid: e3479472-3d5d-4142-842a-44a32b501bd7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: nl2.cvs-a.com
-  reality-opts:
-    public-key: vgmo5AxgVJfSME3mlK4ulM4HeVAn6eS2UO9wYEPNFiY
-    short-id: bb55683efa59799d
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | — | 954 | @ByeWhiteLists2
-  type: vless
-  server: ru1.cvs-a.com
-  port: 443
-  uuid: e3479472-3d5d-4142-842a-44a32b501bd7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ru1.cvs-a.com
-  reality-opts:
-    public-key: vgmo5AxgVJfSME3mlK4ulM4HeVAn6eS2UO9wYEPNFiY
-    short-id: bb55683efa59799d
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇹🇷 TR | — | 977 | @ByeWhiteLists2
-  type: vless
-  server: tr1.cvs-a.com
-  port: 443
-  uuid: e3479472-3d5d-4142-842a-44a32b501bd7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: tr1.cvs-a.com
-  reality-opts:
-    public-key: vgmo5AxgVJfSME3mlK4ulM4HeVAn6eS2UO9wYEPNFiY
-    short-id: bb55683efa59799d
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇭🇺 HU | — | 97 | @ByeWhiteLists2
-  type: vless
-  server: 217.13.104.133
-  port: 443
-  uuid: 40b33e55-6049-4fac-940e-7b38a3f5f270
-  network: tcp
-  udp: true
-  tls: true
-  server-name: eh.vk.com
-  reality-opts:
-    public-key: ZGwYjRp5RxlVpHUTPzi7pB4ZZuDU5FZEaFgBM71teiQ
-    short-id: 0669a3e6b300d069
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇬🇧 GB | — | 95 | @ByeWhiteLists2
-  type: vless
-  server: uk.pinkweb.one
-  port: 443
-  uuid: 4dde0df3-aa67-417c-882e-28beb3886961
-  network: tcp
-  udp: true
-  tls: true
-  server-name: uk.pinkweb.one
-  reality-opts:
-    public-key: rkDYX1M5KDPI-HBTisZfzjBFUPzKMfZoFmfZoLst1Fw
-    short-id: 2b25a6998e2c4876
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇩🇪 DE | — | 67 | @ByeWhiteLists2
-  type: vless
-  server: de.whalon.top
-  port: 443
-  uuid: 645da6ec-876b-44c9-8fdc-2d0c4715ffd0
-  network: tcp
-  udp: true
-  tls: true
-  server-name: de.whalon.top
-  reality-opts:
-    public-key: v1IeaDFVRDohxTWfnsoiWI3-vZCj6pbli30r2az_TXU
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇳🇱 NL | — | 92 | @ByeWhiteLists2
-  type: vless
-  server: nl.whalon.top
-  port: 443
-  uuid: 645da6ec-876b-44c9-8fdc-2d0c4715ffd0
-  network: tcp
-  udp: true
-  tls: true
-  server-name: nl.whalon.top
-  reality-opts:
-    public-key: t2mg38oyiICWzWrUjOEpQAyRKJfcdanmr1imcTqT8H8
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇳🇱 NL | — | 77 | @ByeWhiteLists2
-  type: vless
-  server: 195.2.92.183
-  port: 443
-  uuid: 7c6c3d89-e709-551d-89a2-5889f374e2b1
-  network: tcp
-  udp: true
-  tls: true
-  server-name: vk.com
-  reality-opts:
-    public-key: h_2ltojrlOLaZtaxFDkpiJpyPzWIshh9a5rDskjq3R8
-    short-id: ffffffffff
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇬🇧 GB | — | 66 | @ByeWhiteLists2
-  type: vless
-  server: 91.193.17.111
-  port: 443
-  uuid: 7d40449f-92df-4256-9607-679241455d49
-  network: tcp
-  udp: true
-  tls: true
-  server-name: drive.yandex.ru
-  reality-opts:
-    public-key: 6Jm0J6DFfO2P-OOUd1OygjPigR4nQjLY5vpUsM83OXM
-    short-id: 4967e8608eb2a42c
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
 - name: 🇪🇺 ДЛЯ ОБХОДА ГЛУШИЛК/БС/ЧС
   type: vless
   server: qq.utiltools.site
@@ -638,63 +27,35 @@ proxies:
   tls: true
   server-name: fitindoor.net
   client-fingerprint: firefox
-- name: cool [LSO-LTE] 🇷🇺 |#30|
+- name: cool [LSO-LTE] 🇷🇺 |#41|
   type: vless
-  server: 82.202.182.42
-  port: 3443
+  server: 82.202.179.111
+  port: 15443
   uuid: 1ba0439d-384c-4a6e-9560-0439698beb2a
   network: tcp
   udp: true
   tls: true
   server-name: smartcaptcha.yandexcloud.net
   reality-opts:
-    public-key: YIXOvwrCFxQYKOP_GwdhbzZLlwgBIVVISXDpFZQBt0c
-    short-id: a5bb22e6a41ff20a
+    public-key: MNmqM2p3nUYZIqo0sTMXRXGzB5HquF-czSycvdqn3U4
+    short-id: b74f54b7
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇺🇸 |#38|
+- name: cool [LSO-LTE] 🇱🇹 |#14|
   type: vless
-  server: 144.31.50.236
-  port: 443
-  uuid: 1c332eae-7e02-4acd-996d-4eb3e652401c
+  server: 147.45.217.41
+  port: 21731
+  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
   network: tcp
   udp: true
   tls: true
-  server-name: yandex.ru
+  server-name: metrika.yandex.ru
   reality-opts:
-    public-key: uitO4Z8t9TplwwYaqwLqh5rfxDh_X8bOBiNuPbzvaEM
-    short-id: bbe46bd8f6b96839
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇺🇸 |#25|
-  type: vless
-  server: prep.wwwinternetvideo.click
-  port: 443
-  uuid: 1c332eae-7e02-4acd-996d-4eb3e652401c
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yandex.ru
-  reality-opts:
-    public-key: uitO4Z8t9TplwwYaqwLqh5rfxDh_X8bOBiNuPbzvaEM
-    short-id: bbe46bd8f6b96839
+    public-key: QeLV1NQeTG3e1DRFSNnK_f9Ca5Gf9smexICxtr27WUA
+    short-id: 0446eb17
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇵🇱 |#14|
-  type: vless
-  server: 144.31.101.196
-  port: 33891
-  uuid: 1c794e75-bcd4-4a65-9f69-ed0a10f33d60
-  network: tcp
-  udp: true
-  tls: true
-  server-name: browser.yandex.com
-  reality-opts:
-    public-key: HXXIkFRPeRpluXJ7SOoUGf9EOq4Lw-oJpvg1W0UPbEw
-    short-id: 5bd7b68ca4c04443
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇮🇹 |#29|
+- name: cool [LSO-LTE] 🇮🇹 |#15|
   type: vless
   server: 82.118.16.149
   port: 443
@@ -708,11 +69,11 @@ proxies:
     short-id: 7bbf811a
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇷🇺 |#40|
+- name: cool [LSO-LTE] 🇷🇺 |#20|
   type: vless
-  server: 145.249.109.112
+  server: spainspeedboostjbl88.qcloud.surf
   port: 27311
-  uuid: 4ad3dbf5-2005-4d96-b56c-a0ca9905cab6
+  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
   network: tcp
   udp: true
   tls: true
@@ -722,7 +83,7 @@ proxies:
     short-id: 56daff9a
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇦🇲 |#16|
+- name: cool [LSO-LTE] 🇦🇲 |#22|
   type: vless
   server: 88.218.92.41
   port: 24694
@@ -736,7 +97,7 @@ proxies:
     short-id: '58301280'
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇳🇱 |#43|
+- name: cool [LSO-LTE] 🇳🇱 |#27|
   type: vless
   server: 87.199.205.28
   port: 443
@@ -750,62 +111,6 @@ proxies:
     short-id: b7cd177731793b1e
   client-fingerprint: qq
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇷🇺 |#39|
-  type: vless
-  server: 82.202.179.106
-  port: 11443
-  uuid: 54f22246-cc9c-4315-907a-6c94c901d20f
-  network: tcp
-  udp: true
-  tls: true
-  server-name: smartcaptcha.yandexcloud.net
-  reality-opts:
-    public-key: WWmwRoB2K7xonT6jzbhKen_Rp-UM7QCr_vMgmNZuggc
-    short-id: 044a5e06faf5
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇷🇺 |#32|
-  type: vless
-  server: 145.249.109.112
-  port: 27311
-  uuid: 8bd04756-3beb-4348-82c9-d35453df50ce
-  network: tcp
-  udp: true
-  tls: true
-  server-name: metrika.yandex.ru
-  reality-opts:
-    public-key: 9vHDWMrmerdjndp_XHbCc9jaR-9K95H_mwpLvI2emkY
-    short-id: 56daff9a
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇺🇸 |#42|
-  type: vless
-  server: qcloudge1.exitvpn.shop
-  port: 20268
-  uuid: 8bd04756-3beb-4348-82c9-d35453df50ce
-  network: tcp
-  udp: true
-  tls: true
-  server-name: metrika.yandex.ru
-  reality-opts:
-    public-key: 5H_MmyfvF4SkwS84wTbLmtcZDecXJIJtZ3uisiKQpSM
-    short-id: 0c774b50
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇺🇸 |#28|
-  type: vless
-  server: sweedenqfds777.qcloud.surf
-  port: 21221
-  uuid: 8bd04756-3beb-4348-82c9-d35453df50ce
-  network: tcp
-  udp: true
-  tls: true
-  server-name: metrika.yandex.ru
-  reality-opts:
-    public-key: RtxGqCtQJeOyUwSe7k6oZOrQWV1hPbC-TMqqgxl9fn4
-    short-id: c430045c
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: 🇷🇺 Россия 5G Telegram ❌
   type: vless
   server: randomquaint.net
@@ -816,10 +121,10 @@ proxies:
   tls: true
   server-name: randomquaint.net
   client-fingerprint: chrome
-- name: cool [LSO-LTE] 🇺🇸 |#19|
+- name: cool [LSO-LTE] 🇺🇸 |#25|
   type: vless
-  server: 193.23.195.37
-  port: 22443
+  server: 185.170.154.35
+  port: 7443
   uuid: 9ebf4fda-7395-4800-b42f-b2dda649880a
   network: tcp
   udp: true
@@ -830,49 +135,35 @@ proxies:
     short-id: d2061bb1
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇺🇸 |#23|
+- name: cool [LSO-LTE] 🇺🇸 |#31|
   type: vless
-  server: 193.23.195.37
-  port: 23443
-  uuid: 9ebf4fda-7395-4800-b42f-b2dda649880a
+  server: 45.138.100.248
+  port: 10444
+  uuid: ae908ff5-f749-402c-af25-e6e9aef4d6bb
   network: tcp
   udp: true
   tls: true
-  server-name: dzen.ru
+  server-name: ads.x5.ru
   reality-opts:
-    public-key: 8-QVqJkQK6im68scoBqUSvb14ishLf5c_YeD9WpB_Ec
-    short-id: 36f4f1d1a9bd8355
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇺🇸 |#9|
+- name: cool [LSO-LTE] 🇫🇷 |#26|
   type: vless
-  server: 177.3.222.174
-  port: 20268
-  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
+  server: 161.97.160.224
+  port: 443
+  uuid: b81b4d1b-7f20-48f1-82dc-d24bef898cab
   network: tcp
   udp: true
   tls: true
-  server-name: metrika.yandex.ru
+  server-name: passport.yandex.ru
   reality-opts:
-    public-key: 5H_MmyfvF4SkwS84wTbLmtcZDecXJIJtZ3uisiKQpSM
-    short-id: 0c774b50
+    public-key: 33zaT3jHXjtynSQ0Ucw9bK92-XH2zolJmuIeZ1XyZB0
+    short-id: e6
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇺🇸 |#2|
-  type: vless
-  server: 13.143.137.206
-  port: 12443
-  uuid: 9ebf4fda-7395-4800-b42f-b2dda649880a
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ya.ru
-  reality-opts:
-    public-key: 1MLoHw7RVkGefh7XUyuGg4ndxwv4vDU9en-f9JxpXRQ
-    short-id: d2061bb1
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇭🇰 |#7|
+- name: cool [LSO-LTE] 🇭🇰 |#45|
   type: vless
   server: 213.176.92.168
   port: 10444
@@ -886,18 +177,46 @@ proxies:
     short-id: 8debcf36f1cc69ff
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇬🇧 |#3|
+- name: cool [LSO-LTE] 🇷🇺 |#12|
   type: vless
-  server: 138.124.125.193
-  port: 10444
-  uuid: e57ce64d-5a1a-4a90-96df-9e1bd3ad26e4
+  server: spainspeedboostjbl88.qcloud.surf
+  port: 27311
+  uuid: f83ce3c4-07d9-4895-bd14-cb74abbcab37
   network: tcp
   udp: true
   tls: true
-  server-name: ads.x5.ru
+  server-name: metrika.yandex.ru
   reality-opts:
-    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
-    short-id: 8debcf36f1cc69ff
+    public-key: 9vHDWMrmerdjndp_XHbCc9jaR-9K95H_mwpLvI2emkY
+    short-id: 56daff9a
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇵🇱 |#2|
+  type: vless
+  server: 144.31.101.196
+  port: 33891
+  uuid: 1c794e75-bcd4-4a65-9f69-ed0a10f33d60
+  network: tcp
+  udp: true
+  tls: true
+  server-name: browser.yandex.com
+  reality-opts:
+    public-key: HXXIkFRPeRpluXJ7SOoUGf9EOq4Lw-oJpvg1W0UPbEw
+    short-id: 5bd7b68ca4c04443
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇺🇸 |#4|
+  type: vless
+  server: 193.23.195.37
+  port: 22443
+  uuid: 9ebf4fda-7395-4800-b42f-b2dda649880a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: ya.ru
+  reality-opts:
+    public-key: 1MLoHw7RVkGefh7XUyuGg4ndxwv4vDU9en-f9JxpXRQ
+    short-id: d2061bb1
   client-fingerprint: firefox
   flow: xtls-rprx-vision
 - name: 🇷🇺Белые списки • RU 1
@@ -924,265 +243,63 @@ proxies:
   tls: true
   server-name: fitindoor.net
   client-fingerprint: firefox
-- name: 🏳️ Jafar | 🛡️🔥 322ms
+- name: 🇧🇬 Болгария 5G
   type: vless
-  server: 172.67.163.68
-  port: 443
-  uuid: 26086552-5b79-d167-dd18-1ea000000000
-  network: ws
-  udp: true
-  tls: true
-  server-name: lczoox-b5gygc-24w8tc.rozhaghadri.workers.dev
-  client-fingerprint: chrome
-  ws-opts:
-    path: /sync
-    headers:
-      Host: lczoox-b5gygc-24w8tc.rozhaghadri.workers.dev
-- name: 📶 Обход LTE - Auto
-  type: vless
-  server: es3.h1cloud.net
-  port: 25150
-  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.samsung.com
-  reality-opts:
-    public-key: Qvn7tV54mdqxJ40LmmoI1PRM1QKXEbfFOZS-omPKhGY
-    short-id: 4301a484cc762aa6
-  client-fingerprint: firefox
-- name: 🇪🇺 Автовыбор 10
-  type: vless
-  server: 9bc578g.us4.h1clayd.click
-  port: 443
-  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
-  network: grpc
-  udp: true
-  tls: true
-  server-name: 9bc578g.us4.h1clayd.click
-  reality-opts:
-    public-key: uUWYLl2Fdhr74k9o5WacesJjvsCwLiOHccgfR23TIk4
-    short-id: 29b29106d4769e3a
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: aa7f1b042f73
-- name: 🇪🇺 Автовыбор 11
-  type: vless
-  server: ba0229x.us4.h1clayd.click
-  port: 443
-  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  server: 78.159.246.85
+  port: 8443
+  uuid: 6a2aff19-ff1f-4a13-96c8-a4d8986a9699
   network: xhttp
   udp: true
   tls: true
-  server-name: ba0229x.us4.h1clayd.click
-  reality-opts:
-    public-key: 2E2qSCOHLYD5rqV8GZjwODqKnQ4Qg7zqe7LnUKwzyF8
-    short-id: 8da8bb9dd3213eb8
+  server-name: fitindoor.net
   client-fingerprint: firefox
-- name: 🇪🇺 Автовыбор 2
-  type: vless
-  server: es3.h1cloud.net
-  port: 25152
-  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.samsung.com
-  reality-opts:
-    public-key: ZIZIfEd-cs4jAgYIav5ZAkfWaqvpG8DQP-SH6xhGDmc
-    short-id: 08c379434f36cdbe
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 🇪🇺 Автовыбор 5
-  type: vless
-  server: pl1.h1cloud.net
-  port: 27592
-  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
-  network: grpc
-  udp: true
-  tls: true
-  server-name: www.samsung.com
-  reality-opts:
-    public-key: pAB1F_bFGUwbJNHZKHjeOYDk85B4UovLIZBwJN8iBjo
-    short-id: 8553af3d51dc8156
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: 15222da4395c
-- name: VLESS-188.114.97.6
-  type: vless
-  server: 188.114.97.6
-  port: 443
-  uuid: d593c88a-496b-4889-968c-6af644021467
-  network: ws
-  udp: true
-  tls: true
-  server-name: white-disk-79ed.476.workers.dev
-  client-fingerprint: chrome
-  ws-opts:
-    path: /pyip=ProxyIP.US.CMLiussss.net
-    headers:
-      Host: white-disk-79ed.476.workers.dev
 proxy-groups:
 - name: ♻️ Auto
   type: url-test
   proxies:
-  - 🤖+Для+Claude+&+ChatGPT+#03+•+🇩🇪+[DE]+VLESS+(3469ms)
-  - 🇷🇺+RU+#03+•+VLESS+Reality+[Белый+список]+(433ms)
-  - 🇷🇺+RU+#01+•+VLESS+TLS+[Белый+список]+(1461ms)
-  - 🇷🇺+RU+#02+•+VLESS+TLS+[Белый+список]+(488ms)
-  - 🛡️+Белый+список+РФ+#06+•+VLESS+(1209ms)
-  - 🛡️+Белый+список+РФ+#05+•+VLESS+(1203ms)
-  - 🛡️+Белый+список+РФ+#04+•+VLESS+(572ms)
-  - 🛡️+Белый+список+РФ+#01+•+VLESS+(657ms)
-  - 🛡️+Белый+список+РФ+#08+•+VLESS+(697ms)
-  - 🛡️+Белый+список+РФ+#02+•+VLESS+(944ms)
-  - 🇷🇺 RU | CIDR | 719 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 918 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 841 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 869 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 895 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 768 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 596 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 818 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 664 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 440 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 585 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 632 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 576 | @ByeWhiteLists2
-  - 🇰🇿 KZ | — | 1014 | @ByeWhiteLists2
-  - 🇺🇸 US | — | 1013 | @ByeWhiteLists2
-  - 🇳🇱 NL | — | 1023 | @ByeWhiteLists2
-  - 🇪🇪 EE | — | 218 | @ByeWhiteLists2
-  - 🇱🇻 LV | — | 179 | @ByeWhiteLists2
-  - 🇱🇻 LV | — | 183 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 208 | @ByeWhiteLists2
-  - 🇪🇪 EE | — | 185 | @ByeWhiteLists2
-  - 🇺🇸 US | — | 973 | @ByeWhiteLists2
-  - 🇺🇸 US | — | 971 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 277 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 976 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 946 | @ByeWhiteLists2
-  - 🇪🇸 ES | — | 958 | @ByeWhiteLists2
-  - 🇺🇸 US | — | 980 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 954 | @ByeWhiteLists2
-  - 🇹🇷 TR | — | 977 | @ByeWhiteLists2
-  - 🇭🇺 HU | — | 97 | @ByeWhiteLists2
-  - 🇬🇧 GB | — | 95 | @ByeWhiteLists2
-  - 🇩🇪 DE | — | 67 | @ByeWhiteLists2
-  - 🇳🇱 NL | — | 92 | @ByeWhiteLists2
-  - 🇳🇱 NL | — | 77 | @ByeWhiteLists2
-  - 🇬🇧 GB | — | 66 | @ByeWhiteLists2
   - 🇪🇺 ДЛЯ ОБХОДА ГЛУШИЛК/БС/ЧС
   - 🇪🇺📡Антиглушилка • EU №1
-  - cool [LSO-LTE] 🇷🇺 |#30|
-  - cool [LSO-LTE] 🇺🇸 |#38|
-  - cool [LSO-LTE] 🇺🇸 |#25|
-  - cool [LSO-LTE] 🇵🇱 |#14|
-  - cool [LSO-LTE] 🇮🇹 |#29|
-  - cool [LSO-LTE] 🇷🇺 |#40|
-  - cool [LSO-LTE] 🇦🇲 |#16|
-  - cool [LSO-LTE] 🇳🇱 |#43|
-  - cool [LSO-LTE] 🇷🇺 |#39|
-  - cool [LSO-LTE] 🇷🇺 |#32|
-  - cool [LSO-LTE] 🇺🇸 |#42|
-  - cool [LSO-LTE] 🇺🇸 |#28|
+  - cool [LSO-LTE] 🇷🇺 |#41|
+  - cool [LSO-LTE] 🇱🇹 |#14|
+  - cool [LSO-LTE] 🇮🇹 |#15|
+  - cool [LSO-LTE] 🇷🇺 |#20|
+  - cool [LSO-LTE] 🇦🇲 |#22|
+  - cool [LSO-LTE] 🇳🇱 |#27|
   - 🇷🇺 Россия 5G Telegram ❌
-  - cool [LSO-LTE] 🇺🇸 |#19|
-  - cool [LSO-LTE] 🇺🇸 |#23|
-  - cool [LSO-LTE] 🇺🇸 |#9|
-  - cool [LSO-LTE] 🇺🇸 |#2|
-  - cool [LSO-LTE] 🇭🇰 |#7|
-  - cool [LSO-LTE] 🇬🇧 |#3|
+  - cool [LSO-LTE] 🇺🇸 |#25|
+  - cool [LSO-LTE] 🇺🇸 |#31|
+  - cool [LSO-LTE] 🇫🇷 |#26|
+  - cool [LSO-LTE] 🇭🇰 |#45|
+  - cool [LSO-LTE] 🇷🇺 |#12|
+  - cool [LSO-LTE] 🇵🇱 |#2|
+  - cool [LSO-LTE] 🇺🇸 |#4|
   - 🇷🇺Белые списки • RU 1
   - 🇷🇺Белые списки • RU 2
-  - 🏳️ Jafar | 🛡️🔥 322ms
-  - 📶 Обход LTE - Auto
-  - 🇪🇺 Автовыбор 10
-  - 🇪🇺 Автовыбор 11
-  - 🇪🇺 Автовыбор 2
-  - 🇪🇺 Автовыбор 5
-  - VLESS-188.114.97.6
+  - 🇧🇬 Болгария 5G
   url: http://www.gstatic.com/generate_204
   interval: 300
 - name: 🚀 Proxy
   type: select
   proxies:
   - ♻️ Auto
-  - 🤖+Для+Claude+&+ChatGPT+#03+•+🇩🇪+[DE]+VLESS+(3469ms)
-  - 🇷🇺+RU+#03+•+VLESS+Reality+[Белый+список]+(433ms)
-  - 🇷🇺+RU+#01+•+VLESS+TLS+[Белый+список]+(1461ms)
-  - 🇷🇺+RU+#02+•+VLESS+TLS+[Белый+список]+(488ms)
-  - 🛡️+Белый+список+РФ+#06+•+VLESS+(1209ms)
-  - 🛡️+Белый+список+РФ+#05+•+VLESS+(1203ms)
-  - 🛡️+Белый+список+РФ+#04+•+VLESS+(572ms)
-  - 🛡️+Белый+список+РФ+#01+•+VLESS+(657ms)
-  - 🛡️+Белый+список+РФ+#08+•+VLESS+(697ms)
-  - 🛡️+Белый+список+РФ+#02+•+VLESS+(944ms)
-  - 🇷🇺 RU | CIDR | 719 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 918 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 841 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 869 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 895 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 768 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 596 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 818 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 664 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 440 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 585 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 632 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 576 | @ByeWhiteLists2
-  - 🇰🇿 KZ | — | 1014 | @ByeWhiteLists2
-  - 🇺🇸 US | — | 1013 | @ByeWhiteLists2
-  - 🇳🇱 NL | — | 1023 | @ByeWhiteLists2
-  - 🇪🇪 EE | — | 218 | @ByeWhiteLists2
-  - 🇱🇻 LV | — | 179 | @ByeWhiteLists2
-  - 🇱🇻 LV | — | 183 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 208 | @ByeWhiteLists2
-  - 🇪🇪 EE | — | 185 | @ByeWhiteLists2
-  - 🇺🇸 US | — | 973 | @ByeWhiteLists2
-  - 🇺🇸 US | — | 971 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 277 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 976 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 946 | @ByeWhiteLists2
-  - 🇪🇸 ES | — | 958 | @ByeWhiteLists2
-  - 🇺🇸 US | — | 980 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 954 | @ByeWhiteLists2
-  - 🇹🇷 TR | — | 977 | @ByeWhiteLists2
-  - 🇭🇺 HU | — | 97 | @ByeWhiteLists2
-  - 🇬🇧 GB | — | 95 | @ByeWhiteLists2
-  - 🇩🇪 DE | — | 67 | @ByeWhiteLists2
-  - 🇳🇱 NL | — | 92 | @ByeWhiteLists2
-  - 🇳🇱 NL | — | 77 | @ByeWhiteLists2
-  - 🇬🇧 GB | — | 66 | @ByeWhiteLists2
   - 🇪🇺 ДЛЯ ОБХОДА ГЛУШИЛК/БС/ЧС
   - 🇪🇺📡Антиглушилка • EU №1
-  - cool [LSO-LTE] 🇷🇺 |#30|
-  - cool [LSO-LTE] 🇺🇸 |#38|
-  - cool [LSO-LTE] 🇺🇸 |#25|
-  - cool [LSO-LTE] 🇵🇱 |#14|
-  - cool [LSO-LTE] 🇮🇹 |#29|
-  - cool [LSO-LTE] 🇷🇺 |#40|
-  - cool [LSO-LTE] 🇦🇲 |#16|
-  - cool [LSO-LTE] 🇳🇱 |#43|
-  - cool [LSO-LTE] 🇷🇺 |#39|
-  - cool [LSO-LTE] 🇷🇺 |#32|
-  - cool [LSO-LTE] 🇺🇸 |#42|
-  - cool [LSO-LTE] 🇺🇸 |#28|
+  - cool [LSO-LTE] 🇷🇺 |#41|
+  - cool [LSO-LTE] 🇱🇹 |#14|
+  - cool [LSO-LTE] 🇮🇹 |#15|
+  - cool [LSO-LTE] 🇷🇺 |#20|
+  - cool [LSO-LTE] 🇦🇲 |#22|
+  - cool [LSO-LTE] 🇳🇱 |#27|
   - 🇷🇺 Россия 5G Telegram ❌
-  - cool [LSO-LTE] 🇺🇸 |#19|
-  - cool [LSO-LTE] 🇺🇸 |#23|
-  - cool [LSO-LTE] 🇺🇸 |#9|
-  - cool [LSO-LTE] 🇺🇸 |#2|
-  - cool [LSO-LTE] 🇭🇰 |#7|
-  - cool [LSO-LTE] 🇬🇧 |#3|
+  - cool [LSO-LTE] 🇺🇸 |#25|
+  - cool [LSO-LTE] 🇺🇸 |#31|
+  - cool [LSO-LTE] 🇫🇷 |#26|
+  - cool [LSO-LTE] 🇭🇰 |#45|
+  - cool [LSO-LTE] 🇷🇺 |#12|
+  - cool [LSO-LTE] 🇵🇱 |#2|
+  - cool [LSO-LTE] 🇺🇸 |#4|
   - 🇷🇺Белые списки • RU 1
   - 🇷🇺Белые списки • RU 2
-  - 🏳️ Jafar | 🛡️🔥 322ms
-  - 📶 Обход LTE - Auto
-  - 🇪🇺 Автовыбор 10
-  - 🇪🇺 Автовыбор 11
-  - 🇪🇺 Автовыбор 2
-  - 🇪🇺 Автовыбор 5
-  - VLESS-188.114.97.6
+  - 🇧🇬 Болгария 5G
 rules:
 - MATCH,🚀 Proxy
