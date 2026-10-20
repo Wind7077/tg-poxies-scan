@@ -27,7 +27,21 @@ proxies:
   tls: true
   server-name: fitindoor.net
   client-fingerprint: firefox
-- name: cool [LSO-LTE] 🇷🇺 |#41|
+- name: cool [LSO-LTE] 🇷🇺 |#18|
+  type: vless
+  server: 139.28.168.75
+  port: 10444
+  uuid: 154bd388-4968-4900-a088-18676f428a20
+  network: tcp
+  udp: true
+  tls: true
+  server-name: video.yandex.ru
+  reality-opts:
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇷🇺 |#70|
   type: vless
   server: 82.202.179.111
   port: 15443
@@ -41,157 +55,35 @@ proxies:
     short-id: b74f54b7
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇱🇹 |#14|
+- name: cool [LSO-LTE] 🇷🇺 |#75|
   type: vless
-  server: 147.45.217.41
-  port: 21731
-  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
+  server: 82.202.182.42
+  port: 3443
+  uuid: 1ba0439d-384c-4a6e-9560-0439698beb2a
   network: tcp
   udp: true
   tls: true
-  server-name: metrika.yandex.ru
+  server-name: smartcaptcha.yandexcloud.net
   reality-opts:
-    public-key: QeLV1NQeTG3e1DRFSNnK_f9Ca5Gf9smexICxtr27WUA
-    short-id: 0446eb17
-  client-fingerprint: firefox
+    public-key: YIXOvwrCFxQYKOP_GwdhbzZLlwgBIVVISXDpFZQBt0c
+    short-id: a5bb22e6a41ff20a
+  client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇮🇹 |#15|
+- name: cool [LSO-LTE] 🇺🇸 |#33|
   type: vless
-  server: 82.118.16.149
+  server: 144.31.50.236
   port: 443
-  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
+  uuid: 1c332eae-7e02-4acd-996d-4eb3e652401c
   network: tcp
   udp: true
   tls: true
-  server-name: metrika.yandex.ru
+  server-name: yandex.ru
   reality-opts:
-    public-key: HbK-TTnL1Dog-wKCowjLrKsx5ECIt2uxBsdGfeWG6kQ
-    short-id: 7bbf811a
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇷🇺 |#20|
-  type: vless
-  server: spainspeedboostjbl88.qcloud.surf
-  port: 27311
-  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
-  network: tcp
-  udp: true
-  tls: true
-  server-name: metrika.yandex.ru
-  reality-opts:
-    public-key: 9vHDWMrmerdjndp_XHbCc9jaR-9K95H_mwpLvI2emkY
-    short-id: 56daff9a
+    public-key: uitO4Z8t9TplwwYaqwLqh5rfxDh_X8bOBiNuPbzvaEM
+    short-id: bbe46bd8f6b96839
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇦🇲 |#22|
-  type: vless
-  server: 88.218.92.41
-  port: 24694
-  uuid: 4ad3dbf5-2005-4d96-b56c-a0ca9905cab6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: metrika.yandex.ru
-  reality-opts:
-    public-key: kaPztgo_2b2CKxytGWXzn6EauyNKr6Ho8xerGpSS-SQ
-    short-id: '58301280'
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇳🇱 |#27|
-  type: vless
-  server: 87.199.205.28
-  port: 443
-  uuid: 501a2da5-cb22-4a3f-915e-e3b821d1d62d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: vkvd754.okcdn.ru
-  reality-opts:
-    public-key: W-9zyiOq287RtXVTZlTFbSDJ0Mx8joyBLJoA7ZE7eBw
-    short-id: b7cd177731793b1e
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 🇷🇺 Россия 5G Telegram ❌
-  type: vless
-  server: randomquaint.net
-  port: 2053
-  uuid: 95a608b6-bff1-4e10-bb61-0a39f221bb7d
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: randomquaint.net
-  client-fingerprint: chrome
-- name: cool [LSO-LTE] 🇺🇸 |#25|
-  type: vless
-  server: 185.170.154.35
-  port: 7443
-  uuid: 9ebf4fda-7395-4800-b42f-b2dda649880a
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ya.ru
-  reality-opts:
-    public-key: 1MLoHw7RVkGefh7XUyuGg4ndxwv4vDU9en-f9JxpXRQ
-    short-id: d2061bb1
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇺🇸 |#31|
-  type: vless
-  server: 45.138.100.248
-  port: 10444
-  uuid: ae908ff5-f749-402c-af25-e6e9aef4d6bb
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
-    short-id: 8debcf36f1cc69ff
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇫🇷 |#26|
-  type: vless
-  server: 161.97.160.224
-  port: 443
-  uuid: b81b4d1b-7f20-48f1-82dc-d24bef898cab
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: 33zaT3jHXjtynSQ0Ucw9bK92-XH2zolJmuIeZ1XyZB0
-    short-id: e6
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇭🇰 |#45|
-  type: vless
-  server: 213.176.92.168
-  port: 10444
-  uuid: ba52cc43-700d-4040-9444-29214c98e6e0
-  network: tcp
-  udp: true
-  tls: true
-  server-name: video.yandex.ru
-  reality-opts:
-    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
-    short-id: 8debcf36f1cc69ff
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇷🇺 |#12|
-  type: vless
-  server: spainspeedboostjbl88.qcloud.surf
-  port: 27311
-  uuid: f83ce3c4-07d9-4895-bd14-cb74abbcab37
-  network: tcp
-  udp: true
-  tls: true
-  server-name: metrika.yandex.ru
-  reality-opts:
-    public-key: 9vHDWMrmerdjndp_XHbCc9jaR-9K95H_mwpLvI2emkY
-    short-id: 56daff9a
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇵🇱 |#2|
+- name: cool [LSO-LTE] 🇵🇱 |#72|
   type: vless
   server: 144.31.101.196
   port: 33891
@@ -205,10 +97,437 @@ proxies:
     short-id: 5bd7b68ca4c04443
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇺🇸 |#4|
+- name: cool [LSO-LTE] 🇸🇬 |#88|
+  type: vless
+  server: 178.94.25.73
+  port: 10444
+  uuid: 2dacc738-5720-4824-b8bc-e3db57596ba7
+  network: tcp
+  udp: true
+  tls: true
+  server-name: video.yandex.ru
+  reality-opts:
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
+  client-fingerprint: safari
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇭🇰 |#36|
+  type: vless
+  server: 85.155.149.9
+  port: 20285
+  uuid: 3acb3c2b-680c-40a5-ac19-9eef6b061efa
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: snNVYSFAGMHIRMnzBZoFFTcu6KowqSFLSyRgmI9NSRU
+    short-id: 5308d9ab
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇱🇹 |#58|
+  type: vless
+  server: 147.45.217.41
+  port: 21731
+  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: QeLV1NQeTG3e1DRFSNnK_f9Ca5Gf9smexICxtr27WUA
+    short-id: 0446eb17
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇺🇸 |#29|
+  type: vless
+  server: 201.58.177.38
+  port: 21221
+  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: RtxGqCtQJeOyUwSe7k6oZOrQWV1hPbC-TMqqgxl9fn4
+    short-id: c430045c
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇮🇹 |#26|
+  type: vless
+  server: 82.118.16.149
+  port: 443
+  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: HbK-TTnL1Dog-wKCowjLrKsx5ECIt2uxBsdGfeWG6kQ
+    short-id: 7bbf811a
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇩🇪 |#89|
+  type: vless
+  server: 94.156.170.215
+  port: 20268
+  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: 5H_MmyfvF4SkwS84wTbLmtcZDecXJIJtZ3uisiKQpSM
+    short-id: 0c774b50
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇱🇹 |#62|
+  type: vless
+  server: boostlitva77www.qcloud.surf
+  port: 21731
+  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: QeLV1NQeTG3e1DRFSNnK_f9Ca5Gf9smexICxtr27WUA
+    short-id: 0446eb17
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇷🇺 |#30|
+  type: vless
+  server: spainspeedboostjbl88.qcloud.surf
+  port: 27311
+  uuid: 408c51e8-9246-483d-ba73-34ab4e202eb9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: 9vHDWMrmerdjndp_XHbCc9jaR-9K95H_mwpLvI2emkY
+    short-id: 56daff9a
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇺🇸 |#31|
+  type: vless
+  server: 150.241.101.17
+  port: 8443
+  uuid: 47d9b534-8a0a-4bd2-90f1-1d6ade14427e
+  network: tcp
+  udp: true
+  tls: true
+  server-name: yandex.net
+  reality-opts:
+    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
+    short-id: 6ba85179e30d4fc2
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇺🇸 |#80|
+  type: vless
+  server: 201.58.177.38
+  port: 21221
+  uuid: 4ad3dbf5-2005-4d96-b56c-a0ca9905cab6
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: RtxGqCtQJeOyUwSe7k6oZOrQWV1hPbC-TMqqgxl9fn4
+    short-id: c430045c
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇦🇲 |#98|
+  type: vless
+  server: 88.218.92.41
+  port: 24694
+  uuid: 4ad3dbf5-2005-4d96-b56c-a0ca9905cab6
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: kaPztgo_2b2CKxytGWXzn6EauyNKr6Ho8xerGpSS-SQ
+    short-id: '58301280'
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇩🇪 |#15|
+  type: vless
+  server: 94.156.170.215
+  port: 20268
+  uuid: 4ad3dbf5-2005-4d96-b56c-a0ca9905cab6
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: 5H_MmyfvF4SkwS84wTbLmtcZDecXJIJtZ3uisiKQpSM
+    short-id: 0c774b50
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇳🇱 |#48|
+  type: vless
+  server: 87.199.205.28
+  port: 443
+  uuid: 501a2da5-cb22-4a3f-915e-e3b821d1d62d
+  network: tcp
+  udp: true
+  tls: true
+  server-name: vkvd754.okcdn.ru
+  reality-opts:
+    public-key: W-9zyiOq287RtXVTZlTFbSDJ0Mx8joyBLJoA7ZE7eBw
+    short-id: b7cd177731793b1e
+  client-fingerprint: qq
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇷🇺 |#95|
+  type: vless
+  server: 82.202.179.106
+  port: 11443
+  uuid: 54f22246-cc9c-4315-907a-6c94c901d20f
+  network: tcp
+  udp: true
+  tls: true
+  server-name: smartcaptcha.yandexcloud.net
+  reality-opts:
+    public-key: WWmwRoB2K7xonT6jzbhKen_Rp-UM7QCr_vMgmNZuggc
+    short-id: 044a5e06faf5
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇸🇪 |#25|
+  type: vless
+  server: 193.188.21.253
+  port: 10444
+  uuid: 57f7772d-f5d6-4d8f-992d-5fa5e0d6da55
+  network: tcp
+  udp: true
+  tls: true
+  server-name: video.yandex.ru
+  reality-opts:
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇸🇬 |#51|
+  type: vless
+  server: 147.93.173.45
+  port: 10444
+  uuid: 75c5f51b-d548-4eab-a26e-aa10fc3dbc7b
+  network: tcp
+  udp: true
+  tls: true
+  server-name: video.yandex.ru
+  reality-opts:
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇦🇪 |#71|
+  type: vless
+  server: 45.59.120.217
+  port: 443
+  uuid: 8732f92b-ba85-48f7-92e4-ad029f1cd4e7
+  network: tcp
+  udp: true
+  tls: true
+  server-name: strm.yandex.net
+  reality-opts:
+    public-key: mWxcYeYE-M3iE0RBjTzG88QI9kj2wivJDoIYDu_aG3w
+    short-id: 29c2dd1e3ef7c4d4
+  client-fingerprint: chrome
+- name: cool [LSO-LTE] 🇺🇸 |#97|
+  type: vless
+  server: 201.58.177.38
+  port: 21221
+  uuid: 8bd04756-3beb-4348-82c9-d35453df50ce
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: RtxGqCtQJeOyUwSe7k6oZOrQWV1hPbC-TMqqgxl9fn4
+    short-id: c430045c
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇩🇪 |#91|
+  type: vless
+  server: 94.156.170.215
+  port: 20268
+  uuid: 8bd04756-3beb-4348-82c9-d35453df50ce
+  network: tcp
+  udp: true
+  tls: true
+  server-name: metrika.yandex.ru
+  reality-opts:
+    public-key: 5H_MmyfvF4SkwS84wTbLmtcZDecXJIJtZ3uisiKQpSM
+    short-id: 0c774b50
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇹🇷 |#59|
+  type: vless
+  server: 193.223.107.105
+  port: 1932
+  uuid: 8d32831a-3116-49ab-ad6d-d277dba27c05
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.vk.com
+  reality-opts:
+    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
+  client-fingerprint: qq
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇹🇷 |#27|
+  type: vless
+  server: 193.223.107.109
+  port: 443
+  uuid: 8d32831a-3116-49ab-ad6d-d277dba27c05
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.vk.com
+  reality-opts:
+    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
+  client-fingerprint: qq
+  flow: xtls-rprx-vision
+- name: 🇷🇺 Россия 5G Telegram ❌
+  type: vless
+  server: randomquaint.net
+  port: 2053
+  uuid: 95a608b6-bff1-4e10-bb61-0a39f221bb7d
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: randomquaint.net
+  client-fingerprint: chrome
+- name: cool [LSO-LTE] 🇺🇸 |#12|
+  type: vless
+  server: 185.170.154.35
+  port: 7443
+  uuid: 9ebf4fda-7395-4800-b42f-b2dda649880a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: ya.ru
+  reality-opts:
+    public-key: 1MLoHw7RVkGefh7XUyuGg4ndxwv4vDU9en-f9JxpXRQ
+    short-id: d2061bb1
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇺🇸 |#20|
   type: vless
   server: 193.23.195.37
   port: 22443
+  uuid: 9ebf4fda-7395-4800-b42f-b2dda649880a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: ya.ru
+  reality-opts:
+    public-key: 1MLoHw7RVkGefh7XUyuGg4ndxwv4vDU9en-f9JxpXRQ
+    short-id: d2061bb1
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇺🇸 |#39|
+  type: vless
+  server: 45.138.100.248
+  port: 10444
+  uuid: ae908ff5-f749-402c-af25-e6e9aef4d6bb
+  network: tcp
+  udp: true
+  tls: true
+  server-name: ads.x5.ru
+  reality-opts:
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇳🇱 |#16|
+  type: vless
+  server: 109.120.150.245
+  port: 2053
+  uuid: b1097a54-29de-4014-962c-c835d96e8409
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.rutube.ru
+  reality-opts:
+    public-key: iywsgYk8P1mWMu9xBjwpJQnBNGSH43RKSaaRVVv75S0
+    short-id: c342eb1745bbaefd
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇧🇾 |#79|
+  type: vless
+  server: 178.172.227.228
+  port: 10444
+  uuid: b6e5dc56-836f-48c1-9163-b0b0b43b647d
+  network: tcp
+  udp: true
+  tls: true
+  server-name: ads.x5.ru
+  reality-opts:
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇭🇰 |#66|
+  type: vless
+  server: 213.176.92.168
+  port: 10444
+  uuid: ba52cc43-700d-4040-9444-29214c98e6e0
+  network: tcp
+  udp: true
+  tls: true
+  server-name: video.yandex.ru
+  reality-opts:
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇬🇧 |#74|
+  type: vless
+  server: 138.124.125.193
+  port: 10444
+  uuid: e57ce64d-5a1a-4a90-96df-9e1bd3ad26e4
+  network: tcp
+  udp: true
+  tls: true
+  server-name: ads.x5.ru
+  reality-opts:
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇦🇪 |#11|
+  type: vless
+  server: 9.247.34.118
+  port: 2053
+  uuid: fbbfebf3-dfc9-49cb-b5e5-06c99ef3d504
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.rutube.ru
+  reality-opts:
+    public-key: 1kaGIHz5N3-UTemrcJIP6vGD6aEbTcAmxedDv2VTcSA
+    short-id: c46d735d6444850f
+  client-fingerprint: qq
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇩🇪 |#6|
+  type: vless
+  server: 78.17.178.125
+  port: 443
+  uuid: 6c713691-3ca2-4446-ad25-113d1bed6b03
+  network: tcp
+  udp: true
+  tls: true
+  server-name: cdn.tbank.ru
+  reality-opts:
+    public-key: jcp4Lj_qYzxtkalm_XFjrmvqEMGRG7sb19yMwLe16WE
+    short-id: e0215064d8d1fd7c
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: cool [LSO-LTE] 🇺🇸 |#7|
+  type: vless
+  server: 193.23.195.37
+  port: 8443
   uuid: 9ebf4fda-7395-4800-b42f-b2dda649880a
   network: tcp
   udp: true
@@ -259,20 +578,43 @@ proxy-groups:
   proxies:
   - 🇪🇺 ДЛЯ ОБХОДА ГЛУШИЛК/БС/ЧС
   - 🇪🇺📡Антиглушилка • EU №1
-  - cool [LSO-LTE] 🇷🇺 |#41|
-  - cool [LSO-LTE] 🇱🇹 |#14|
-  - cool [LSO-LTE] 🇮🇹 |#15|
-  - cool [LSO-LTE] 🇷🇺 |#20|
-  - cool [LSO-LTE] 🇦🇲 |#22|
-  - cool [LSO-LTE] 🇳🇱 |#27|
-  - 🇷🇺 Россия 5G Telegram ❌
-  - cool [LSO-LTE] 🇺🇸 |#25|
+  - cool [LSO-LTE] 🇷🇺 |#18|
+  - cool [LSO-LTE] 🇷🇺 |#70|
+  - cool [LSO-LTE] 🇷🇺 |#75|
+  - cool [LSO-LTE] 🇺🇸 |#33|
+  - cool [LSO-LTE] 🇵🇱 |#72|
+  - cool [LSO-LTE] 🇸🇬 |#88|
+  - cool [LSO-LTE] 🇭🇰 |#36|
+  - cool [LSO-LTE] 🇱🇹 |#58|
+  - cool [LSO-LTE] 🇺🇸 |#29|
+  - cool [LSO-LTE] 🇮🇹 |#26|
+  - cool [LSO-LTE] 🇩🇪 |#89|
+  - cool [LSO-LTE] 🇱🇹 |#62|
+  - cool [LSO-LTE] 🇷🇺 |#30|
   - cool [LSO-LTE] 🇺🇸 |#31|
-  - cool [LSO-LTE] 🇫🇷 |#26|
-  - cool [LSO-LTE] 🇭🇰 |#45|
-  - cool [LSO-LTE] 🇷🇺 |#12|
-  - cool [LSO-LTE] 🇵🇱 |#2|
-  - cool [LSO-LTE] 🇺🇸 |#4|
+  - cool [LSO-LTE] 🇺🇸 |#80|
+  - cool [LSO-LTE] 🇦🇲 |#98|
+  - cool [LSO-LTE] 🇩🇪 |#15|
+  - cool [LSO-LTE] 🇳🇱 |#48|
+  - cool [LSO-LTE] 🇷🇺 |#95|
+  - cool [LSO-LTE] 🇸🇪 |#25|
+  - cool [LSO-LTE] 🇸🇬 |#51|
+  - cool [LSO-LTE] 🇦🇪 |#71|
+  - cool [LSO-LTE] 🇺🇸 |#97|
+  - cool [LSO-LTE] 🇩🇪 |#91|
+  - cool [LSO-LTE] 🇹🇷 |#59|
+  - cool [LSO-LTE] 🇹🇷 |#27|
+  - 🇷🇺 Россия 5G Telegram ❌
+  - cool [LSO-LTE] 🇺🇸 |#12|
+  - cool [LSO-LTE] 🇺🇸 |#20|
+  - cool [LSO-LTE] 🇺🇸 |#39|
+  - cool [LSO-LTE] 🇳🇱 |#16|
+  - cool [LSO-LTE] 🇧🇾 |#79|
+  - cool [LSO-LTE] 🇭🇰 |#66|
+  - cool [LSO-LTE] 🇬🇧 |#74|
+  - cool [LSO-LTE] 🇦🇪 |#11|
+  - cool [LSO-LTE] 🇩🇪 |#6|
+  - cool [LSO-LTE] 🇺🇸 |#7|
   - 🇷🇺Белые списки • RU 1
   - 🇷🇺Белые списки • RU 2
   - 🇧🇬 Болгария 5G
@@ -284,20 +626,43 @@ proxy-groups:
   - ♻️ Auto
   - 🇪🇺 ДЛЯ ОБХОДА ГЛУШИЛК/БС/ЧС
   - 🇪🇺📡Антиглушилка • EU №1
-  - cool [LSO-LTE] 🇷🇺 |#41|
-  - cool [LSO-LTE] 🇱🇹 |#14|
-  - cool [LSO-LTE] 🇮🇹 |#15|
-  - cool [LSO-LTE] 🇷🇺 |#20|
-  - cool [LSO-LTE] 🇦🇲 |#22|
-  - cool [LSO-LTE] 🇳🇱 |#27|
-  - 🇷🇺 Россия 5G Telegram ❌
-  - cool [LSO-LTE] 🇺🇸 |#25|
+  - cool [LSO-LTE] 🇷🇺 |#18|
+  - cool [LSO-LTE] 🇷🇺 |#70|
+  - cool [LSO-LTE] 🇷🇺 |#75|
+  - cool [LSO-LTE] 🇺🇸 |#33|
+  - cool [LSO-LTE] 🇵🇱 |#72|
+  - cool [LSO-LTE] 🇸🇬 |#88|
+  - cool [LSO-LTE] 🇭🇰 |#36|
+  - cool [LSO-LTE] 🇱🇹 |#58|
+  - cool [LSO-LTE] 🇺🇸 |#29|
+  - cool [LSO-LTE] 🇮🇹 |#26|
+  - cool [LSO-LTE] 🇩🇪 |#89|
+  - cool [LSO-LTE] 🇱🇹 |#62|
+  - cool [LSO-LTE] 🇷🇺 |#30|
   - cool [LSO-LTE] 🇺🇸 |#31|
-  - cool [LSO-LTE] 🇫🇷 |#26|
-  - cool [LSO-LTE] 🇭🇰 |#45|
-  - cool [LSO-LTE] 🇷🇺 |#12|
-  - cool [LSO-LTE] 🇵🇱 |#2|
-  - cool [LSO-LTE] 🇺🇸 |#4|
+  - cool [LSO-LTE] 🇺🇸 |#80|
+  - cool [LSO-LTE] 🇦🇲 |#98|
+  - cool [LSO-LTE] 🇩🇪 |#15|
+  - cool [LSO-LTE] 🇳🇱 |#48|
+  - cool [LSO-LTE] 🇷🇺 |#95|
+  - cool [LSO-LTE] 🇸🇪 |#25|
+  - cool [LSO-LTE] 🇸🇬 |#51|
+  - cool [LSO-LTE] 🇦🇪 |#71|
+  - cool [LSO-LTE] 🇺🇸 |#97|
+  - cool [LSO-LTE] 🇩🇪 |#91|
+  - cool [LSO-LTE] 🇹🇷 |#59|
+  - cool [LSO-LTE] 🇹🇷 |#27|
+  - 🇷🇺 Россия 5G Telegram ❌
+  - cool [LSO-LTE] 🇺🇸 |#12|
+  - cool [LSO-LTE] 🇺🇸 |#20|
+  - cool [LSO-LTE] 🇺🇸 |#39|
+  - cool [LSO-LTE] 🇳🇱 |#16|
+  - cool [LSO-LTE] 🇧🇾 |#79|
+  - cool [LSO-LTE] 🇭🇰 |#66|
+  - cool [LSO-LTE] 🇬🇧 |#74|
+  - cool [LSO-LTE] 🇦🇪 |#11|
+  - cool [LSO-LTE] 🇩🇪 |#6|
+  - cool [LSO-LTE] 🇺🇸 |#7|
   - 🇷🇺Белые списки • RU 1
   - 🇷🇺Белые списки • RU 2
   - 🇧🇬 Болгария 5G
