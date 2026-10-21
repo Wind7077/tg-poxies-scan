@@ -23,13 +23,20 @@ OUT_TXT = 'proxy.txt'
 OUT_YAML = 'proxy.yaml'
 OUT_ALL_TXT = 'proxy-all.txt'
 OUT_ALL_YAML = 'proxy-all.yaml'
-MAX_DAYS = 20
+
+# ✅ ДВА ПЕРИОДА: разные для белосписочных и всех
+MAX_DAYS_WL = 20   # Белосписочные: 20 дней
+MAX_DAYS_ALL = 10  # Все прокси: 10 дней
+
+# ✅ ДВА ЛИМИТА для Telethon
+LIMIT_WL = 1000    # Белосписочные: 1000 сообщений
+LIMIT_ALL = 300    # Все прокси: 300 сообщений
+
 TIMEOUT = aiohttp.ClientTimeout(total=12, connect=7)
 MAX_CONCURRENT_HTTP = 50
 MAX_CONCURRENT_PING = 500
 
-# 0 = без лимита; N = не больше N вариантов на один host:port (после дедупа по конфигу)
-MAX_PER_ENDPOINT = 5  # ✅ ПРАВКА: было 3
+MAX_PER_ENDPOINT = 5
 
 API_ID = int(os.getenv('TELEGRAM_API_ID', '0'))
 API_HASH = os.getenv('TELEGRAM_API_HASH', '')
@@ -80,11 +87,9 @@ SID_RE = re.compile(r'^(?:[0-9a-fA-F]{2}){0,8}$')
 
 _KEYWORD_ROOTS = [w.lower() for w in WHITELIST_ROOTS.split() if w]
 
-# --- дедуп по конфигу ---
 IGNORED_PARAMS = {'fp', 'alpn', 'extra', 'headertype', 'encryption', 'allowinsecure',
                   'insecure', 'fm', 'packetencoding', 'spx', 'ed'}
 DEDUP_SCHEMES = {'vless', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic'}
-# ✅ ПРАВКА: False — не игнорируем uuid, т.к. разные uuid = разные аккаунты
 DEDUP_IGNORE_USER = False
 
 _AMP_RE = re.compile(r'&(?:amp|#0*38|#x0*26);', re.I)
@@ -145,11 +150,8 @@ def remove_sticky_words(url):
     return url.rstrip('/')
 
 def clean_url(url):
-    """Очистка URL: &amp; -> &, имя после # кодируется"""
-    # &amp; / &amp;amp; -> &
     while _AMP_RE.search(url):
         url = _AMP_RE.sub('&', url)
-    # не-ASCII до '#' режем; имя после '#' кодируем в %XX
     head, sep, frag = url.partition('#')
     for i, c in enumerate(head):
         if ord(c) > 127:
@@ -159,7 +161,6 @@ def clean_url(url):
     if not frag:
         sep = ''
     url = head + sep + frag
-    # ✅ ПРАВКА: УБРАЛИ raw→tcp (обрабатывается в parse_uri_for_clash)
     while url.endswith(')') and url.count(')') > url.count('('): url = url[:-1]
     url = split_glued(url.rstrip('.,;:!?'))
     url = remove_sticky_words(url)
@@ -193,7 +194,6 @@ def make_names_unique(proxies):
     return proxies
 
 def deduplicate_proxies(proxies):
-    """Убирает только полные дубликаты строк"""
     seen = set()
     result = []
     dupes = 0
@@ -238,7 +238,6 @@ def config_key(uri):
             if q.get('host') == eff: q.pop('host')
     if q['type'] == 'tcp':
         q.pop('path', None); q.pop('host', None)
-    # DEDUP_IGNORE_USER=False — uuid сохраняется в ключе
     if DEDUP_IGNORE_USER and scheme == 'vless':
         user = ''
         if q.get('security') == 'reality': q.pop('sid', None)
@@ -486,7 +485,8 @@ def extract_messages_data(html_content, cutoff_date):
     debug_log(f"Найдено сообщений: {len(messages)}")
     return p, u
 
-async def parse_with_telethon(source_url, cutoff_date):
+# ✅ ИЗМЕНЕНО: теперь принимает limit как параметр
+async def parse_with_telethon(source_url, cutoff_date, limit):
     if not SESSION_B64 or not TELETHON_OK or API_ID == 0:
         debug_log("Telethon не настроен")
         return [], []
@@ -517,7 +517,8 @@ async def parse_with_telethon(source_url, cutoff_date):
             return [], []
         msg_count = 0
         try:
-            async for msg in client.iter_messages(entity, limit=1000):
+            # ✅ ИСПОЛЬЗУЕМ limit из параметра
+            async for msg in client.iter_messages(entity, limit=limit):
                 if not msg.date: continue
                 msg_date = msg.date.replace(tzinfo=timezone.utc)
                 if msg_date < cutoff_date: break
@@ -833,8 +834,14 @@ async def main():
         sources = [l.strip() for l in f if l.strip() and not l.startswith('#')]
     http_sem = asyncio.Semaphore(MAX_CONCURRENT_HTTP)
     ping_sem = asyncio.Semaphore(MAX_CONCURRENT_PING)
-    cutoff = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS)
-    all_proxies, sub_urls, visited = [], set(), set()
+    
+    # ✅ ДВА CUTOFF: для всех и для белосписочных
+    cutoff_all = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS_ALL)
+    cutoff_wl = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS_WL)
+    
+    # ✅ Храним прокси с датами: (uri, date, parsed)
+    all_proxies_with_dates = []
+    sub_urls, visited = [], set()
     web_sources, telethon_sources = [], []
     for src in sources:
         if not src.startswith('http'): continue
@@ -844,8 +851,11 @@ async def main():
             else:
                 web_sources.append(src)
         else:
-            sub_urls.add(clean_url(src))
+            sub_urls.append(clean_url(src))
+    
     print(f"[{time.time()-start:.1f}s] Web: {len(web_sources)}, Telethon: {len(telethon_sources)}")
+    print(f"[{time.time()-start:.1f}s] Периоды: ALL={MAX_DAYS_ALL}д (limit={LIMIT_ALL}), WL={MAX_DAYS_WL}д (limit={LIMIT_WL})")
+    
     if web_sources:
         async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
             tasks = []
@@ -858,19 +868,29 @@ async def main():
             results = await asyncio.gather(*[t[1] for t in tasks])
             for (u, _), html_content in zip(tasks, results):
                 if html_content:
-                    p, u2 = extract_messages_data(html_content, cutoff)
+                    # ✅ Используем cutoff_wl (20 дней) для веб-парсинга
+                    p, u2 = extract_messages_data(html_content, cutoff_wl)
                     debug_log(f"Из {u[:60]}: {len(p)} прокси, {len(u2)} URL")
-                    all_proxies.extend(p)
-                    for l in u2: sub_urls.add(clean_url(l))
+                    # Дата для веб-прокси = текущее время (они все свежие)
+                    now = datetime.now(timezone.utc)
+                    for proxy in p:
+                        all_proxies_with_dates.append((proxy, now, None))
+                    for l in u2: sub_urls.append(clean_url(l))
+    
     if telethon_sources:
         if TELETHON_OK and SESSION_B64 and API_ID != 0:
             print(f"[{time.time()-start:.1f}s] Парсим через Telethon ({len(telethon_sources)} источников)...")
             for src in telethon_sources:
-                p, u = await parse_with_telethon(src, cutoff)
-                all_proxies.extend(p)
-                for l in u: sub_urls.add(clean_url(l))
+                # ✅ Используем cutoff_wl (20 дней) и limit=LIMIT_WL (1000) для Telethon
+                p, u = await parse_with_telethon(src, cutoff_wl, LIMIT_WL)
+                # Дата для Telethon-прокси = текущее время
+                now = datetime.now(timezone.utc)
+                for proxy in p:
+                    all_proxies_with_dates.append((proxy, now, None))
+                for l in u: sub_urls.append(clean_url(l))
         else:
             debug_log(f"⚠️ Telethon не настроен, пропускаем {len(telethon_sources)} источников")
+    
     if sub_urls:
         clean_subs = set()
         for url in sub_urls:
@@ -881,23 +901,37 @@ async def main():
         async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
             tasks = [process_subscription(url, session, http_sem, visited) for url in clean_subs]
             results = await asyncio.gather(*tasks)
-            for r in results: all_proxies.extend(r)
-    all_proxies = [p for p in set(all_proxies) if p and '://' in p]
-    print(f"[{time.time()-start:.1f}s] Сырых прокси: {len(all_proxies)}")
+            now = datetime.now(timezone.utc)
+            for r in results:
+                for proxy in r:
+                    all_proxies_with_dates.append((proxy, now, None))
+    
+    # Убираем дубликаты URI, сохраняя самую свежую дату
+    seen_uris = {}
+    for uri, date, _ in all_proxies_with_dates:
+        if uri not in seen_uris or date > seen_uris[uri][1]:
+            seen_uris[uri] = (uri, date, None)
+    all_proxies_with_dates = list(seen_uris.values())
+    
+    print(f"[{time.time()-start:.1f}s] Сырых прокси: {len(all_proxies_with_dates)}")
 
-    # дедуп по конфигу ДО пинга
-    n0 = len(all_proxies)
-    all_proxies = dedupe_by_config(all_proxies)
-    debug_log(f"🔁 Дублей по конфигу удалено: {n0 - len(all_proxies)} (осталось {len(all_proxies)})")
+    # ✅ ДВА ПРОХОДА: для ALL (10 дней) и WL (20 дней)
+    
+    # --- ПРОХОД 1: proxy-all (10 дней) ---
+    proxies_all = [uri for uri, date, _ in all_proxies_with_dates if date >= cutoff_all]
+    n0_all = len(proxies_all)
+    proxies_all = dedupe_by_config(proxies_all)
+    debug_log(f"🔁 ALL: дублей удалено {n0_all - len(proxies_all)} (осталось {len(proxies_all)})")
 
-    happ, ping_list = [], []
-    for u in all_proxies:
-        (happ if u.lower().startswith('happ://') else ping_list).append(u)
-    print(f"[{time.time()-start:.1f}s] Пингуем {len(ping_list)} серверов...")
-    alive = []
+    happ_all, ping_list_all = [], []
+    for u in proxies_all:
+        (happ_all if u.lower().startswith('happ://') else ping_list_all).append(u)
+    
+    print(f"[{time.time()-start:.1f}s] Пингуем {len(ping_list_all)} серверов для ALL...")
+    alive_all = []
     tasks, pmap = [], {}
     parse_errors = 0
-    for u in ping_list:
+    for u in ping_list_all:
         parsed = parse_uri_for_clash(u)
         if parsed and parsed.get('server') and parsed.get('port'):
             tasks.append(check_proxy_tcp(parsed['server'], parsed['port'], ping_sem))
@@ -905,37 +939,73 @@ async def main():
         else:
             parse_errors += 1
     if parse_errors:
-        debug_log(f"⚠️ Не удалось распарсить {parse_errors} прокси")
+        debug_log(f"⚠️ ALL: не распарсено {parse_errors} прокси")
     if tasks:
         results = await asyncio.gather(*tasks)
         for i, ok in enumerate(results):
-            if ok: alive.append(pmap[i])
-    print(f"[{time.time()-start:.1f}s] Живых: {len(alive)}")
-    type_stats = {}
-    for _, p in alive:
+            if ok: alive_all.append(pmap[i])
+    print(f"[{time.time()-start:.1f}s] ALL живых: {len(alive_all)}")
+    
+    type_stats_all = {}
+    for _, p in alive_all:
         t = p.get('type', 'unknown')
-        type_stats[t] = type_stats.get(t, 0) + 1
-    debug_log(f"📊 Типы живых прокси: {type_stats}")
+        type_stats_all[t] = type_stats_all.get(t, 0) + 1
+    debug_log(f"📊 ALL типы: {type_stats_all}")
 
-    alive_uris_all = [u for u, _ in alive]
-    enabled_protocols = get_enabled_protocols()
-
-    # PROXY-ALL
-    clash_all = [sanitize_proxy(p) for _, p in alive]
+    alive_uris_all = [u for u, _ in alive_all]
+    
+    clash_all = [sanitize_proxy(p) for _, p in alive_all]
     clash_all, _ = filter_by_protocol(clash_all)
     clash_all = validate_all(clash_all)
     clash_all = make_names_unique(clash_all)
 
-    all_txt_uris = alive_uris_all + happ
+    all_txt_uris = alive_uris_all + happ_all
     all_txt_uris = deduplicate_proxies(all_txt_uris)
 
-    write_txt(OUT_ALL_TXT, all_txt_uris, len(alive))
+    write_txt(OUT_ALL_TXT, all_txt_uris, len(alive_all))
     write_yaml(OUT_ALL_YAML, clash_all)
     debug_log(f"📄 proxy-all.txt: {len(all_txt_uris)} ссылок")
     debug_log(f"📄 proxy-all.yaml: {len(clash_all)} прокси")
 
-    # PROXY (белосписочные)
-    clash_wl = [sanitize_proxy(p) for _, p in alive]
+    # --- ПРОХОД 2: proxy.txt белосписочные (20 дней) ---
+    proxies_wl = [uri for uri, date, _ in all_proxies_with_dates if date >= cutoff_wl]
+    n0_wl = len(proxies_wl)
+    proxies_wl = dedupe_by_config(proxies_wl)
+    debug_log(f"🔁 WL: дублей удалено {n0_wl - len(proxies_wl)} (осталось {len(proxies_wl)})")
+
+    happ_wl, ping_list_wl = [], []
+    for u in proxies_wl:
+        (happ_wl if u.lower().startswith('happ://') else ping_list_wl).append(u)
+    
+    print(f"[{time.time()-start:.1f}s] Пингуем {len(ping_list_wl)} серверов для WL...")
+    alive_wl = []
+    tasks, pmap = [], {}
+    parse_errors = 0
+    for u in ping_list_wl:
+        parsed = parse_uri_for_clash(u)
+        if parsed and parsed.get('server') and parsed.get('port'):
+            tasks.append(check_proxy_tcp(parsed['server'], parsed['port'], ping_sem))
+            pmap[len(tasks)-1] = (u, parsed)
+        else:
+            parse_errors += 1
+    if parse_errors:
+        debug_log(f"⚠️ WL: не распарсено {parse_errors} прокси")
+    if tasks:
+        results = await asyncio.gather(*tasks)
+        for i, ok in enumerate(results):
+            if ok: alive_wl.append(pmap[i])
+    print(f"[{time.time()-start:.1f}s] WL живых: {len(alive_wl)}")
+    
+    type_stats_wl = {}
+    for _, p in alive_wl:
+        t = p.get('type', 'unknown')
+        type_stats_wl[t] = type_stats_wl.get(t, 0) + 1
+    debug_log(f"📊 WL типы: {type_stats_wl}")
+
+    alive_uris_wl = [u for u, _ in alive_wl]
+    enabled_protocols = get_enabled_protocols()
+
+    clash_wl = [sanitize_proxy(p) for _, p in alive_wl]
     clash_wl, _ = filter_by_protocol(clash_wl)
 
     before_filter = len(clash_wl)
@@ -946,7 +1016,7 @@ async def main():
     clash_wl = make_names_unique(clash_wl)
 
     wl_uris = []
-    for uri, parsed in alive:
+    for uri, parsed in alive_wl:
         if parsed.get('type') not in enabled_protocols:
             continue
         if not matches_roots(parsed):
