@@ -44,7 +44,7 @@ SESSION_B64 = os.getenv('TELEGRAM_SESSION', '')
 
 PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
 _SCHEMES_ALT = '|'.join(PROXY_SCHEMES)
-_URL_CHARS = r'[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%{}"\\]'
+_URL_CHARS = r"[a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%{}\"\\ ]"
 PROXY_REGEX = re.compile(
     r'(?:' + _SCHEMES_ALT + r')://(?:(?!(?:' + _SCHEMES_ALT + r')://)' + _URL_CHARS + r')+',
     re.IGNORECASE)
