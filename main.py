@@ -23,7 +23,7 @@ OUT_TXT = 'proxy.txt'
 OUT_YAML = 'proxy.yaml'
 OUT_ALL_TXT = 'proxy-all.txt'
 OUT_ALL_YAML = 'proxy-all.yaml'
-MAX_DAYS = 10
+MAX_DAYS = 20
 TIMEOUT = aiohttp.ClientTimeout(total=12, connect=7)
 MAX_CONCURRENT_HTTP = 50
 MAX_CONCURRENT_PING = 500
@@ -517,7 +517,7 @@ async def parse_with_telethon(source_url, cutoff_date):
             return [], []
         msg_count = 0
         try:
-            async for msg in client.iter_messages(entity, limit=300):
+            async for msg in client.iter_messages(entity, limit=1000):
                 if not msg.date: continue
                 msg_date = msg.date.replace(tzinfo=timezone.utc)
                 if msg_date < cutoff_date: break
