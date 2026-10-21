@@ -24,13 +24,10 @@ OUT_YAML = 'proxy.yaml'
 OUT_ALL_TXT = 'proxy-all.txt'
 OUT_ALL_YAML = 'proxy-all.yaml'
 
-# ✅ ДВА ПЕРИОДА: разные для белосписочных и всех
-MAX_DAYS_WL = 20   # Белосписочные: 20 дней
-MAX_DAYS_ALL = 10  # Все прокси: 10 дней
-
-# ✅ ДВА ЛИМИТА для Telethon
-LIMIT_WL = 1000    # Белосписочные: 1000 сообщений
-LIMIT_ALL = 300    # Все прокси: 300 сообщений
+MAX_DAYS_WL = 20
+MAX_DAYS_ALL = 10
+LIMIT_WL = 1000
+LIMIT_ALL = 300
 
 TIMEOUT = aiohttp.ClientTimeout(total=12, connect=7)
 MAX_CONCURRENT_HTTP = 50
@@ -44,7 +41,7 @@ SESSION_B64 = os.getenv('TELEGRAM_SESSION', '')
 
 PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
 _SCHEMES_ALT = '|'.join(PROXY_SCHEMES)
-_URL_CHARS = r"[a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%{}\"\\ ]"
+_URL_CHARS = r'[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%{}"\\ ]'
 PROXY_REGEX = re.compile(
     r'(?:' + _SCHEMES_ALT + r')://' + _URL_CHARS + r'+(?:#[^\s]*)?',
     re.IGNORECASE)
@@ -93,7 +90,6 @@ DEDUP_SCHEMES = {'vless', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic'}
 DEDUP_IGNORE_USER = False
 
 _AMP_RE = re.compile(r'&(?:amp|#0*38|#x0*26);', re.I)
-_RAW_RE = re.compile(r'([?&]type=)raw(?=[&#]|$)', re.I)
 
 DEBUG = True
 
@@ -197,7 +193,6 @@ def deduplicate_proxies(proxies):
     seen = set()
     result = []
     dupes = 0
-
     for proxy in proxies:
         if not proxy:
             continue
@@ -206,10 +201,8 @@ def deduplicate_proxies(proxies):
             continue
         seen.add(proxy)
         result.append(proxy)
-
     if dupes:
         debug_log(f"🔁 Дубликатов удалено: {dupes}")
-
     return result
 
 def _uri_parts(uri):
@@ -428,18 +421,35 @@ async def fetch(session, url, sem, retry_count=2):
     async with sem:
         try:
             if not url.startswith(('http://', 'https://')): return ""
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',  # ← ЭТА СТРОКА ЛОМАЕТ ВСЁ
-                'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
-                'Connection': 'keep-alive',
-            }
+            
+            # ✅ ПРАВКА: разные заголовки для t.me и подписок
+            # t.me/telegram.me — нужен HTML-парсинг
+            # Подписки (pozor.bond и др.) — отдадут base64 только с Accept: */*
+            is_tme = 't.me/' in url or 'telegram.me/' in url
+            
+            if is_tme:
+                headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
+                    'Connection': 'keep-alive',
+                    'Upgrade-Insecure-Requests': '1',
+                }
+            else:
+                headers = {
+                    'User-Agent': 'Happ/1.0 (com.happ; build:100; iOS 17.0.0) Alamofire/5.8.0',
+                    'Accept': '*/*',
+                    'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
+                }
+            
             if 'kfwl.lol' in url:
                 headers['Referer'] = 'https://t.me/'
+            
             timeout = TIMEOUT
             problem_domains = ['kfwl.lol', 'pozor.bond', 'atlanta-subs.ru', 'astra-sub.com', 'taurus-sync.com', 'net4.su']
             if any(d in url for d in problem_domains):
                 timeout = aiohttp.ClientTimeout(total=30, connect=10)
+            
             for attempt in range(retry_count + 1):
                 try:
                     async with session.get(url, headers=headers, allow_redirects=True, ssl=False, timeout=timeout) as resp:
@@ -485,7 +495,6 @@ def extract_messages_data(html_content, cutoff_date):
     debug_log(f"Найдено сообщений: {len(messages)}")
     return p, u
 
-# ✅ ИЗМЕНЕНО: теперь принимает limit как параметр
 async def parse_with_telethon(source_url, cutoff_date, limit):
     if not SESSION_B64 or not TELETHON_OK or API_ID == 0:
         debug_log("Telethon не настроен")
@@ -517,7 +526,6 @@ async def parse_with_telethon(source_url, cutoff_date, limit):
             return [], []
         msg_count = 0
         try:
-            # ✅ ИСПОЛЬЗУЕМ limit из параметра
             async for msg in client.iter_messages(entity, limit=limit):
                 if not msg.date: continue
                 msg_date = msg.date.replace(tzinfo=timezone.utc)
@@ -835,11 +843,9 @@ async def main():
     http_sem = asyncio.Semaphore(MAX_CONCURRENT_HTTP)
     ping_sem = asyncio.Semaphore(MAX_CONCURRENT_PING)
     
-    # ✅ ДВА CUTOFF: для всех и для белосписочных
     cutoff_all = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS_ALL)
     cutoff_wl = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS_WL)
     
-    # ✅ Храним прокси с датами: (uri, date, parsed)
     all_proxies_with_dates = []
     sub_urls, visited = [], set()
     web_sources, telethon_sources = [], []
@@ -868,10 +874,8 @@ async def main():
             results = await asyncio.gather(*[t[1] for t in tasks])
             for (u, _), html_content in zip(tasks, results):
                 if html_content:
-                    # ✅ Используем cutoff_wl (20 дней) для веб-парсинга
                     p, u2 = extract_messages_data(html_content, cutoff_wl)
                     debug_log(f"Из {u[:60]}: {len(p)} прокси, {len(u2)} URL")
-                    # Дата для веб-прокси = текущее время (они все свежие)
                     now = datetime.now(timezone.utc)
                     for proxy in p:
                         all_proxies_with_dates.append((proxy, now, None))
@@ -881,9 +885,7 @@ async def main():
         if TELETHON_OK and SESSION_B64 and API_ID != 0:
             print(f"[{time.time()-start:.1f}s] Парсим через Telethon ({len(telethon_sources)} источников)...")
             for src in telethon_sources:
-                # ✅ Используем cutoff_wl (20 дней) и limit=LIMIT_WL (1000) для Telethon
                 p, u = await parse_with_telethon(src, cutoff_wl, LIMIT_WL)
-                # Дата для Telethon-прокси = текущее время
                 now = datetime.now(timezone.utc)
                 for proxy in p:
                     all_proxies_with_dates.append((proxy, now, None))
@@ -906,7 +908,6 @@ async def main():
                 for proxy in r:
                     all_proxies_with_dates.append((proxy, now, None))
     
-    # Убираем дубликаты URI, сохраняя самую свежую дату
     seen_uris = {}
     for uri, date, _ in all_proxies_with_dates:
         if uri not in seen_uris or date > seen_uris[uri][1]:
@@ -915,9 +916,6 @@ async def main():
     
     print(f"[{time.time()-start:.1f}s] Сырых прокси: {len(all_proxies_with_dates)}")
 
-    # ✅ ДВА ПРОХОДА: для ALL (10 дней) и WL (20 дней)
-    
-    # --- ПРОХОД 1: proxy-all (10 дней) ---
     proxies_all = [uri for uri, date, _ in all_proxies_with_dates if date >= cutoff_all]
     n0_all = len(proxies_all)
     proxies_all = dedupe_by_config(proxies_all)
@@ -967,7 +965,6 @@ async def main():
     debug_log(f"📄 proxy-all.txt: {len(all_txt_uris)} ссылок")
     debug_log(f"📄 proxy-all.yaml: {len(clash_all)} прокси")
 
-    # --- ПРОХОД 2: proxy.txt белосписочные (20 дней) ---
     proxies_wl = [uri for uri, date, _ in all_proxies_with_dates if date >= cutoff_wl]
     n0_wl = len(proxies_wl)
     proxies_wl = dedupe_by_config(proxies_wl)
