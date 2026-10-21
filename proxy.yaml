@@ -27,20 +27,6 @@ proxies:
   tls: true
   server-name: fitindoor.net
   client-fingerprint: firefox
-- name: cool [LSO-LTE] 🇷🇺 |#18|
-  type: vless
-  server: 139.28.168.75
-  port: 10444
-  uuid: 154bd388-4968-4900-a088-18676f428a20
-  network: tcp
-  udp: true
-  tls: true
-  server-name: video.yandex.ru
-  reality-opts:
-    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
-    short-id: 8debcf36f1cc69ff
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
 - name: cool [LSO-LTE] 🇷🇺 |#70|
   type: vless
   server: 82.202.179.111
@@ -96,20 +82,6 @@ proxies:
     public-key: HXXIkFRPeRpluXJ7SOoUGf9EOq4Lw-oJpvg1W0UPbEw
     short-id: 5bd7b68ca4c04443
   client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇸🇬 |#88|
-  type: vless
-  server: 178.94.25.73
-  port: 10444
-  uuid: 2dacc738-5720-4824-b8bc-e3db57596ba7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: video.yandex.ru
-  reality-opts:
-    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
-    short-id: 8debcf36f1cc69ff
-  client-fingerprint: safari
   flow: xtls-rprx-vision
 - name: cool [LSO-LTE] 🇭🇰 |#36|
   type: vless
@@ -375,19 +347,6 @@ proxies:
     public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
   client-fingerprint: qq
   flow: xtls-rprx-vision
-- name: cool [LSO-LTE] 🇹🇷 |#27|
-  type: vless
-  server: 193.223.107.109
-  port: 443
-  uuid: 8d32831a-3116-49ab-ad6d-d277dba27c05
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.vk.com
-  reality-opts:
-    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
 - name: 🇷🇺 Россия 5G Telegram ❌
   type: vless
   server: randomquaint.net
@@ -562,6 +521,184 @@ proxies:
   tls: true
   server-name: fitindoor.net
   client-fingerprint: firefox
+- name: 📶 Обход LTE - Auto
+  type: vless
+  server: es3.h1cloud.net
+  port: 25150
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.samsung.com
+  reality-opts:
+    public-key: Qvn7tV54mdqxJ40LmmoI1PRM1QKXEbfFOZS-omPKhGY
+    short-id: 4301a484cc762aa6
+  client-fingerprint: firefox
+- name: 🇪🇺 Автовыбор 10
+  type: vless
+  server: 9bc578g.us4.h1clayd.click
+  port: 443
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 9bc578g.us4.h1clayd.click
+  reality-opts:
+    public-key: uUWYLl2Fdhr74k9o5WacesJjvsCwLiOHccgfR23TIk4
+    short-id: 29b29106d4769e3a
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: aa7f1b042f73
+- name: 🇪🇺 Автовыбор 11
+  type: vless
+  server: ba0229x.us4.h1clayd.click
+  port: 443
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: ba0229x.us4.h1clayd.click
+  reality-opts:
+    public-key: 2E2qSCOHLYD5rqV8GZjwODqKnQ4Qg7zqe7LnUKwzyF8
+    short-id: 8da8bb9dd3213eb8
+  client-fingerprint: firefox
+- name: 🇪🇺 Автовыбор 6
+  type: vless
+  server: 263651t.fi3.h1clayd.click
+  port: 443
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 263651t.fi3.h1clayd.click
+  reality-opts:
+    public-key: nNe5Y8_G7L0_VO5lqlee3h5UmRH4RXjaRYGCDUkbQz4
+    short-id: 2892e611785bafd1
+  client-fingerprint: firefox
+- name: 🇪🇺 Автовыбор 7
+  type: vless
+  server: 8fc752g.fi3.h1clayd.click
+  port: 443
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 8fc752g.fi3.h1clayd.click
+  reality-opts:
+    public-key: GJzag9Wrvz_bO9AQaA-Oq0P1kV9btmxxAdzPV-uQB18
+    short-id: 09d0a94a1c6fc9d5
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: f345a414c040
+- name: 🇪🇺 Автовыбор 9
+  type: vless
+  server: a0688bt.us4.h1clayd.click
+  port: 443
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: tcp
+  udp: true
+  tls: true
+  server-name: a0688bt.us4.h1clayd.click
+  reality-opts:
+    public-key: 5-9YzvyXcZ4J5Z4OaVTUbxUU2InvnwT17m0XY-Jse1E
+    short-id: 257420d9d430152a
+  client-fingerprint: firefox
+- name: 🇪🇺 Автовыбор 2
+  type: vless
+  server: es3.h1cloud.net
+  port: 25152
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.samsung.com
+  reality-opts:
+    public-key: ZIZIfEd-cs4jAgYIav5ZAkfWaqvpG8DQP-SH6xhGDmc
+    short-id: 08c379434f36cdbe
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 🇪🇺 Автовыбор 8
+  type: vless
+  server: faf318x.fi3.h1clayd.click
+  port: 443
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: faf318x.fi3.h1clayd.click
+  reality-opts:
+    public-key: iZD9niaCQZpjG_ndVq8N2pY4hLNg0n7_oT7qJUMkDEI
+    short-id: 248965340b604f9c
+  client-fingerprint: firefox
+- name: 🇪🇺 Автовыбор 3
+  type: vless
+  server: pl1.h1cloud.net
+  port: 27591
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.samsung.com
+  reality-opts:
+    public-key: LY0H47MWx87_L_JBzxFAuTzKZB53U7MrZQK8-dNnMxM
+    short-id: 6c5c7900406a1ae7
+  client-fingerprint: firefox
+- name: 🇪🇺 Автовыбор 5
+  type: vless
+  server: pl1.h1cloud.net
+  port: 27592
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: grpc
+  udp: true
+  tls: true
+  server-name: www.samsung.com
+  reality-opts:
+    public-key: pAB1F_bFGUwbJNHZKHjeOYDk85B4UovLIZBwJN8iBjo
+    short-id: 8553af3d51dc8156
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: 15222da4395c
+- name: 🇪🇺 Автовыбор 4
+  type: vless
+  server: pl1.h1cloud.net
+  port: 27612
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: www.samsung.com
+  reality-opts:
+    public-key: KmAohGMMhgDPfKfRaQWS6JbsMuwzwlDqBwQFlGVdEjs
+    short-id: afd47a2658030530
+  client-fingerprint: firefox
+- name: ProxyRift 1274
+  type: vless
+  server: 104.17.28.83
+  port: 2087
+  uuid: 099244b9-2168-4dbd-870e-cbbe9d6eb573
+  network: ws
+  udp: true
+  tls: true
+  server-name: whitecreeper.pages.dev
+  client-fingerprint: chrome
+  ws-opts:
+    path: /proxyip=ProxyIP.SG.CMLiussss.Net
+    headers:
+      Host: whitecreeper.pages.dev
+- name: ProxyRift 1269
+  type: vless
+  server: 172.67.75.194
+  port: 2096
+  uuid: 099244b9-2168-4dbd-870e-cbbe9d6eb573
+  network: ws
+  udp: true
+  tls: true
+  server-name: whitecreeper.pages.dev
+  client-fingerprint: chrome
+  ws-opts:
+    path: /proxyip=ProxyIP.SG.CMLiussss.Net
+    headers:
+      Host: whitecreeper.pages.dev
 - name: 🇧🇬 Болгария 5G
   type: vless
   server: 78.159.246.85
@@ -572,18 +709,86 @@ proxies:
   tls: true
   server-name: fitindoor.net
   client-fingerprint: firefox
+- name: ProxyRift 490
+  type: vless
+  server: 116.204.164.30
+  port: 7443
+  uuid: 097e0483-50a9-4adf-8f62-031057710d11
+  network: ws
+  udp: true
+  tls: true
+  server-name: o-85ley6knn8ut.6nvkygqh144t7xtdyvh0y3o4gzo3ujhnk8n.workers.dev
+  client-fingerprint: chrome
+  ws-opts:
+    path: /@Marisa_kristi
+    headers:
+      Host: o-85ley6knn8ut.6nvkygqh144t7xtdyvh0y3o4gzo3ujhnk8n.workers.dev
+- name: ProxyRift 047
+  type: vless
+  server: 172.67.65.56
+  port: 2053
+  uuid: 099244b9-2168-4dbd-870e-cbbe9d6eb573
+  network: ws
+  udp: true
+  tls: true
+  server-name: whitecreeper.pages.dev
+  client-fingerprint: chrome
+  ws-opts:
+    path: /proxyip
+    headers:
+      Host: whitecreeper.pages.dev
+- name: ProxyRift 594
+  type: vless
+  server: 188.164.248.81
+  port: 2087
+  uuid: 099244b9-2168-4dbd-870e-cbbe9d6eb573
+  network: ws
+  udp: true
+  tls: true
+  server-name: whitecreeper.pages.dev
+  client-fingerprint: chrome
+  ws-opts:
+    path: /proxyip=ProxyIP.SG.CMLiussss.Net
+    headers:
+      Host: whitecreeper.pages.dev
+- name: ProxyRift 412
+  type: vless
+  server: 188.164.248.96
+  port: 8443
+  uuid: 099244b9-2168-4dbd-870e-cbbe9d6eb573
+  network: ws
+  udp: true
+  tls: true
+  server-name: whitecreeper.pages.dev
+  client-fingerprint: chrome
+  ws-opts:
+    path: /proxyip=ProxyIP.SG.CMLiussss.Net
+    headers:
+      Host: whitecreeper.pages.dev
+- name: ProxyRift 142
+  type: vless
+  server: z1q3pv4g78.rucdncomp.pro
+  port: 443
+  uuid: c720cb74-4c84-4fce-b8ae-637dbaa16199
+  network: ws
+  udp: true
+  tls: true
+  server-name: z1q3pv4g78.rucdncomp.pro
+  client-fingerprint: firefox
+  ws-opts:
+    path: /useraction/events/b892639b7195/
+    headers:
+      Host: z1q3pv4g78.rucdncomp.pro
 proxy-groups:
 - name: ♻️ Auto
   type: url-test
   proxies:
   - 🇪🇺 ДЛЯ ОБХОДА ГЛУШИЛК/БС/ЧС
   - 🇪🇺📡Антиглушилка • EU №1
-  - cool [LSO-LTE] 🇷🇺 |#18|
   - cool [LSO-LTE] 🇷🇺 |#70|
   - cool [LSO-LTE] 🇷🇺 |#75|
   - cool [LSO-LTE] 🇺🇸 |#33|
   - cool [LSO-LTE] 🇵🇱 |#72|
-  - cool [LSO-LTE] 🇸🇬 |#88|
   - cool [LSO-LTE] 🇭🇰 |#36|
   - cool [LSO-LTE] 🇱🇹 |#58|
   - cool [LSO-LTE] 🇺🇸 |#29|
@@ -603,7 +808,6 @@ proxy-groups:
   - cool [LSO-LTE] 🇺🇸 |#97|
   - cool [LSO-LTE] 🇩🇪 |#91|
   - cool [LSO-LTE] 🇹🇷 |#59|
-  - cool [LSO-LTE] 🇹🇷 |#27|
   - 🇷🇺 Россия 5G Telegram ❌
   - cool [LSO-LTE] 🇺🇸 |#12|
   - cool [LSO-LTE] 🇺🇸 |#20|
@@ -617,7 +821,25 @@ proxy-groups:
   - cool [LSO-LTE] 🇺🇸 |#7|
   - 🇷🇺Белые списки • RU 1
   - 🇷🇺Белые списки • RU 2
+  - 📶 Обход LTE - Auto
+  - 🇪🇺 Автовыбор 10
+  - 🇪🇺 Автовыбор 11
+  - 🇪🇺 Автовыбор 6
+  - 🇪🇺 Автовыбор 7
+  - 🇪🇺 Автовыбор 9
+  - 🇪🇺 Автовыбор 2
+  - 🇪🇺 Автовыбор 8
+  - 🇪🇺 Автовыбор 3
+  - 🇪🇺 Автовыбор 5
+  - 🇪🇺 Автовыбор 4
+  - ProxyRift 1274
+  - ProxyRift 1269
   - 🇧🇬 Болгария 5G
+  - ProxyRift 490
+  - ProxyRift 047
+  - ProxyRift 594
+  - ProxyRift 412
+  - ProxyRift 142
   url: http://www.gstatic.com/generate_204
   interval: 300
 - name: 🚀 Proxy
@@ -626,12 +848,10 @@ proxy-groups:
   - ♻️ Auto
   - 🇪🇺 ДЛЯ ОБХОДА ГЛУШИЛК/БС/ЧС
   - 🇪🇺📡Антиглушилка • EU №1
-  - cool [LSO-LTE] 🇷🇺 |#18|
   - cool [LSO-LTE] 🇷🇺 |#70|
   - cool [LSO-LTE] 🇷🇺 |#75|
   - cool [LSO-LTE] 🇺🇸 |#33|
   - cool [LSO-LTE] 🇵🇱 |#72|
-  - cool [LSO-LTE] 🇸🇬 |#88|
   - cool [LSO-LTE] 🇭🇰 |#36|
   - cool [LSO-LTE] 🇱🇹 |#58|
   - cool [LSO-LTE] 🇺🇸 |#29|
@@ -651,7 +871,6 @@ proxy-groups:
   - cool [LSO-LTE] 🇺🇸 |#97|
   - cool [LSO-LTE] 🇩🇪 |#91|
   - cool [LSO-LTE] 🇹🇷 |#59|
-  - cool [LSO-LTE] 🇹🇷 |#27|
   - 🇷🇺 Россия 5G Telegram ❌
   - cool [LSO-LTE] 🇺🇸 |#12|
   - cool [LSO-LTE] 🇺🇸 |#20|
@@ -665,6 +884,24 @@ proxy-groups:
   - cool [LSO-LTE] 🇺🇸 |#7|
   - 🇷🇺Белые списки • RU 1
   - 🇷🇺Белые списки • RU 2
+  - 📶 Обход LTE - Auto
+  - 🇪🇺 Автовыбор 10
+  - 🇪🇺 Автовыбор 11
+  - 🇪🇺 Автовыбор 6
+  - 🇪🇺 Автовыбор 7
+  - 🇪🇺 Автовыбор 9
+  - 🇪🇺 Автовыбор 2
+  - 🇪🇺 Автовыбор 8
+  - 🇪🇺 Автовыбор 3
+  - 🇪🇺 Автовыбор 5
+  - 🇪🇺 Автовыбор 4
+  - ProxyRift 1274
+  - ProxyRift 1269
   - 🇧🇬 Болгария 5G
+  - ProxyRift 490
+  - ProxyRift 047
+  - ProxyRift 594
+  - ProxyRift 412
+  - ProxyRift 142
 rules:
 - MATCH,🚀 Proxy
