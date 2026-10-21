@@ -46,7 +46,7 @@ PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2
 _SCHEMES_ALT = '|'.join(PROXY_SCHEMES)
 _URL_CHARS = r"[a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%{}\"\\ ]"
 PROXY_REGEX = re.compile(
-    r'(?:' + _SCHEMES_ALT + r')://(?:(?!(?:' + _SCHEMES_ALT + r')://)' + _URL_CHARS + r')+',
+    r'(?:' + _SCHEMES_ALT + r')://' + _URL_CHARS + r'+(?:#[^\s]*)?',
     re.IGNORECASE)
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
