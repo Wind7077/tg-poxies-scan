@@ -459,31 +459,6 @@ proxies:
     public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇧🇾 Беларусь | VLESS WS | 💎 gemini
-  type: vless
-  server: 178.172.227.228
-  port: 14430
-  uuid: b6e5dc56-836f-48c1-9163-b0b0b43b647d
-  network: ws
-  udp: true
-  ws-opts:
-    path: /vless
-    headers:
-      Host: 178.172.227.228
-- name: 🇳🇱 Нидерланды | VLESS WS TLS
-  type: vless
-  server: 217.19.122.156
-  port: 443
-  uuid: c720cb74-4c84-4fce-b8ae-637dbaa16199
-  network: ws
-  udp: true
-  tls: true
-  server-name: z1q3pv4g78.rucdncomp.pro
-  client-fingerprint: random
-  ws-opts:
-    path: /useraction/events/b892639b7195/
-    headers:
-      Host: z1q3pv4g78.rucdncomp.pro
 - name: '@neirolexa_bot C-1 #99 🜂 🇫🇲'
   type: vless
   server: cdn389.whitenw.net
@@ -539,17 +514,6 @@ proxies:
     public-key: drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI
   client-fingerprint: random
   flow: xtls-rprx-vision
-- name: 🇧🇾 Беларусь | VLESS WS
-  type: vless
-  server: 95.128.71.79
-  port: 14430
-  uuid: 8cef7621-c6f0-486e-b51d-59c30c5b0b25
-  network: ws
-  udp: true
-  ws-opts:
-    path: /vless
-    headers:
-      Host: 95.128.71.79
 - name: 🇷🇺тг @shadbobr1 | бс"
   type: vless
   server: 78.159.250.214
@@ -605,18 +569,18 @@ proxies:
   client-fingerprint: chrome
 - name: 🇩🇪 AetrisVPN
   type: vless
-  server: 79.137.197.212
-  port: 2105
-  uuid: 3c88be7f-dc22-4a4a-b1b5-9a2efc5a721e
+  server: 217.19.122.156
+  port: 443
+  uuid: c720cb74-4c84-4fce-b8ae-637dbaa16199
   network: ws
   udp: true
   tls: true
-  server-name: o-85ley6knn8ut.6nvkygqh144t7xtdyvh0y3o4gzo3ujhnk8n.workers.dev
+  server-name: z1q3pv4g78.rucdncomp.pro
   client-fingerprint: chrome
   ws-opts:
-    path: /@Marisa_kristi
+    path: /useraction/events/b892639b7195/
     headers:
-      Host: o-85ley6knn8ut.6nvkygqh144t7xtdyvh0y3o4gzo3ujhnk8n.workers.dev
+      Host: z1q3pv4g78.rucdncomp.pro
 proxy-groups:
 - name: ♻️ Auto
   type: url-test
@@ -808,13 +772,10 @@ proxy-groups:
     "alpn": ["h2"], "fp": "firefox", "encryption": "none"}, {"type": "vless", "name":
     "'
   - 'AetrisVPN White list ┃ ✅ SNI: www.vk.com ┃ 🇩🇪 Германия (4)'
-  - 🇧🇾 Беларусь | VLESS WS | 💎 gemini
-  - 🇳🇱 Нидерланды | VLESS WS TLS
   - '@neirolexa_bot C-1 #99 🜂 🇫🇲'
   - '@neirolexa_bot C-1 #97 🜱 🇫🇲'
   - '@neirolexa_bot C-1 #80 🚰 🇫🇲'
   - 🇸🇬 Mobil_VPN 📶 LTE (Test)
-  - 🇧🇾 Беларусь | VLESS WS
   - 🇷🇺тг @shadbobr1 | бс"
   - '🇷🇺 Россия (LTE) #264"'
   - Notorgames_0 (122)
@@ -1013,13 +974,10 @@ proxy-groups:
     "alpn": ["h2"], "fp": "firefox", "encryption": "none"}, {"type": "vless", "name":
     "'
   - 'AetrisVPN White list ┃ ✅ SNI: www.vk.com ┃ 🇩🇪 Германия (4)'
-  - 🇧🇾 Беларусь | VLESS WS | 💎 gemini
-  - 🇳🇱 Нидерланды | VLESS WS TLS
   - '@neirolexa_bot C-1 #99 🜂 🇫🇲'
   - '@neirolexa_bot C-1 #97 🜱 🇫🇲'
   - '@neirolexa_bot C-1 #80 🚰 🇫🇲'
   - 🇸🇬 Mobil_VPN 📶 LTE (Test)
-  - 🇧🇾 Беларусь | VLESS WS
   - 🇷🇺тг @shadbobr1 | бс"
   - '🇷🇺 Россия (LTE) #264"'
   - Notorgames_0 (122)
