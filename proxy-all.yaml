@@ -239,31 +239,6 @@ proxies:
   udp: true
   ws-opts:
     path: /ws/yNDaXPuEfdTj
-- name: '🇪🇺 🟢 LTE Обход Глушилок #2", "network": "xhttp", "security": "tls", "sni":
-    "cdn-yb.shamanapp.online", "alpn": ["h2", "http/1.1"], "fp": "firefox", "encryption":
-    "none"}], "userinfo": {"upload": 0, "download": 0, "total": 0, "expire": 1793491200},
-    "profileTitle": "base64:8J+QtiBMdWNreSBWUE4=", "outdated": true}'
-  type: vless
-  server: cdn-yb.shamanapp.online
-  port: 443
-  uuid: 54f9dfa0-b6d2-49b7-bded-6d1f3aff29bf
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: cdn-yb.shamanapp.online
-  client-fingerprint: firefox
-- name: '🇪🇺 🟢 LTE Обход Глушилок #1", "network": "xhttp", "security": "tls", "sni":
-    "cdn-ya.shamanapp.online", "alpn": ["h2", "http/1.1"], "fp": "firefox", "encryption":
-    "none"}, {"type": "vless", "name": "'
-  type: vless
-  server: cdn-ya.shamanapp.online
-  port: 443
-  uuid: 54f9dfa0-b6d2-49b7-bded-6d1f3aff29bf
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: cdn-ya.shamanapp.online
-  client-fingerprint: firefox
 - name: '🇨🇾 Russia (обход №1)", "network": "xhttp", "security": "tls", "sni": "api.axnode.net",
     "alpn": ["h2"], "fp": "firefox", "encryption": "none"}, {"type": "vless", "name":
     "'
@@ -290,48 +265,6 @@ proxies:
     short-id: b2baccb38dc00f96
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #99 🜂 🇫🇲'
-  type: vless
-  server: cdn389.whitenw.net
-  port: 15443
-  uuid: 7ae5205f-e6c2-45bd-b393-b42c4e1d54f6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ru.cdn390.whitenw.net
-  reality-opts:
-    public-key: 4MtUhO_0Dmi7u8ETp_eaNZSTTgQrbY2q2NBDfR2-USE
-    short-id: f055e516ca1a57b4
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #97 🜱 🇫🇲'
-  type: vless
-  server: cdn390.whitenw.net
-  port: 7449
-  uuid: 7ae5205f-e6c2-45bd-b393-b42c4e1d54f6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ru.cdn390.whitenw.net
-  reality-opts:
-    public-key: 4MtUhO_0Dmi7u8ETp_eaNZSTTgQrbY2q2NBDfR2-USE
-    short-id: f055e516ca1a57b4
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #80 🚰 🇫🇲'
-  type: vless
-  server: z1q3pv4g78.rucdncomp.pro
-  port: 443
-  uuid: c720cb74-4c84-4fce-b8ae-637dbaa16199
-  network: ws
-  udp: true
-  tls: true
-  server-name: z1q3pv4g78.rucdncomp.pro
-  client-fingerprint: firefox
-  ws-opts:
-    path: /useraction/events/b892639b7195/
-    headers:
-      Host: z1q3pv4g78.rucdncomp.pro
 - name: 🇸🇬 Mobil_VPN 📶 LTE (Test)
   type: vless
   server: 78.159.250.214
@@ -345,6 +278,20 @@ proxies:
     public-key: drY21DHNOr6ezJLA2B10mzTExeJ9-gVBfTBNLwVBtWI
   client-fingerprint: random
   flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #52 🪬 🇫🇲'
+  type: vless
+  server: 217.19.122.156
+  port: 443
+  uuid: c720cb74-4c84-4fce-b8ae-637dbaa16199
+  network: ws
+  udp: true
+  tls: true
+  server-name: z1q3pv4g78.rucdncomp.pro
+  client-fingerprint: random
+  ws-opts:
+    path: /useraction/events/b892639b7195/
+    headers:
+      Host: z1q3pv4g78.rucdncomp.pro
 - name: 🇧🇾 Беларусь | VLESS WS
   type: vless
   server: 95.128.71.79
@@ -369,86 +316,6 @@ proxies:
     public-key: _PYBo3dyZRpGC44vADqcmlBCSeAVh1X8l3mulghVsTI
     short-id: a1b2c3d4
   client-fingerprint: firefox
-- name: 🇪🇺 AUTO — Обход БС 73
-  type: vless
-  server: yan16.aliboba.shop
-  port: 443
-  uuid: 044895fc-ae51-455c-900a-0d0c355ae44a
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: yan16.aliboba.shop
-  client-fingerprint: chrome
-- name: 🇪🇺 AUTO — Обход БС 57
-  type: vless
-  server: yan17.aliboba.shop
-  port: 443
-  uuid: 044895fc-ae51-455c-900a-0d0c355ae44a
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: yan17.aliboba.shop
-  client-fingerprint: chrome
-- name: 🇪🇺 AUTO — Обход БС 52
-  type: vless
-  server: yan18.aliboba.shop
-  port: 443
-  uuid: 044895fc-ae51-455c-900a-0d0c355ae44a
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: yan18.aliboba.shop
-  client-fingerprint: chrome
-- name: 🇪🇺 AUTO — Обход БС 47
-  type: vless
-  server: yan19.aliboba.shop
-  port: 443
-  uuid: 044895fc-ae51-455c-900a-0d0c355ae44a
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: yan19.aliboba.shop
-  client-fingerprint: chrome
-- name: 🇪🇺 AUTO — Обход БС 48
-  type: vless
-  server: yan20.aliboba.shop
-  port: 443
-  uuid: 044895fc-ae51-455c-900a-0d0c355ae44a
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: yan20.aliboba.shop
-  client-fingerprint: chrome
-- name: 🇪🇺 AUTO — Обход БС 51
-  type: vless
-  server: yan21.aliboba.shop
-  port: 443
-  uuid: 044895fc-ae51-455c-900a-0d0c355ae44a
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: yan21.aliboba.shop
-  client-fingerprint: chrome
-- name: 🇪🇺 AUTO — Обход БС 78
-  type: vless
-  server: yan24.aliboba.shop
-  port: 443
-  uuid: 044895fc-ae51-455c-900a-0d0c355ae44a
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: yan24.aliboba.shop
-  client-fingerprint: chrome
-- name: 🇪🇺 AUTO — Обход БС 80
-  type: vless
-  server: yan9.aliboba.shop
-  port: 443
-  uuid: 044895fc-ae51-455c-900a-0d0c355ae44a
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: yan9.aliboba.shop
-  client-fingerprint: chrome
 - name: 🇪🇺 AUTO — Обход БС 84
   type: vless
   server: 45.9.156.28
@@ -464,51 +331,6 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: cloud.v1.RelayService
-- name: 🇪🇺 AUTO — Обход БС 81
-  type: vless
-  server: bg3.univesalsrv.com
-  port: 443
-  uuid: 2f35965a-9a9b-45fd-ba32-987296dfb6be
-  network: grpc
-  udp: true
-  tls: true
-  server-name: bg3.univesalsrv.com
-  reality-opts:
-    public-key: XBfCioniAKXgKYBUVnvBXu80AIaIa4SpAB3w8qeF7Gk
-    short-id: 1be1bd931c98c84a
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: home.v1.ApiService
-- name: 🇪🇺 AUTO — Обход БС 89
-  type: vless
-  server: md4.univesalsrv.com
-  port: 443
-  uuid: 2f35965a-9a9b-45fd-ba32-987296dfb6be
-  network: grpc
-  udp: true
-  tls: true
-  server-name: md4.univesalsrv.com
-  reality-opts:
-    public-key: TZVMqglhHzteJ6t34mtku75LKzXNq0CB6glKYMAH6zg
-    short-id: 8e07337954f9823f
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: hub.v1.ApiService
-- name: 🇪🇺 AUTO — Обход БС 76
-  type: vless
-  server: rs1.univesalsrv.com
-  port: 443
-  uuid: 2f35965a-9a9b-45fd-ba32-987296dfb6be
-  network: grpc
-  udp: true
-  tls: true
-  server-name: rs1.univesalsrv.com
-  reality-opts:
-    public-key: upIzyaSbVz2ZK6KfGtXmPl_-sCwn8XLDyFDH5CsL9iY
-    short-id: ed0cd5cc2e26e6e7
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: node.v2.ObjectService
 - name: 🇪🇺 AUTO — Обход БС 37
   type: vless
   server: 178.176.128.128
@@ -605,143 +427,6 @@ proxies:
   client-fingerprint: chrome
   ws-opts:
     path: /tyxyws
-- name: 🇪🇺 AUTO — Обход БС 25
-  type: vless
-  server: fastest.phantom.direct
-  port: 443
-  uuid: 54c4bece-fa4f-4ac3-9c19-7c12b379cd0a
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.vk.com
-  reality-opts:
-    public-key: Sh5wKMCzi5dg0zH6Vn6pSl0WPWC1Q4eVluKQRFm-9Rs
-    short-id: dcc96d50632eb107
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 🇪🇺 AUTO — Обход БС 23
-  type: vless
-  server: fastest.phantom.direct
-  port: 443
-  uuid: 54c4bece-fa4f-4ac3-9c19-7c12b379cd0a
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yandex.ru
-  reality-opts:
-    public-key: tpLrIFRbgAaHl673OOS-4t3mnFf9O2V_UedV5g3FITQ
-    short-id: 7151f19278f5ac4a
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 🇪🇺 AUTO — Обход БС 24
-  type: vless
-  server: selgw.phantom.direct
-  port: 443
-  uuid: 54c4bece-fa4f-4ac3-9c19-7c12b379cd0a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: selgw.phantom.direct
-  reality-opts:
-    public-key: kxjx6ax6xfttNS6CSzgLVZZlKmvQ8d5EPY9ELQQjvkM
-    short-id: 10600edc6cfa209e
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: grpc
-- name: 🇪🇺 AUTO — Обход БС 49
-  type: vless
-  server: kumar.oblachniy.ink
-  port: 443
-  uuid: 55fb73fc-789e-48a8-b116-583d34f25a7d
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: kumar.oblachniy.ink
-  client-fingerprint: firefox
-- name: 🇪🇺 AUTO — Обход БС 64
-  type: vless
-  server: represent.stereotip.life
-  port: 443
-  uuid: 55fb73fc-789e-48a8-b116-583d34f25a7d
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: represent.stereotip.life
-  client-fingerprint: firefox
-- name: 🇪🇺 AUTO — Обход БС 60
-  type: vless
-  server: toterdo.rigdol.garden
-  port: 443
-  uuid: 55fb73fc-789e-48a8-b116-583d34f25a7d
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: toterdo.rigdol.garden
-  client-fingerprint: firefox
-- name: 🇪🇺 AUTO — Обход БС 58
-  type: vless
-  server: yooo.nibber.bond
-  port: 443
-  uuid: 55fb73fc-789e-48a8-b116-583d34f25a7d
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: yooo.nibber.bond
-  client-fingerprint: firefox
-- name: 🇪🇺 AUTO — Обход БС 30
-  type: vless
-  server: cosmo-pulse.ru
-  port: 443
-  uuid: 7ec9f26a-edec-4bf1-addd-700626df27c1
-  network: ws
-  udp: true
-  tls: true
-  server-name: cosmo-pulse.ru
-  client-fingerprint: edge
-  ws-opts:
-    path: /nl7ws
-    headers:
-      Host: cosmo-pulse.ru
-- name: 🇪🇺 AUTO — Обход БС 35
-  type: vless
-  server: kaban.likontrop.wiki
-  port: 443
-  uuid: 7ec9f26a-edec-4bf1-addd-700626df27c1
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: kaban.likontrop.wiki
-  client-fingerprint: firefox
-- name: 🇪🇺 AUTO — Обход БС 31
-  type: vless
-  server: kumar.oblachniy.ink
-  port: 443
-  uuid: 7ec9f26a-edec-4bf1-addd-700626df27c1
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: kumar.oblachniy.ink
-  client-fingerprint: firefox
-- name: 🇪🇺 AUTO — Обход БС 34
-  type: vless
-  server: toterdo.rigdol.garden
-  port: 443
-  uuid: 7ec9f26a-edec-4bf1-addd-700626df27c1
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: toterdo.rigdol.garden
-  client-fingerprint: firefox
-- name: 🇪🇺 AUTO — Обход БС 33
-  type: vless
-  server: yooo.nibber.bond
-  port: 443
-  uuid: 7ec9f26a-edec-4bf1-addd-700626df27c1
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: yooo.nibber.bond
-  client-fingerprint: firefox
 - name: 🇪🇺 AUTO — Обход БС 88
   type: vless
   server: 5.181.202.58
@@ -756,16 +441,6 @@ proxies:
     short-id: 5629431325884ff0
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇭🇰 Гонконг | VMESS WS
-  type: vmess
-  server: 156.245.232.239
-  port: 35043
-  uuid: b15e481d-17e4-41a8-84c2-23d4f0514d9a
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: ws
-  udp: true
 - name: '🇷🇺 Россия (LTE) #264'
   type: vless
   server: 84.38.187.134
@@ -779,6 +454,19 @@ proxies:
     public-key: QSAIpsE696lDqkumfo7dyBt92XzrVDPTF6KogbeKhGc
     short-id: 2c9431dc7a306018
   client-fingerprint: firefox
+- name: 🇮🇳 Индия | VMESS WS
+  type: vmess
+  server: 152.67.8.205
+  port: 80
+  uuid: 9db4c708-aef8-4359-821b-38e47990be0d
+  alterId: 0
+  cipher: auto
+  tls: false
+  network: ws
+  udp: true
+  ws-opts:
+    headers:
+      Host: in-152.67.8.205-0202
 - name: Notorgames_0 (122)
   type: vless
   server: 95.143.188.10
@@ -828,20 +516,6 @@ proxies:
   tls: false
   network: raw
   udp: true
-- name: VLESS-217.19.122.156
-  type: vless
-  server: 217.19.122.156
-  port: 443
-  uuid: c720cb74-4c84-4fce-b8ae-637dbaa16199
-  network: ws
-  udp: true
-  tls: true
-  server-name: z1q3pv4g78.rucdncomp.pro
-  client-fingerprint: firefox
-  ws-opts:
-    path: /useraction/events/b892639b7195/
-    headers:
-      Host: z1q3pv4g78.rucdncomp.pro
 - name: '♾️ Доступ к Telegram", "network": "tcp", "security": "reality", "sni": "nl.moodweb.top",
     "fp": "firefox", "pbk": "LbQbrE6Fl1ZgxqLmAj3ttlH_5997uKPKSJ_3OnT9eTk", "sid":
     "2d7a4f9c1e826a3f", "spx": "/", "flow": "xtls-rprx-vision", "encryption": "none"}],
@@ -934,6 +608,21 @@ proxies:
   udp: true
   network: tcp
   uuid: ''
+- name: 🇫🇮 Финляндия | VLESS gRPC Reality
+  type: vless
+  server: 196.196.204.174
+  port: 443
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 8fc752g.fi3.h1clayd.click
+  reality-opts:
+    public-key: GJzag9Wrvz_bO9AQaA-Oq0P1kV9btmxxAdzPV-uQB18
+    short-id: 09d0a94a1c6fc9d5
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: f345a414c040
 - name: 🇳🇱 Нидерланды | VLESS TCP Reality
   type: vless
   server: 108.61.164.217
@@ -2080,20 +1769,6 @@ proxies:
     short-id: 48050fab
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 🇸🇪 Швеция | VLESS TCP Reality
-  type: vless
-  server: 13.143.180.104
-  port: 443
-  uuid: a0fa7e19-70ec-41e0-b0cc-bcc984d4201a
-  network: tcp
-  udp: true
-  tls: true
-  server-name: s12.bsh-net.ru
-  reality-opts:
-    public-key: QvT-t_h_AF2EAT4Ggh_a6pcCK3StY8G9WCXn6-dJbxk
-    short-id: 51079f144d661484
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: 🇩🇪 Германия | VLESS XHTTP TLS
   type: vless
   server: 144.31.217.28
@@ -2174,25 +1849,6 @@ proxies:
     short-id: cd2d53510b4df2a8
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #29 🛰️ 🇫🇲'
-  type: ss
-  server: 202.50.253.81
-  port: 19999
-  cipher: aes-256-gcm
-  password: aes-256-gcm:ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-  uuid: ''
-- name: '@neirolexa_bot C-1 #120 🝰 🇧🇬'
-  type: vless
-  server: 188.72.103.4
-  port: 443
-  uuid: 000187a2-924b-8be4-b475-485a4699c80d
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: ch-cdn.fius.dev
-  client-fingerprint: firefox
 - name: 🇱🇹 Литва | VLESS RAW Reality
   type: vless
   server: 130.78.190.163
@@ -2242,26 +1898,6 @@ proxies:
   client-fingerprint: chrome
   ws-opts:
     path: /vless-tr
-- name: '@neirolexa_bot C-1 #101 🪬 🇪🇸'
-  type: vless
-  server: 84.32.108.4
-  port: 443
-  uuid: 7d1a74fd-8a38-4a29-863f-5da53a9e557e
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: 7d1a74fd.ferrin.uk
-  client-fingerprint: firefox
-- name: '@neirolexa_bot C-1 #86 🛰️ 🇫🇲'
-  type: vless
-  server: 78.159.246.85
-  port: 2053
-  uuid: 95a608b6-bff1-4e10-bb61-0a39f221bb7d
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: fitindoor.net
-  client-fingerprint: firefox
 - name: 🇰🇷 Корея | VLESS TCP Reality
   type: vless
   server: 151.245.106.49
@@ -2289,27 +1925,7 @@ proxies:
     path: /api/v1/devices/d63ac7ea89/telemetry
     headers:
       Host: nl11.meshbeat.online
-- name: '@neirolexa_bot C-1 #113 🜂 🇧🇷'
-  type: vless
-  server: 144.31.242.142
-  port: 443
-  uuid: abca037b-bee5-41cc-a888-0668e4c66176
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: 883f1393.con.rasterparcel.tech
-  client-fingerprint: firefox
-- name: '@neirolexa_bot C-1 #115 🪬 🇫🇷'
-  type: vless
-  server: 2.27.210.119
-  port: 443
-  uuid: abca037b-bee5-41cc-a888-0668e4c66176
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: 4f070970.con.metricdraft.tech
-  client-fingerprint: edge
-- name: '@neirolexa_bot C-1 #121 🜂 🇪🇪'
+- name: 🇪🇪 Эстония | VLESS XHTTP TLS
   type: vless
   server: 31.76.70.90
   port: 443
@@ -2318,20 +1934,7 @@ proxies:
   udp: true
   tls: true
   server-name: 597dad6b.con.fernarchive.online
-  client-fingerprint: chrome
-- name: '@neirolexa_bot C-1 #109 🧭 🇦🇲'
-  type: vless
-  server: 94.183.175.164
-  port: 5018
-  uuid: ce334334-3ab8-45a2-8af7-f151f413e402
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: www.aparat.com
-  reality-opts:
-    public-key: KVrKzcMWnFc8-s2Cre3PUS3ojMvugd1BxS9on54vBW0
-    short-id: 9d57eae0ee3fd6cb
-  client-fingerprint: chrome
+  client-fingerprint: firefox
 - name: '🇳🇱 Нидерланды | VLESS WS TLS #3'
   type: vless
   server: 188.164.248.216
@@ -2374,77 +1977,6 @@ proxies:
     path: /
     headers:
       Host: ccc.010304.xyz
-- name: '@neirolexa_bot C-1 #69 🛰️ 🇫🇲'
-  type: vless
-  server: 212.109.194.231
-  port: 444
-  uuid: e0216964-ffa1-4d39-82c4-0e40879a470d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: lamibeauty.site
-  reality-opts:
-    public-key: XYkuP_Keu-yL7EQ8xZc4RTmcVAfp06Z1onV2ZNrlsHM
-    short-id: c31f187b
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #111 🜱 🇹🇷'
-  type: vless
-  server: 199.232.96.150
-  port: 443
-  uuid: f9991b8e-7d19-49e7-ae1d-70ce37d7ca16
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: firefox.com
-  client-fingerprint: firefox
-- name: '@neirolexa_bot C-1 #30 🧭 🇫🇲'
-  type: ss
-  server: 202.50.253.36
-  port: 19999
-  cipher: aes-256-gcm
-  password: aes-256-gcm:ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-  uuid: ''
-- name: '@neirolexa_bot C-1 #85 🪬 🇫🇲'
-  type: vless
-  server: 81.94.148.232
-  port: 8443
-  uuid: 2c634977-584e-4e1f-b501-1b70c77a6743
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: windytrout.net
-  client-fingerprint: chrome
-- name: '@neirolexa_bot C-1 #11 🧿 🇫🇲'
-  type: vless
-  server: 77.221.157.156
-  port: 443
-  uuid: 5f53b921-2874-482a-b530-d3ee1d66cbc5
-  network: tcp
-  udp: true
-  tls: true
-  server-name: gr4.originmesh.online
-  reality-opts:
-    public-key: 82aT3osfzlXuB4ARpNvpn-56M87zoJ8HzoNfIRf3Pl0
-    short-id: eecfe76af97a6132
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #35 🧿 🇫🇲'
-  type: vless
-  server: 94.228.161.123
-  port: 443
-  uuid: 5f53b921-2874-482a-b530-d3ee1d66cbc5
-  network: tcp
-  udp: true
-  tls: true
-  server-name: nl2.originmesh.online
-  reality-opts:
-    public-key: _MRd1VDQBecIufT-CXd5O73L8JBjBI8Iqag9V8xseDc
-    short-id: eecfe76af97a6132
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: 🇬🇧 Англия | VLESS XHTTP TLS
   type: vless
   server: 144.31.213.229
@@ -2479,34 +2011,6 @@ proxies:
     path: /
     headers:
       Host: ccc.010304.xyz
-- name: '@neirolexa_bot C-1 #16 🜱 🇫🇲'
-  type: vless
-  server: 176.65.149.194
-  port: 8443
-  uuid: e0216964-ffa1-4d39-82c4-0e40879a470d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: lamibeauty.site
-  reality-opts:
-    public-key: XYkuP_Keu-yL7EQ8xZc4RTmcVAfp06Z1onV2ZNrlsHM
-    short-id: c31f187b
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #20 🪬 🇫🇲'
-  type: vless
-  server: 72.56.23.254
-  port: 41827
-  uuid: e769c1c2-f2b8-4006-bc84-0672c8368578
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.google.nl
-  reality-opts:
-    public-key: cpKcsAG-_0k5q8envXiiOoBzt53gxwVWEqg6uVKMNDk
-    short-id: fba996d8e3568d0d
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
 - name: 🇸🇬 Сингапур | VLESS RAW TLS
   type: vless
   server: 45.77.40.28
@@ -2517,20 +2021,6 @@ proxies:
   tls: true
   server-name: sg003.zestapp778.com
   client-fingerprint: firefox
-- name: '@neirolexa_bot C-1 #19 🧿 🇫🇲'
-  type: vless
-  server: 155.212.240.10
-  port: 443
-  uuid: f27b6f65-6e59-4f89-b929-afa397ca587f
-  network: ws
-  udp: true
-  tls: true
-  server-name: n.bitpulse.me
-  client-fingerprint: chrome
-  ws-opts:
-    path: /019bcbad-3813-7cce-8786-3ac0e418f128?ed=2560
-    headers:
-      Host: n.bitpulse.me
 - name: 🇭🇰 Гонконг | VLESS TCP TLS
   type: vless
   server: 195.58.144.56
@@ -2565,21 +2055,6 @@ proxies:
     path: /ws-tls
     headers:
       Host: b5.dl-netprime.com
-- name: '@neirolexa_bot C-1 #7 🚰 🇫🇲'
-  type: vless
-  server: 150.40.126.24
-  port: 443
-  uuid: 2f35965a-9a9b-45fd-ba32-987296dfb6be
-  network: grpc
-  udp: true
-  tls: true
-  server-name: rs5.univesalsrv.com
-  reality-opts:
-    public-key: X8mPYnsoTd8QCnvFZKSy7VvpSn_nrt_NWJkCUJhFCyE
-    short-id: 4872856d5489c37d
-  client-fingerprint: chrome
-  grpc-opts:
-    grpc-service-name: gw.v1.ObjectService
 - name: 🇷🇺 Россия | VLESS gRPC TLS
   type: vless
   server: 201.24.121.243
@@ -2632,30 +2107,6 @@ proxies:
     short-id: 336c2cff6e3717c4
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #1 🜂 🇫🇲'
-  type: vless
-  server: 188.130.209.222
-  port: 443
-  uuid: 5c2b47d0-38c0-4b01-b8ff-ab1c145292f0
-  network: tcp
-  udp: true
-  tls: true
-  server-name: thumbs.mycdn-io.ru
-  reality-opts:
-    public-key: 6vubZmkLVtaiFF8JyGFy7XSy2pc7ywN4P625QLKw8wc
-    short-id: 11979c0c9b2da371
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #2 🝰 🇫🇲'
-  type: vless
-  server: 87.120.126.49
-  port: 443
-  uuid: 76ef5ab3-7075-4e23-b445-f3b1bd05d431
-  network: tcp
-  udp: true
-  tls: true
-  server-name: gers.connect-qik.uk
-  client-fingerprint: firefox
 - name: '🇩🇪 Германия | VLESS WS TLS #3'
   type: vless
   server: 91.107.247.173
@@ -3081,6 +2532,19 @@ proxies:
     path: /tyxyws
     headers:
       Host: jp3.yohototo.top
+- name: 'Нейро Лёха C-1 #75 🛰️ 🇫🇲'
+  type: vless
+  server: 201.58.183.147
+  port: 443
+  uuid: 50a87e21-f0e2-4b53-a787-91adfe748f63
+  network: tcp
+  udp: true
+  tls: true
+  server-name: gemsubbgem.world
+  reality-opts:
+    public-key: 6PJlXT9xrgJP8RXfhpWDMKPh4eqGt_IZmenc_a6v0gg
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
 - name: '🇨🇦 Канада | VLESS WS TLS #4'
   type: vless
   server: 104.21.13.229
@@ -3744,6 +3208,25 @@ proxies:
     headers:
       Host: vmess.lbw666.dpdns.org
   client-fingerprint: chrome
+- name: 'Нейро Лёха C-1 #54 🪐 🇫🇲'
+  type: ss
+  server: 82.38.31.198
+  port: 8080
+  cipher: aes-256-gcm
+  password: chacha20-ietf-poly1305:k1dBOmOB4oqi7Ump37a1bQ
+  udp: true
+  network: tcp
+  uuid: ''
+- name: 'Нейро Лёха C-1 #39 💎 🇫🇲'
+  type: vless
+  server: 188.72.103.4
+  port: 443
+  uuid: 000187a2-924b-8be4-b475-485a4699c80d
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: ch-cdn.fius.dev
+  client-fingerprint: firefox
 - name: 🇩🇪 Германия | VLESS RAW
   type: vless
   server: 178.83.45.226
@@ -3751,6 +3234,62 @@ proxies:
   uuid: 1a8ecc41-6e62-431b-8eca-87c2fa4dc286
   network: tcp
   udp: true
+- name: 'Нейро Лёха C-1 #64 🪐 🇫🇲'
+  type: vless
+  server: 2.26.224.5
+  port: 1443
+  uuid: 42a64b9a-ab79-4094-8656-30366a7c2ea3
+  network: tcp
+  udp: true
+  tls: true
+  server-name: pl-balancer.peregrine-sub.net
+  reality-opts:
+    public-key: PUj1la__ltNjv_ASE5n4HJY7GiRs--N-0aYhkcAApCI
+    short-id: 7b6803a79bba5c52
+  client-fingerprint: qq
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #63 🫧 🇫🇲'
+  type: vless
+  server: 191.44.108.6
+  port: 443
+  uuid: 558b26f6-061b-4079-9b84-ca13b3e90ae3
+  network: tcp
+  udp: true
+  tls: true
+  server-name: c9.qwyak.ru
+  reality-opts:
+    public-key: A0QL_j-ReX7AotEj1w8qX9rHRgN2WycTZ43gUvuvZ00
+    short-id: 3cf8d11aa0415d29
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #14 🪬 🇫🇲'
+  type: vless
+  server: 2.26.255.215
+  port: 443
+  uuid: 69e41e64-a832-471a-b740-94577ca85520
+  network: tcp
+  udp: true
+  tls: true
+  server-name: cloudflare.com
+  reality-opts:
+    public-key: pOHbbyo_PlUwH4DjC6bKvC3jB8RPnCdu-nL8trAP8CI
+    short-id: '50'
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #18 🧭 🇫🇲'
+  type: vless
+  server: 95.133.245.250
+  port: 2027
+  uuid: 6a6ac9b3-b336-44f7-a1c4-a03d6c2fae9e
+  network: tcp
+  udp: true
+  tls: true
+  server-name: deo.skysafe.online
+  reality-opts:
+    public-key: EApxy12MeXpqt-78odxizwcXT6hX9f8XeAcbMDVRAV0
+    short-id: 6ba7b8109dad11d1
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
 - name: '🇩🇪 Германия | VLESS RAW #2'
   type: vless
   server: 178.83.45.226
@@ -3758,6 +3297,73 @@ proxies:
   uuid: 6bceb548-d9b6-461f-8e37-a5a7fbcdc2c8
   network: tcp
   udp: true
+- name: 'Нейро Лёха C-1 #71 🧿 🇫🇲'
+  type: vless
+  server: 178.17.52.236
+  port: 2083
+  uuid: 6da2c981-8c77-4340-bda3-93399b7aea26
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: maps.blog-forme.ru
+  reality-opts:
+    public-key: mbi4BZAuiq_L6pfhG2xxWmtosq0Z1Pzf18fvNSWKMxY
+    short-id: 3258252d44113e23
+  client-fingerprint: chrome
+- name: 'Нейро Лёха C-1 #66 🧭 🇫🇲'
+  type: vless
+  server: 195.63.139.79
+  port: 443
+  uuid: 6da2c981-8c77-4340-bda3-93399b7aea26
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: sports.blog-forme.ru
+  reality-opts:
+    public-key: nalACuCZjV1sZx7QOH6yAIDio8mFI0FgVKYQvQHBKS4
+    short-id: fb3a5f2d4ca346ed
+  client-fingerprint: firefox
+- name: 'Нейро Лёха C-1 #44 🌈 🇫🇲'
+  type: vless
+  server: 213.165.54.59
+  port: 8443
+  uuid: 70a43052-8d45-45c1-b9da-ec745890790a
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: www.kinopoisk.ru
+  reality-opts:
+    public-key: CI4hMTvVsem9mloOgRCW9A6WC-srPPwu3jlylwOnd3A
+    short-id: 2e6d668958829998
+  client-fingerprint: edge
+- name: 'Нейро Лёха C-1 #12 🝰 🇫🇲'
+  type: vless
+  server: 13.143.165.126
+  port: 443
+  uuid: 7ad63b26-bf70-4872-8fab-ebaf73a1e19d
+  network: tcp
+  udp: true
+  tls: true
+  server-name: update-26.topp-con.xyz
+  reality-opts:
+    public-key: EHlZh1OuiO6gQLTSV2-BVeV0Niv23vvIxQaPvcWCJUw
+    short-id: db382e1979d80ecb
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #10 🪄 🇫🇲'
+  type: vless
+  server: 147.45.164.160
+  port: 443
+  uuid: 7ad63b26-bf70-4872-8fab-ebaf73a1e19d
+  network: tcp
+  udp: true
+  tls: true
+  server-name: edge-54.topp-con.xyz
+  reality-opts:
+    public-key: LEziyH-E4k9hehGRJkVi1FadVObB_NZJy8U7oUCVWXU
+    short-id: b9120cd53ffd7bba
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: '🇩🇪 Германия | VLESS RAW #3'
   type: vless
   server: 178.83.45.226
@@ -3814,6 +3420,88 @@ proxies:
     headers:
       Host: ccc.010304.xyz
   client-fingerprint: chrome
+- name: 'Нейро Лёха C-1 #13 🧿 🇫🇲'
+  type: vless
+  server: 92.42.201.65
+  port: 4443
+  uuid: e0134f1c-8b74-4733-9c34-50cb251480c2
+  network: tcp
+  udp: true
+  tls: true
+  server-name: node-slo03.rkitman.ru
+  reality-opts:
+    public-key: CTiiN_SriTUj-eBv0047HpCWgLtAzWzq-gwvIWN9KUI
+    short-id: 7f0275a4db6068fb
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #114 🇺🇦'
+  type: vless
+  server: 87.228.92.104
+  port: 443
+  uuid: 01a8c896-1abd-425d-bf75-b0b355754cc1
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 9fd04ct.fi4.h1clayd.click
+  reality-opts:
+    public-key: JpBC1XkdycLVlXlt2oe-pMVLYlI83WEurSPA8fPkPiE
+    short-id: d9d36cd07fbe103e
+  client-fingerprint: firefox
+- name: 'Нейро Лёха C-1 #115 🇦🇲'
+  type: vless
+  server: 138.124.38.65
+  port: 443
+  uuid: 4c9f78a0-5ff8-485d-b783-e8672d566dc3
+  network: tcp
+  udp: true
+  tls: true
+  server-name: gewair.underground.company
+  reality-opts:
+    public-key: z6S5mw-BVxPv2cm2XvV05MDWGODAL_3trl_vK63HzUE
+    short-id: 146ef2a26338adad
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #111 🇷🇸'
+  type: vless
+  server: 209.50.229.58
+  port: 443
+  uuid: 4c9f78a0-5ff8-485d-b783-e8672d566dc3
+  network: tcp
+  udp: true
+  tls: true
+  server-name: u4.underground.company
+  reality-opts:
+    public-key: pS4MvwoGLQMp70jrdLK9oGoSg7yj29eZ8RglrOzJtVU
+    short-id: 618bbb7554f5c1c6
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #4 🪬 🇫🇲'
+  type: vless
+  server: 138.124.32.139
+  port: 443
+  uuid: 5254c281-3bc1-40ee-ba89-1aaf8c251402
+  network: tcp
+  udp: true
+  tls: true
+  server-name: nl-modx-prime.storagedirectguide.com
+  reality-opts:
+    public-key: node0aB_7yyVADkeieiBBpxqIlxNLQcvgotRClh0QXQ
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #3 🧿 🇫🇲'
+  type: vless
+  server: 188.130.209.222
+  port: 443
+  uuid: 5c2b47d0-38c0-4b01-b8ff-ab1c145292f0
+  network: tcp
+  udp: true
+  tls: true
+  server-name: thumbs.mycdn-io.ru
+  reality-opts:
+    public-key: 6vubZmkLVtaiFF8JyGFy7XSy2pc7ywN4P625QLKw8wc
+    short-id: 11979c0c9b2da371
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: 🇩🇪 Германия | VLESS WS
   type: vless
   server: 181.214.1.30
@@ -3825,6 +3513,20 @@ proxies:
     path: /
     headers:
       Host: vms.lifetime39.workers.dev
+- name: 'Нейро Лёха C-1 #103 🇨🇿'
+  type: vless
+  server: 178.208.80.62
+  port: 443
+  uuid: 689a62e4-37e7-41de-9e6a-f2a56368c9e2
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.google.co.uk
+  reality-opts:
+    public-key: giiwQrxIa46OC_KvKgK61k4e_E0DoffuYSBEzik_bmc
+    short-id: a38c67
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: '🇩🇪 Cluster Germany #77'
   type: vless
   server: 78.17.178.125
@@ -3839,6 +3541,48 @@ proxies:
     short-id: e0215064d8d1fd7c
   client-fingerprint: qq
   flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #108 🇧🇬'
+  type: vless
+  server: 201.34.158.224
+  port: 443
+  uuid: 7ad63b26-bf70-4872-8fab-ebaf73a1e19d
+  network: tcp
+  udp: true
+  tls: true
+  server-name: cdn-92.topp-con.xyz
+  reality-opts:
+    public-key: 3QAi5iLidk8pDh988LPCWkX0dj41f4ajbrCQNQtw_XQ
+    short-id: 87c393d5776f8d5c
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #102 🇨🇿'
+  type: vless
+  server: 201.51.4.89
+  port: 443
+  uuid: 7ad63b26-bf70-4872-8fab-ebaf73a1e19d
+  network: tcp
+  udp: true
+  tls: true
+  server-name: cache-89.topp-con.xyz
+  reality-opts:
+    public-key: LEziyH-E4k9hehGRJkVi1FadVObB_NZJy8U7oUCVWXU
+    short-id: b9120cd53ffd7bba
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #1 🜂 🇫🇲'
+  type: vless
+  server: 13.143.176.83
+  port: 443
+  uuid: 7b22dce8-7ebd-425b-8ca4-7b6190321985
+  network: tcp
+  udp: true
+  tls: true
+  server-name: a.es-1.bnc-gt-r1.co.uk
+  reality-opts:
+    public-key: CegqLjzOImUmYD9ZdpOOG65UgNTGeQfRmpIni8iraB0
+    short-id: 7be1e9c243451b14
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: 🇹🇷 Турция | VLESS gRPC
   type: vless
   server: 178.83.111.107
@@ -3848,6 +3592,16 @@ proxies:
   udp: true
   grpc-opts:
     grpc-service-name: vless
+- name: 'Нейро Лёха C-1 #116 🇦🇲'
+  type: vless
+  server: 188.72.103.4
+  port: 443
+  uuid: 9737cc16-7266-45ce-94d9-6e05a45e0b9c
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: swit.nnight.sbs
+  client-fingerprint: firefox
 - name: 🇫🇷 Франция | VLESS RAW
   type: vless
   server: 155.117.5.208
@@ -3855,6 +3609,21 @@ proxies:
   uuid: a05ecf37-c661-4247-ab09-4432cf0f3cc1
   network: tcp
   udp: true
+- name: 'Нейро Лёха C-1 #5 🫧 🇫🇲'
+  type: vless
+  server: 84.38.184.126
+  port: 2089
+  uuid: a628c583-24a8-4ce5-98ad-c6458abf1cc4
+  network: grpc
+  udp: true
+  tls: true
+  server-name: s3.storage.selcloud.ru
+  reality-opts:
+    public-key: 4Ba7EKm90gUC57U-0WtkSVXgmeLzR9TG5Qw3dqgjbDQ
+    short-id: c1db0a1b
+  client-fingerprint: chrome
+  grpc-opts:
+    grpc-service-name: cas-fi
 - name: 🇻🇳 Вьетнам | VLESS TCP
   type: vless
   server: 150.95.109.109
@@ -3862,6 +3631,19 @@ proxies:
   uuid: b83faafc-cbb7-4655-99d4-2c4c39a49d1b
   network: tcp
   udp: true
+- name: 'Нейро Лёха C-1 #110 🇧🇷'
+  type: vless
+  server: 31.76.55.162
+  port: 443
+  uuid: c29fa587-b10d-445d-b7e3-eaa6d1bd1330
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: est1.dnsfire.fun
+  reality-opts:
+    public-key: nNoxOT_HzUZkKbHiK34iSfF89wlXAXBdlkquGVqGUDk
+    short-id: f4e0550a
+  client-fingerprint: firefox
 - name: '🇷🇺 Cluster Russia #11'
   type: vless
   server: 193.233.220.203
@@ -3875,6 +3657,20 @@ proxies:
     public-key: KZejN2d1cwCrITHNxFYQVZ4rpMTZzHgJd9p30MZm_3k
     short-id: 6bd33a75ebc0f26e
   client-fingerprint: firefox
+- name: 'Нейро Лёха C-1 #85 🇫🇷'
+  type: vless
+  server: 163.245.52.140
+  port: 443
+  uuid: 265db9a9-1a90-4d41-9375-02a9fbc41def
+  network: tcp
+  udp: true
+  tls: true
+  server-name: majuas.rivohost.cc
+  reality-opts:
+    public-key: R5Q-oKGFqq8tZlp5oJ5Qv48qDq2rlkPXUaIqW1hDsH0
+    short-id: 66826a572267d996
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: '🇷🇺 Cluster Russia #12'
   type: vless
   server: 139.100.226.187
@@ -3889,6 +3685,20 @@ proxies:
     path: /fdip=sstp://vpn:vpn@public-vpn-200.opengw.net:443
     headers:
       Host: snip.edgeoneai.cc.cd
+- name: 'Нейро Лёха C-1 #95 🇦🇺'
+  type: vless
+  server: 31.77.57.204
+  port: 443
+  uuid: 4c9f78a0-5ff8-485d-b783-e8672d566dc3
+  network: tcp
+  udp: true
+  tls: true
+  server-name: adminde2.underground.company
+  reality-opts:
+    public-key: NNR12b373pwW9EiP_rdSlY5969AOEuFsnCAeiRoINgo
+    short-id: 6a612e74d2304b0f
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: 🇺🇸 США | VLESS WS TLS
   type: vless
   server: 165.215.250.1
@@ -3901,6 +3711,19 @@ proxies:
   client-fingerprint: chrome
   ws-opts:
     path: /stream/PANEL_ZEUS/974cf37772bb/loc-1
+- name: 'Нейро Лёха C-1 #80 🇯🇵'
+  type: vless
+  server: 82.152.132.223
+  port: 443
+  uuid: 6a6ac9b3-b336-44f7-a1c4-a03d6c2fae9e
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: rom.skysafe.online
+  reality-opts:
+    public-key: EApxy12MeXpqt-78odxizwcXT6hX9f8XeAcbMDVRAV0
+    short-id: 6ba7b8109dad11d1
+  client-fingerprint: qq
 - name: 🇫🇷 Франция | VLESS WS
   type: vless
   server: 138.124.70.41
@@ -3912,6 +3735,34 @@ proxies:
     path: /vless
     headers:
       Host: 138.124.70.41
+- name: 'Нейро Лёха C-1 #84 🇸🇬'
+  type: vless
+  server: 130.49.177.193
+  port: 443
+  uuid: 727a9178-d7f0-4142-8205-b0d19959ded0
+  network: tcp
+  udp: true
+  tls: true
+  server-name: de-2.ffpn.pro
+  reality-opts:
+    public-key: DCpi9-1rSXxBnEIAQ9U3mTqHivk7vHJRV_T2pWw5vCc
+    short-id: 681fc2dd643bc2f3
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 'Нейро Лёха C-1 #88 🇺🇸'
+  type: vless
+  server: 85.239.146.95
+  port: 444
+  uuid: 79247bff-828f-41f7-b733-968eeb0742aa
+  network: tcp
+  udp: true
+  tls: true
+  server-name: de1.vrsvpn.com
+  reality-opts:
+    public-key: tEHL8oz8kXsEPy224pqQ0go5CkbDYRrDMG8DMfMrPSs
+    short-id: 45ba24f917ad1f12
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: '🇷🇺 Cluster Russia #19'
   type: vless
   server: 72.56.241.75
@@ -3926,6 +3777,16 @@ proxies:
   client-fingerprint: random
   grpc-opts:
     grpc-service-name: grpc
+- name: 'Нейро Лёха C-1 #86 🇫🇷'
+  type: vless
+  server: 188.72.103.4
+  port: 443
+  uuid: 9737cc16-7266-45ce-94d9-6e05a45e0b9c
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: ru.nnight.cfd
+  client-fingerprint: firefox
 - name: '🇷🇺 Cluster Russia #16'
   type: vless
   server: 178.236.251.175
@@ -4117,6 +3978,19 @@ proxies:
     path: /
     headers:
       Host: copy_az_channel_NUFiLTER_8i.global.ssl.fastly.net.
+- name: 'Нейро Лёха C-1 #78 🇹🇷'
+  type: vless
+  server: 83.171.241.199
+  port: 443
+  uuid: fafc7c16-f890-45ee-a856-02df225172dd
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: bb9052x.es4.h1clayd.click
+  reality-opts:
+    public-key: bJ6tjO4Jcc6ZduEgRSNHYqVml_OIEiBx-3el8jSRqwg
+    short-id: 79c4ab4dcd5ed080
+  client-fingerprint: firefox
 - name: 🇺🇸 США | VMESS WS TLS
   type: vmess
   server: 47.88.79.34
@@ -4132,7 +4006,7 @@ proxies:
     headers:
       Host: rib9jxayoqjgn2kw.v.3dns.vip
   client-fingerprint: chrome
-- name: '🇭🇰 Гонконг | VMESS WS #2'
+- name: 🇭🇰 Гонконг | VMESS WS
   type: vmess
   server: 47.244.120.197
   port: 44867
@@ -5006,6 +4880,20 @@ proxies:
     short-id: ae97223a8f799002
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: '🇵🇱 AetrisVPN #2'
+  type: vless
+  server: 31.59.143.147
+  port: 443
+  uuid: 1fe01c8a-ab37-4e95-bbfc-95d4a608931e
+  network: tcp
+  udp: true
+  tls: true
+  server-name: pl2.waspnest.space
+  reality-opts:
+    public-key: Liu35gmIQJtbul5AeCrceJTjsmln4RaqxX6joKlaBjk
+    short-id: ae97223a8f799889
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: 🇹🇷 AetrisVPN
   type: vless
   server: 206.1.97.108
@@ -5198,20 +5086,6 @@ proxies:
     short-id: c3d4e5f607182939
   client-fingerprint: qq
   flow: xtls-rprx-vision
-- name: 🇫🇮 AetrisVPN
-  type: vless
-  server: 178.72.185.235
-  port: 40446
-  uuid: 572b3d30-3ced-4b88-9e06-4241f124cc88
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.booking.com
-  reality-opts:
-    public-key: EbXSjwJKAI1cmU2TK3af62qS2k58x8Rnct1525c0m1I
-    short-id: d4e5f60718293a4b
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
 - name: '🇳🇱 AetrisVPN #21'
   type: vless
   server: 217.60.144.91
@@ -5226,7 +5100,7 @@ proxies:
     short-id: c1ee14fa93b83bae
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇫🇮 AetrisVPN #2'
+- name: 🇫🇮 AetrisVPN
   type: vless
   server: 176.125.254.250
   port: 443
@@ -5240,7 +5114,7 @@ proxies:
     short-id: debb6422ca8513ac
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇫🇮 AetrisVPN #3'
+- name: '🇫🇮 AetrisVPN #2'
   type: vless
   server: 176.125.254.93
   port: 443
@@ -5252,6 +5126,20 @@ proxies:
   reality-opts:
     public-key: o95dV-zuwG0jJdcMdL6z5V0ynuqMiC3kouSyOtbVEzM
     short-id: debb6422ca8513ac
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🇳🇱 AetrisVPN #22'
+  type: vless
+  server: 94.228.161.123
+  port: 443
+  uuid: 5f53b921-2874-482a-b530-d3ee1d66cbc5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: nl2.originmesh.online
+  reality-opts:
+    public-key: _MRd1VDQBecIufT-CXd5O73L8JBjBI8Iqag9V8xseDc
+    short-id: eecfe76af97a6132
   client-fingerprint: firefox
   flow: xtls-rprx-vision
 - name: 🇺🇦 AetrisVPN
@@ -5268,7 +5156,7 @@ proxies:
     short-id: 6c050e745decc363
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇳🇱 AetrisVPN #22'
+- name: '🇳🇱 AetrisVPN #23'
   type: vless
   server: 86.38.112.69
   port: 443
@@ -5280,33 +5168,6 @@ proxies:
   reality-opts:
     public-key: I_-Mb_q3_4-ZdzrzB6SKh-Zla1kKI4M_0OMjWDYXVxg
     short-id: 13d8fbd7fd9e1ce8
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🇷🇺 AetrisVPN #3'
-  type: vless
-  server: 45.12.75.242
-  port: 26424
-  uuid: 633f424e-2b11-48da-a6b3-a849dd71456f
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ya.ru
-  reality-opts:
-    public-key: l8AubqcxQO-HRFJy4pZL1vbLOo-eXit69s-XulSELE0
-    short-id: 23103e1e
-  client-fingerprint: qq
-- name: 🇨🇿 AetrisVPN
-  type: vless
-  server: 178.208.80.62
-  port: 443
-  uuid: 689a62e4-37e7-41de-9e6a-f2a56368c9e2
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.google.co.uk
-  reality-opts:
-    public-key: giiwQrxIa46OC_KvKgK61k4e_E0DoffuYSBEzik_bmc
-    short-id: a38c67
   client-fingerprint: firefox
   flow: xtls-rprx-vision
 - name: '🇬🇧 AetrisVPN #4'
@@ -5322,7 +5183,7 @@ proxies:
     public-key: ud15DX-emDBS7QsLMabJ7CjgIteK61jxwSp1v0Fewxc
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇷🇺 AetrisVPN #4'
+- name: '🇷🇺 AetrisVPN #3'
   type: vless
   server: 89.208.210.53
   port: 38963
@@ -5334,35 +5195,7 @@ proxies:
   reality-opts:
     public-key: ud15DX-emDBS7QsLMabJ7CjgIteK61jxwSp1v0Fewxc
   client-fingerprint: qq
-- name: '🇪🇸 AetrisVPN #3'
-  type: vless
-  server: 185.232.205.13
-  port: 2027
-  uuid: 6a6ac9b3-b336-44f7-a1c4-a03d6c2fae9e
-  network: grpc
-  udp: true
-  tls: true
-  server-name: isp2.skysafe.online
-  reality-opts:
-    public-key: EApxy12MeXpqt-78odxizwcXT6hX9f8XeAcbMDVRAV0
-    short-id: 6ba7b8109dad11d1
-  client-fingerprint: qq
-  grpc-opts:
-    grpc-service-name: grpc-svc
-- name: '🇺🇸 AetrisVPN #11'
-  type: vless
-  server: 192.177.26.161
-  port: 2027
-  uuid: 6a6ac9b3-b336-44f7-a1c4-a03d6c2fae9e
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: uusa.skysafe.online
-  reality-opts:
-    public-key: EApxy12MeXpqt-78odxizwcXT6hX9f8XeAcbMDVRAV0
-    short-id: 6ba7b8109dad11d1
-  client-fingerprint: qq
-- name: '🇫🇮 AetrisVPN #4'
+- name: '🇫🇮 AetrisVPN #3'
   type: vless
   server: 2.27.26.129
   port: 2027
@@ -5371,32 +5204,6 @@ proxies:
   udp: true
   tls: true
   server-name: aq.skysafe.online
-  reality-opts:
-    public-key: EApxy12MeXpqt-78odxizwcXT6hX9f8XeAcbMDVRAV0
-    short-id: 6ba7b8109dad11d1
-  client-fingerprint: qq
-- name: 🇷🇴 AetrisVPN
-  type: vless
-  server: 82.152.132.223
-  port: 443
-  uuid: 6a6ac9b3-b336-44f7-a1c4-a03d6c2fae9e
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: rom.skysafe.online
-  reality-opts:
-    public-key: EApxy12MeXpqt-78odxizwcXT6hX9f8XeAcbMDVRAV0
-    short-id: 6ba7b8109dad11d1
-  client-fingerprint: firefox
-- name: '🇩🇪 AetrisVPN #9'
-  type: vless
-  server: 94.249.195.177
-  port: 2027
-  uuid: 6a6ac9b3-b336-44f7-a1c4-a03d6c2fae9e
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: nlka.skysafe.online
   reality-opts:
     public-key: EApxy12MeXpqt-78odxizwcXT6hX9f8XeAcbMDVRAV0
     short-id: 6ba7b8109dad11d1
@@ -5414,7 +5221,7 @@ proxies:
     public-key: 3LbVuwKpQv55GngyRhvGl9KyAHIDAgvJx_VRM5mUD2Q
     short-id: 6bdc8320
   client-fingerprint: firefox
-- name: '🇷🇺 AetrisVPN #5'
+- name: '🇷🇺 AetrisVPN #4'
   type: vless
   server: 132.243.230.251
   port: 443
@@ -5427,32 +5234,6 @@ proxies:
     public-key: Uz1UbBDf84n7oNfFIhFvXbuFcj1nbNEroiKC_Ud4ajg
     short-id: b2f9bb426426e0e7
   client-fingerprint: qq
-- name: '🇩🇪 AetrisVPN #10'
-  type: vless
-  server: 178.17.52.236
-  port: 2083
-  uuid: 6da2c981-8c77-4340-bda3-93399b7aea26
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: maps.blog-forme.ru
-  reality-opts:
-    public-key: mbi4BZAuiq_L6pfhG2xxWmtosq0Z1Pzf18fvNSWKMxY
-    short-id: 3258252d44113e23
-  client-fingerprint: edge
-- name: '🇳🇱 AetrisVPN #23'
-  type: vless
-  server: 195.63.139.79
-  port: 443
-  uuid: 6da2c981-8c77-4340-bda3-93399b7aea26
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: sports.blog-forme.ru
-  reality-opts:
-    public-key: nalACuCZjV1sZx7QOH6yAIDio8mFI0FgVKYQvQHBKS4
-    short-id: fb3a5f2d4ca346ed
-  client-fingerprint: firefox
 - name: '🇳🇱 AetrisVPN #24'
   type: vless
   server: 195.63.139.79
@@ -5507,7 +5288,7 @@ proxies:
     short-id: 11a2fc
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇵🇱 AetrisVPN #2'
+- name: '🇵🇱 AetrisVPN #3'
   type: vless
   server: 177.1.192.117
   port: 443
@@ -5521,7 +5302,7 @@ proxies:
     short-id: 3952a220c86628a8
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇵🇱 AetrisVPN #3'
+- name: '🇵🇱 AetrisVPN #4'
   type: vless
   server: 177.1.192.90
   port: 443
@@ -5549,48 +5330,7 @@ proxies:
     short-id: 335efec4069ae9a2
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇵🇱 AetrisVPN #4'
-  type: vless
-  server: 188.225.42.52
-  port: 443
-  uuid: 706bce83-91db-4260-b175-cba29145cd56
-  network: tcp
-  udp: true
-  tls: true
-  server-name: spb1.uni-plan.com
-  reality-opts:
-    public-key: _AJrIKDPHT1h1TT4vGouVI_-GKYby138cWf29erKmX0
-    short-id: 20a048ac5dcb34bd
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 🇮🇶 AetrisVPN
-  type: vless
-  server: 213.165.54.59
-  port: 8443
-  uuid: 70a43052-8d45-45c1-b9da-ec745890790a
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: www.kinopoisk.ru
-  reality-opts:
-    public-key: CI4hMTvVsem9mloOgRCW9A6WC-srPPwu3jlylwOnd3A
-    short-id: 2e6d668958829998
-  client-fingerprint: edge
-- name: '🇩🇪 AetrisVPN #11'
-  type: vless
-  server: 13.143.165.126
-  port: 443
-  uuid: 7ad63b26-bf70-4872-8fab-ebaf73a1e19d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: update-26.topp-con.xyz
-  reality-opts:
-    public-key: EHlZh1OuiO6gQLTSV2-BVeV0Niv23vvIxQaPvcWCJUw
-    short-id: db382e1979d80ecb
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🇷🇺 AetrisVPN #6'
+- name: '🇷🇺 AetrisVPN #5'
   type: vless
   server: 147.45.153.29
   port: 443
@@ -5618,20 +5358,6 @@ proxies:
     short-id: 75fe71d16ccae610
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇷🇺 AetrisVPN #7'
-  type: vless
-  server: 201.34.158.224
-  port: 443
-  uuid: 7ad63b26-bf70-4872-8fab-ebaf73a1e19d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: cdn-92.topp-con.xyz
-  reality-opts:
-    public-key: 3QAi5iLidk8pDh988LPCWkX0dj41f4ajbrCQNQtw_XQ
-    short-id: 87c393d5776f8d5c
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: '🇦🇹 AetrisVPN #2'
   type: vless
   server: 217.198.6.206
@@ -5646,7 +5372,7 @@ proxies:
     short-id: b9120cd53ffd7bba
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇷🇺 AetrisVPN #8'
+- name: '🇷🇺 AetrisVPN #6'
   type: vless
   server: 5.129.202.74
   port: 443
@@ -5674,21 +5400,7 @@ proxies:
     short-id: 2ef2b10d5143d798
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇷🇺 AetrisVPN #9'
-  type: vless
-  server: 5.129.222.175
-  port: 443
-  uuid: 7ad63b26-bf70-4872-8fab-ebaf73a1e19d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: sig-45.topp-con.xyz
-  reality-opts:
-    public-key: LEziyH-E4k9hehGRJkVi1FadVObB_NZJy8U7oUCVWXU
-    short-id: b9120cd53ffd7bba
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🇺🇸 AetrisVPN #12'
+- name: '🇺🇸 AetrisVPN #11'
   type: vless
   server: 13.143.176.83
   port: 443
@@ -5712,7 +5424,7 @@ proxies:
   client-fingerprint: qq
   grpc-opts:
     grpc-service-name: grpc
-- name: '🇫🇮 AetrisVPN #5'
+- name: '🇫🇮 AetrisVPN #4'
   type: vless
   server: 45.144.52.187
   port: 443
@@ -5724,7 +5436,7 @@ proxies:
   client-fingerprint: qq
   grpc-opts:
     grpc-service-name: grpc
-- name: '🇺🇸 AetrisVPN #13'
+- name: '🇺🇸 AetrisVPN #12'
   type: vless
   server: 91.196.33.157
   port: 443
@@ -5736,7 +5448,7 @@ proxies:
   client-fingerprint: qq
   grpc-opts:
     grpc-service-name: grpc
-- name: '🇩🇪 AetrisVPN #12'
+- name: '🇩🇪 AetrisVPN #9'
   type: vless
   server: 94.249.148.20
   port: 443
@@ -5786,7 +5498,7 @@ proxies:
     short-id: 48050fab
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '🇺🇸 AetrisVPN #14'
+- name: '🇺🇸 AetrisVPN #13'
   type: vless
   server: 179.255.185.193
   port: 443
@@ -5800,7 +5512,7 @@ proxies:
     short-id: 7c63b57a1245ef44
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇷🇺 AetrisVPN #10'
+- name: '🇷🇺 AetrisVPN #7'
   type: vless
   server: 45.152.113.206
   port: 443
@@ -5814,22 +5526,7 @@ proxies:
     short-id: 65557338e1cd5605
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇬🇧 AetrisVPN #5'
-  type: vless
-  server: 82.202.183.9
-  port: 443
-  uuid: 8822fe1c-7a83-49c0-af96-c2027cb6ddd5
-  network: grpc
-  udp: true
-  tls: true
-  server-name: h4.smart-life.agency
-  reality-opts:
-    public-key: 1A9loATtqTbKfErpj24clMebWdbmBRDgUIADwtlvtAw
-    short-id: 70c20a2f5a7d542e
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: google.storage.v2.Storage
-- name: '🇩🇪 AetrisVPN #13'
+- name: '🇩🇪 AetrisVPN #10'
   type: vless
   server: 95.163.214.43
   port: 443
@@ -5842,7 +5539,7 @@ proxies:
     public-key: VdG4ntV15FfNWV4rvSny2mvOTSXfOUVKHNC0dOyXY2s
     short-id: 864fbb122f15b43d
   client-fingerprint: edge
-- name: '🇺🇸 AetrisVPN #15'
+- name: '🇺🇸 AetrisVPN #14'
   type: vless
   server: 5.34.178.120
   port: 443
@@ -5855,20 +5552,6 @@ proxies:
     public-key: EVhq2BxKuw2Cody1DmF_HPvUYKwzdXbHP47blUv-eRM
     short-id: 55ab5559e3a6d10a
   client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '🇫🇮 AetrisVPN #6'
-  type: vless
-  server: 138.124.9.165
-  port: 443
-  uuid: 91bf374b-9a91-48dc-a5de-80379af45f95
-  network: tcp
-  udp: true
-  tls: true
-  server-name: cdn7-02.cdn-vkvideo.com
-  reality-opts:
-    public-key: MpuwI3YH2g3YWHKLuQwwgD_qLo-UmUtZe8L1KXOKxhA
-    short-id: b0d8f964b7ac8ac0
-  client-fingerprint: edge
   flow: xtls-rprx-vision
 - name: '🇳🇱 AetrisVPN #29'
   type: vless
@@ -5911,7 +5594,7 @@ proxies:
     short-id: b0d8f964b7ac8ac0
   client-fingerprint: edge
   flow: xtls-rprx-vision
-- name: '🇷🇺 AetrisVPN #11'
+- name: '🇷🇺 AetrisVPN #8'
   type: vless
   server: 46.182.24.147
   port: 443
@@ -5924,7 +5607,7 @@ proxies:
     public-key: oWfus0zGe8_g7JIh5dIVsEyT_smnPtUqpnlIsHLas2w
     short-id: aaaa
   client-fingerprint: firefox
-- name: '🇫🇮 AetrisVPN #7'
+- name: '🇫🇮 AetrisVPN #5'
   type: vless
   server: 196.196.204.180
   port: 443
@@ -5939,7 +5622,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: 0adb9638509b
-- name: '🇫🇮 AetrisVPN #8'
+- name: '🇫🇮 AetrisVPN #6'
   type: vless
   server: 196.196.204.182
   port: 443
@@ -5954,7 +5637,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: 0adb9638509b
-- name: '🇪🇸 AetrisVPN #4'
+- name: '🇪🇸 AetrisVPN #3'
   type: vless
   server: 45.147.251.111
   port: 443
@@ -5968,7 +5651,7 @@ proxies:
     short-id: e0ccc8c2f487d913
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇩🇪 AetrisVPN #14'
+- name: '🇩🇪 AetrisVPN #11'
   type: vless
   server: 5.187.4.75
   port: 8443
@@ -6010,7 +5693,7 @@ proxies:
     short-id: 8854f17e2a5af2d8
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇺🇸 AetrisVPN #16'
+- name: '🇺🇸 AetrisVPN #15'
   type: vless
   server: 172.238.221.223
   port: 8443
@@ -6024,7 +5707,7 @@ proxies:
     short-id: d284b7e1d9b687fb
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇨🇿 AetrisVPN #2'
+- name: 🇨🇿 AetrisVPN
   type: vless
   server: 31.77.13.22
   port: 2063
@@ -6066,7 +5749,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: neurex
-- name: '🇩🇪 AetrisVPN #15'
+- name: '🇩🇪 AetrisVPN #12'
   type: vless
   server: 217.60.183.205
   port: 443
@@ -6094,7 +5777,7 @@ proxies:
     short-id: 2bae9991a388f1e0
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇺🇸 AetrisVPN #17'
+- name: '🇺🇸 AetrisVPN #16'
   type: vless
   server: 46.209.54.212
   port: 2083
@@ -6175,7 +5858,7 @@ proxies:
     path: /
     headers:
       Host: ccc.010304.xyz
-- name: '🇺🇸 AetrisVPN #18'
+- name: '🇺🇸 AetrisVPN #17'
   type: vless
   server: 45.144.112.55
   port: 443
@@ -6189,7 +5872,7 @@ proxies:
     short-id: c39cc7310a
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇩🇪 AetrisVPN #16'
+- name: '🇩🇪 AetrisVPN #13'
   type: vless
   server: 140.225.209.150
   port: 2083
@@ -6201,7 +5884,21 @@ proxies:
   client-fingerprint: firefox
   ws-opts:
     path: /vless-ws
-- name: '🇫🇮 AetrisVPN #9'
+- name: '🇳🇱 AetrisVPN #33'
+  type: vless
+  server: 72.56.23.254
+  port: 41827
+  uuid: e769c1c2-f2b8-4006-bc84-0672c8368578
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.google.nl
+  reality-opts:
+    public-key: cpKcsAG-_0k5q8envXiiOoBzt53gxwVWEqg6uVKMNDk
+    short-id: fba996d8e3568d0d
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: '🇫🇮 AetrisVPN #7'
   type: vless
   server: 185.186.143.147
   port: 443
@@ -6227,7 +5924,7 @@ proxies:
     public-key: dlhoLMdfvgjSVzSuT0PPhomRdNcy8_qtnky0kKflqGI
     short-id: a1b2c3d4
   client-fingerprint: firefox
-- name: '🇳🇱 AetrisVPN #33'
+- name: '🇳🇱 AetrisVPN #34'
   type: vless
   server: 31.76.252.142
   port: 443
@@ -6240,7 +5937,7 @@ proxies:
     public-key: tbKg89n1kirBQbHyexrBIH21iHS0JigQnPqits499R4
     short-id: f7c8ee5aa55993a0
   client-fingerprint: firefox
-- name: '🇷🇺 AetrisVPN #12'
+- name: '🇷🇺 AetrisVPN #9'
   type: vless
   server: 45.84.1.42
   port: 25565
@@ -6254,7 +5951,7 @@ proxies:
     short-id: 43dcff53849b81e6
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇩🇪 AetrisVPN #17'
+- name: '🇩🇪 AetrisVPN #14'
   type: vless
   server: 179.255.186.102
   port: 443
@@ -6281,7 +5978,7 @@ proxies:
     short-id: 6717a9ae
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇩🇪 AetrisVPN #18'
+- name: '🇩🇪 AetrisVPN #15'
   type: vless
   server: 144.31.140.125
   port: 8443
@@ -6295,7 +5992,7 @@ proxies:
     short-id: 168c15efac9df5fd
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇷🇺 AetrisVPN #13'
+- name: '🇷🇺 AetrisVPN #10'
   type: vless
   server: 194.87.143.165
   port: 8443
@@ -6307,20 +6004,7 @@ proxies:
   client-fingerprint: chrome
   ws-opts:
     path: /
-- name: '🇷🇺 AetrisVPN #14'
-  type: vless
-  server: 83.171.241.199
-  port: 443
-  uuid: fafc7c16-f890-45ee-a856-02df225172dd
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: bb9052x.es4.h1clayd.click
-  reality-opts:
-    public-key: bJ6tjO4Jcc6ZduEgRSNHYqVml_OIEiBx-3el8jSRqwg
-    short-id: 79c4ab4dcd5ed080
-  client-fingerprint: firefox
-- name: '🇺🇸 AetrisVPN #19'
+- name: '🇺🇸 AetrisVPN #18'
   type: vless
   server: 8.35.211.242
   port: 443
@@ -6396,6 +6080,15 @@ proxies:
 - name: SS-82.38.31.193
   type: ss
   server: 82.38.31.193
+  port: 8080
+  cipher: aes-256-gcm
+  password: chacha20-ietf-poly1305:k1dBOmOB4oqi7Ump37a1bQ
+  udp: true
+  network: tcp
+  uuid: ''
+- name: SS-82.38.31.203
+  type: ss
+  server: 82.38.31.203
   port: 8080
   cipher: aes-256-gcm
   password: chacha20-ietf-poly1305:k1dBOmOB4oqi7Ump37a1bQ
@@ -6507,6 +6200,15 @@ proxies:
   port: 80
   cipher: aes-256-gcm
   password: aes-256-gcm:3eOFeNssde7PYYMv
+  udp: true
+  network: tcp
+  uuid: ''
+- name: SS-139.84.166.47
+  type: ss
+  server: 139.84.166.47
+  port: 8388
+  cipher: aes-256-gcm
+  password: aes-256-gcm:GEdoeeqLZtkJRgSa
   udp: true
   network: tcp
   uuid: ''
@@ -6805,6 +6507,19 @@ proxies:
     public-key: vZ22ThhkpXUd5-tY-v5TTrouLHjgYYmeQgqeLt7HRz0
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: VLESS-185.229.207.104
+  type: vless
+  server: 185.229.207.104
+  port: 443
+  uuid: 202ab4e9-d944-49af-8dae-72541f227734
+  network: tcp
+  udp: true
+  tls: true
+  server-name: m4.mincreaft.com
+  reality-opts:
+    public-key: a2shpTGkqr-nkclTg-GlDIk2WG2aEOHtDsiG3m68xlg
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: VLESS-185.254.98.39
   type: vless
   server: 185.254.98.39
@@ -6912,6 +6627,19 @@ proxies:
   reality-opts:
     public-key: zWjUMD-iInBWwLrHKhu2O3eogAKGm6NVY0ueUTkeHGc
     short-id: 1047b5ccf227653c
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: VLESS-45.145.40.112
+  type: vless
+  server: 45.145.40.112
+  port: 443
+  uuid: 202ab4e9-d944-49af-8dae-72541f227734
+  network: tcp
+  udp: true
+  tls: true
+  server-name: m1.mincreaft.com
+  reality-opts:
+    public-key: 3PgtDLnBNACvK6rlJp-DxJNte_BxQejuc4ueN2t-IDA
   client-fingerprint: firefox
   flow: xtls-rprx-vision
 - name: VLESS-45.145.42.45
@@ -7033,20 +6761,6 @@ proxies:
   reality-opts:
     public-key: HRTDbh1GG7HDFV_VD3j2d_Nwue2h69sos56jvn5tTxo
     short-id: 4e08e2d6115f4a3f
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: VLESS-95.85.241.106
-  type: vless
-  server: 95.85.241.106
-  port: 443
-  uuid: 202ab4e9-d944-49af-8dae-72541f227734
-  network: tcp
-  udp: true
-  tls: true
-  server-name: se-1c.maxleshax.icu
-  reality-opts:
-    public-key: HanKvj2z_AI63e7zY4FqtRiSpnZO0HGCn5IDMHFusng
-    short-id: 62eb5d61f3277ce7
   client-fingerprint: firefox
   flow: xtls-rprx-vision
 - name: VLESS-72.56.242.232
@@ -7183,19 +6897,6 @@ proxies:
   reality-opts:
     public-key: DZ0BYEIHEe9KmJzM_j5EAN0t3_BTcfO63P7x6SRCeQM
   client-fingerprint: firefox
-- name: VLESS-201.58.183.147
-  type: vless
-  server: 201.58.183.147
-  port: 443
-  uuid: 50a87e21-f0e2-4b53-a787-91adfe748f63
-  network: tcp
-  udp: true
-  tls: true
-  server-name: gemsubbgem.world
-  reality-opts:
-    public-key: 6PJlXT9xrgJP8RXfhpWDMKPh4eqGt_IZmenc_a6v0gg
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: VLESS-72.56.41.232
   type: vless
   server: 72.56.41.232
@@ -7309,6 +7010,19 @@ proxies:
   udp: true
   tls: true
   server-name: luckyping.mcufa.pro
+  reality-opts:
+    public-key: -P8DgKISSG4jnLuj6ihZDqZs1_zt-juBrhVhTylHiAo
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: VLESS-188.225.56.39
+  type: vless
+  server: 188.225.56.39
+  port: 444
+  uuid: 53a68b18-ce91-47d5-be3c-afaa22628580
+  network: tcp
+  udp: true
+  tls: true
+  server-name: statics.mcufa.pro
   reality-opts:
     public-key: -P8DgKISSG4jnLuj6ihZDqZs1_zt-juBrhVhTylHiAo
   client-fingerprint: firefox
@@ -7733,6 +7447,16 @@ proxies:
   tls: true
   server-name: 7d1a74fd.ferrin.uk
   client-fingerprint: firefox
+- name: VLESS-84.32.108.4
+  type: vless
+  server: 84.32.108.4
+  port: 443
+  uuid: 7d1a74fd-8a38-4a29-863f-5da53a9e557e
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 7d1a74fd.ferrin.uk
+  client-fingerprint: firefox
 - name: VLESS-89.41.181.164
   type: vless
   server: 89.41.181.164
@@ -7836,6 +7560,16 @@ proxies:
     short-id: 323da253
   client-fingerprint: chrome
   flow: xtls-rprx-vision
+- name: VLESS-78.159.246.85
+  type: vless
+  server: 78.159.246.85
+  port: 2053
+  uuid: 95a608b6-bff1-4e10-bb61-0a39f221bb7d
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: fitindoor.net
+  client-fingerprint: firefox
 - name: VLESS-185.86.145.142
   type: vless
   server: 185.86.145.142
@@ -7846,6 +7580,26 @@ proxies:
   tls: true
   server-name: apis.heoleti.pro
   client-fingerprint: chrome
+- name: VLESS-144.31.242.142
+  type: vless
+  server: 144.31.242.142
+  port: 443
+  uuid: abca037b-bee5-41cc-a888-0668e4c66176
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 883f1393.con.rasterparcel.tech
+  client-fingerprint: firefox
+- name: VLESS-2.27.210.119
+  type: vless
+  server: 2.27.210.119
+  port: 443
+  uuid: abca037b-bee5-41cc-a888-0668e4c66176
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 4f070970.con.metricdraft.tech
+  client-fingerprint: edge
 - name: VLESS-2.27.210.127
   type: vless
   server: 2.27.210.127
@@ -7936,6 +7690,20 @@ proxies:
   tls: true
   server-name: de-1e51a8f925.shamanapp.online
   client-fingerprint: firefox
+- name: VLESS-176.65.149.194
+  type: vless
+  server: 176.65.149.194
+  port: 8443
+  uuid: e0216964-ffa1-4d39-82c4-0e40879a470d
+  network: tcp
+  udp: true
+  tls: true
+  server-name: lamibeauty.site
+  reality-opts:
+    public-key: XYkuP_Keu-yL7EQ8xZc4RTmcVAfp06Z1onV2ZNrlsHM
+    short-id: c31f187b
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: VLESS-194.87.239.82
   type: vless
   server: 194.87.239.82
@@ -8436,35 +8204,15 @@ proxy-groups:
   - '🇪🇺 Auto (рекомендуем) 29", "network": "ws", "ws_path": "/ws/yNDaXPuEfdTj", "ws_host":
     "", "security": "none", "encryption": "mlkem768x25519plus.random.1rtt.100-300-1400.50-0-80.70-0-2500.5hheyRcryHYJPtgyX7C4A-fLJdHMkio-UAgFwOJfO5CF1JG6y5S8CHCKjMs0kKTF5BFtn9o6MVhpprMD37IGfIVXirmMveN7PlaI0KJJ29SybYd6jhtBj2dWUGUit_NNCPsPiRFxdoGJ6oSLbaudd8hqrDVS_jFaK-yQqSkLWrUQQsZ7OhSbOxzMuReduClIPlRpkpSDLzZX1MxJB9hdRgDHZQklBbwRzmAPc4Yb18Eh5Fwa9FIUBYuEEqpXeMC8fZh6WOM0ASgzzxBVKLR-nrCF5xUtHCgUHNJ0klCBVZkpZiYa-JCP-3lo8TFzyPCIkdU5bCeOe0Zk_tMeS4UroFE20AVfXddtflZUVdmJMkMj_mQCtRYQseVW--cf38oi0JurPaY7KhwD_oxMEUe4CmM4f5G9N4HM3_c1BUwbEiklsLSdhxtBKfYTBZCfhASdn_JiNQs3YKGDZ4JaeWE3lrNAiDOi28dD6Ctir8GutbBRj0lq8KeuMEDErhFvHSoZzfo6pbeFgwymYgmKjpF3WWHCQCevvJVi8DUqPqhba9hUFKYGBvqeQ4ElxqYBTsm2dJxsEEMVjgsFsbovCmAwK4Edf1yA1ONqnvSgTTqS5XiAiYsGXsuHOaQi6zGfxNRF3zm_sHVXyOp5vyZg6vwhraBa6zUFpnS8ffVyyZY-rWAZUXg9s9bC32CCFqOl3NZwRVcA-Bp4Q7qK6qBKrskSAEGVQJsQy7ZT1-iv4mdDC0Kpm3uHOeU06FZX9KV8EllJYLhG--FsbYfFU1c0GAegdTFE0vKJtzU0akA4o7uBS1xncZdZ2YPJDbd7s_WpaEaU7ngYGeFwkuyR8uWoG2xdG-QEAMd8wRrP2Vu-rrKKdAJx-nHOafOFVrxnRoa3SAYaEbIUC5elFCmaAyIC9bw40xDKkcSyqekGpUIiQ9uY1kh3I3RCggKQPLQoELxJrcF6CbeNXKiGQmxx-XdQS8Rm0qC2Qjal5yUlUOm1n-h_FiyLsckcARU7NGFTDNHLWcZPbnW_lIRAj-CyP_Eng6BeNlFl4EMDDaGKkpix52NvTONOzKYPnnoVjqugruPGPZqaLNfI6qIMhhSOKWd8XOmoZkUlPCQaHJKaxGYZMTAMXmphHsWxa4dTIPhGR9R8RhBp_YqgfzW-cNTM9JhF5QXMOmaQttqCp6kgkawTAoFjr6bBYwRGsUfESrwB5MbDBsugalmQ6LxamYGdzzAKI3uOs6IpEceQIgZM32hx1eq2XHlE_8dduHwzhdsyEuCAyHC0DHpcE6ZOaVBpODqwVro2Q3iRyScN5_LC_TtRVYTNqvSB4-cRo0QXEtsWN-czazWz96ac03huJRh4M4wv8elZ6CMJrtlHVoRDA-Oe1ppMX2x8vsRI69KlpnmfWfRoh4I4sVut5cvIbVIrN6e3BLZz6Tibu3lSQwAmeiWCX5pp2ho2ttMaSrydtrG9coBehERmgxtT51mIBubI6NLOVdtLNCsC8UWGHsWeq8ey3Gdf2Sqh6QiUqTRCJvdbaFBRxDpf0pTJtSP50JJD9UKaNGhf-pzXksIy6FGTIIOQctnmSvQ"},
     {"type": "vless", "name": "'
-  - '🇪🇺 🟢 LTE Обход Глушилок #2", "network": "xhttp", "security": "tls", "sni": "cdn-yb.shamanapp.online",
-    "alpn": ["h2", "http/1.1"], "fp": "firefox", "encryption": "none"}], "userinfo":
-    {"upload": 0, "download": 0, "total": 0, "expire": 1793491200}, "profileTitle":
-    "base64:8J+QtiBMdWNreSBWUE4=", "outdated": true}'
-  - '🇪🇺 🟢 LTE Обход Глушилок #1", "network": "xhttp", "security": "tls", "sni": "cdn-ya.shamanapp.online",
-    "alpn": ["h2", "http/1.1"], "fp": "firefox", "encryption": "none"}, {"type": "vless",
-    "name": "'
   - '🇨🇾 Russia (обход №1)", "network": "xhttp", "security": "tls", "sni": "api.axnode.net",
     "alpn": ["h2"], "fp": "firefox", "encryption": "none"}, {"type": "vless", "name":
     "'
   - 🇷🇺 Белые списки / LTE / 1 (TCP)"
-  - '@neirolexa_bot C-1 #99 🜂 🇫🇲'
-  - '@neirolexa_bot C-1 #97 🜱 🇫🇲'
-  - '@neirolexa_bot C-1 #80 🚰 🇫🇲'
   - 🇸🇬 Mobil_VPN 📶 LTE (Test)
+  - 'Нейро Лёха C-1 #52 🪬 🇫🇲'
   - 🇧🇾 Беларусь | VLESS WS
   - 🇪🇺 AUTO — Обход БС 11
-  - 🇪🇺 AUTO — Обход БС 73
-  - 🇪🇺 AUTO — Обход БС 57
-  - 🇪🇺 AUTO — Обход БС 52
-  - 🇪🇺 AUTO — Обход БС 47
-  - 🇪🇺 AUTO — Обход БС 48
-  - 🇪🇺 AUTO — Обход БС 51
-  - 🇪🇺 AUTO — Обход БС 78
-  - 🇪🇺 AUTO — Обход БС 80
   - 🇪🇺 AUTO — Обход БС 84
-  - 🇪🇺 AUTO — Обход БС 81
-  - 🇪🇺 AUTO — Обход БС 89
-  - 🇪🇺 AUTO — Обход БС 76
   - 🇪🇺 AUTO — Обход БС 37
   - 🇪🇺 AUTO — Обход БС 39
   - 🇪🇺 AUTO — Обход БС 38
@@ -8474,26 +8222,13 @@ proxy-groups:
   - 🇪🇺 AUTO — Обход БС 36
   - 🇷🇺тг @shadbobr1 | бс"
   - 🇪🇺 AUTO — Обход БС 85
-  - 🇪🇺 AUTO — Обход БС 25
-  - 🇪🇺 AUTO — Обход БС 23
-  - 🇪🇺 AUTO — Обход БС 24
-  - 🇪🇺 AUTO — Обход БС 49
-  - 🇪🇺 AUTO — Обход БС 64
-  - 🇪🇺 AUTO — Обход БС 60
-  - 🇪🇺 AUTO — Обход БС 58
-  - 🇪🇺 AUTO — Обход БС 30
-  - 🇪🇺 AUTO — Обход БС 35
-  - 🇪🇺 AUTO — Обход БС 31
-  - 🇪🇺 AUTO — Обход БС 34
-  - 🇪🇺 AUTO — Обход БС 33
   - 🇪🇺 AUTO — Обход БС 88
-  - 🇭🇰 Гонконг | VMESS WS
   - '🇷🇺 Россия (LTE) #264'
+  - 🇮🇳 Индия | VMESS WS
   - Notorgames_0 (122)
   - Notorgames_0 (210)
   - Notorgames_0 (221)
   - 🇺🇸 США | VMESS RAW
-  - VLESS-217.19.122.156
   - '♾️ Доступ к Telegram", "network": "tcp", "security": "reality", "sni": "nl.moodweb.top",
     "fp": "firefox", "pbk": "LbQbrE6Fl1ZgxqLmAj3ttlH_5997uKPKSJ_3OnT9eTk", "sid":
     "2d7a4f9c1e826a3f", "spx": "/", "flow": "xtls-rprx-vision", "encryption": "none"}],
@@ -8505,6 +8240,7 @@ proxy-groups:
   - 🇳🇱 Нидерланды | VLESS gRPC Reality
   - '🇳🇱 Нидерланды | VLESS gRPC Reality #2'
   - 🇬🇧 Бункер 😻 | United Kingdom | 01
+  - 🇫🇮 Финляндия | VLESS gRPC Reality
   - 🇳🇱 Нидерланды | VLESS TCP Reality
   - '🇳🇱 Нидерланды | VLESS TCP Reality #2'
   - 🇳🇱 Нидерланды | VLESS RAW Reality
@@ -8591,53 +8327,33 @@ proxy-groups:
   - 🇯🇵 Япония | VLESS TCP Reality
   - 🇰🇿 Казахстан | VLESS gRPC TLS
   - '🇯🇵 Япония | VLESS RAW Reality #2'
-  - 🇸🇪 Швеция | VLESS TCP Reality
   - 🇩🇪 Германия | VLESS XHTTP TLS
   - '🇷🇺 Россия | VLESS RAW Reality #5'
   - '🇷🇺 Россия | VLESS RAW Reality #6'
   - '🇷🇺 Россия | VLESS TCP Reality #8'
   - '🇷🇺 Россия | VLESS TCP Reality #9'
   - 🇬🇧 Англия | VLESS TCP Reality
-  - '@neirolexa_bot C-1 #29 🛰️ 🇫🇲'
-  - '@neirolexa_bot C-1 #120 🝰 🇧🇬'
   - 🇱🇹 Литва | VLESS RAW Reality
   - 🇨🇭 Швейцария | VLESS TCP TLS
   - 🇮🇳 Индия | VLESS TCP Reality
   - 🇳🇱 Нидерланды | VLESS WS TLS
-  - '@neirolexa_bot C-1 #101 🪬 🇪🇸'
-  - '@neirolexa_bot C-1 #86 🛰️ 🇫🇲'
   - 🇰🇷 Корея | VLESS TCP Reality
   - '🇳🇱 Нидерланды | VLESS WS TLS #2'
-  - '@neirolexa_bot C-1 #113 🜂 🇧🇷'
-  - '@neirolexa_bot C-1 #115 🪬 🇫🇷'
-  - '@neirolexa_bot C-1 #121 🜂 🇪🇪'
-  - '@neirolexa_bot C-1 #109 🧭 🇦🇲'
+  - 🇪🇪 Эстония | VLESS XHTTP TLS
   - '🇳🇱 Нидерланды | VLESS WS TLS #3'
   - '🇳🇱 Нидерланды | VLESS WS TLS #4'
   - '🇳🇱 Нидерланды | VLESS WS TLS #5'
-  - '@neirolexa_bot C-1 #69 🛰️ 🇫🇲'
-  - '@neirolexa_bot C-1 #111 🜱 🇹🇷'
-  - '@neirolexa_bot C-1 #30 🧭 🇫🇲'
-  - '@neirolexa_bot C-1 #85 🪬 🇫🇲'
-  - '@neirolexa_bot C-1 #11 🧿 🇫🇲'
-  - '@neirolexa_bot C-1 #35 🧿 🇫🇲'
   - 🇬🇧 Англия | VLESS XHTTP TLS
   - 🇮🇪 Ирландия | VLESS RAW TLS
   - 🇮🇩 Индонезия | VLESS WS TLS
-  - '@neirolexa_bot C-1 #16 🜱 🇫🇲'
-  - '@neirolexa_bot C-1 #20 🪬 🇫🇲'
   - 🇸🇬 Сингапур | VLESS RAW TLS
-  - '@neirolexa_bot C-1 #19 🧿 🇫🇲'
   - 🇭🇰 Гонконг | VLESS TCP TLS
   - 🇭🇰 Гонконг | VLESS RAW TLS
   - 🇩🇪 Германия | VLESS WS TLS
-  - '@neirolexa_bot C-1 #7 🚰 🇫🇲'
   - 🇷🇺 Россия | VLESS gRPC TLS
   - '🇷🇺 Россия | VLESS gRPC TLS #2'
   - '🇩🇪 Германия | VLESS WS TLS #2'
   - 🇺🇸 США | VLESS TCP Reality
-  - '@neirolexa_bot C-1 #1 🜂 🇫🇲'
-  - '@neirolexa_bot C-1 #2 🝰 🇫🇲'
   - '🇩🇪 Германия | VLESS WS TLS #3'
   - '🇩🇪 Германия | VLESS WS TLS #4'
   - 🇸🇬 Сингапур | VLESS WS TLS
@@ -8675,6 +8391,7 @@ proxy-groups:
   - 🇨🇦 Канада | VLESS WS TLS
   - '🇨🇦 Канада | VLESS WS TLS #2'
   - '🇨🇦 Канада | VLESS WS TLS #3'
+  - 'Нейро Лёха C-1 #75 🛰️ 🇫🇲'
   - '🇨🇦 Канада | VLESS WS TLS #4'
   - '🇨🇦 Канада | VLESS WS TLS #5'
   - '🇨🇦 Канада | VLESS WS TLS #6'
@@ -8725,24 +8442,54 @@ proxy-groups:
   - '🇨🇦 Канада | VLESS WS TLS #41'
   - '🇨🇦 Канада | VLESS WS TLS #42'
   - 🇨🇦 Канада | VMESS WS TLS
+  - 'Нейро Лёха C-1 #54 🪐 🇫🇲'
+  - 'Нейро Лёха C-1 #39 💎 🇫🇲'
   - 🇩🇪 Германия | VLESS RAW
+  - 'Нейро Лёха C-1 #64 🪐 🇫🇲'
+  - 'Нейро Лёха C-1 #63 🫧 🇫🇲'
+  - 'Нейро Лёха C-1 #14 🪬 🇫🇲'
+  - 'Нейро Лёха C-1 #18 🧭 🇫🇲'
   - '🇩🇪 Германия | VLESS RAW #2'
+  - 'Нейро Лёха C-1 #71 🧿 🇫🇲'
+  - 'Нейро Лёха C-1 #66 🧭 🇫🇲'
+  - 'Нейро Лёха C-1 #44 🌈 🇫🇲'
+  - 'Нейро Лёха C-1 #12 🝰 🇫🇲'
+  - 'Нейро Лёха C-1 #10 🪄 🇫🇲'
   - '🇩🇪 Германия | VLESS RAW #3'
   - 🇩🇪 Германия | VLESS TCP
   - '🇩🇪 Германия | VLESS TCP #2'
   - '🇩🇪 Германия | VLESS TCP #3'
   - 🇮🇳 Индия | VLESS WS TLS
   - 🇱🇹 Литва | VLESS WS TLS
+  - 'Нейро Лёха C-1 #13 🧿 🇫🇲'
+  - 'Нейро Лёха C-1 #114 🇺🇦'
+  - 'Нейро Лёха C-1 #115 🇦🇲'
+  - 'Нейро Лёха C-1 #111 🇷🇸'
+  - 'Нейро Лёха C-1 #4 🪬 🇫🇲'
+  - 'Нейро Лёха C-1 #3 🧿 🇫🇲'
   - 🇩🇪 Германия | VLESS WS
+  - 'Нейро Лёха C-1 #103 🇨🇿'
   - '🇩🇪 Cluster Germany #77'
+  - 'Нейро Лёха C-1 #108 🇧🇬'
+  - 'Нейро Лёха C-1 #102 🇨🇿'
+  - 'Нейро Лёха C-1 #1 🜂 🇫🇲'
   - 🇹🇷 Турция | VLESS gRPC
+  - 'Нейро Лёха C-1 #116 🇦🇲'
   - 🇫🇷 Франция | VLESS RAW
+  - 'Нейро Лёха C-1 #5 🫧 🇫🇲'
   - 🇻🇳 Вьетнам | VLESS TCP
+  - 'Нейро Лёха C-1 #110 🇧🇷'
   - '🇷🇺 Cluster Russia #11'
+  - 'Нейро Лёха C-1 #85 🇫🇷'
   - '🇷🇺 Cluster Russia #12'
+  - 'Нейро Лёха C-1 #95 🇦🇺'
   - 🇺🇸 США | VLESS WS TLS
+  - 'Нейро Лёха C-1 #80 🇯🇵'
   - 🇫🇷 Франция | VLESS WS
+  - 'Нейро Лёха C-1 #84 🇸🇬'
+  - 'Нейро Лёха C-1 #88 🇺🇸'
   - '🇷🇺 Cluster Russia #19'
+  - 'Нейро Лёха C-1 #86 🇫🇷'
   - '🇷🇺 Cluster Russia #16'
   - '🇷🇺 Cluster Russia #14'
   - 🇯🇵 Япония | VLESS TCP
@@ -8759,8 +8506,9 @@ proxy-groups:
   - '🇺🇸 США | VLESS WS TLS #12'
   - '🇺🇸 США | VLESS WS TLS #13'
   - '🇺🇸 США | VLESS WS TLS #14'
+  - 'Нейро Лёха C-1 #78 🇹🇷'
   - 🇺🇸 США | VMESS WS TLS
-  - '🇭🇰 Гонконг | VMESS WS #2'
+  - 🇭🇰 Гонконг | VMESS WS
   - 🇨🇦 Канада | VMESS TCP
   - 🇨🇦 Канада | VLESS WS
   - '🇨🇦 Канада | VLESS WS #2'
@@ -8846,6 +8594,7 @@ proxy-groups:
   - '🇩🇪 AetrisVPN #2'
   - '🇺🇸 AetrisVPN #10'
   - '🇩🇪 AetrisVPN #3'
+  - '🇵🇱 AetrisVPN #2'
   - 🇹🇷 AetrisVPN
   - '🇫🇷 AetrisVPN #2'
   - '🇦🇱 AetrisVPN #2'
@@ -8860,90 +8609,75 @@ proxy-groups:
   - '🇩🇪 AetrisVPN #8'
   - '🇳🇱 AetrisVPN #20'
   - 🇦🇹 AetrisVPN
-  - 🇫🇮 AetrisVPN
   - '🇳🇱 AetrisVPN #21'
+  - 🇫🇮 AetrisVPN
   - '🇫🇮 AetrisVPN #2'
-  - '🇫🇮 AetrisVPN #3'
-  - 🇺🇦 AetrisVPN
   - '🇳🇱 AetrisVPN #22'
-  - '🇷🇺 AetrisVPN #3'
-  - 🇨🇿 AetrisVPN
-  - '🇬🇧 AetrisVPN #4'
-  - '🇷🇺 AetrisVPN #4'
-  - '🇪🇸 AetrisVPN #3'
-  - '🇺🇸 AetrisVPN #11'
-  - '🇫🇮 AetrisVPN #4'
-  - 🇷🇴 AetrisVPN
-  - '🇩🇪 AetrisVPN #9'
-  - '🇮🇳 AetrisVPN #2'
-  - '🇷🇺 AetrisVPN #5'
-  - '🇩🇪 AetrisVPN #10'
+  - 🇺🇦 AetrisVPN
   - '🇳🇱 AetrisVPN #23'
+  - '🇬🇧 AetrisVPN #4'
+  - '🇷🇺 AetrisVPN #3'
+  - '🇫🇮 AetrisVPN #3'
+  - '🇮🇳 AetrisVPN #2'
+  - '🇷🇺 AetrisVPN #4'
   - '🇳🇱 AetrisVPN #24'
   - '🇳🇱 AetrisVPN #25'
   - '🇳🇱 AetrisVPN #26'
   - '🇳🇱 AetrisVPN #27'
-  - '🇵🇱 AetrisVPN #2'
   - '🇵🇱 AetrisVPN #3'
-  - '🇫🇷 AetrisVPN #3'
   - '🇵🇱 AetrisVPN #4'
-  - 🇮🇶 AetrisVPN
-  - '🇩🇪 AetrisVPN #11'
-  - '🇷🇺 AetrisVPN #6'
+  - '🇫🇷 AetrisVPN #3'
+  - '🇷🇺 AetrisVPN #5'
   - '🇵🇱 AetrisVPN #5'
-  - '🇷🇺 AetrisVPN #7'
   - '🇦🇹 AetrisVPN #2'
-  - '🇷🇺 AetrisVPN #8'
+  - '🇷🇺 AetrisVPN #6'
   - 🇪🇪 AetrisVPN
-  - '🇷🇺 AetrisVPN #9'
-  - '🇺🇸 AetrisVPN #12'
+  - '🇺🇸 AetrisVPN #11'
   - '🇳🇱 AetrisVPN #28'
-  - '🇫🇮 AetrisVPN #5'
-  - '🇺🇸 AetrisVPN #13'
-  - '🇩🇪 AetrisVPN #12'
+  - '🇫🇮 AetrisVPN #4'
+  - '🇺🇸 AetrisVPN #12'
+  - '🇩🇪 AetrisVPN #9'
   - 🇧🇬 AetrisVPN
   - '🇯🇵 AetrisVPN #3'
   - '🇰🇷 AetrisVPN #3'
+  - '🇺🇸 AetrisVPN #13'
+  - '🇷🇺 AetrisVPN #7'
+  - '🇩🇪 AetrisVPN #10'
   - '🇺🇸 AetrisVPN #14'
-  - '🇷🇺 AetrisVPN #10'
-  - '🇬🇧 AetrisVPN #5'
-  - '🇩🇪 AetrisVPN #13'
-  - '🇺🇸 AetrisVPN #15'
-  - '🇫🇮 AetrisVPN #6'
   - '🇳🇱 AetrisVPN #29'
   - '🇳🇱 AetrisVPN #30'
   - '🇵🇱 AetrisVPN #6'
-  - '🇷🇺 AetrisVPN #11'
-  - '🇫🇮 AetrisVPN #7'
-  - '🇫🇮 AetrisVPN #8'
-  - '🇪🇸 AetrisVPN #4'
-  - '🇩🇪 AetrisVPN #14'
+  - '🇷🇺 AetrisVPN #8'
+  - '🇫🇮 AetrisVPN #5'
+  - '🇫🇮 AetrisVPN #6'
+  - '🇪🇸 AetrisVPN #3'
+  - '🇩🇪 AetrisVPN #11'
   - '🇫🇷 AetrisVPN #4'
   - '🇸🇬 AetrisVPN #2'
-  - '🇺🇸 AetrisVPN #16'
-  - '🇨🇿 AetrisVPN #2'
+  - '🇺🇸 AetrisVPN #15'
+  - 🇨🇿 AetrisVPN
   - '🇧🇾 AetrisVPN #2'
   - '🇳🇱 AetrisVPN #31'
-  - '🇩🇪 AetrisVPN #15'
+  - '🇩🇪 AetrisVPN #12'
   - '🇪🇪 AetrisVPN #2'
-  - '🇺🇸 AetrisVPN #17'
+  - '🇺🇸 AetrisVPN #16'
   - 🇨🇾 AetrisVPN
   - '🇳🇱 AetrisVPN #32'
   - 🇧🇪 AetrisVPN
   - '🇦🇱 AetrisVPN #3'
   - 🇪🇺 AetrisVPN
-  - '🇺🇸 AetrisVPN #18'
-  - '🇩🇪 AetrisVPN #16'
-  - '🇫🇮 AetrisVPN #9'
-  - '🇵🇱 AetrisVPN #7'
+  - '🇺🇸 AetrisVPN #17'
+  - '🇩🇪 AetrisVPN #13'
   - '🇳🇱 AetrisVPN #33'
-  - '🇷🇺 AetrisVPN #12'
-  - '🇩🇪 AetrisVPN #17'
+  - '🇫🇮 AetrisVPN #7'
+  - '🇵🇱 AetrisVPN #7'
+  - '🇳🇱 AetrisVPN #34'
+  - '🇷🇺 AetrisVPN #9'
+  - '🇩🇪 AetrisVPN #14'
   - '🇭🇰 AetrisVPN #2'
-  - '🇩🇪 AetrisVPN #18'
-  - '🇷🇺 AetrisVPN #13'
-  - '🇷🇺 AetrisVPN #14'
-  - '🇺🇸 AetrisVPN #19'
+  - '🇩🇪 AetrisVPN #15'
+  - '🇷🇺 AetrisVPN #10'
+  - '🇺🇸 AetrisVPN #18'
   - VPN
   - Hysteria-144.124.245.52
   - SS-8.211.196.252
@@ -8951,6 +8685,7 @@ proxy-groups:
   - SS-82.38.31.178
   - SS-82.38.31.180
   - SS-82.38.31.193
+  - SS-82.38.31.203
   - SS-82.38.31.149
   - SS-82.38.31.169
   - SS-82.38.31.171
@@ -8963,6 +8698,7 @@ proxy-groups:
   - SS-156.146.38.170
   - SS-84.247.155.196
   - 'SS-84.247.155.196 #2'
+  - SS-139.84.166.47
   - SS-51.77.216.96
   - SS-172.105.39.124
   - SS-202.50.253.18
@@ -8989,6 +8725,7 @@ proxy-groups:
   - VLESS-150.241.72.110
   - VLESS-176.96.136.72
   - VLESS-185.22.234.100
+  - VLESS-185.229.207.104
   - VLESS-185.254.98.39
   - VLESS-185.86.145.174
   - VLESS-185.86.147.85
@@ -8997,6 +8734,7 @@ proxy-groups:
   - VLESS-2.27.160.18
   - VLESS-31.76.70.232
   - VLESS-31.77.7.146
+  - VLESS-45.145.40.112
   - VLESS-45.145.42.45
   - VLESS-5.180.21.251
   - VLESS-5.253.29.77
@@ -9006,7 +8744,6 @@ proxy-groups:
   - VLESS-87.242.95.110
   - VLESS-87.242.95.129
   - VLESS-93.152.213.7
-  - VLESS-95.85.241.106
   - VLESS-72.56.242.232
   - VLESS-81.94.148.232
   - 'VLESS-81.94.148.232 #2'
@@ -9018,7 +8755,6 @@ proxy-groups:
   - VLESS-85.192.56.236
   - VLESS-177.3.214.133
   - VLESS-78.17.27.137
-  - VLESS-201.58.183.147
   - VLESS-72.56.41.232
   - VLESS-185.86.147.80
   - 'VLESS-185.86.147.80 #2'
@@ -9028,6 +8764,7 @@ proxy-groups:
   - 'VLESS-185.86.147.80 #6'
   - 'VLESS-185.86.147.80 #7'
   - VLESS-188.225.45.99
+  - VLESS-188.225.56.39
   - VLESS-31.59.211.244
   - VLESS-31.76.91.169
   - VLESS-37.139.42.227
@@ -9061,6 +8798,7 @@ proxy-groups:
   - VLESS-50.7.216.174
   - 'VLESS-50.7.216.174 #2'
   - VLESS-50.7.87.93
+  - VLESS-84.32.108.4
   - VLESS-89.41.181.164
   - VLESS-191.217.217.69
   - VLESS-81.17.154.97
@@ -9069,7 +8807,10 @@ proxy-groups:
   - VLESS-45.9.14.206
   - VLESS-5.253.29.23
   - VLESS-89.46.38.58
+  - VLESS-78.159.246.85
   - VLESS-185.86.145.142
+  - VLESS-144.31.242.142
+  - VLESS-2.27.210.119
   - VLESS-2.27.210.127
   - VLESS-31.76.7.233
   - VLESS-31.76.7.38
@@ -9078,6 +8819,7 @@ proxy-groups:
   - VLESS-88.218.170.236
   - VLESS-217.60.183.95
   - 'VLESS-217.60.183.95 #2'
+  - VLESS-176.65.149.194
   - VLESS-194.87.239.82
   - VLESS-109.120.137.98
   - VLESS-144.31.17.132
@@ -9253,35 +8995,15 @@ proxy-groups:
   - '🇪🇺 Auto (рекомендуем) 29", "network": "ws", "ws_path": "/ws/yNDaXPuEfdTj", "ws_host":
     "", "security": "none", "encryption": "mlkem768x25519plus.random.1rtt.100-300-1400.50-0-80.70-0-2500.5hheyRcryHYJPtgyX7C4A-fLJdHMkio-UAgFwOJfO5CF1JG6y5S8CHCKjMs0kKTF5BFtn9o6MVhpprMD37IGfIVXirmMveN7PlaI0KJJ29SybYd6jhtBj2dWUGUit_NNCPsPiRFxdoGJ6oSLbaudd8hqrDVS_jFaK-yQqSkLWrUQQsZ7OhSbOxzMuReduClIPlRpkpSDLzZX1MxJB9hdRgDHZQklBbwRzmAPc4Yb18Eh5Fwa9FIUBYuEEqpXeMC8fZh6WOM0ASgzzxBVKLR-nrCF5xUtHCgUHNJ0klCBVZkpZiYa-JCP-3lo8TFzyPCIkdU5bCeOe0Zk_tMeS4UroFE20AVfXddtflZUVdmJMkMj_mQCtRYQseVW--cf38oi0JurPaY7KhwD_oxMEUe4CmM4f5G9N4HM3_c1BUwbEiklsLSdhxtBKfYTBZCfhASdn_JiNQs3YKGDZ4JaeWE3lrNAiDOi28dD6Ctir8GutbBRj0lq8KeuMEDErhFvHSoZzfo6pbeFgwymYgmKjpF3WWHCQCevvJVi8DUqPqhba9hUFKYGBvqeQ4ElxqYBTsm2dJxsEEMVjgsFsbovCmAwK4Edf1yA1ONqnvSgTTqS5XiAiYsGXsuHOaQi6zGfxNRF3zm_sHVXyOp5vyZg6vwhraBa6zUFpnS8ffVyyZY-rWAZUXg9s9bC32CCFqOl3NZwRVcA-Bp4Q7qK6qBKrskSAEGVQJsQy7ZT1-iv4mdDC0Kpm3uHOeU06FZX9KV8EllJYLhG--FsbYfFU1c0GAegdTFE0vKJtzU0akA4o7uBS1xncZdZ2YPJDbd7s_WpaEaU7ngYGeFwkuyR8uWoG2xdG-QEAMd8wRrP2Vu-rrKKdAJx-nHOafOFVrxnRoa3SAYaEbIUC5elFCmaAyIC9bw40xDKkcSyqekGpUIiQ9uY1kh3I3RCggKQPLQoELxJrcF6CbeNXKiGQmxx-XdQS8Rm0qC2Qjal5yUlUOm1n-h_FiyLsckcARU7NGFTDNHLWcZPbnW_lIRAj-CyP_Eng6BeNlFl4EMDDaGKkpix52NvTONOzKYPnnoVjqugruPGPZqaLNfI6qIMhhSOKWd8XOmoZkUlPCQaHJKaxGYZMTAMXmphHsWxa4dTIPhGR9R8RhBp_YqgfzW-cNTM9JhF5QXMOmaQttqCp6kgkawTAoFjr6bBYwRGsUfESrwB5MbDBsugalmQ6LxamYGdzzAKI3uOs6IpEceQIgZM32hx1eq2XHlE_8dduHwzhdsyEuCAyHC0DHpcE6ZOaVBpODqwVro2Q3iRyScN5_LC_TtRVYTNqvSB4-cRo0QXEtsWN-czazWz96ac03huJRh4M4wv8elZ6CMJrtlHVoRDA-Oe1ppMX2x8vsRI69KlpnmfWfRoh4I4sVut5cvIbVIrN6e3BLZz6Tibu3lSQwAmeiWCX5pp2ho2ttMaSrydtrG9coBehERmgxtT51mIBubI6NLOVdtLNCsC8UWGHsWeq8ey3Gdf2Sqh6QiUqTRCJvdbaFBRxDpf0pTJtSP50JJD9UKaNGhf-pzXksIy6FGTIIOQctnmSvQ"},
     {"type": "vless", "name": "'
-  - '🇪🇺 🟢 LTE Обход Глушилок #2", "network": "xhttp", "security": "tls", "sni": "cdn-yb.shamanapp.online",
-    "alpn": ["h2", "http/1.1"], "fp": "firefox", "encryption": "none"}], "userinfo":
-    {"upload": 0, "download": 0, "total": 0, "expire": 1793491200}, "profileTitle":
-    "base64:8J+QtiBMdWNreSBWUE4=", "outdated": true}'
-  - '🇪🇺 🟢 LTE Обход Глушилок #1", "network": "xhttp", "security": "tls", "sni": "cdn-ya.shamanapp.online",
-    "alpn": ["h2", "http/1.1"], "fp": "firefox", "encryption": "none"}, {"type": "vless",
-    "name": "'
   - '🇨🇾 Russia (обход №1)", "network": "xhttp", "security": "tls", "sni": "api.axnode.net",
     "alpn": ["h2"], "fp": "firefox", "encryption": "none"}, {"type": "vless", "name":
     "'
   - 🇷🇺 Белые списки / LTE / 1 (TCP)"
-  - '@neirolexa_bot C-1 #99 🜂 🇫🇲'
-  - '@neirolexa_bot C-1 #97 🜱 🇫🇲'
-  - '@neirolexa_bot C-1 #80 🚰 🇫🇲'
   - 🇸🇬 Mobil_VPN 📶 LTE (Test)
+  - 'Нейро Лёха C-1 #52 🪬 🇫🇲'
   - 🇧🇾 Беларусь | VLESS WS
   - 🇪🇺 AUTO — Обход БС 11
-  - 🇪🇺 AUTO — Обход БС 73
-  - 🇪🇺 AUTO — Обход БС 57
-  - 🇪🇺 AUTO — Обход БС 52
-  - 🇪🇺 AUTO — Обход БС 47
-  - 🇪🇺 AUTO — Обход БС 48
-  - 🇪🇺 AUTO — Обход БС 51
-  - 🇪🇺 AUTO — Обход БС 78
-  - 🇪🇺 AUTO — Обход БС 80
   - 🇪🇺 AUTO — Обход БС 84
-  - 🇪🇺 AUTO — Обход БС 81
-  - 🇪🇺 AUTO — Обход БС 89
-  - 🇪🇺 AUTO — Обход БС 76
   - 🇪🇺 AUTO — Обход БС 37
   - 🇪🇺 AUTO — Обход БС 39
   - 🇪🇺 AUTO — Обход БС 38
@@ -9291,26 +9013,13 @@ proxy-groups:
   - 🇪🇺 AUTO — Обход БС 36
   - 🇷🇺тг @shadbobr1 | бс"
   - 🇪🇺 AUTO — Обход БС 85
-  - 🇪🇺 AUTO — Обход БС 25
-  - 🇪🇺 AUTO — Обход БС 23
-  - 🇪🇺 AUTO — Обход БС 24
-  - 🇪🇺 AUTO — Обход БС 49
-  - 🇪🇺 AUTO — Обход БС 64
-  - 🇪🇺 AUTO — Обход БС 60
-  - 🇪🇺 AUTO — Обход БС 58
-  - 🇪🇺 AUTO — Обход БС 30
-  - 🇪🇺 AUTO — Обход БС 35
-  - 🇪🇺 AUTO — Обход БС 31
-  - 🇪🇺 AUTO — Обход БС 34
-  - 🇪🇺 AUTO — Обход БС 33
   - 🇪🇺 AUTO — Обход БС 88
-  - 🇭🇰 Гонконг | VMESS WS
   - '🇷🇺 Россия (LTE) #264'
+  - 🇮🇳 Индия | VMESS WS
   - Notorgames_0 (122)
   - Notorgames_0 (210)
   - Notorgames_0 (221)
   - 🇺🇸 США | VMESS RAW
-  - VLESS-217.19.122.156
   - '♾️ Доступ к Telegram", "network": "tcp", "security": "reality", "sni": "nl.moodweb.top",
     "fp": "firefox", "pbk": "LbQbrE6Fl1ZgxqLmAj3ttlH_5997uKPKSJ_3OnT9eTk", "sid":
     "2d7a4f9c1e826a3f", "spx": "/", "flow": "xtls-rprx-vision", "encryption": "none"}],
@@ -9322,6 +9031,7 @@ proxy-groups:
   - 🇳🇱 Нидерланды | VLESS gRPC Reality
   - '🇳🇱 Нидерланды | VLESS gRPC Reality #2'
   - 🇬🇧 Бункер 😻 | United Kingdom | 01
+  - 🇫🇮 Финляндия | VLESS gRPC Reality
   - 🇳🇱 Нидерланды | VLESS TCP Reality
   - '🇳🇱 Нидерланды | VLESS TCP Reality #2'
   - 🇳🇱 Нидерланды | VLESS RAW Reality
@@ -9408,53 +9118,33 @@ proxy-groups:
   - 🇯🇵 Япония | VLESS TCP Reality
   - 🇰🇿 Казахстан | VLESS gRPC TLS
   - '🇯🇵 Япония | VLESS RAW Reality #2'
-  - 🇸🇪 Швеция | VLESS TCP Reality
   - 🇩🇪 Германия | VLESS XHTTP TLS
   - '🇷🇺 Россия | VLESS RAW Reality #5'
   - '🇷🇺 Россия | VLESS RAW Reality #6'
   - '🇷🇺 Россия | VLESS TCP Reality #8'
   - '🇷🇺 Россия | VLESS TCP Reality #9'
   - 🇬🇧 Англия | VLESS TCP Reality
-  - '@neirolexa_bot C-1 #29 🛰️ 🇫🇲'
-  - '@neirolexa_bot C-1 #120 🝰 🇧🇬'
   - 🇱🇹 Литва | VLESS RAW Reality
   - 🇨🇭 Швейцария | VLESS TCP TLS
   - 🇮🇳 Индия | VLESS TCP Reality
   - 🇳🇱 Нидерланды | VLESS WS TLS
-  - '@neirolexa_bot C-1 #101 🪬 🇪🇸'
-  - '@neirolexa_bot C-1 #86 🛰️ 🇫🇲'
   - 🇰🇷 Корея | VLESS TCP Reality
   - '🇳🇱 Нидерланды | VLESS WS TLS #2'
-  - '@neirolexa_bot C-1 #113 🜂 🇧🇷'
-  - '@neirolexa_bot C-1 #115 🪬 🇫🇷'
-  - '@neirolexa_bot C-1 #121 🜂 🇪🇪'
-  - '@neirolexa_bot C-1 #109 🧭 🇦🇲'
+  - 🇪🇪 Эстония | VLESS XHTTP TLS
   - '🇳🇱 Нидерланды | VLESS WS TLS #3'
   - '🇳🇱 Нидерланды | VLESS WS TLS #4'
   - '🇳🇱 Нидерланды | VLESS WS TLS #5'
-  - '@neirolexa_bot C-1 #69 🛰️ 🇫🇲'
-  - '@neirolexa_bot C-1 #111 🜱 🇹🇷'
-  - '@neirolexa_bot C-1 #30 🧭 🇫🇲'
-  - '@neirolexa_bot C-1 #85 🪬 🇫🇲'
-  - '@neirolexa_bot C-1 #11 🧿 🇫🇲'
-  - '@neirolexa_bot C-1 #35 🧿 🇫🇲'
   - 🇬🇧 Англия | VLESS XHTTP TLS
   - 🇮🇪 Ирландия | VLESS RAW TLS
   - 🇮🇩 Индонезия | VLESS WS TLS
-  - '@neirolexa_bot C-1 #16 🜱 🇫🇲'
-  - '@neirolexa_bot C-1 #20 🪬 🇫🇲'
   - 🇸🇬 Сингапур | VLESS RAW TLS
-  - '@neirolexa_bot C-1 #19 🧿 🇫🇲'
   - 🇭🇰 Гонконг | VLESS TCP TLS
   - 🇭🇰 Гонконг | VLESS RAW TLS
   - 🇩🇪 Германия | VLESS WS TLS
-  - '@neirolexa_bot C-1 #7 🚰 🇫🇲'
   - 🇷🇺 Россия | VLESS gRPC TLS
   - '🇷🇺 Россия | VLESS gRPC TLS #2'
   - '🇩🇪 Германия | VLESS WS TLS #2'
   - 🇺🇸 США | VLESS TCP Reality
-  - '@neirolexa_bot C-1 #1 🜂 🇫🇲'
-  - '@neirolexa_bot C-1 #2 🝰 🇫🇲'
   - '🇩🇪 Германия | VLESS WS TLS #3'
   - '🇩🇪 Германия | VLESS WS TLS #4'
   - 🇸🇬 Сингапур | VLESS WS TLS
@@ -9492,6 +9182,7 @@ proxy-groups:
   - 🇨🇦 Канада | VLESS WS TLS
   - '🇨🇦 Канада | VLESS WS TLS #2'
   - '🇨🇦 Канада | VLESS WS TLS #3'
+  - 'Нейро Лёха C-1 #75 🛰️ 🇫🇲'
   - '🇨🇦 Канада | VLESS WS TLS #4'
   - '🇨🇦 Канада | VLESS WS TLS #5'
   - '🇨🇦 Канада | VLESS WS TLS #6'
@@ -9542,24 +9233,54 @@ proxy-groups:
   - '🇨🇦 Канада | VLESS WS TLS #41'
   - '🇨🇦 Канада | VLESS WS TLS #42'
   - 🇨🇦 Канада | VMESS WS TLS
+  - 'Нейро Лёха C-1 #54 🪐 🇫🇲'
+  - 'Нейро Лёха C-1 #39 💎 🇫🇲'
   - 🇩🇪 Германия | VLESS RAW
+  - 'Нейро Лёха C-1 #64 🪐 🇫🇲'
+  - 'Нейро Лёха C-1 #63 🫧 🇫🇲'
+  - 'Нейро Лёха C-1 #14 🪬 🇫🇲'
+  - 'Нейро Лёха C-1 #18 🧭 🇫🇲'
   - '🇩🇪 Германия | VLESS RAW #2'
+  - 'Нейро Лёха C-1 #71 🧿 🇫🇲'
+  - 'Нейро Лёха C-1 #66 🧭 🇫🇲'
+  - 'Нейро Лёха C-1 #44 🌈 🇫🇲'
+  - 'Нейро Лёха C-1 #12 🝰 🇫🇲'
+  - 'Нейро Лёха C-1 #10 🪄 🇫🇲'
   - '🇩🇪 Германия | VLESS RAW #3'
   - 🇩🇪 Германия | VLESS TCP
   - '🇩🇪 Германия | VLESS TCP #2'
   - '🇩🇪 Германия | VLESS TCP #3'
   - 🇮🇳 Индия | VLESS WS TLS
   - 🇱🇹 Литва | VLESS WS TLS
+  - 'Нейро Лёха C-1 #13 🧿 🇫🇲'
+  - 'Нейро Лёха C-1 #114 🇺🇦'
+  - 'Нейро Лёха C-1 #115 🇦🇲'
+  - 'Нейро Лёха C-1 #111 🇷🇸'
+  - 'Нейро Лёха C-1 #4 🪬 🇫🇲'
+  - 'Нейро Лёха C-1 #3 🧿 🇫🇲'
   - 🇩🇪 Германия | VLESS WS
+  - 'Нейро Лёха C-1 #103 🇨🇿'
   - '🇩🇪 Cluster Germany #77'
+  - 'Нейро Лёха C-1 #108 🇧🇬'
+  - 'Нейро Лёха C-1 #102 🇨🇿'
+  - 'Нейро Лёха C-1 #1 🜂 🇫🇲'
   - 🇹🇷 Турция | VLESS gRPC
+  - 'Нейро Лёха C-1 #116 🇦🇲'
   - 🇫🇷 Франция | VLESS RAW
+  - 'Нейро Лёха C-1 #5 🫧 🇫🇲'
   - 🇻🇳 Вьетнам | VLESS TCP
+  - 'Нейро Лёха C-1 #110 🇧🇷'
   - '🇷🇺 Cluster Russia #11'
+  - 'Нейро Лёха C-1 #85 🇫🇷'
   - '🇷🇺 Cluster Russia #12'
+  - 'Нейро Лёха C-1 #95 🇦🇺'
   - 🇺🇸 США | VLESS WS TLS
+  - 'Нейро Лёха C-1 #80 🇯🇵'
   - 🇫🇷 Франция | VLESS WS
+  - 'Нейро Лёха C-1 #84 🇸🇬'
+  - 'Нейро Лёха C-1 #88 🇺🇸'
   - '🇷🇺 Cluster Russia #19'
+  - 'Нейро Лёха C-1 #86 🇫🇷'
   - '🇷🇺 Cluster Russia #16'
   - '🇷🇺 Cluster Russia #14'
   - 🇯🇵 Япония | VLESS TCP
@@ -9576,8 +9297,9 @@ proxy-groups:
   - '🇺🇸 США | VLESS WS TLS #12'
   - '🇺🇸 США | VLESS WS TLS #13'
   - '🇺🇸 США | VLESS WS TLS #14'
+  - 'Нейро Лёха C-1 #78 🇹🇷'
   - 🇺🇸 США | VMESS WS TLS
-  - '🇭🇰 Гонконг | VMESS WS #2'
+  - 🇭🇰 Гонконг | VMESS WS
   - 🇨🇦 Канада | VMESS TCP
   - 🇨🇦 Канада | VLESS WS
   - '🇨🇦 Канада | VLESS WS #2'
@@ -9663,6 +9385,7 @@ proxy-groups:
   - '🇩🇪 AetrisVPN #2'
   - '🇺🇸 AetrisVPN #10'
   - '🇩🇪 AetrisVPN #3'
+  - '🇵🇱 AetrisVPN #2'
   - 🇹🇷 AetrisVPN
   - '🇫🇷 AetrisVPN #2'
   - '🇦🇱 AetrisVPN #2'
@@ -9677,90 +9400,75 @@ proxy-groups:
   - '🇩🇪 AetrisVPN #8'
   - '🇳🇱 AetrisVPN #20'
   - 🇦🇹 AetrisVPN
-  - 🇫🇮 AetrisVPN
   - '🇳🇱 AetrisVPN #21'
+  - 🇫🇮 AetrisVPN
   - '🇫🇮 AetrisVPN #2'
-  - '🇫🇮 AetrisVPN #3'
-  - 🇺🇦 AetrisVPN
   - '🇳🇱 AetrisVPN #22'
-  - '🇷🇺 AetrisVPN #3'
-  - 🇨🇿 AetrisVPN
-  - '🇬🇧 AetrisVPN #4'
-  - '🇷🇺 AetrisVPN #4'
-  - '🇪🇸 AetrisVPN #3'
-  - '🇺🇸 AetrisVPN #11'
-  - '🇫🇮 AetrisVPN #4'
-  - 🇷🇴 AetrisVPN
-  - '🇩🇪 AetrisVPN #9'
-  - '🇮🇳 AetrisVPN #2'
-  - '🇷🇺 AetrisVPN #5'
-  - '🇩🇪 AetrisVPN #10'
+  - 🇺🇦 AetrisVPN
   - '🇳🇱 AetrisVPN #23'
+  - '🇬🇧 AetrisVPN #4'
+  - '🇷🇺 AetrisVPN #3'
+  - '🇫🇮 AetrisVPN #3'
+  - '🇮🇳 AetrisVPN #2'
+  - '🇷🇺 AetrisVPN #4'
   - '🇳🇱 AetrisVPN #24'
   - '🇳🇱 AetrisVPN #25'
   - '🇳🇱 AetrisVPN #26'
   - '🇳🇱 AetrisVPN #27'
-  - '🇵🇱 AetrisVPN #2'
   - '🇵🇱 AetrisVPN #3'
-  - '🇫🇷 AetrisVPN #3'
   - '🇵🇱 AetrisVPN #4'
-  - 🇮🇶 AetrisVPN
-  - '🇩🇪 AetrisVPN #11'
-  - '🇷🇺 AetrisVPN #6'
+  - '🇫🇷 AetrisVPN #3'
+  - '🇷🇺 AetrisVPN #5'
   - '🇵🇱 AetrisVPN #5'
-  - '🇷🇺 AetrisVPN #7'
   - '🇦🇹 AetrisVPN #2'
-  - '🇷🇺 AetrisVPN #8'
+  - '🇷🇺 AetrisVPN #6'
   - 🇪🇪 AetrisVPN
-  - '🇷🇺 AetrisVPN #9'
-  - '🇺🇸 AetrisVPN #12'
+  - '🇺🇸 AetrisVPN #11'
   - '🇳🇱 AetrisVPN #28'
-  - '🇫🇮 AetrisVPN #5'
-  - '🇺🇸 AetrisVPN #13'
-  - '🇩🇪 AetrisVPN #12'
+  - '🇫🇮 AetrisVPN #4'
+  - '🇺🇸 AetrisVPN #12'
+  - '🇩🇪 AetrisVPN #9'
   - 🇧🇬 AetrisVPN
   - '🇯🇵 AetrisVPN #3'
   - '🇰🇷 AetrisVPN #3'
+  - '🇺🇸 AetrisVPN #13'
+  - '🇷🇺 AetrisVPN #7'
+  - '🇩🇪 AetrisVPN #10'
   - '🇺🇸 AetrisVPN #14'
-  - '🇷🇺 AetrisVPN #10'
-  - '🇬🇧 AetrisVPN #5'
-  - '🇩🇪 AetrisVPN #13'
-  - '🇺🇸 AetrisVPN #15'
-  - '🇫🇮 AetrisVPN #6'
   - '🇳🇱 AetrisVPN #29'
   - '🇳🇱 AetrisVPN #30'
   - '🇵🇱 AetrisVPN #6'
-  - '🇷🇺 AetrisVPN #11'
-  - '🇫🇮 AetrisVPN #7'
-  - '🇫🇮 AetrisVPN #8'
-  - '🇪🇸 AetrisVPN #4'
-  - '🇩🇪 AetrisVPN #14'
+  - '🇷🇺 AetrisVPN #8'
+  - '🇫🇮 AetrisVPN #5'
+  - '🇫🇮 AetrisVPN #6'
+  - '🇪🇸 AetrisVPN #3'
+  - '🇩🇪 AetrisVPN #11'
   - '🇫🇷 AetrisVPN #4'
   - '🇸🇬 AetrisVPN #2'
-  - '🇺🇸 AetrisVPN #16'
-  - '🇨🇿 AetrisVPN #2'
+  - '🇺🇸 AetrisVPN #15'
+  - 🇨🇿 AetrisVPN
   - '🇧🇾 AetrisVPN #2'
   - '🇳🇱 AetrisVPN #31'
-  - '🇩🇪 AetrisVPN #15'
+  - '🇩🇪 AetrisVPN #12'
   - '🇪🇪 AetrisVPN #2'
-  - '🇺🇸 AetrisVPN #17'
+  - '🇺🇸 AetrisVPN #16'
   - 🇨🇾 AetrisVPN
   - '🇳🇱 AetrisVPN #32'
   - 🇧🇪 AetrisVPN
   - '🇦🇱 AetrisVPN #3'
   - 🇪🇺 AetrisVPN
-  - '🇺🇸 AetrisVPN #18'
-  - '🇩🇪 AetrisVPN #16'
-  - '🇫🇮 AetrisVPN #9'
-  - '🇵🇱 AetrisVPN #7'
+  - '🇺🇸 AetrisVPN #17'
+  - '🇩🇪 AetrisVPN #13'
   - '🇳🇱 AetrisVPN #33'
-  - '🇷🇺 AetrisVPN #12'
-  - '🇩🇪 AetrisVPN #17'
+  - '🇫🇮 AetrisVPN #7'
+  - '🇵🇱 AetrisVPN #7'
+  - '🇳🇱 AetrisVPN #34'
+  - '🇷🇺 AetrisVPN #9'
+  - '🇩🇪 AetrisVPN #14'
   - '🇭🇰 AetrisVPN #2'
-  - '🇩🇪 AetrisVPN #18'
-  - '🇷🇺 AetrisVPN #13'
-  - '🇷🇺 AetrisVPN #14'
-  - '🇺🇸 AetrisVPN #19'
+  - '🇩🇪 AetrisVPN #15'
+  - '🇷🇺 AetrisVPN #10'
+  - '🇺🇸 AetrisVPN #18'
   - VPN
   - Hysteria-144.124.245.52
   - SS-8.211.196.252
@@ -9768,6 +9476,7 @@ proxy-groups:
   - SS-82.38.31.178
   - SS-82.38.31.180
   - SS-82.38.31.193
+  - SS-82.38.31.203
   - SS-82.38.31.149
   - SS-82.38.31.169
   - SS-82.38.31.171
@@ -9780,6 +9489,7 @@ proxy-groups:
   - SS-156.146.38.170
   - SS-84.247.155.196
   - 'SS-84.247.155.196 #2'
+  - SS-139.84.166.47
   - SS-51.77.216.96
   - SS-172.105.39.124
   - SS-202.50.253.18
@@ -9806,6 +9516,7 @@ proxy-groups:
   - VLESS-150.241.72.110
   - VLESS-176.96.136.72
   - VLESS-185.22.234.100
+  - VLESS-185.229.207.104
   - VLESS-185.254.98.39
   - VLESS-185.86.145.174
   - VLESS-185.86.147.85
@@ -9814,6 +9525,7 @@ proxy-groups:
   - VLESS-2.27.160.18
   - VLESS-31.76.70.232
   - VLESS-31.77.7.146
+  - VLESS-45.145.40.112
   - VLESS-45.145.42.45
   - VLESS-5.180.21.251
   - VLESS-5.253.29.77
@@ -9823,7 +9535,6 @@ proxy-groups:
   - VLESS-87.242.95.110
   - VLESS-87.242.95.129
   - VLESS-93.152.213.7
-  - VLESS-95.85.241.106
   - VLESS-72.56.242.232
   - VLESS-81.94.148.232
   - 'VLESS-81.94.148.232 #2'
@@ -9835,7 +9546,6 @@ proxy-groups:
   - VLESS-85.192.56.236
   - VLESS-177.3.214.133
   - VLESS-78.17.27.137
-  - VLESS-201.58.183.147
   - VLESS-72.56.41.232
   - VLESS-185.86.147.80
   - 'VLESS-185.86.147.80 #2'
@@ -9845,6 +9555,7 @@ proxy-groups:
   - 'VLESS-185.86.147.80 #6'
   - 'VLESS-185.86.147.80 #7'
   - VLESS-188.225.45.99
+  - VLESS-188.225.56.39
   - VLESS-31.59.211.244
   - VLESS-31.76.91.169
   - VLESS-37.139.42.227
@@ -9878,6 +9589,7 @@ proxy-groups:
   - VLESS-50.7.216.174
   - 'VLESS-50.7.216.174 #2'
   - VLESS-50.7.87.93
+  - VLESS-84.32.108.4
   - VLESS-89.41.181.164
   - VLESS-191.217.217.69
   - VLESS-81.17.154.97
@@ -9886,7 +9598,10 @@ proxy-groups:
   - VLESS-45.9.14.206
   - VLESS-5.253.29.23
   - VLESS-89.46.38.58
+  - VLESS-78.159.246.85
   - VLESS-185.86.145.142
+  - VLESS-144.31.242.142
+  - VLESS-2.27.210.119
   - VLESS-2.27.210.127
   - VLESS-31.76.7.233
   - VLESS-31.76.7.38
@@ -9895,6 +9610,7 @@ proxy-groups:
   - VLESS-88.218.170.236
   - VLESS-217.60.183.95
   - 'VLESS-217.60.183.95 #2'
+  - VLESS-176.65.149.194
   - VLESS-194.87.239.82
   - VLESS-109.120.137.98
   - VLESS-144.31.17.132
