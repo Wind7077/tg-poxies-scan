@@ -275,6 +275,19 @@ proxies:
     short-id: 0af4862788c6eff6
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: '🇪🇺 🟢 LTE Обход Глушилок #2", "network": "xhttp", "security": "tls", "sni":
+    "cdn-yb.shamanapp.online", "alpn": ["h2", "http/1.1"], "fp": "firefox", "encryption":
+    "none"}], "userinfo": {"upload": 0, "download": 0, "total": 0, "expire": 1793491200},
+    "profileTitle": "base64:8J+QtiBMdWNreSBWUE4=", "outdated": true}'
+  type: vless
+  server: cdn-yb.shamanapp.online
+  port: 443
+  uuid: 54f9dfa0-b6d2-49b7-bded-6d1f3aff29bf
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: cdn-yb.shamanapp.online
+  client-fingerprint: firefox
 - name: 'Армения 🇦🇲 | Безлимит 1", "network": "tcp", "security": "reality", "sni":
     "page.syoknew.lol", "fp": "chrome", "pbk": "wxBAhNgGKmjVGUOAZZidsASnO8KswK2M5Zf_-r5GviU",
     "sid": "22e0ad446650ba37", "flow": "xtls-rprx-vision", "encryption": "none"},
@@ -558,7 +571,7 @@ proxies:
       Host: z1q3pv4g78.rucdncomp.pro
 - name: '🔐 Сервер для доступа в Telegram", "network": "tcp", "security": "reality",
     "sni": "acb7c56149.meow.ac", "fp": "firefox", "pbk": "Cu-Sy_a5r9Kqu-ES6hswGo0b7_ujzS01KknX9fo5JTI",
-    "sid": "b155de99a4a0b1f3", "flow": "xtls-rprx-vision", "encryption": "none"}],
+    "sid": "6a727d36bf424c06", "flow": "xtls-rprx-vision", "encryption": "none"}],
     "userinfo": {"upload": 0, "download": 14103845122, "total": 10737418240, "expire":
     1793556000}, "profileTitle": "base64:8J+QviBDYXRzIFZQTiAtIGNhdHN2cG4ubmV0", "outdated":
     true}'
@@ -572,7 +585,7 @@ proxies:
   server-name: acb7c56149.meow.ac
   reality-opts:
     public-key: Cu-Sy_a5r9Kqu-ES6hswGo0b7_ujzS01KknX9fo5JTI
-    short-id: b155de99a4a0b1f3
+    short-id: 6a727d36bf424c06
   client-fingerprint: firefox
   flow: xtls-rprx-vision
 - name: '🇷🇺 Russia (за границей)", "network": "xhttp", "security": "reality", "sni":
@@ -1004,19 +1017,6 @@ proxies:
     public-key: MN2XIVlIusdWaGwyyrGZ7Ti3jzqjDlpMmc12WcrV1nU
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #116 🛰️ 🇬🇧'
-  type: vless
-  server: router.hermit.pw
-  port: 24128
-  uuid: 69158986-cfae-4567-8391-0f96d9d985bd
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: uk.neuroniko.com
-  reality-opts:
-    public-key: ud15DX-emDBS7QsLMabJ7CjgIteK61jxwSp1v0Fewxc
-    short-id: 10a59b0a94367ac2
-  client-fingerprint: qq
 - name: '@neirolexa_bot C-1 #102 🛰️ 🇳🇴'
   type: vless
   server: 6d160a52.con.fernarchive.online
@@ -1063,45 +1063,6 @@ proxies:
     public-key: iD0nfLVyK9EbtFtKZgj_UcuGINq6yTqQM4jFfuTMFSY
     short-id: 5f5962cc9ec6b180
   client-fingerprint: firefox
-- name: '@neirolexa_bot C-1 #105 🜂 🇦🇹'
-  type: vless
-  server: router.hermit.pw
-  port: 24122
-  uuid: 69158986-cfae-4567-8391-0f96d9d985bd
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: av.neuroniko.com
-  reality-opts:
-    public-key: ud15DX-emDBS7QsLMabJ7CjgIteK61jxwSp1v0Fewxc
-    short-id: 10a59b0a94367ac2
-  client-fingerprint: qq
-- name: '@neirolexa_bot C-1 #104 🝰 🇮🇹'
-  type: vless
-  server: router.hermit.pw
-  port: 24124
-  uuid: 69158986-cfae-4567-8391-0f96d9d985bd
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: it.neuroniko.com
-  reality-opts:
-    public-key: ud15DX-emDBS7QsLMabJ7CjgIteK61jxwSp1v0Fewxc
-    short-id: 10a59b0a94367ac2
-  client-fingerprint: qq
-- name: '@neirolexa_bot C-1 #122 🧿 🇱🇻'
-  type: vless
-  server: router.hermit.pw
-  port: 38963
-  uuid: 69158986-cfae-4567-8391-0f96d9d985bd
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: lv.neuroniko.com
-  reality-opts:
-    public-key: ud15DX-emDBS7QsLMabJ7CjgIteK61jxwSp1v0Fewxc
-    short-id: 10a59b0a94367ac2
-  client-fingerprint: qq
 - name: '@neirolexa_bot C-1 #106 🧿 🇸🇪'
   type: vless
   server: sw.neuroniko.com
@@ -1317,31 +1278,6 @@ proxies:
   tls: true
   server-name: firefox.com
   client-fingerprint: firefox
-- name: '@neirolexa_bot C-1 #62 🧭 🇫🇲'
-  type: vless
-  server: by-tls.nerpvpn.net
-  port: 443
-  uuid: 1ffd1edc-16da-4a9f-a72b-9b5253dfb9cc
-  network: grpc
-  udp: true
-  tls: true
-  server-name: mediatract.com
-  client-fingerprint: safari
-  grpc-opts:
-    grpc-service-name: /grpc
-- name: '@neirolexa_bot C-1 #88 🚰 🇫🇲'
-  type: vless
-  server: media.storage-hub.site
-  port: 443
-  uuid: 287e2dbf-41e2-415d-bcbf-edf5808c4561
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: media.storage-hub.site
-  reality-opts:
-    public-key: BsU4GWaW8iZHeJp_xh7YgZ6oWkD3md6VjoiM52egV0Y
-    short-id: fcfb5b496af15412
-  client-fingerprint: firefox
 - name: '@neirolexa_bot C-1 #85 🪬 🇫🇲'
   type: vless
   server: 81.94.148.232
@@ -1352,102 +1288,6 @@ proxies:
   tls: true
   server-name: windytrout.net
   client-fingerprint: chrome
-- name: '@neirolexa_bot C-1 #10 🜂 🇫🇲'
-  type: vless
-  server: al.reus.lol
-  port: 443
-  uuid: 3de59cd0-f92c-40bf-829c-db7bf6043d1d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: al.reus.lol
-  reality-opts:
-    public-key: jVNJH18MECOqhciQLa-w7Y7yp3N9IdseIDpgCEu2LhU
-    short-id: 81785a5f59d66d7d
-  client-fingerprint: safari
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #64 🜱 🇫🇲'
-  type: vless
-  server: bg.reus.lol
-  port: 443
-  uuid: 3de59cd0-f92c-40bf-829c-db7bf6043d1d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: bg.reus.lol
-  reality-opts:
-    public-key: OWnQ9xwvYFlNw_Fnmf4ceZMtb0SVLuVUoq2WP5P8lkw
-    short-id: 5f2d02dc7ec1e539
-  client-fingerprint: safari
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #18 🜂 🇫🇲'
-  type: vless
-  server: fi.reus.lol
-  port: 443
-  uuid: 3de59cd0-f92c-40bf-829c-db7bf6043d1d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: fi.reus.lol
-  reality-opts:
-    public-key: jVNJH18MECOqhciQLa-w7Y7yp3N9IdseIDpgCEu2LhU
-    short-id: 81785a5f59d66d7d
-  client-fingerprint: safari
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #40 🜱 🇫🇲'
-  type: vless
-  server: pl.reus.lol
-  port: 443
-  uuid: 3de59cd0-f92c-40bf-829c-db7bf6043d1d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: pl.reus.lol
-  reality-opts:
-    public-key: jVNJH18MECOqhciQLa-w7Y7yp3N9IdseIDpgCEu2LhU
-    short-id: 81785a5f59d66d7d
-  client-fingerprint: safari
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #41 🝰 🇫🇲'
-  type: vless
-  server: etpl6.servertest.cc
-  port: 443
-  uuid: 3f044365-9592-4301-8291-f2d93fcc2570
-  network: ws
-  udp: true
-  tls: true
-  server-name: etpl6.servertest.cc
-  client-fingerprint: firefox
-  ws-opts:
-    path: /gateway/v1/ws/e17e55a42ca2cb6bc3c98ab20ff16f9c
-- name: '@neirolexa_bot C-1 #43 🧿 🇫🇲'
-  type: vless
-  server: jp.launch.tel
-  port: 443
-  uuid: 3f044365-9592-4301-8291-f2d93fcc2570
-  network: tcp
-  udp: true
-  tls: true
-  server-name: jp.launch.tel
-  reality-opts:
-    public-key: Su5ULcRQKF-0DJIHZeTNEnXHBpyQtizmUrcNIYhZI0E
-    short-id: afee962d
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #33 🝰 🇫🇲'
-  type: vless
-  server: swd03.launch.tel
-  port: 443
-  uuid: 3f044365-9592-4301-8291-f2d93fcc2570
-  network: tcp
-  udp: true
-  tls: true
-  server-name: swd03.launch.tel
-  reality-opts:
-    public-key: Su5ULcRQKF-0DJIHZeTNEnXHBpyQtizmUrcNIYhZI0E
-    short-id: afee962d
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: '@neirolexa_bot C-1 #11 🧿 🇫🇲'
   type: vless
   server: 77.221.157.156
@@ -1473,20 +1313,6 @@ proxies:
   server-name: nl2.originmesh.online
   reality-opts:
     public-key: _MRd1VDQBecIufT-CXd5O73L8JBjBI8Iqag9V8xseDc
-    short-id: eecfe76af97a6132
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '@neirolexa_bot C-1 #96 🚰 🇫🇲'
-  type: vless
-  server: gr4.originmesh.online
-  port: 443
-  uuid: 5f53b921-2874-482a-b530-d3ee1d66cbc5
-  network: tcp
-  udp: true
-  tls: true
-  server-name: gr4.originmesh.online
-  reality-opts:
-    public-key: 82aT3osfzlXuB4ARpNvpn-56M87zoJ8HzoNfIRf3Pl0
     short-id: eecfe76af97a6132
   client-fingerprint: firefox
   flow: xtls-rprx-vision
@@ -1718,17 +1544,17 @@ proxies:
   client-fingerprint: random
   grpc-opts:
     grpc-service-name: grpc
-- name: '🇷🇺 Cluster Russia #21'
+- name: '🇷🇺 Cluster Russia #15'
   type: vless
   server: 94.228.112.60
-  port: 7443
+  port: 8443
   uuid: 92e135b9-4c04-4e7e-8b28-d8074a202cf8
   network: grpc
   udp: true
   tls: true
-  server-name: cdn.suzuki.lol
+  server-name: assets.uzumaki.lol
   reality-opts:
-    public-key: 36VgwCvCzW3ST22DrfRU7y8mVfm0PM7JpkXQnN9yLiE
+    public-key: TLxUogtDgnVgAZaPtiSmsKWeJvLqhSKSmKdGTTxKZSE
   client-fingerprint: random
   grpc-opts:
     grpc-service-name: grpc
@@ -1933,16 +1759,16 @@ proxies:
   flow: xtls-rprx-vision
 - name: '🇩🇪 AetrisVPN #3'
   type: vless
-  server: 217.60.151.187
+  server: 31.56.189.208
   port: 47443
   uuid: 1fe01c8a-ab37-4e95-bbfc-95d4a608931e
   network: tcp
   udp: true
   tls: true
-  server-name: ge-3.waspguard.ru
+  server-name: ge-2.waspguard.ru
   reality-opts:
-    public-key: MnW49sASUaQ1Sm8SbCWlU8eKfNR8x1O03YSZdj5vM3Y
-    short-id: ae97223a8f799003
+    public-key: ITUrGb0T4zee52YrsT7lPXvdPmBDDN5R9nh1zBoVnkg
+    short-id: ae97223a8f799002
   client-fingerprint: firefox
   flow: xtls-rprx-vision
 - name: '🇵🇱 AetrisVPN #2'
@@ -2729,6 +2555,20 @@ proxies:
     short-id: 8debcf36f1cc69ff
   client-fingerprint: chrome
   flow: xtls-rprx-vision
+- name: '🇺🇸 AetrisVPN #5'
+  type: vless
+  server: 5.34.178.120
+  port: 443
+  uuid: 9063f9fb-e88a-4ee0-b4a4-a92ca7316a9f
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.cloudflare.com
+  reality-opts:
+    public-key: EVhq2BxKuw2Cody1DmF_HPvUYKwzdXbHP47blUv-eRM
+    short-id: 55ab5559e3a6d10a
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
 - name: '🇷🇺 AetrisVPN #7'
   type: vless
   server: 46.182.24.147
@@ -2778,7 +2618,7 @@ proxies:
     short-id: 0e7741edc378622f
   client-fingerprint: qq
   flow: xtls-rprx-vision
-- name: '🇺🇸 AetrisVPN #5'
+- name: '🇺🇸 AetrisVPN #6'
   type: vless
   server: 31.172.69.31
   port: 8443
@@ -2848,7 +2688,7 @@ proxies:
     path: /go.html/item/content
     headers:
       Host: d39333476.pages.dev
-- name: '🇺🇸 AetrisVPN #6'
+- name: '🇺🇸 AetrisVPN #7'
   type: vless
   server: 188.164.248.151
   port: 2096
@@ -3700,16 +3540,6 @@ proxies:
     path: /live.stream.v1.Broadcast/
     headers:
       Host: freetg.ghost-service.cc
-- name: VLESS-77.232.135.123
-  type: vless
-  server: 77.232.135.123
-  port: 9444
-  uuid: 36cf792c-f07d-4500-97ea-a395e5178deb
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: ru2.radiolumens.uk
-  client-fingerprint: firefox
 - name: VLESS-77.232.135.141
   type: vless
   server: 77.232.135.141
@@ -4630,20 +4460,6 @@ proxies:
   tls: true
   server-name: de-1e51a8f925.shamanapp.online
   client-fingerprint: firefox
-- name: VLESS-212.109.194.231
-  type: vless
-  server: 212.109.194.231
-  port: 443
-  uuid: e0216964-ffa1-4d39-82c4-0e40879a470d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ger.nullo.pro
-  reality-opts:
-    public-key: e8vusEkL9FTC7oxFCp8biOWMFH-e-1IN21V6YNynGDg
-    short-id: 6350d1647a4880
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: VLESS-194.87.239.82
   type: vless
   server: 194.87.239.82
@@ -5112,6 +4928,10 @@ proxy-groups:
     "fp": "firefox", "pbk": "jaIUtxC9Ej4ps6f7gkzO2NgnqTb3wcjsYJa-AatV8Sc", "sid":
     "0af4862788c6eff6", "flow": "xtls-rprx-vision", "encryption": "mlkem768x25519plus.native.1rtt.MIP-YNZKKPsnI9bwNMwOyj3iUe0V-zSPudpW3ao7Ilo"},
     {"type": "vless", "name": "'
+  - '🇪🇺 🟢 LTE Обход Глушилок #2", "network": "xhttp", "security": "tls", "sni": "cdn-yb.shamanapp.online",
+    "alpn": ["h2", "http/1.1"], "fp": "firefox", "encryption": "none"}], "userinfo":
+    {"upload": 0, "download": 0, "total": 0, "expire": 1793491200}, "profileTitle":
+    "base64:8J+QtiBMdWNreSBWUE4=", "outdated": true}'
   - 'Армения 🇦🇲 | Безлимит 1", "network": "tcp", "security": "reality", "sni": "page.syoknew.lol",
     "fp": "chrome", "pbk": "wxBAhNgGKmjVGUOAZZidsASnO8KswK2M5Zf_-r5GviU", "sid": "22e0ad446650ba37",
     "flow": "xtls-rprx-vision", "encryption": "none"}, {"type": "vless", "name": "'
@@ -5155,7 +4975,7 @@ proxy-groups:
   - VLESS-217.19.122.156
   - '🔐 Сервер для доступа в Telegram", "network": "tcp", "security": "reality", "sni":
     "acb7c56149.meow.ac", "fp": "firefox", "pbk": "Cu-Sy_a5r9Kqu-ES6hswGo0b7_ujzS01KknX9fo5JTI",
-    "sid": "b155de99a4a0b1f3", "flow": "xtls-rprx-vision", "encryption": "none"}],
+    "sid": "6a727d36bf424c06", "flow": "xtls-rprx-vision", "encryption": "none"}],
     "userinfo": {"upload": 0, "download": 14103845122, "total": 10737418240, "expire":
     1793556000}, "profileTitle": "base64:8J+QviBDYXRzIFZQTiAtIGNhdHN2cG4ubmV0", "outdated":
     true}'
@@ -5238,14 +5058,10 @@ proxy-groups:
   - '🇳🇱 Cluster The Netherlands #76'
   - '🇳🇱 Cluster The Netherlands #84'
   - '🇪🇪 Wi-Fi 10 | тгк: @rostunnel'
-  - '@neirolexa_bot C-1 #116 🛰️ 🇬🇧'
   - '@neirolexa_bot C-1 #102 🛰️ 🇳🇴'
   - '@neirolexa_bot C-1 #108 🛰️ 🇦🇲'
   - '@neirolexa_bot C-1 #120 🝰 🇧🇬'
   - '@neirolexa_bot C-1 #118 🚰 🇩🇰'
-  - '@neirolexa_bot C-1 #105 🜂 🇦🇹'
-  - '@neirolexa_bot C-1 #104 🝰 🇮🇹'
-  - '@neirolexa_bot C-1 #122 🧿 🇱🇻'
   - '@neirolexa_bot C-1 #106 🧿 🇸🇪'
   - '@neirolexa_bot C-1 #61 🛰️ 🇫🇲'
   - '@neirolexa_bot C-1 #107 🪬 🇸🇰'
@@ -5265,19 +5081,9 @@ proxy-groups:
   - '@neirolexa_bot C-1 #69 🛰️ 🇫🇲'
   - '@neirolexa_bot C-1 #112 🝰 🇧🇷'
   - '@neirolexa_bot C-1 #111 🜱 🇹🇷'
-  - '@neirolexa_bot C-1 #62 🧭 🇫🇲'
-  - '@neirolexa_bot C-1 #88 🚰 🇫🇲'
   - '@neirolexa_bot C-1 #85 🪬 🇫🇲'
-  - '@neirolexa_bot C-1 #10 🜂 🇫🇲'
-  - '@neirolexa_bot C-1 #64 🜱 🇫🇲'
-  - '@neirolexa_bot C-1 #18 🜂 🇫🇲'
-  - '@neirolexa_bot C-1 #40 🜱 🇫🇲'
-  - '@neirolexa_bot C-1 #41 🝰 🇫🇲'
-  - '@neirolexa_bot C-1 #43 🧿 🇫🇲'
-  - '@neirolexa_bot C-1 #33 🝰 🇫🇲'
   - '@neirolexa_bot C-1 #11 🧿 🇫🇲'
   - '@neirolexa_bot C-1 #35 🧿 🇫🇲'
-  - '@neirolexa_bot C-1 #96 🚰 🇫🇲'
   - '@neirolexa_bot C-1 #16 🜱 🇫🇲'
   - '@neirolexa_bot C-1 #5 🛰️ 🇫🇲'
   - '@neirolexa_bot C-1 #20 🪬 🇫🇲'
@@ -5295,7 +5101,7 @@ proxy-groups:
   - '🇷🇺 Cluster Russia #22'
   - '🇷🇺 Cluster Russia #17'
   - '🇷🇺 Cluster Russia #23'
-  - '🇷🇺 Cluster Russia #21'
+  - '🇷🇺 Cluster Russia #15'
   - '🇷🇺 Cluster Russia #16'
   - '🇷🇺 Cluster Russia #14'
   - '🇷🇺 Cluster Russia #1'
@@ -5372,16 +5178,17 @@ proxy-groups:
   - '🇰🇷 AetrisVPN #2'
   - '🇩🇪 AetrisVPN #12'
   - 🇧🇾 AetrisVPN
+  - '🇺🇸 AetrisVPN #5'
   - '🇷🇺 AetrisVPN #7'
   - '🇳🇱 AetrisVPN #6'
   - '🇪🇺 AetrisVPN #5'
   - '🇸🇪 AetrisVPN #4'
-  - '🇺🇸 AetrisVPN #5'
+  - '🇺🇸 AetrisVPN #6'
   - '🇩🇪 AetrisVPN #13'
   - '🇪🇺 AetrisVPN #6'
   - '🇷🇺 AetrisVPN #8'
   - '🇪🇺 AetrisVPN #7'
-  - '🇺🇸 AetrisVPN #6'
+  - '🇺🇸 AetrisVPN #7'
   - '🇪🇺 AetrisVPN #8'
   - '🇸🇪 AetrisVPN #5'
   - '🇸🇬 AetrisVPN #4'
@@ -5445,7 +5252,6 @@ proxy-groups:
   - 'VLESS-81.94.148.232 #2'
   - VLESS-185.86.145.37
   - VLESS-45.145.43.151
-  - VLESS-77.232.135.123
   - VLESS-77.232.135.141
   - VLESS-157.22.205.180
   - VLESS-193.233.220.173
@@ -5520,7 +5326,6 @@ proxy-groups:
   - VLESS-91.107.180.176
   - VLESS-217.60.183.95
   - 'VLESS-217.60.183.95 #2'
-  - VLESS-212.109.194.231
   - VLESS-194.87.239.82
   - VLESS-109.120.137.98
   - VLESS-144.31.17.132
@@ -5699,6 +5504,10 @@ proxy-groups:
     "fp": "firefox", "pbk": "jaIUtxC9Ej4ps6f7gkzO2NgnqTb3wcjsYJa-AatV8Sc", "sid":
     "0af4862788c6eff6", "flow": "xtls-rprx-vision", "encryption": "mlkem768x25519plus.native.1rtt.MIP-YNZKKPsnI9bwNMwOyj3iUe0V-zSPudpW3ao7Ilo"},
     {"type": "vless", "name": "'
+  - '🇪🇺 🟢 LTE Обход Глушилок #2", "network": "xhttp", "security": "tls", "sni": "cdn-yb.shamanapp.online",
+    "alpn": ["h2", "http/1.1"], "fp": "firefox", "encryption": "none"}], "userinfo":
+    {"upload": 0, "download": 0, "total": 0, "expire": 1793491200}, "profileTitle":
+    "base64:8J+QtiBMdWNreSBWUE4=", "outdated": true}'
   - 'Армения 🇦🇲 | Безлимит 1", "network": "tcp", "security": "reality", "sni": "page.syoknew.lol",
     "fp": "chrome", "pbk": "wxBAhNgGKmjVGUOAZZidsASnO8KswK2M5Zf_-r5GviU", "sid": "22e0ad446650ba37",
     "flow": "xtls-rprx-vision", "encryption": "none"}, {"type": "vless", "name": "'
@@ -5742,7 +5551,7 @@ proxy-groups:
   - VLESS-217.19.122.156
   - '🔐 Сервер для доступа в Telegram", "network": "tcp", "security": "reality", "sni":
     "acb7c56149.meow.ac", "fp": "firefox", "pbk": "Cu-Sy_a5r9Kqu-ES6hswGo0b7_ujzS01KknX9fo5JTI",
-    "sid": "b155de99a4a0b1f3", "flow": "xtls-rprx-vision", "encryption": "none"}],
+    "sid": "6a727d36bf424c06", "flow": "xtls-rprx-vision", "encryption": "none"}],
     "userinfo": {"upload": 0, "download": 14103845122, "total": 10737418240, "expire":
     1793556000}, "profileTitle": "base64:8J+QviBDYXRzIFZQTiAtIGNhdHN2cG4ubmV0", "outdated":
     true}'
@@ -5825,14 +5634,10 @@ proxy-groups:
   - '🇳🇱 Cluster The Netherlands #76'
   - '🇳🇱 Cluster The Netherlands #84'
   - '🇪🇪 Wi-Fi 10 | тгк: @rostunnel'
-  - '@neirolexa_bot C-1 #116 🛰️ 🇬🇧'
   - '@neirolexa_bot C-1 #102 🛰️ 🇳🇴'
   - '@neirolexa_bot C-1 #108 🛰️ 🇦🇲'
   - '@neirolexa_bot C-1 #120 🝰 🇧🇬'
   - '@neirolexa_bot C-1 #118 🚰 🇩🇰'
-  - '@neirolexa_bot C-1 #105 🜂 🇦🇹'
-  - '@neirolexa_bot C-1 #104 🝰 🇮🇹'
-  - '@neirolexa_bot C-1 #122 🧿 🇱🇻'
   - '@neirolexa_bot C-1 #106 🧿 🇸🇪'
   - '@neirolexa_bot C-1 #61 🛰️ 🇫🇲'
   - '@neirolexa_bot C-1 #107 🪬 🇸🇰'
@@ -5852,19 +5657,9 @@ proxy-groups:
   - '@neirolexa_bot C-1 #69 🛰️ 🇫🇲'
   - '@neirolexa_bot C-1 #112 🝰 🇧🇷'
   - '@neirolexa_bot C-1 #111 🜱 🇹🇷'
-  - '@neirolexa_bot C-1 #62 🧭 🇫🇲'
-  - '@neirolexa_bot C-1 #88 🚰 🇫🇲'
   - '@neirolexa_bot C-1 #85 🪬 🇫🇲'
-  - '@neirolexa_bot C-1 #10 🜂 🇫🇲'
-  - '@neirolexa_bot C-1 #64 🜱 🇫🇲'
-  - '@neirolexa_bot C-1 #18 🜂 🇫🇲'
-  - '@neirolexa_bot C-1 #40 🜱 🇫🇲'
-  - '@neirolexa_bot C-1 #41 🝰 🇫🇲'
-  - '@neirolexa_bot C-1 #43 🧿 🇫🇲'
-  - '@neirolexa_bot C-1 #33 🝰 🇫🇲'
   - '@neirolexa_bot C-1 #11 🧿 🇫🇲'
   - '@neirolexa_bot C-1 #35 🧿 🇫🇲'
-  - '@neirolexa_bot C-1 #96 🚰 🇫🇲'
   - '@neirolexa_bot C-1 #16 🜱 🇫🇲'
   - '@neirolexa_bot C-1 #5 🛰️ 🇫🇲'
   - '@neirolexa_bot C-1 #20 🪬 🇫🇲'
@@ -5882,7 +5677,7 @@ proxy-groups:
   - '🇷🇺 Cluster Russia #22'
   - '🇷🇺 Cluster Russia #17'
   - '🇷🇺 Cluster Russia #23'
-  - '🇷🇺 Cluster Russia #21'
+  - '🇷🇺 Cluster Russia #15'
   - '🇷🇺 Cluster Russia #16'
   - '🇷🇺 Cluster Russia #14'
   - '🇷🇺 Cluster Russia #1'
@@ -5959,16 +5754,17 @@ proxy-groups:
   - '🇰🇷 AetrisVPN #2'
   - '🇩🇪 AetrisVPN #12'
   - 🇧🇾 AetrisVPN
+  - '🇺🇸 AetrisVPN #5'
   - '🇷🇺 AetrisVPN #7'
   - '🇳🇱 AetrisVPN #6'
   - '🇪🇺 AetrisVPN #5'
   - '🇸🇪 AetrisVPN #4'
-  - '🇺🇸 AetrisVPN #5'
+  - '🇺🇸 AetrisVPN #6'
   - '🇩🇪 AetrisVPN #13'
   - '🇪🇺 AetrisVPN #6'
   - '🇷🇺 AetrisVPN #8'
   - '🇪🇺 AetrisVPN #7'
-  - '🇺🇸 AetrisVPN #6'
+  - '🇺🇸 AetrisVPN #7'
   - '🇪🇺 AetrisVPN #8'
   - '🇸🇪 AetrisVPN #5'
   - '🇸🇬 AetrisVPN #4'
@@ -6032,7 +5828,6 @@ proxy-groups:
   - 'VLESS-81.94.148.232 #2'
   - VLESS-185.86.145.37
   - VLESS-45.145.43.151
-  - VLESS-77.232.135.123
   - VLESS-77.232.135.141
   - VLESS-157.22.205.180
   - VLESS-193.233.220.173
@@ -6107,7 +5902,6 @@ proxy-groups:
   - VLESS-91.107.180.176
   - VLESS-217.60.183.95
   - 'VLESS-217.60.183.95 #2'
-  - VLESS-212.109.194.231
   - VLESS-194.87.239.82
   - VLESS-109.120.137.98
   - VLESS-144.31.17.132
