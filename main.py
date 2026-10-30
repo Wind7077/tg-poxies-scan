@@ -62,8 +62,8 @@ STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс"
 
 ENABLE_VLESS = True
-ENABLE_VMESS = False
-ENABLE_SS = False
+ENABLE_VMESS = True
+ENABLE_SS = True
 ENABLE_TROJAN = False
 ENABLE_HYSTERIA = False
 ENABLE_HYSTERIA2 = True
