@@ -24,7 +24,7 @@ OUT_YAML = 'proxy.yaml'
 OUT_ALL_TXT = 'proxy-all.txt'
 OUT_ALL_YAML = 'proxy-all.yaml'
 
-MAX_DAYS_WL = 20
+MAX_DAYS_WL = 30
 MAX_DAYS_ALL = 10
 LIMIT_WL = 1000
 LIMIT_ALL = 300
