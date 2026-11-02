@@ -4,19 +4,6 @@ mode: Rule
 log-level: info
 external-controller: 127.0.0.1:9090
 proxies:
-- name: Mackros • 📶 Белые списки • 🇫🇲 FM
-  type: vless
-  server: 185.91.52.60
-  port: 443
-  uuid: 00d80782-13bb-4e45-82b6-4c21747eabd6
-  network: grpc
-  udp: true
-  tls: true
-  server-name: api-maps.yandex.ru
-  reality-opts:
-    public-key: mvaKH3l8-oq7ZAS2Nf2bOaRtKIT_es06DAgTZUqO1VM
-    short-id: 18abe35232d7d316
-  client-fingerprint: qq
 - name: 🇷🇺 Белые списки / LTE / 1 (TCP)"
   type: vless
   server: 46.254.17.226
@@ -232,7 +219,6 @@ proxy-groups:
 - name: ♻️ Auto
   type: url-test
   proxies:
-  - Mackros • 📶 Белые списки • 🇫🇲 FM
   - 🇷🇺 Белые списки / LTE / 1 (TCP)"
   - 🇷🇺 Белые списки  happcluchi vpn
   - 🇩🇪 Белые списки  happcluchi vpn
@@ -255,7 +241,6 @@ proxy-groups:
   type: select
   proxies:
   - ♻️ Auto
-  - Mackros • 📶 Белые списки • 🇫🇲 FM
   - 🇷🇺 Белые списки / LTE / 1 (TCP)"
   - 🇷🇺 Белые списки  happcluchi vpn
   - 🇩🇪 Белые списки  happcluchi vpn
