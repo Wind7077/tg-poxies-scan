@@ -260,6 +260,59 @@ proxies:
     short-id: b2baccb38dc00f96
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: 🇳🇱 Белые списки  happcluchi vpn
+  type: vless
+  server: 195.63.139.79
+  port: 443
+  uuid: 6da2c981-8c77-4340-bda3-93399b7aea26
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: sports.blog-forme.ru
+  reality-opts:
+    public-key: nalACuCZjV1sZx7QOH6yAIDio8mFI0FgVKYQvQHBKS4
+    short-id: fb3a5f2d4ca346ed
+  client-fingerprint: firefox
+- name: '🇳🇱 Белые списки  happcluchi vpn #2'
+  type: vless
+  server: 87.199.207.116
+  port: 443
+  uuid: 6da2c981-8c77-4340-bda3-93399b7aea26
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: docs.blog-forme.ru
+  reality-opts:
+    public-key: nalACuCZjV1sZx7QOH6yAIDio8mFI0FgVKYQvQHBKS4
+    short-id: fb3a5f2d4ca346ed
+  client-fingerprint: firefox
+- name: '🇳🇱 Белые списки  happcluchi vpn #3'
+  type: vless
+  server: sports.blog-forme.ru
+  port: 443
+  uuid: 6da2c981-8c77-4340-bda3-93399b7aea26
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: sports.blog-forme.ru
+  reality-opts:
+    public-key: nalACuCZjV1sZx7QOH6yAIDio8mFI0FgVKYQvQHBKS4
+    short-id: fb3a5f2d4ca346ed
+  client-fingerprint: edge
+- name: '🇳🇱 Белые списки  happcluchi vpn #4'
+  type: vless
+  server: sports.blog-forme.ru
+  port: 8443
+  uuid: 6da2c981-8c77-4340-bda3-93399b7aea26
+  network: tcp
+  udp: true
+  tls: true
+  server-name: sports.blog-forme.ru
+  reality-opts:
+    public-key: nalACuCZjV1sZx7QOH6yAIDio8mFI0FgVKYQvQHBKS4
+    short-id: fb3a5f2d4ca346ed
+  client-fingerprint: edge
+  flow: xtls-rprx-vision
 - name: 🇩🇪 Белые списки  happcluchi vpn
   type: vless
   server: 87.120.166.160
@@ -288,6 +341,19 @@ proxies:
     headers:
       Host: lvi.su
   client-fingerprint: chrome
+- name: 🇪🇺 Белые списки  happcluchi vpn
+  type: vless
+  server: 188.225.27.178
+  port: 443
+  uuid: 7f99eb58-5983-006e-9c02-d8cea49f7074
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: ozon.ru
+  reality-opts:
+    public-key: 0omtLHQHyKnV7w05maiOqvL5PvxdCQKw_zDqqgR28X8
+    short-id: 8d0ff3d6ec629371
+  client-fingerprint: firefox
 - name: 🇧🇾 Беларусь | VLESS TCP Reality
   type: vless
   server: 95.128.71.79
@@ -302,19 +368,19 @@ proxies:
     short-id: 8debcf36f1cc69ff
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇧🇾 Беларусь | VLESS TCP Reality #2'
+- name: 🇵🇱 Белые списки  happcluchi vpn
   type: vless
-  server: 178.172.227.228
-  port: 10444
-  uuid: b6e5dc56-836f-48c1-9163-b0b0b43b647d
+  server: 217.60.33.67
+  port: 8443
+  uuid: dc413f44-7dce-4cc4-b2c7-878ef70ce464
   network: tcp
   udp: true
   tls: true
-  server-name: ads.x5.ru
+  server-name: go-obsh-auto-drun.keno.su
   reality-opts:
-    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
-    short-id: 8debcf36f1cc69ff
-  client-fingerprint: edge
+    public-key: -r5xcA3iTzAf63kkb0VIILrLHH1VUq550pFZ-M74Jlc
+    short-id: de
+  client-fingerprint: ios
   flow: xtls-rprx-vision
 - name: '#5 🇩🇪LTE Обход все операторы'
   type: hysteria2
@@ -509,10 +575,15 @@ proxy-groups:
     "alpn": ["h2"], "fp": "firefox", "encryption": "none"}, {"type": "vless", "name":
     "'
   - 🇷🇺 Белые списки / LTE / 1 (TCP)"
+  - 🇳🇱 Белые списки  happcluchi vpn
+  - '🇳🇱 Белые списки  happcluchi vpn #2'
+  - '🇳🇱 Белые списки  happcluchi vpn #3'
+  - '🇳🇱 Белые списки  happcluchi vpn #4'
   - 🇩🇪 Белые списки  happcluchi vpn
   - '🇩🇪 Белые списки  happcluchi vpn #2'
+  - 🇪🇺 Белые списки  happcluchi vpn
   - 🇧🇾 Беларусь | VLESS TCP Reality
-  - '🇧🇾 Беларусь | VLESS TCP Reality #2'
+  - 🇵🇱 Белые списки  happcluchi vpn
   - '#5 🇩🇪LTE Обход все операторы'
   - '#6 🇩🇪LTE Обход все операторы'
   - 🇧🇾 Беларусь | VLESS WS
@@ -680,10 +751,15 @@ proxy-groups:
     "alpn": ["h2"], "fp": "firefox", "encryption": "none"}, {"type": "vless", "name":
     "'
   - 🇷🇺 Белые списки / LTE / 1 (TCP)"
+  - 🇳🇱 Белые списки  happcluchi vpn
+  - '🇳🇱 Белые списки  happcluchi vpn #2'
+  - '🇳🇱 Белые списки  happcluchi vpn #3'
+  - '🇳🇱 Белые списки  happcluchi vpn #4'
   - 🇩🇪 Белые списки  happcluchi vpn
   - '🇩🇪 Белые списки  happcluchi vpn #2'
+  - 🇪🇺 Белые списки  happcluchi vpn
   - 🇧🇾 Беларусь | VLESS TCP Reality
-  - '🇧🇾 Беларусь | VLESS TCP Reality #2'
+  - 🇵🇱 Белые списки  happcluchi vpn
   - '#5 🇩🇪LTE Обход все операторы'
   - '#6 🇩🇪LTE Обход все операторы'
   - 🇧🇾 Беларусь | VLESS WS
