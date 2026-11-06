@@ -329,7 +329,7 @@ proxies:
 - name: '🇷🇺 LTE | Все операторы 10", "network": "tcp", "security": "reality", "sni":
     "pulse.mail.ru", "fp": "firefox", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs",
     "sid": "428ef87fd47a3a32", "spx": "/", "flow": "xtls-rprx-vision", "encryption":
-    "none"}], "userinfo": {"upload": 0, "download": 36981953605, "total": 214748364800,
+    "none"}], "userinfo": {"upload": 0, "download": 40424445991, "total": 214748364800,
     "expire": 1794348337}, "profileTitle": "base64:QFNob3BUX1ZQTl9ib3Q=", "outdated":
     true}'
   type: vless
@@ -347,7 +347,7 @@ proxies:
   flow: xtls-rprx-vision
 - name: '🇫🇮 Финляндия v1.1 🟢LTE 4", "network": "ws", "ws_path": "/static/js/runtime.9d03c7.js?ed=2048",
     "ws_host": "", "security": "tls", "sni": "lte-v2-ws.gacvpn.site", "fp": "firefox",
-    "encryption": "none"}], "userinfo": {"upload": 0, "download": 179415762938, "total":
+    "encryption": "none"}], "userinfo": {"upload": 0, "download": 977077459653, "total":
     0, "expire": 1794048150}, "profileTitle": "GAC VPN", "outdated": true}'
   type: vless
   server: lte-v2-ws.gacvpn.site
@@ -554,91 +554,48 @@ proxies:
   client-fingerprint: firefox
   ws-opts:
     path: /static/js/chunk.36c7638e.js?ed=2048
-- name: '🇷🇺➜🇩🇪 GidroksiFree #3 | 🔗Каскад | 🛡БС | 🟢LTE | 1476ms | ↓0.0Mbps'
+- name: '🇩🇪 GidroksiFree #1 | 🛡БС | 🟢LTE | 2289ms | ↓0.0Mbps'
   type: vless
-  server: 185.86.147.143
-  port: 7443
-  uuid: a2ed7ef3-a16a-4a55-9c8e-39a984247de4
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: 0w339GBhpDiYwa9Wgqu3z3epu8dHAzeYUFXPtvzK8To
-    short-id: 190c27ae5f2e4d2c
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🇷🇺➜🇩🇪 GidroksiFree #1 | 🔗Каскад | 🛡БС | 🟢LTE | 986ms | ↓0.0Mbps'
-  type: vless
-  server: 37.9.4.182
+  server: 88.216.70.128
   port: 443
-  uuid: 255a8044-3337-473e-af26-46a37208adcc
+  uuid: 95d0e214-eab0-4701-93ed-fea4f1b56062
   network: tcp
   udp: true
   tls: true
-  server-name: anvil.kachow.ink
+  server-name: tickets.betust.net
   reality-opts:
-    public-key: BGe-GOf-JkNWNay9--36nR4ZFHYNjGmpzVTQcXthR2A
-    short-id: 647547b8f895f9b9
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🇷🇺➜🇩🇪 GidroksiFree #2 | 🔗Каскад | 🛡БС | 🟢LTE | 586ms | ↓0.0Mbps'
-  type: vless
-  server: 185.86.145.112
-  port: 10452
-  uuid: a2ed7ef3-a16a-4a55-9c8e-39a984247de4
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: L1Ug_ELbeZ_5q9QRzO5Lg_ZMkus9n72aiUfvFirN9Vo
-    short-id: c8a79c7b64adca2a
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🇷🇺➜🇩🇪 GidroksiFree #5 | 🔗Каскад | 🛡БС | 🟢LTE | 776ms | ↓0.0Mbps'
-  type: vless
-  server: 185.86.145.216
-  port: 32944
-  uuid: a2ed7ef3-a16a-4a55-9c8e-39a984247de4
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: Te3ZcFFTilb6_j4hdotSvXaRYBzGuNiRxuBh8n1NezU
-    short-id: 91d2d3db690f4b59
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🇷🇺➜🇩🇪 GidroksiFree #4 | 🔗Каскад | 🛡БС | 🟢LTE | 819ms | ↓0.0Mbps'
-  type: vless
-  server: 185.86.147.184
-  port: 9449
-  uuid: a2ed7ef3-a16a-4a55-9c8e-39a984247de4
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: SsPslLCfw2CGDmCs17gTLRSUOsOfv0KgnuLnkyTqCzA
-    short-id: 62002c0a685ac208
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🇬🇧 Великобритания · LTE · ❔ · #17'
-  type: vless
-  server: 193.163.203.170
-  port: 443
-  uuid: 11aabba0-5fd1-4f15-8068-74c1a466cefc
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yandex.ru
-  reality-opts:
-    public-key: GCCZ1ZZjB_nj7yxqFi22bIIWWr_G6rnWUzDcssN_40o
-    short-id: b28db60d77c50b4f
+    public-key: TRaUsnzFf-AhWUuW4RQUQOBYTdM-qJdLDTTkzQNkcRw
+    short-id: f70764f8
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '🇬🇧 Великобритания · LTE · ❔ · #16'
+- name: '🇷🇺 GidroksiFree #2 | 🟢LTE | 500ms | ↓0.0Mbps'
+  type: vless
+  server: 136.234.9.92
+  port: 443
+  uuid: e267bd26-3816-002e-990f-8d6ec83bd25b
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: git.medrocket.ru
+  reality-opts:
+    public-key: YHPoUNxsml4z6pYt-7djOb1lqnBjxCk4-2mk84pveyc
+    short-id: 3b5b38669a1a51c0
+  client-fingerprint: firefox
+- name: '🇬🇧 Великобритания · LTE · ❔ · #14'
+  type: vless
+  server: prime.jarbook.net
+  port: 443
+  uuid: fb37d713-0ed3-4146-b085-a5c879a9aafa
+  network: tcp
+  udp: true
+  tls: true
+  server-name: prime.jarbook.net
+  reality-opts:
+    public-key: oAX7soFKfN3xURgCD26trmjeF-e-eEjW3pBVXuuvW0k
+    short-id: 77a8c8c8
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🇬🇧 Великобритания · LTE · 🟢 · #1'
   type: vless
   server: 138.124.125.193
   port: 10444
@@ -650,22 +607,255 @@ proxies:
   reality-opts:
     public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
     short-id: 8debcf36f1cc69ff
-  client-fingerprint: firefox
+  client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 🇷🇺 Белые списки / LTE / 1 (TCP)"
+- name: 🇪🇺 Белые списки  happcluchi vpn
   type: vless
-  server: 46.254.17.226
-  port: 443
-  uuid: 4f155c95-bbff-446b-a093-a18e5a3b2fde
+  server: dfsto.whitenw.net
+  port: 8443
+  uuid: 02e7f01e-c9cf-4f96-816d-3b7cb97b289b
   network: tcp
   udp: true
   tls: true
-  server-name: filecache.ru
+  server-name: vk.ru
   reality-opts:
-    public-key: rDu7DyU9KClauBhK7iQeP1Znx4_OAMJqMJp4wlJ5nxc
-    short-id: b2baccb38dc00f96
+    public-key: pNj1rPSs9XjNpf30e8DjGbNBU1fp58CzFrxP36_D42U
+    short-id: b470934eb6924098
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: '🇪🇺 Белые списки  happcluchi vpn #2'
+  type: vless
+  server: cdn4.anytube.ru
+  port: 443
+  uuid: 255a8044-3337-473e-af26-46a37208adcc
+  network: tcp
+  udp: true
+  tls: true
+  server-name: cdn4.anytube.ru
+  client-fingerprint: firefox
+- name: 🇷🇺 Белые списки  happcluchi vpn
+  type: vless
+  server: 155.212.161.144
+  port: 443
+  uuid: 27c8be8c-878d-4541-bf5f-3d8cffcf5c18
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 360.yandex.ru
+  reality-opts:
+    public-key: R45Yzi8VdbJi7qT-o5NYUpYCDfG7SSpFfSJGEQXAgWA
+    short-id: 06d22eb12a38a8a6
+  client-fingerprint: chrome
+- name: '🇷🇺 Белые списки  happcluchi vpn #2'
+  type: vless
+  server: 155.212.161.144
+  port: 8443
+  uuid: 27c8be8c-878d-4541-bf5f-3d8cffcf5c18
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 360.yandex.ru
+  reality-opts:
+    public-key: R45Yzi8VdbJi7qT-o5NYUpYCDfG7SSpFfSJGEQXAgWA
+    short-id: 06d22eb12a38a8a6
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: '🇷🇺 Белые списки  happcluchi vpn #3'
+  type: vless
+  server: 155.212.161.144
+  port: 8445
+  uuid: 27c8be8c-878d-4541-bf5f-3d8cffcf5c18
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 360.yandex.ru
+  reality-opts:
+    public-key: R45Yzi8VdbJi7qT-o5NYUpYCDfG7SSpFfSJGEQXAgWA
+    short-id: 06d22eb12a38a8a6
+  client-fingerprint: chrome
+  grpc-opts:
+    grpc-service-name: grpc-reality
+- name: 🇫🇷 Белые списки  happcluchi vpn
+  type: vless
+  server: 95.163.152.232
+  port: 8443
+  uuid: 314bfcda-ea36-494d-9522-aa0f6d40a340
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 360.yandex.ru
+  reality-opts:
+    public-key: feCpmxhNdrVkZ2ggjKY_vjHI6buLtGM8mUccpy0blSI
+    short-id: 81059ecb5a20112d
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: '🇷🇺 Белые списки  happcluchi vpn #4'
+  type: vless
+  server: 176.123.162.102
+  port: 8443
+  uuid: 65e7a6ab-84b4-4202-a951-7d2afe2aa352
+  network: tcp
+  udp: true
+  tls: true
+  server-name: vk.ru
+  reality-opts:
+    public-key: 5J8IRlEEy8vuB2NArH15h9EVV--wwDUdq-_9HXoy9FM
+    short-id: dcc04e7520
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 🇺🇸 Белые списки  happcluchi vpn
+  type: vless
+  server: 152.234.239.57
+  port: 443
+  uuid: 73a0f995-f2f1-4d47-a99d-a6dcc1952bf9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: ru.it-crp.ru
+  reality-opts:
+    public-key: HLKQ0JvyaZ16JNdl0pbEPkiVRYJDiZNzGz9prDMiw2s
+    short-id: a1b2c3d4b5
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 🇳🇱 Белые списки  happcluchi vpn
+  type: vless
+  server: 31.76.110.231
+  port: 443
+  uuid: 73a0f995-f2f1-4d47-a99d-a6dcc1952bf9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: nl-3.it-crp.ru
+  reality-opts:
+    public-key: HLKQ0JvyaZ16JNdl0pbEPkiVRYJDiZNzGz9prDMiw2s
+    short-id: a1b2c3d4b5
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🇳🇱 Белые списки  happcluchi vpn #2'
+  type: vless
+  server: nl-3.it-crp.ru
+  port: 443
+  uuid: 73a0f995-f2f1-4d47-a99d-a6dcc1952bf9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: nl-3.it-crp.ru
+  reality-opts:
+    public-key: HLKQ0JvyaZ16JNdl0pbEPkiVRYJDiZNzGz9prDMiw2s
+    short-id: a1b2c3d4b5
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🇺🇸 Белые списки  happcluchi vpn #2'
+  type: vless
+  server: ru.it-crp.ru
+  port: 443
+  uuid: 73a0f995-f2f1-4d47-a99d-a6dcc1952bf9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: ru.it-crp.ru
+  reality-opts:
+    public-key: HLKQ0JvyaZ16JNdl0pbEPkiVRYJDiZNzGz9prDMiw2s
+    short-id: a1b2c3d4b5
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🇳🇱 Белые списки  happcluchi vpn #3'
+  type: vless
+  server: 213.108.21.173
+  port: 443
+  uuid: c1fdf1e6-6370-4bad-a866-f80f27f5e785
+  network: tcp
+  udp: true
+  tls: true
+  server-name: nl1.kids-games.ru
+  reality-opts:
+    public-key: oSbyJBoI2JTEva2ks51kmUCA7z-iFUcoGYCk-ciEaDU
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🇷🇺 Белые списки  happcluchi vpn #5'
+  type: vless
+  server: 185.244.43.99
+  port: 443
+  uuid: e6b16182-b55a-481a-a72a-a02d0233b850
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 360.yandex.ru
+  reality-opts:
+    public-key: drHN56XyKC5veHm0uaclQBAz2pLm70u-aXuVaSaSU0w
+    short-id: 21d9dbf9eb99735d
+  client-fingerprint: ios
+- name: '🇷🇺 Белые списки  happcluchi vpn #6'
+  type: vless
+  server: 185.244.43.99
+  port: 8443
+  uuid: e6b16182-b55a-481a-a72a-a02d0233b850
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 360.yandex.ru
+  reality-opts:
+    public-key: drHN56XyKC5veHm0uaclQBAz2pLm70u-aXuVaSaSU0w
+    short-id: 21d9dbf9eb99735d
+  client-fingerprint: ios
+  flow: xtls-rprx-vision
+- name: '🇷🇺 Белые списки  happcluchi vpn #7'
+  type: vless
+  server: 185.244.43.99
+  port: 8444
+  uuid: e6b16182-b55a-481a-a72a-a02d0233b850
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 360.yandex.ru
+  reality-opts:
+    public-key: drHN56XyKC5veHm0uaclQBAz2pLm70u-aXuVaSaSU0w
+    short-id: 21d9dbf9eb99735d
+  client-fingerprint: ios
+  grpc-opts:
+    grpc-service-name: grpc-reality
+- name: '🇷🇺 Белые списки  happcluchi vpn #8'
+  type: vless
+  server: 104.171.134.135
+  port: 443
+  uuid: f9f70641-667b-46f2-a37e-e3858acbcd9b
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 360.yandex.ru
+  reality-opts:
+    public-key: AMOBkNsSbIM8YBI6uosUBioGJSOp8eliEpW7vTZ4Mks
+    short-id: 8fd699a1c79e360d
+  client-fingerprint: firefox
+- name: '🇷🇺 Белые списки  happcluchi vpn #9'
+  type: vless
+  server: 104.171.134.135
+  port: 8443
+  uuid: f9f70641-667b-46f2-a37e-e3858acbcd9b
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 360.yandex.ru
+  reality-opts:
+    public-key: AMOBkNsSbIM8YBI6uosUBioGJSOp8eliEpW7vTZ4Mks
+    short-id: 8fd699a1c79e360d
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🇷🇺 Белые списки  happcluchi vpn #10'
+  type: vless
+  server: 104.171.134.135
+  port: 8444
+  uuid: f9f70641-667b-46f2-a37e-e3858acbcd9b
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 360.yandex.ru
+  reality-opts:
+    public-key: AMOBkNsSbIM8YBI6uosUBioGJSOp8eliEpW7vTZ4Mks
+    short-id: 8fd699a1c79e360d
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: grpc-reality
 - name: '🇳🇱 Нидерланды · LTE · ❔ · #19'
   type: vless
   server: 213.165.39.134
@@ -680,7 +870,7 @@ proxies:
     short-id: 6f3332a09b0ab6d1
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇳🇱 Нидерланды · LTE · ❔ · #11'
+- name: '🇳🇱 Нидерланды · LTE · ❔ · #13'
   type: vless
   server: snow.betust.net
   port: 443
@@ -694,11 +884,11 @@ proxies:
     short-id: b7a5c406
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇧🇾 Беларусь · LTE · ❔ · #14'
+- name: '🇧🇾 Беларусь · LTE · ❔ · #17'
   type: vless
-  server: 95.128.71.79
+  server: 178.172.227.124
   port: 10444
-  uuid: 8cef7621-c6f0-486e-b51d-59c30c5b0b25
+  uuid: 1af36694-b548-4b18-89a0-bc076eab4ed7
   network: tcp
   udp: true
   tls: true
@@ -706,7 +896,7 @@ proxies:
   reality-opts:
     public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
     short-id: 8debcf36f1cc69ff
-  client-fingerprint: firefox
+  client-fingerprint: ios
   flow: xtls-rprx-vision
 - name: '🇧🇾 Беларусь · LTE · ❔ · #15'
   type: vless
@@ -720,7 +910,7 @@ proxies:
   reality-opts:
     public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
     short-id: 8debcf36f1cc69ff
-  client-fingerprint: firefox
+  client-fingerprint: chrome
   flow: xtls-rprx-vision
 - name: 'BUNKER 🖤 | Россия 🇷🇺 #181'
   type: vless
@@ -785,20 +975,21 @@ proxies:
     short-id: 487cff0425b4e006
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇱🇹 Литва · LTE · ❔ · #13'
+- name: '🇩🇪  happcluchi vpn #58'
   type: vless
-  server: app26.betust.net
+  server: 06cb24g.de2.h1clayd.click
   port: 443
-  uuid: fb37d713-0ed3-4146-b085-a5c879a9aafa
-  network: tcp
+  uuid: 3d78373f-bdbd-428a-9b83-aea64264bf4e
+  network: grpc
   udp: true
   tls: true
-  server-name: app26.betust.net
+  server-name: 06cb24g.de2.h1clayd.click
   reality-opts:
-    public-key: 5pR15ATlWW3tVzfnMN3xoiN56LjIUbhnOMp37ZvTFUc
-    short-id: d44d6d46
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
+    public-key: uBwO9Qm6BHnLzFhbm3muOzeQwofkwheYVB15t1LZ_XU
+    short-id: 5d8cf657b1295d65
+  client-fingerprint: chrome
+  grpc-opts:
+    grpc-service-name: 0f1c5c3c3dca
 - name: 🇧🇾 Беларусь | VLESS WS
   type: vless
   server: 95.128.71.79
@@ -810,18 +1001,30 @@ proxies:
     path: /vless
     headers:
       Host: 95.128.71.79
-- name: '🇺🇸 США · LTE · ❔ · #12'
+- name: '🇷🇺  happcluchi vpn #97'
   type: vless
-  server: panel.betust.net
+  server: lte-v2-ws.gacvpn.site
+  port: 8443
+  uuid: 981c7ccc-2b17-473c-8358-7fd1d6eec1b4
+  network: ws
+  udp: true
+  tls: true
+  server-name: lte-v2-ws.gacvpn.site
+  client-fingerprint: firefox
+  ws-opts:
+    path: /static/js/runtime.9d03c7.js
+- name: '🇺🇸 США · LTE · ❔ · #16'
+  type: vless
+  server: subscribe.goonars.com
   port: 443
   uuid: fb37d713-0ed3-4146-b085-a5c879a9aafa
   network: tcp
   udp: true
   tls: true
-  server-name: panel.betust.net
+  server-name: subscribe.goonars.com
   reality-opts:
-    public-key: 2e9dGid5D-e4demAVGqU71uEeusuBhviikchaJ96E3o
-    short-id: 8ece2039
+    public-key: ZZihyRejv8lHTwTnNCGF0IB6U9kS-L34L3v0ch6k_30
+    short-id: 4f339f5f
   client-fingerprint: firefox
   flow: xtls-rprx-vision
 - name: 🇪🇺 Авто · Европа ⚡️ 💫
@@ -876,6 +1079,48 @@ proxies:
     public-key: gQ77kXT_HW87HDpD0u95L7gAPBNuV8e4kFgUdKH56l8
     short-id: 803c4bb737a161c0
   client-fingerprint: firefox
+- name: 'LTE #3'
+  type: vless
+  server: ad.bomjweb.tech
+  port: 443
+  uuid: 75cadbe3-1f0f-46df-80c9-e0149f77fd00
+  network: ws
+  udp: true
+  tls: true
+  server-name: ad.bomjweb.tech
+  client-fingerprint: firefox
+  ws-opts:
+    path: /apiv1/esa1-asda2jcvnbpseflkn-kjweksad
+    headers:
+      Host: ad.bomjweb.tech
+- name: 'LTE #2'
+  type: vless
+  server: login.bomjweb.tech
+  port: 443
+  uuid: 75cadbe3-1f0f-46df-80c9-e0149f77fd00
+  network: ws
+  udp: true
+  tls: true
+  server-name: login.bomjweb.tech
+  client-fingerprint: firefox
+  ws-opts:
+    path: /apiv1/esa1-asda2jcvnbpseflkn-kjweksad
+    headers:
+      Host: login.bomjweb.tech
+- name: 'LTE #1'
+  type: vless
+  server: testing.bomjweb.tech
+  port: 443
+  uuid: 75cadbe3-1f0f-46df-80c9-e0149f77fd00
+  network: ws
+  udp: true
+  tls: true
+  server-name: testing.bomjweb.tech
+  client-fingerprint: firefox
+  ws-opts:
+    path: /apiv1/esa1-asda2jcvnbpseflkn-kjweksad
+    headers:
+      Host: testing.bomjweb.tech
 proxy-groups:
 - name: ♻️ Auto
   type: url-test
@@ -1175,11 +1420,11 @@ proxy-groups:
   - '🇷🇺 LTE | Все операторы 10", "network": "tcp", "security": "reality", "sni": "pulse.mail.ru",
     "fp": "firefox", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs", "sid":
     "428ef87fd47a3a32", "spx": "/", "flow": "xtls-rprx-vision", "encryption": "none"}],
-    "userinfo": {"upload": 0, "download": 36981953605, "total": 214748364800, "expire":
+    "userinfo": {"upload": 0, "download": 40424445991, "total": 214748364800, "expire":
     1794348337}, "profileTitle": "base64:QFNob3BUX1ZQTl9ib3Q=", "outdated": true}'
   - '🇫🇮 Финляндия v1.1 🟢LTE 4", "network": "ws", "ws_path": "/static/js/runtime.9d03c7.js?ed=2048",
     "ws_host": "", "security": "tls", "sni": "lte-v2-ws.gacvpn.site", "fp": "firefox",
-    "encryption": "none"}], "userinfo": {"upload": 0, "download": 179415762938, "total":
+    "encryption": "none"}], "userinfo": {"upload": 0, "download": 977077459653, "total":
     0, "expire": 1794048150}, "profileTitle": "GAC VPN", "outdated": true}'
   - '🇷🇺 LTE | Все операторы 5", "network": "tcp", "security": "reality", "sni": "api.browser.yandex.com",
     "fp": "firefox", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs", "sid":
@@ -1226,30 +1471,48 @@ proxy-groups:
   - '🇷🇺 Россия МСК 1", "network": "ws", "ws_path": "/static/js/chunk.36c7638e.js?ed=2048",
     "ws_host": "", "security": "tls", "sni": "lte-v2-ws.gacvpn.site", "fp": "firefox",
     "encryption": "none"}, {"type": "vless", "name": "'
-  - '🇷🇺➜🇩🇪 GidroksiFree #3 | 🔗Каскад | 🛡БС | 🟢LTE | 1476ms | ↓0.0Mbps'
-  - '🇷🇺➜🇩🇪 GidroksiFree #1 | 🔗Каскад | 🛡БС | 🟢LTE | 986ms | ↓0.0Mbps'
-  - '🇷🇺➜🇩🇪 GidroksiFree #2 | 🔗Каскад | 🛡БС | 🟢LTE | 586ms | ↓0.0Mbps'
-  - '🇷🇺➜🇩🇪 GidroksiFree #5 | 🔗Каскад | 🛡БС | 🟢LTE | 776ms | ↓0.0Mbps'
-  - '🇷🇺➜🇩🇪 GidroksiFree #4 | 🔗Каскад | 🛡БС | 🟢LTE | 819ms | ↓0.0Mbps'
-  - '🇬🇧 Великобритания · LTE · ❔ · #17'
-  - '🇬🇧 Великобритания · LTE · ❔ · #16'
-  - 🇷🇺 Белые списки / LTE / 1 (TCP)"
+  - '🇩🇪 GidroksiFree #1 | 🛡БС | 🟢LTE | 2289ms | ↓0.0Mbps'
+  - '🇷🇺 GidroksiFree #2 | 🟢LTE | 500ms | ↓0.0Mbps'
+  - '🇬🇧 Великобритания · LTE · ❔ · #14'
+  - '🇬🇧 Великобритания · LTE · 🟢 · #1'
+  - 🇪🇺 Белые списки  happcluchi vpn
+  - '🇪🇺 Белые списки  happcluchi vpn #2'
+  - 🇷🇺 Белые списки  happcluchi vpn
+  - '🇷🇺 Белые списки  happcluchi vpn #2'
+  - '🇷🇺 Белые списки  happcluchi vpn #3'
+  - 🇫🇷 Белые списки  happcluchi vpn
+  - '🇷🇺 Белые списки  happcluchi vpn #4'
+  - 🇺🇸 Белые списки  happcluchi vpn
+  - 🇳🇱 Белые списки  happcluchi vpn
+  - '🇳🇱 Белые списки  happcluchi vpn #2'
+  - '🇺🇸 Белые списки  happcluchi vpn #2'
+  - '🇳🇱 Белые списки  happcluchi vpn #3'
+  - '🇷🇺 Белые списки  happcluchi vpn #5'
+  - '🇷🇺 Белые списки  happcluchi vpn #6'
+  - '🇷🇺 Белые списки  happcluchi vpn #7'
+  - '🇷🇺 Белые списки  happcluchi vpn #8'
+  - '🇷🇺 Белые списки  happcluchi vpn #9'
+  - '🇷🇺 Белые списки  happcluchi vpn #10'
   - '🇳🇱 Нидерланды · LTE · ❔ · #19'
-  - '🇳🇱 Нидерланды · LTE · ❔ · #11'
-  - '🇧🇾 Беларусь · LTE · ❔ · #14'
+  - '🇳🇱 Нидерланды · LTE · ❔ · #13'
+  - '🇧🇾 Беларусь · LTE · ❔ · #17'
   - '🇧🇾 Беларусь · LTE · ❔ · #15'
   - 'BUNKER 🖤 | Россия 🇷🇺 #181'
   - '🇷🇺➜🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #24'
   - '🇨🇿 Чехия · LTE · ❔ · #18'
   - 'BUNKER 🖤 | Россия 🇷🇺 #65'
   - '🇨🇿 Чехия · LTE · ❔ · #20'
-  - '🇱🇹 Литва · LTE · ❔ · #13'
+  - '🇩🇪  happcluchi vpn #58'
   - 🇧🇾 Беларусь | VLESS WS
-  - '🇺🇸 США · LTE · ❔ · #12'
+  - '🇷🇺  happcluchi vpn #97'
+  - '🇺🇸 США · LTE · ❔ · #16'
   - 🇪🇺 Авто · Европа ⚡️ 💫
   - 🇸🇬 AetrisVPN
   - 🇷🇺 AetrisVPN
   - 🇪🇺 ⚡ Авто 💫
+  - 'LTE #3'
+  - 'LTE #2'
+  - 'LTE #1'
   url: http://www.gstatic.com/generate_204
   interval: 300
 - name: 🚀 Proxy
@@ -1551,11 +1814,11 @@ proxy-groups:
   - '🇷🇺 LTE | Все операторы 10", "network": "tcp", "security": "reality", "sni": "pulse.mail.ru",
     "fp": "firefox", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs", "sid":
     "428ef87fd47a3a32", "spx": "/", "flow": "xtls-rprx-vision", "encryption": "none"}],
-    "userinfo": {"upload": 0, "download": 36981953605, "total": 214748364800, "expire":
+    "userinfo": {"upload": 0, "download": 40424445991, "total": 214748364800, "expire":
     1794348337}, "profileTitle": "base64:QFNob3BUX1ZQTl9ib3Q=", "outdated": true}'
   - '🇫🇮 Финляндия v1.1 🟢LTE 4", "network": "ws", "ws_path": "/static/js/runtime.9d03c7.js?ed=2048",
     "ws_host": "", "security": "tls", "sni": "lte-v2-ws.gacvpn.site", "fp": "firefox",
-    "encryption": "none"}], "userinfo": {"upload": 0, "download": 179415762938, "total":
+    "encryption": "none"}], "userinfo": {"upload": 0, "download": 977077459653, "total":
     0, "expire": 1794048150}, "profileTitle": "GAC VPN", "outdated": true}'
   - '🇷🇺 LTE | Все операторы 5", "network": "tcp", "security": "reality", "sni": "api.browser.yandex.com",
     "fp": "firefox", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs", "sid":
@@ -1602,29 +1865,47 @@ proxy-groups:
   - '🇷🇺 Россия МСК 1", "network": "ws", "ws_path": "/static/js/chunk.36c7638e.js?ed=2048",
     "ws_host": "", "security": "tls", "sni": "lte-v2-ws.gacvpn.site", "fp": "firefox",
     "encryption": "none"}, {"type": "vless", "name": "'
-  - '🇷🇺➜🇩🇪 GidroksiFree #3 | 🔗Каскад | 🛡БС | 🟢LTE | 1476ms | ↓0.0Mbps'
-  - '🇷🇺➜🇩🇪 GidroksiFree #1 | 🔗Каскад | 🛡БС | 🟢LTE | 986ms | ↓0.0Mbps'
-  - '🇷🇺➜🇩🇪 GidroksiFree #2 | 🔗Каскад | 🛡БС | 🟢LTE | 586ms | ↓0.0Mbps'
-  - '🇷🇺➜🇩🇪 GidroksiFree #5 | 🔗Каскад | 🛡БС | 🟢LTE | 776ms | ↓0.0Mbps'
-  - '🇷🇺➜🇩🇪 GidroksiFree #4 | 🔗Каскад | 🛡БС | 🟢LTE | 819ms | ↓0.0Mbps'
-  - '🇬🇧 Великобритания · LTE · ❔ · #17'
-  - '🇬🇧 Великобритания · LTE · ❔ · #16'
-  - 🇷🇺 Белые списки / LTE / 1 (TCP)"
+  - '🇩🇪 GidroksiFree #1 | 🛡БС | 🟢LTE | 2289ms | ↓0.0Mbps'
+  - '🇷🇺 GidroksiFree #2 | 🟢LTE | 500ms | ↓0.0Mbps'
+  - '🇬🇧 Великобритания · LTE · ❔ · #14'
+  - '🇬🇧 Великобритания · LTE · 🟢 · #1'
+  - 🇪🇺 Белые списки  happcluchi vpn
+  - '🇪🇺 Белые списки  happcluchi vpn #2'
+  - 🇷🇺 Белые списки  happcluchi vpn
+  - '🇷🇺 Белые списки  happcluchi vpn #2'
+  - '🇷🇺 Белые списки  happcluchi vpn #3'
+  - 🇫🇷 Белые списки  happcluchi vpn
+  - '🇷🇺 Белые списки  happcluchi vpn #4'
+  - 🇺🇸 Белые списки  happcluchi vpn
+  - 🇳🇱 Белые списки  happcluchi vpn
+  - '🇳🇱 Белые списки  happcluchi vpn #2'
+  - '🇺🇸 Белые списки  happcluchi vpn #2'
+  - '🇳🇱 Белые списки  happcluchi vpn #3'
+  - '🇷🇺 Белые списки  happcluchi vpn #5'
+  - '🇷🇺 Белые списки  happcluchi vpn #6'
+  - '🇷🇺 Белые списки  happcluchi vpn #7'
+  - '🇷🇺 Белые списки  happcluchi vpn #8'
+  - '🇷🇺 Белые списки  happcluchi vpn #9'
+  - '🇷🇺 Белые списки  happcluchi vpn #10'
   - '🇳🇱 Нидерланды · LTE · ❔ · #19'
-  - '🇳🇱 Нидерланды · LTE · ❔ · #11'
-  - '🇧🇾 Беларусь · LTE · ❔ · #14'
+  - '🇳🇱 Нидерланды · LTE · ❔ · #13'
+  - '🇧🇾 Беларусь · LTE · ❔ · #17'
   - '🇧🇾 Беларусь · LTE · ❔ · #15'
   - 'BUNKER 🖤 | Россия 🇷🇺 #181'
   - '🇷🇺➜🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #24'
   - '🇨🇿 Чехия · LTE · ❔ · #18'
   - 'BUNKER 🖤 | Россия 🇷🇺 #65'
   - '🇨🇿 Чехия · LTE · ❔ · #20'
-  - '🇱🇹 Литва · LTE · ❔ · #13'
+  - '🇩🇪  happcluchi vpn #58'
   - 🇧🇾 Беларусь | VLESS WS
-  - '🇺🇸 США · LTE · ❔ · #12'
+  - '🇷🇺  happcluchi vpn #97'
+  - '🇺🇸 США · LTE · ❔ · #16'
   - 🇪🇺 Авто · Европа ⚡️ 💫
   - 🇸🇬 AetrisVPN
   - 🇷🇺 AetrisVPN
   - 🇪🇺 ⚡ Авто 💫
+  - 'LTE #3'
+  - 'LTE #2'
+  - 'LTE #1'
 rules:
 - MATCH,🚀 Proxy
