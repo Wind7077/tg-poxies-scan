@@ -53,13 +53,13 @@ BLACKLIST_DOMAINS = [
     'mail.ru', 'rambler.ru', 'meduza.io', 'kommersant.ru', 'cnews.ru',
     'iz.ru', 'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru', 'max.ru',
-    'git.a9fm.best', 'ria.ru', 'lenta.ru', 'rbc.ru', 'vedomosti.ru',
-    'tass.ru', 'h1cloud.net'
+    'ria.ru', 'lenta.ru', 'rbc.ru', 'vedomosti.ru',
+    'tass.ru'
 ]
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 
-WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс"
+WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс"
 
 ENABLE_VLESS = True
 ENABLE_VMESS = True
