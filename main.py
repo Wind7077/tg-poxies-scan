@@ -48,7 +48,7 @@ PROXY_REGEX = re.compile(
     re.IGNORECASE)
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
-ISSUE_SCHEMES = ['csqtt', 'qwdtt', 'olcrtc', 'openflux', 'wdtt']
+ISSUE_SCHEMES = ['csqtt', 'qwdtt', 'olcrtc', 'openflux']
 _ISSUE_ALT = '|'.join(ISSUE_SCHEMES)
 ISSUE_REGEX = re.compile(
     r'(?:' + _ISSUE_ALT + r')://' + _URL_CHARS + r'+(?:#[^\s]*)?',
