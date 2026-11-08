@@ -48,7 +48,6 @@ PROXY_REGEX = re.compile(
     re.IGNORECASE)
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
-# ✅ Специальные типы ссылок для сбора в issue.txt
 ISSUE_SCHEMES = ['csqtt', 'qwdtt', 'olcrtc', 'openflux', 'wdtt', 'mrtt', 'freeturn']
 _ISSUE_ALT = '|'.join(ISSUE_SCHEMES)
 ISSUE_REGEX = re.compile(
@@ -170,6 +169,56 @@ def clean_url(url):
     url = split_glued(url.rstrip('.,;:!?'))
     url = remove_sticky_words(url)
     return url
+
+def is_valid_issue_url(url):
+    """Проверяет что issue-ссылка полная и валидная"""
+    if not url or '://' not in url:
+        return False
+    
+    # Минимальная длина (отбрасываем "обрезки")
+    if len(url) < 40:
+        return False
+    
+    scheme, rest = url.split('://', 1)
+    
+    # Отбрасываем пустые/мусорные
+    if not rest or rest.strip() in (',', ' ', '', '@'):
+        return False
+    
+    # Отбрасываем без значимого содержимого
+    if rest.startswith(('import', 'jitsi?datachannel@')):
+        return False
+    
+    # Если это config?name= — должен быть peer или password
+    if scheme == 'qwdtt' and 'config?' in rest:
+        if 'peer=' not in rest and 'pass=' not in rest:
+            return False
+    
+    return True
+
+def split_glued_issues(url):
+    """Разделяет склеенные issue-ссылки: ...textmrtt://... → [..., mrtt://...]"""
+    # Ищем места где scheme:// приклеен к предыдущему тексту
+    results = []
+    pattern = re.compile(r'(?<!^)(?<!\s)(' + '|'.join(ISSUE_SCHEMES) + r')://', re.I)
+    
+    parts = pattern.split(url)
+    
+    if len(parts) == 1:
+        return [url]
+    
+    # Собираем обратно по схеме
+    i = 0
+    while i < len(parts):
+        if i + 2 < len(parts) and parts[i+1].lower() in ISSUE_SCHEMES:
+            # Нашли схему - берём prefix + scheme + rest до следующей схемы
+            full = parts[i+1].lower() + '://' + parts[i+2]
+            results.append(full)
+            i += 3
+        else:
+            i += 1
+    
+    return results if results else [url]
 
 def collect_url(raw, urls):
     u = clean_url(raw)
@@ -853,19 +902,31 @@ def write_txt(filename, uris, count_alive):
         f.write("\n".join(header + uris))
 
 def write_issue_file():
-    """Сохраняет собранные issue-ссылки в issue.txt"""
+    """Сохраняет собранные issue-ссылки в issue.txt с валидацией"""
     if not ISSUE_URLS:
         debug_log(f"📄 {ISSUE_FILE}: нет ссылок")
         return
     
-    sorted_urls = sorted(ISSUE_URLS)
+    # Разделяем склеенные и валидируем
+    clean_urls = set()
+    for url in ISSUE_URLS:
+        for split_url in split_glued_issues(url):
+            cleaned = clean_url(split_url)
+            if is_valid_issue_url(cleaned):
+                clean_urls.add(cleaned)
+    
+    if not clean_urls:
+        debug_log(f"📄 {ISSUE_FILE}: нет валидных ссылок")
+        return
+    
+    sorted_urls = sorted(clean_urls)
     ts = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
     header = [f"# Обновлено: {ts}", f"# Найдено: {len(sorted_urls)}", "#"]
     
     with open(ISSUE_FILE, 'w', encoding='utf-8') as f:
         f.write("\n".join(header + sorted_urls))
     
-    debug_log(f"📄 {ISSUE_FILE}: {len(sorted_urls)} ссылок")
+    debug_log(f"📄 {ISSUE_FILE}: {len(sorted_urls)} валидных ссылок (из {len(ISSUE_URLS)} сырых)")
 
 async def main():
     start = time.time()
@@ -1072,7 +1133,6 @@ async def main():
         final_types_wl[t] = final_types_wl.get(t, 0) + 1
     debug_log(f"📊 ИТОГО proxy.yaml: {len(clash_wl)} прокси {final_types_wl}")
 
-    # ✅ Сохраняем issue-ссылки
     write_issue_file()
     
     print(f"✅ Готово за {time.time()-start:.1f} сек!")
