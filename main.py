@@ -23,6 +23,7 @@ OUT_TXT = 'proxy.txt'
 OUT_YAML = 'proxy.yaml'
 OUT_ALL_TXT = 'proxy-all.txt'
 OUT_ALL_YAML = 'proxy-all.yaml'
+ISSUE_FILE = 'issue.txt'
 
 MAX_DAYS_WL = 50
 MAX_DAYS_ALL = 10
@@ -46,6 +47,14 @@ PROXY_REGEX = re.compile(
     r'(?:' + _SCHEMES_ALT + r')://' + _URL_CHARS + r'+(?:#[^\s]*)?',
     re.IGNORECASE)
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
+
+# ✅ Специальные типы ссылок для сбора в issue.txt
+ISSUE_SCHEMES = ['csqtt', 'qwdtt', 'olcrtc', 'openflux', 'wdtt', 'mrtt', 'freeturn']
+_ISSUE_ALT = '|'.join(ISSUE_SCHEMES)
+ISSUE_REGEX = re.compile(
+    r'(?:' + _ISSUE_ALT + r')://' + _URL_CHARS + r'+(?:#[^\s]*)?',
+    re.IGNORECASE)
+ISSUE_URLS = set()
 
 BLACKLIST_DOMAINS = [
     'youtube.com', 'youtu.be', 'instagram.com', 'twitter.com', 'x.com',
@@ -409,10 +418,14 @@ def extract_from_element(element):
             href = a['href'].strip()
             if any(href.startswith(f"{s}://") for s in PROXY_SCHEMES):
                 proxies.append(clean_url(href))
+            elif any(href.startswith(f"{s}://") for s in ISSUE_SCHEMES):
+                ISSUE_URLS.add(clean_url(href))
             elif href.startswith('http'):
                 collect_url(href, urls)
     text = element.get_text() if hasattr(element, 'get_text') else str(element)
     proxies.extend([clean_url(m.group(0)) for m in PROXY_REGEX.finditer(text)])
+    for m in ISSUE_REGEX.finditer(text):
+        ISSUE_URLS.add(clean_url(m.group(0)))
     for m in URL_REGEX.finditer(text):
         collect_url(m.group(0), urls)
     return list(set(proxies)), list(set(urls))
@@ -422,9 +435,6 @@ async def fetch(session, url, sem, retry_count=2):
         try:
             if not url.startswith(('http://', 'https://')): return ""
             
-            # ✅ ПРАВКА: разные заголовки для t.me и подписок
-            # t.me/telegram.me — нужен HTML-парсинг
-            # Подписки (pozor.bond и др.) — отдадут base64 только с Accept: */*
             is_tme = 't.me/' in url or 'telegram.me/' in url
             
             if is_tme:
@@ -534,6 +544,8 @@ async def parse_with_telethon(source_url, cutoff_date, limit):
                 text = msg.text or msg.message or ''
                 for m in PROXY_REGEX.finditer(text):
                     proxies.append(clean_url(m.group(0)))
+                for m in ISSUE_REGEX.finditer(text):
+                    ISSUE_URLS.add(clean_url(m.group(0)))
                 for m in URL_REGEX.finditer(text):
                     collect_url(m.group(0), urls)
                 if msg.entities:
@@ -542,6 +554,8 @@ async def parse_with_telethon(source_url, cutoff_date, limit):
                             u = clean_url(ent.url)
                             if any(u.startswith(f"{s}://") for s in PROXY_SCHEMES):
                                 proxies.append(u)
+                            elif any(u.startswith(f"{s}://") for s in ISSUE_SCHEMES):
+                                ISSUE_URLS.add(u)
                             else:
                                 collect_url(ent.url, urls)
         except Exception:
@@ -568,6 +582,8 @@ async def process_subscription(url, session, sem, visited):
         decoded = decode_base64(text)
         search_text = decoded if decoded and len(decoded) > 50 else text
         found = [clean_url(p) for p in PROXY_REGEX.findall(search_text)]
+        for m in ISSUE_REGEX.finditer(search_text):
+            ISSUE_URLS.add(clean_url(m.group(0)))
         if found: debug_log(f"✓ {len(found)} прокси в {url[:60]}")
         return found
     text = await fetch(session, url, sem)
@@ -575,6 +591,8 @@ async def process_subscription(url, session, sem, visited):
     decoded = decode_base64(text)
     search_text = decoded if decoded and len(decoded) > 50 else text
     found = [clean_url(p) for p in PROXY_REGEX.findall(search_text)]
+    for m in ISSUE_REGEX.finditer(search_text):
+        ISSUE_URLS.add(clean_url(m.group(0)))
     if found: debug_log(f"✓ {len(found)} прокси в {url[:60]}")
     return found
 
@@ -834,6 +852,21 @@ def write_txt(filename, uris, count_alive):
     with open(filename, 'w', encoding='utf-8') as f:
         f.write("\n".join(header + uris))
 
+def write_issue_file():
+    """Сохраняет собранные issue-ссылки в issue.txt"""
+    if not ISSUE_URLS:
+        debug_log(f"📄 {ISSUE_FILE}: нет ссылок")
+        return
+    
+    sorted_urls = sorted(ISSUE_URLS)
+    ts = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+    header = [f"# Обновлено: {ts}", f"# Найдено: {len(sorted_urls)}", "#"]
+    
+    with open(ISSUE_FILE, 'w', encoding='utf-8') as f:
+        f.write("\n".join(header + sorted_urls))
+    
+    debug_log(f"📄 {ISSUE_FILE}: {len(sorted_urls)} ссылок")
+
 async def main():
     start = time.time()
     if not os.path.exists(SOURCES_FILE):
@@ -1039,6 +1072,9 @@ async def main():
         final_types_wl[t] = final_types_wl.get(t, 0) + 1
     debug_log(f"📊 ИТОГО proxy.yaml: {len(clash_wl)} прокси {final_types_wl}")
 
+    # ✅ Сохраняем issue-ссылки
+    write_issue_file()
+    
     print(f"✅ Готово за {time.time()-start:.1f} сек!")
 
 if __name__ == '__main__':
