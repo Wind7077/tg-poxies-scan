@@ -247,7 +247,7 @@ proxies:
 - name: '🇷🇺 LTE | Все операторы 10", "network": "tcp", "security": "reality", "sni":
     "pulse.mail.ru", "fp": "firefox", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs",
     "sid": "428ef87fd47a3a32", "spx": "/", "flow": "xtls-rprx-vision", "encryption":
-    "none"}], "userinfo": {"upload": 0, "download": 88160900175, "total": 214748364800,
+    "none"}], "userinfo": {"upload": 0, "download": 88792573618, "total": 214748364800,
     "expire": 1794348337}, "profileTitle": "base64:QFNob3BUX1ZQTl9ib3Q=", "outdated":
     true}'
   type: vless
@@ -473,6 +473,20 @@ proxies:
   client-fingerprint: chrome
 - name: Телефон / Роутер [owpn.org]
   type: vless
+  server: 136.148.213.229
+  port: 443
+  uuid: 07df3711-07a1-4649-9a61-3f16cb931d02
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 3fb2b6t.se2.h1clayd.click
+  reality-opts:
+    public-key: XQWaIMBPo0mpWs3MooxxkjWNSgxnkIESd_2PnR8_2HA
+    short-id: 1061f1b1cdaad3ad
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #2'
+  type: vless
   server: 345739t.de19.h1clayd.click
   port: 443
   uuid: 07df3711-07a1-4649-9a61-3f16cb931d02
@@ -484,7 +498,21 @@ proxies:
     public-key: hFee7zTreqlv_wccK_8zxN5v23hj9u-DshByvGf-KAA
     short-id: 23732d14a527990d
   client-fingerprint: chrome
-- name: 'Телефон / Роутер [owpn.org] #2'
+- name: 'Телефон / Роутер [owpn.org] #3'
+  type: vless
+  server: 3fb2b6t.se2.h1clayd.click
+  port: 443
+  uuid: 07df3711-07a1-4649-9a61-3f16cb931d02
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 3fb2b6t.se2.h1clayd.click
+  reality-opts:
+    public-key: XQWaIMBPo0mpWs3MooxxkjWNSgxnkIESd_2PnR8_2HA
+    short-id: 1061f1b1cdaad3ad
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #4'
   type: vless
   server: ec7a81g.de19.h1clayd.click
   port: 443
@@ -499,117 +527,7 @@ proxies:
   client-fingerprint: chrome
   grpc-opts:
     grpc-service-name: 43f41cd7fee0
-- name: 'Телефон / Роутер [owpn.org] #3'
-  type: vless
-  server: 46.33.8.244
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: proxy.onecloudtraining.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #4'
-  type: vless
-  server: 46.33.8.246
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: upload.onecloudtraining.com
-  client-fingerprint: firefox
 - name: 'Телефон / Роутер [owpn.org] #5'
-  type: vless
-  server: 46.33.8.251
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: assets.onecloudtraining.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #6'
-  type: vless
-  server: 46.33.8.253
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: link.onecloudtraining.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #7'
-  type: vless
-  server: 46.33.8.254
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: main.onecloudtraining.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #8'
-  type: vless
-  server: cache.onecloudtraining.com
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: cache.onecloudtraining.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #9'
-  type: vless
-  server: fetch.onecloudtraining.com
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: fetch.onecloudtraining.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #10'
-  type: vless
-  server: media.onecloudtraining.com
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: media.onecloudtraining.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #11'
-  type: vless
-  server: proxy.onecloudtraining.com
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: proxy.onecloudtraining.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #12'
-  type: vless
-  server: tracker.onecloudtraining.com
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: tracker.onecloudtraining.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #13'
-  type: vless
-  server: upload.onecloudtraining.com
-  port: 443
-  uuid: 0ad875ef-b751-46e3-aa89-e1ae20e43bcc
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: upload.onecloudtraining.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #14'
   type: vless
   server: 143.246.212.173
   port: 443
@@ -622,7 +540,7 @@ proxies:
     public-key: YEyZf6GvVcUG2VJnxyWOJQd8_ORz0n8Tw8Hs417OPxo
     short-id: 5b524cdb28b6824a
   client-fingerprint: edge
-- name: 'Телефон / Роутер [owpn.org] #15'
+- name: 'Телефон / Роутер [owpn.org] #6'
   type: vless
   server: srv21.buddygpt.ru
   port: 443
@@ -635,7 +553,7 @@ proxies:
     public-key: YEyZf6GvVcUG2VJnxyWOJQd8_ORz0n8Tw8Hs417OPxo
     short-id: 5b524cdb28b6824a
   client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #16'
+- name: 'Телефон / Роутер [owpn.org] #7'
   type: vless
   server: 89.105.195.147
   port: 443
@@ -647,7 +565,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: home.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #17'
+- name: 'Телефон / Роутер [owpn.org] #8'
   type: vless
   server: 89.105.195.148
   port: 443
@@ -659,7 +577,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: gw.v2.PushService
-- name: 'Телефон / Роутер [owpn.org] #18'
+- name: 'Телефон / Роутер [owpn.org] #9'
   type: vless
   server: 89.105.195.149
   port: 443
@@ -671,7 +589,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: home.v2.MetricsService
-- name: 'Телефон / Роутер [owpn.org] #19'
+- name: 'Телефон / Роутер [owpn.org] #10'
   type: vless
   server: 89.105.195.150
   port: 443
@@ -680,10 +598,10 @@ proxies:
   udp: true
   tls: true
   server-name: images.mediacorphub.org
-  client-fingerprint: ios
+  client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: stats.v2.StreamService
-- name: 'Телефон / Роутер [owpn.org] #20'
+- name: 'Телефон / Роутер [owpn.org] #11'
   type: vless
   server: 89.105.195.151
   port: 443
@@ -695,7 +613,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: hub.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #21'
+- name: 'Телефон / Роутер [owpn.org] #12'
   type: vless
   server: 89.105.195.152
   port: 443
@@ -703,11 +621,11 @@ proxies:
   network: grpc
   udp: true
   tls: true
-  server-name: relay.mediacorphub.org
-  client-fingerprint: edge
+  server-name: fetch.mediacorphub.org
+  client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: api.v1.FeedService
-- name: 'Телефон / Роутер [owpn.org] #22'
+- name: 'Телефон / Роутер [owpn.org] #13'
   type: vless
   server: api.mediacorphub.org
   port: 443
@@ -716,10 +634,10 @@ proxies:
   udp: true
   tls: true
   server-name: api.mediacorphub.org
-  client-fingerprint: edge
+  client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: gw.v2.PushService
-- name: 'Телефон / Роутер [owpn.org] #23'
+- name: 'Телефон / Роутер [owpn.org] #14'
   type: vless
   server: app.mediacorphub.org
   port: 443
@@ -728,10 +646,10 @@ proxies:
   udp: true
   tls: true
   server-name: app.mediacorphub.org
-  client-fingerprint: firefox
+  client-fingerprint: edge
   grpc-opts:
     grpc-service-name: stats.v2.StreamService
-- name: 'Телефон / Роутер [owpn.org] #24'
+- name: 'Телефон / Роутер [owpn.org] #15'
   type: vless
   server: assets.mediacorphub.org
   port: 443
@@ -740,10 +658,10 @@ proxies:
   udp: true
   tls: true
   server-name: assets.mediacorphub.org
-  client-fingerprint: firefox
+  client-fingerprint: edge
   grpc-opts:
     grpc-service-name: hub.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #25'
+- name: 'Телефон / Роутер [owpn.org] #16'
   type: vless
   server: cdn.mediacorphub.org
   port: 443
@@ -752,22 +670,10 @@ proxies:
   udp: true
   tls: true
   server-name: cdn.mediacorphub.org
-  client-fingerprint: ios
-  grpc-opts:
-    grpc-service-name: stats.v2.StreamService
-- name: 'Телефон / Роутер [owpn.org] #26'
-  type: vless
-  server: data.mediacorphub.org
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: data.mediacorphub.org
   client-fingerprint: firefox
   grpc-opts:
-    grpc-service-name: home.v2.MetricsService
-- name: 'Телефон / Роутер [owpn.org] #27'
+    grpc-service-name: stats.v2.StreamService
+- name: 'Телефон / Роутер [owpn.org] #17'
   type: vless
   server: edge.mediacorphub.org
   port: 443
@@ -779,7 +685,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: hub.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #28'
+- name: 'Телефон / Роутер [owpn.org] #18'
   type: vless
   server: fetch.mediacorphub.org
   port: 443
@@ -788,10 +694,10 @@ proxies:
   udp: true
   tls: true
   server-name: fetch.mediacorphub.org
-  client-fingerprint: firefox
+  client-fingerprint: ios
   grpc-opts:
     grpc-service-name: api.v1.FeedService
-- name: 'Телефон / Роутер [owpn.org] #29'
+- name: 'Телефон / Роутер [owpn.org] #19'
   type: vless
   server: gateway.mediacorphub.org
   port: 443
@@ -803,7 +709,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: home.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #30'
+- name: 'Телефон / Роутер [owpn.org] #20'
   type: vless
   server: get.mediacorphub.org
   port: 443
@@ -812,10 +718,10 @@ proxies:
   udp: true
   tls: true
   server-name: get.mediacorphub.org
-  client-fingerprint: chrome
+  client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: gw.v2.PushService
-- name: 'Телефон / Роутер [owpn.org] #31'
+- name: 'Телефон / Роутер [owpn.org] #21'
   type: vless
   server: hub.mediacorphub.org
   port: 443
@@ -824,10 +730,10 @@ proxies:
   udp: true
   tls: true
   server-name: hub.mediacorphub.org
-  client-fingerprint: firefox
+  client-fingerprint: ios
   grpc-opts:
     grpc-service-name: hub.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #32'
+- name: 'Телефон / Роутер [owpn.org] #22'
   type: vless
   server: images.mediacorphub.org
   port: 443
@@ -839,7 +745,7 @@ proxies:
   client-fingerprint: ios
   grpc-opts:
     grpc-service-name: stats.v2.StreamService
-- name: 'Телефон / Роутер [owpn.org] #33'
+- name: 'Телефон / Роутер [owpn.org] #23'
   type: vless
   server: img.mediacorphub.org
   port: 443
@@ -848,10 +754,10 @@ proxies:
   udp: true
   tls: true
   server-name: img.mediacorphub.org
-  client-fingerprint: ios
+  client-fingerprint: edge
   grpc-opts:
     grpc-service-name: home.v2.MetricsService
-- name: 'Телефон / Роутер [owpn.org] #34'
+- name: 'Телефон / Роутер [owpn.org] #24'
   type: vless
   server: live.mediacorphub.org
   port: 443
@@ -863,7 +769,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: home.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #35'
+- name: 'Телефон / Роутер [owpn.org] #25'
   type: vless
   server: net.mediacorphub.org
   port: 443
@@ -875,7 +781,19 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: home.v2.MetricsService
-- name: 'Телефон / Роутер [owpn.org] #36'
+- name: 'Телефон / Роутер [owpn.org] #26'
+  type: vless
+  server: relay.mediacorphub.org
+  port: 443
+  uuid: 1653818d-532e-46be-b825-384107fb7c3a
+  network: grpc
+  udp: true
+  tls: true
+  server-name: relay.mediacorphub.org
+  client-fingerprint: edge
+  grpc-opts:
+    grpc-service-name: api.v1.FeedService
+- name: 'Телефон / Роутер [owpn.org] #27'
   type: vless
   server: rpc.mediacorphub.org
   port: 443
@@ -887,7 +805,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: api.v1.FeedService
-- name: 'Телефон / Роутер [owpn.org] #37'
+- name: 'Телефон / Роутер [owpn.org] #28'
   type: vless
   server: stats.mediacorphub.org
   port: 443
@@ -896,10 +814,10 @@ proxies:
   udp: true
   tls: true
   server-name: stats.mediacorphub.org
-  client-fingerprint: firefox
+  client-fingerprint: ios
   grpc-opts:
     grpc-service-name: gw.v2.PushService
-- name: 'Телефон / Роутер [owpn.org] #38'
+- name: 'Телефон / Роутер [owpn.org] #29'
   type: vless
   server: tracker.mediacorphub.org
   port: 443
@@ -908,10 +826,10 @@ proxies:
   udp: true
   tls: true
   server-name: tracker.mediacorphub.org
-  client-fingerprint: ios
+  client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: home.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #39'
+- name: 'Телефон / Роутер [owpn.org] #30'
   type: vless
   server: 200.169.179.233
   port: 443
@@ -923,19 +841,19 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: mobile.api.Event
-- name: 'Телефон / Роутер [owpn.org] #40'
+- name: 'Телефон / Роутер [owpn.org] #31'
   type: vless
-  server: nep.qiksme.com
+  server: 193.233.127.149
   port: 443
   uuid: 3c4aa500-e3ae-4778-837b-f02dfea8c85f
   network: xhttp
   udp: true
   tls: true
   server-name: nep.qiksme.com
-  client-fingerprint: chrome
-- name: 'Телефон / Роутер [owpn.org] #41'
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #32'
   type: vless
-  server: 150.251.143.253
+  server: 195.206.235.202
   port: 443
   uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
   network: tcp
@@ -945,9 +863,22 @@ proxies:
   reality-opts:
     public-key: MzgB17ZFbKqs8pbC3EscTzHid_ENc-k_Cp6nXl-2knw
     short-id: 6976d670818644cc
-  client-fingerprint: edge
+  client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #42'
+- name: 'Телефон / Роутер [owpn.org] #33'
+  type: vless
+  server: 38917fx.es1.h1clayd.click
+  port: 443
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 38917fx.es1.h1clayd.click
+  reality-opts:
+    public-key: 4mgkA2kT_Im0rkGi-fVSUU5CyF5xvMVcjA6MXBSEDAA
+    short-id: d5501b156391e01d
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #34'
   type: vless
   server: 4935e4t.de25.h1clayd.click
   port: 443
@@ -961,7 +892,48 @@ proxies:
     short-id: 6976d670818644cc
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #43'
+- name: 'Телефон / Роутер [owpn.org] #35'
+  type: vless
+  server: b3cd32g.es1.h1clayd.click
+  port: 443
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: grpc
+  udp: true
+  tls: true
+  server-name: b3cd32g.es1.h1clayd.click
+  reality-opts:
+    public-key: 7efBhLzPwoTtEC1GlukCdiTllobUfa2_XuAKNSLJx30
+    short-id: e7cffac9f8cfb434
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #36'
+  type: vless
+  server: 153.56.228.151
+  port: 443
+  uuid: 4618cebd-e1e9-45c3-be98-d9d6e3ee8bef
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 7cabc1g.de-p2.h1clayd.click
+  reality-opts:
+    public-key: VKwRsPrkqzgO1NgEd9uK-g9Sg9vWUl37msYt4OH7XiI
+    short-id: d04b7f092468a136
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: df0c8e02206d
+- name: 'Телефон / Роутер [owpn.org] #37'
+  type: vless
+  server: 195.206.235.19
+  port: 443
+  uuid: 4618cebd-e1e9-45c3-be98-d9d6e3ee8bef
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 362c1eg.se1.h1clayd.click
+  reality-opts:
+    public-key: BLhS7fE4Yh6kAADw7yRIn2PzKun-JDagJHJNOePYRSY
+    short-id: bee802ae4ab66496
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #38'
   type: vless
   server: 7cabc1g.de-p2.h1clayd.click
   port: 443
@@ -976,35 +948,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: df0c8e02206d
-- name: 'Телефон / Роутер [owpn.org] #44'
-  type: vless
-  server: 9900edx.msk1.h1clayd.click
-  port: 443
-  uuid: 4618cebd-e1e9-45c3-be98-d9d6e3ee8bef
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: 9900edx.msk1.h1clayd.click
-  reality-opts:
-    public-key: yMB1YpMhoF4j800rMjlWy97QAwvNwHwjuH1qKNSGfCA
-    short-id: 0b10c773673c6438
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #45'
-  type: vless
-  server: 9e72bbg.msk1.h1clayd.click
-  port: 443
-  uuid: 4618cebd-e1e9-45c3-be98-d9d6e3ee8bef
-  network: grpc
-  udp: true
-  tls: true
-  server-name: 9e72bbg.msk1.h1clayd.click
-  reality-opts:
-    public-key: 0R5QIf2DFXNgISIYDQdoWIdbNoImaJHrwOkc2tzRPyQ
-    short-id: cc07501e28b18687
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: 93013a569b78
-- name: 'Телефон / Роутер [owpn.org] #46'
+- name: 'Телефон / Роутер [owpn.org] #39'
   type: vless
   server: a566d1g.de18.h1clayd.click
   port: 443
@@ -1019,7 +963,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: 98b9c56e8ebb
-- name: 'Телефон / Роутер [owpn.org] #47'
+- name: 'Телефон / Роутер [owpn.org] #40'
   type: vless
   server: bbcdd4t.de-p2.h1clayd.click
   port: 443
@@ -1032,7 +976,7 @@ proxies:
     public-key: n9cdr2Qf9h3S_jf5Rcd15fl-4fxuztHvlexE7G-QvW8
     short-id: 1aab0b827885a8b4
   client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #48'
+- name: 'Телефон / Роутер [owpn.org] #41'
   type: vless
   server: f3b21at.de18.h1clayd.click
   port: 443
@@ -1045,48 +989,84 @@ proxies:
     public-key: lneTk9CP66okHF_VgXVaSj_QNpRzEmvrAmRxmux5JVU
     short-id: 08485ad122fafbd5
   client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #49'
+- name: 'Телефон / Роутер [owpn.org] #42'
   type: vless
-  server: 195.206.235.14
+  server: 138.124.252.26
   port: 443
-  uuid: 54066259-28a1-47dc-b0f7-e7715f27918e
+  uuid: 461a5e99-c932-449c-9516-853fd0fade7a
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: maxiii.qiksme.com
+  reality-opts:
+    public-key: dQadA8TP5tRVF_SxqNRexInmD_oGuEGopGJ-YdG_Z24
+    short-id: c9154b81e0169400
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #43'
+  type: vless
+  server: 45.81.252.143
+  port: 2053
+  uuid: 53555197-bf0a-49e6-bea1-211fcfc1d962
+  network: grpc
+  udp: true
+  tls: true
+  server-name: germany3.banovano.space
+  client-fingerprint: edge
+- name: 'Телефон / Роутер [owpn.org] #44'
+  type: vless
+  server: germany3.banovano.space
+  port: 2053
+  uuid: 53555197-bf0a-49e6-bea1-211fcfc1d962
+  network: grpc
+  udp: true
+  tls: true
+  server-name: germany3.banovano.space
+  client-fingerprint: edge
+- name: 'Телефон / Роутер [owpn.org] #45'
+  type: vless
+  server: 345739t.de15.h1clayd.click
+  port: 443
+  uuid: 55458d10-24ab-4ea6-a522-13741b546f2a
   network: tcp
   udp: true
   tls: true
-  server-name: 537df6t.ch5.h1clayd.click
+  server-name: 345739t.de15.h1clayd.click
   reality-opts:
-    public-key: LHkKUZNBp93VjTHD9fpoj44-4WB-TQbDpa5A929nSwE
-    short-id: e368a430524df0fa
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #50'
+    public-key: hFee7zTreqlv_wccK_8zxN5v23hj9u-DshByvGf-KAA
+    short-id: 23732d14a527990d
+  client-fingerprint: chrome
+- name: 'Телефон / Роутер [owpn.org] #46'
   type: vless
-  server: d0f7fax.ch5.h1clayd.click
+  server: ec7a81g.de15.h1clayd.click
   port: 443
-  uuid: 54066259-28a1-47dc-b0f7-e7715f27918e
-  network: xhttp
+  uuid: 55458d10-24ab-4ea6-a522-13741b546f2a
+  network: grpc
   udp: true
   tls: true
-  server-name: d0f7fax.ch5.h1clayd.click
+  server-name: ec7a81g.de15.h1clayd.click
   reality-opts:
-    public-key: OqpjppFQ222BTeRXlK6fh7nP5ePkkNCLlUH1-CvkmBc
-    short-id: f245401987e85cad
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #51'
+    public-key: shUbIWcBJdXaDzO80KqTU9exgMarUCOiiZ56Dwl7XVU
+    short-id: 7a8e24da4eb2c1b5
+  client-fingerprint: chrome
+  grpc-opts:
+    grpc-service-name: 43f41cd7fee0
+- name: 'Телефон / Роутер [owpn.org] #47'
   type: vless
-  server: estonia2.banovano.space
-  port: 17417
-  uuid: 6430ede6-3f43-4beb-95c0-0fb29e9ea76d
-  network: xhttp
+  server: 66.90.106.28
+  port: 443
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
   udp: true
   tls: true
-  server-name: yandex-cdn-mirror.ru
+  server-name: banket-restoran.su
   reality-opts:
-    public-key: yhOC-2sFjE59lY3n0IA0AAluzIpjoJiL0QH1SQ_ZZQ8
-    short-id: 728f3f459ddf
-  client-fingerprint: edge
-- name: 'Телефон / Роутер [owpn.org] #52'
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #48'
   type: vless
-  server: 89.105.218.143
+  server: 89.105.218.138
   port: 443
   uuid: 90157e25-cee1-4217-921e-91f300bc1a24
   network: tcp
@@ -1096,11 +1076,11 @@ proxies:
   reality-opts:
     public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
     short-id: 428ef87fd47a3a32
+  client-fingerprint: firefox
   flow: xtls-rprx-vision
-  client-fingerprint: chrome
-- name: 'Телефон / Роутер [owpn.org] #53'
+- name: 'Телефон / Роутер [owpn.org] #49'
   type: vless
-  server: 103.31.4.205
+  server: 103.31.4.160
   port: 8443
   uuid: 9443badf-414f-4b12-b19a-7cc2c7431163
   network: ws
@@ -1112,9 +1092,9 @@ proxies:
     path: /man
     headers:
       Host: moz.ar-marz.fun
-- name: 'Телефон / Роутер [owpn.org] #54'
+- name: 'Телефон / Роутер [owpn.org] #50'
   type: vless
-  server: 103.31.4.75
+  server: 162.159.236.61
   port: 8443
   uuid: 9443badf-414f-4b12-b19a-7cc2c7431163
   network: ws
@@ -1126,9 +1106,9 @@ proxies:
     path: /man
     headers:
       Host: moz.ar-marz.fun
-- name: 'Телефон / Роутер [owpn.org] #55'
+- name: 'Телефон / Роутер [owpn.org] #51'
   type: vless
-  server: 173.245.49.114
+  server: 190.93.247.95
   port: 8443
   uuid: 9443badf-414f-4b12-b19a-7cc2c7431163
   network: ws
@@ -1140,21 +1120,7 @@ proxies:
     path: /man
     headers:
       Host: moz.ar-marz.fun
-- name: 'Телефон / Роутер [owpn.org] #56'
-  type: vless
-  server: 190.93.244.47
-  port: 8443
-  uuid: 9443badf-414f-4b12-b19a-7cc2c7431163
-  network: ws
-  udp: true
-  tls: true
-  server-name: moz.ar-marz.fun
-  client-fingerprint: firefox
-  ws-opts:
-    path: /man
-    headers:
-      Host: moz.ar-marz.fun
-- name: 'Телефон / Роутер [owpn.org] #57'
+- name: 'Телефон / Роутер [owpn.org] #52'
   type: vless
   server: 80.47.13.182
   port: 443
@@ -1166,7 +1132,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: stats.v2.StreamService
-- name: 'Телефон / Роутер [owpn.org] #58'
+- name: 'Телефон / Роутер [owpn.org] #53'
   type: vless
   server: dl.megadrishto.com
   port: 443
@@ -1175,20 +1141,10 @@ proxies:
   udp: true
   tls: true
   server-name: dl.megadrishto.com
-  client-fingerprint: firefox
+  client-fingerprint: edge
   grpc-opts:
     grpc-service-name: stats.v2.StreamService
-- name: 'Телефон / Роутер [owpn.org] #59'
-  type: vless
-  server: uuuss2.qiksme.com
-  port: 443
-  uuid: a6f5d58f-a04f-45dd-bf17-555d3a1e2069
-  network: tcp
-  udp: true
-  tls: true
-  server-name: uuuss2.qiksme.com
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #60'
+- name: 'Телефон / Роутер [owpn.org] #54'
   type: vless
   server: 83.141.80.226
   port: 443
@@ -1201,7 +1157,7 @@ proxies:
     public-key: 5f3YKh1kMwC_Q4BA-8BBBMmUC2hmRDCDb1pr2xz6CUs
     short-id: 69747b8a2d26d6b4
   client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #61'
+- name: 'Телефон / Роутер [owpn.org] #55'
   type: vless
   server: fras.qiksme.com
   port: 443
@@ -1213,7 +1169,46 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: assets
-- name: 'Телефон / Роутер [owpn.org] #62'
+- name: 'Телефон / Роутер [owpn.org] #56'
+  type: vless
+  server: 153.52.85.88
+  port: 443
+  uuid: b7b8ee80-db83-4276-8c68-87dc88b0b0b5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 71b840t.de7.h1clayd.click
+  reality-opts:
+    public-key: 3wFF83gtIA0sXj-6GGCAa--oQbSr0MVUj0FBc-0QmiE
+    short-id: e572b6579ea525d4
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #57'
+  type: vless
+  server: 71b840t.de7.h1clayd.click
+  port: 443
+  uuid: b7b8ee80-db83-4276-8c68-87dc88b0b0b5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 71b840t.de7.h1clayd.click
+  reality-opts:
+    public-key: 3wFF83gtIA0sXj-6GGCAa--oQbSr0MVUj0FBc-0QmiE
+    short-id: e572b6579ea525d4
+  client-fingerprint: chrome
+- name: 'Телефон / Роутер [owpn.org] #58'
+  type: vless
+  server: d58daft.plp1.h1cloud.net
+  port: 443
+  uuid: c82031be-e90f-4b15-ab4f-7ccef236d3ca
+  network: tcp
+  udp: true
+  tls: true
+  server-name: d58daft.plp1.h1cloud.net
+  reality-opts:
+    public-key: ixnCbdlT5sAVd-ilp2nG11CvnNsBCf9xPD56TlXxlR4
+    short-id: a91531ad58c8611c
+  client-fingerprint: chrome
+- name: 'Телефон / Роутер [owpn.org] #59'
   type: vless
   server: 87.120.126.43
   port: 443
@@ -1222,21 +1217,8 @@ proxies:
   udp: true
   tls: true
   server-name: gr.connect-qik.uk
-  client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #63'
-  type: vless
-  server: 31.56.187.81
-  port: 443
-  uuid: dc95c1dd-2cd3-414c-8cf1-71ae86dad666
-  network: tcp
-  udp: true
-  tls: true
-  server-name: esso-music-coroborito.keno.su
-  reality-opts:
-    public-key: _MeP-WwmolUvi6wMXNoSs_zo6miG_OW7xk4ibzADiHY
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #64'
+  client-fingerprint: edge
+- name: 'Телефон / Роутер [owpn.org] #60'
   type: vless
   server: 170.114.45.6
   port: 2096
@@ -1250,7 +1232,7 @@ proxies:
     path: /
     headers:
       Host: pcloud.z-tas.com
-- name: 'Телефон / Роутер [owpn.org] #65'
+- name: 'Телефон / Роутер [owpn.org] #61'
   type: vless
   server: 170.114.46.6
   port: 2096
@@ -1264,21 +1246,20 @@ proxies:
     path: /
     headers:
       Host: pcloud.z-tas.com
-- name: 'Телефон / Роутер [owpn.org] #66'
+- name: 'Телефон / Роутер [owpn.org] #62'
   type: vless
   server: 177.202.68.217
-  port: 443
+  port: 61374
   uuid: f8d52ece-fad4-478d-875d-df6eed3befa7
-  network: tcp
+  network: xhttp
   udp: true
   tls: true
   server-name: pl-b1.golangwikito.cfd
   reality-opts:
-    public-key: DsTVLCehsKvfFGtNZU5leKOLTlEp28qeifHYtRKOFwg
-    short-id: 986ede37bf6925ae
+    public-key: QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI
+    short-id: 40a4b9403abe554c
   client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #67'
+- name: 'Телефон / Роутер [owpn.org] #63'
   type: vless
   server: 187.7.206.127
   port: 61374
@@ -1290,7 +1271,7 @@ proxies:
   reality-opts:
     public-key: QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI
   client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #68'
+- name: 'Телефон / Роутер [owpn.org] #64'
   type: vless
   server: 217.60.33.101
   port: 443
@@ -1304,7 +1285,7 @@ proxies:
     short-id: 3b306f15c6057d55
   client-fingerprint: ios
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #69'
+- name: 'Телефон / Роутер [owpn.org] #65'
   type: vless
   server: cz.pythonmakemigreat.wiki
   port: 61374
@@ -1316,19 +1297,18 @@ proxies:
   reality-opts:
     public-key: QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI
   client-fingerprint: chrome
-- name: 'Телефон / Роутер [owpn.org] #70'
+- name: 'Телефон / Роутер [owpn.org] #66'
   type: vless
-  server: 91.192.157.159
-  port: 443
-  uuid: ff15fcbe-4213-4c7d-ad0d-a0ad9b62f9b9
+  server: pl-b1.golangwikito.cfd
+  port: 61374
+  uuid: f8d52ece-fad4-478d-875d-df6eed3befa7
   network: xhttp
   udp: true
   tls: true
-  server-name: fintl.qiksme.com
+  server-name: pl-b1.golangwikito.cfd
   reality-opts:
-    public-key: GxworJcCmPev82bpbJLAsbVtCo29Kq2z7vzV-bi1RmY
-    short-id: b9828cf6d9e95772
-  client-fingerprint: firefox
+    public-key: QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI
+  client-fingerprint: chrome
 - name: 🇪🇪 Эстония | до 8 нояб
   type: vless
   server: rapira-dof.whitenw.net
@@ -1344,14 +1324,16 @@ proxies:
   flow: xtls-rprx-vision
 - name: LTE/5G [owpn.org]
   type: vless
-  server: cdn.oldertown.ru
-  port: 443
-  uuid: 29777784-b5ad-4e2a-be7b-335f033ab97c
-  network: xhttp
+  server: 81.94.148.67
+  port: 39443
+  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
+  network: grpc
   udp: true
   tls: true
-  server-name: cdn.oldertown.ru
-  client-fingerprint: firefox
+  server-name: bgw93ab5ke7l7.hat.onl
+  client-fingerprint: qq
+  grpc-opts:
+    grpc-service-name: v1.segment.UyktTezxTgNzL5fx.ts
 - name: 'LTE/5G [owpn.org] #2'
   type: vless
   server: 176.108.245.237
@@ -1362,18 +1344,6 @@ proxies:
   tls: true
   server-name: tfusq-ru-40sb.fade.mom
   client-fingerprint: qq
-- name: 'LTE/5G [owpn.org] #3'
-  type: vless
-  server: chat.gpt.prem-ai.shop
-  port: 443
-  uuid: 95f85937-7b95-45c4-8d69-95da6a978569
-  network: ws
-  udp: true
-  tls: true
-  server-name: chat.gpt.prem-ai.shop
-  client-fingerprint: chrome
-  ws-opts:
-    path: /gateway/v1/ws/791f9a4d19f715c2ffaedfbaf99d88bd
 - name: 🇷🇺 AetrisVPN
   type: vless
   server: 72.56.37.23
@@ -1643,7 +1613,7 @@ proxy-groups:
   - '🇷🇺 LTE | Все операторы 10", "network": "tcp", "security": "reality", "sni": "pulse.mail.ru",
     "fp": "firefox", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs", "sid":
     "428ef87fd47a3a32", "spx": "/", "flow": "xtls-rprx-vision", "encryption": "none"}],
-    "userinfo": {"upload": 0, "download": 88160900175, "total": 214748364800, "expire":
+    "userinfo": {"upload": 0, "download": 88792573618, "total": 214748364800, "expire":
     1794348337}, "profileTitle": "base64:QFNob3BUX1ZQTl9ib3Q=", "outdated": true}'
   - '🇷🇺 LTE | Все операторы 5", "network": "tcp", "security": "reality", "sni": "api.browser.yandex.com",
     "fp": "firefox", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs", "sid":
@@ -1749,14 +1719,9 @@ proxy-groups:
   - 'Телефон / Роутер [owpn.org] #64'
   - 'Телефон / Роутер [owpn.org] #65'
   - 'Телефон / Роутер [owpn.org] #66'
-  - 'Телефон / Роутер [owpn.org] #67'
-  - 'Телефон / Роутер [owpn.org] #68'
-  - 'Телефон / Роутер [owpn.org] #69'
-  - 'Телефон / Роутер [owpn.org] #70'
   - 🇪🇪 Эстония | до 8 нояб
   - LTE/5G [owpn.org]
   - 'LTE/5G [owpn.org] #2'
-  - 'LTE/5G [owpn.org] #3'
   - 🇷🇺 AetrisVPN
   - 'LTE #3'
   - 'LTE #2'
@@ -1978,7 +1943,7 @@ proxy-groups:
   - '🇷🇺 LTE | Все операторы 10", "network": "tcp", "security": "reality", "sni": "pulse.mail.ru",
     "fp": "firefox", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs", "sid":
     "428ef87fd47a3a32", "spx": "/", "flow": "xtls-rprx-vision", "encryption": "none"}],
-    "userinfo": {"upload": 0, "download": 88160900175, "total": 214748364800, "expire":
+    "userinfo": {"upload": 0, "download": 88792573618, "total": 214748364800, "expire":
     1794348337}, "profileTitle": "base64:QFNob3BUX1ZQTl9ib3Q=", "outdated": true}'
   - '🇷🇺 LTE | Все операторы 5", "network": "tcp", "security": "reality", "sni": "api.browser.yandex.com",
     "fp": "firefox", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs", "sid":
@@ -2084,14 +2049,9 @@ proxy-groups:
   - 'Телефон / Роутер [owpn.org] #64'
   - 'Телефон / Роутер [owpn.org] #65'
   - 'Телефон / Роутер [owpn.org] #66'
-  - 'Телефон / Роутер [owpn.org] #67'
-  - 'Телефон / Роутер [owpn.org] #68'
-  - 'Телефон / Роутер [owpn.org] #69'
-  - 'Телефон / Роутер [owpn.org] #70'
   - 🇪🇪 Эстония | до 8 нояб
   - LTE/5G [owpn.org]
   - 'LTE/5G [owpn.org] #2'
-  - 'LTE/5G [owpn.org] #3'
   - 🇷🇺 AetrisVPN
   - 'LTE #3'
   - 'LTE #2'
