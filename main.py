@@ -63,7 +63,7 @@ ISSUE_URLS = set()
 BLACKLIST_DOMAINS = [
     'youtube.com', 'youtu.be', 'instagram.com', 'twitter.com', 'x.com',
     'vk.com', 'ok.ru', 'pikabu.ru', 'habr.com', 'dzen.ru', 'rambler.ru',
-    'mail.ru', 'rambler.ru', 'meduza.io', 'kommersant.ru', 'cnews.ru',
+    'mail.ru', 'meduza.io', 'kommersant.ru', 'cnews.ru',
     'iz.ru', 'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru', 'max.ru',
     'ria.ru', 'lenta.ru', 'rbc.ru', 'vedomosti.ru', 'tass.ru'
@@ -74,7 +74,7 @@ JUNK_DOMAINS = [
     'play.google.com', 'apps.apple.com', 'testflight.apple.com',
     'donationalerts.com', 'pay.cloudtips.ru', 'finance.ozon.ru',
     'letmegooglethat.com', 'consumer.ftc.gov', 'cisa.gov',
-    'telegram.org', 'telega.in', 'tgproxy.pink',
+    'telegram.org', 'telega.in', 'tgproxy.pink', 'translate.yandex.ru',
 ]
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
@@ -119,9 +119,30 @@ PROBLEM_DOMAINS = ['kfwl.lol', 'pozor.bond', 'atlanta-subs.ru', 'astra-sub.com',
 
 DEBUG = os.getenv('DEBUG', '1') == '1'
 
+# --------------------------------------------------------------- лог без источников
+# В логе нет ни URL, ни доменов, ни имён каналов/прокси — только счётчики.
+STATS = {'http_ok': 0, 'http_fail': 0, 'bytes': 0, 'sub_links': 0}
+
 def debug_log(msg):
     if DEBUG:
         print(f"[DEBUG] {msg}", flush=True)
+
+def _fmt_bytes(n):
+    return f"{n / 1048576:.1f} MB" if n >= 1048576 else f"{n / 1024:.1f} KB"
+
+def _progress():
+    total = STATS['http_ok'] + STATS['http_fail']
+    if DEBUG and total and total % 100 == 0:
+        print(f"[HTTP] запросов: {total} (ok {STATS['http_ok']} / fail {STATS['http_fail']}), "
+              f"скачано {_fmt_bytes(STATS['bytes'])}", flush=True)
+
+def _scheme_hist(uris, top=8):
+    h = {}
+    for u in uris:
+        s = u.split('://', 1)[0].lower()[:12]
+        h[s] = h.get(s, 0) + 1
+    items = sorted(h.items(), key=lambda kv: -kv[1])[:top]
+    return '{' + ', '.join(f'{k}: {v}' for k, v in items) + '}'
 
 def now_utc():
     return datetime.now(timezone.utc)
@@ -147,7 +168,6 @@ def is_valid_url(url):
             return False
         host = (r.hostname or '').lower()
         # точное совпадение домена/поддомена, а не подстроки
-        # (старый вариант отсеивал netflix.com из-за 'x.com')
         for d in BLACKLIST_DOMAINS + JUNK_DOMAINS:
             if host == d or host.endswith('.' + d):
                 return False
@@ -233,7 +253,7 @@ def clean_url(url):
         url = url[:-1]
     url = url.rstrip('.,;:!?')
     # склейки чиним только у http(s): иначе резались легитимные
-    # vless://...path=...https://... (баг старой версии)
+    # vless://...path=...https://...
     if url.startswith(('http://', 'https://')):
         url = remove_sticky_words(split_glued(url))
         url = normalize_sub_url(url)
@@ -253,7 +273,6 @@ def is_valid_issue_url(url):
     return True
 
 def split_glued_issues(url):
-    """Старый цикл терял все склеенные ссылки кроме первой."""
     pattern = re.compile(r'(?<!^)(?<!\s)(' + _ISSUE_ALT + r')://', re.I)
     parts = pattern.split(url)
     if len(parts) == 1:
@@ -327,8 +346,7 @@ def config_key(uri):
     return (scheme, user, pwd, host, port, path, tuple(sorted(q.items())))
 
 def matches_roots(p):
-    """Совпадение по НАЧАЛУ слова, а не по подстроке.
-    'Белые/белый' -> 'бел', 'Телефон' -> 'теле', 'Автовыбор' -> 'авто'."""
+    """Совпадение по НАЧАЛУ слова: 'Белые' -> 'бел', 'Телефон' -> 'теле', 'Автовыбор' -> 'авто'."""
     searchable = ' '.join([
         str(p.get('name', '')), str(p.get('server', '')),
         str(p.get('sni', '')), str(p.get('server-name', '')),
@@ -710,6 +728,30 @@ def parse_uri_for_clash(uri):
         pass
     return None
 
+def _fail_reason(uri):
+    """Короткая причина отказа БЕЗ самих ссылок — для статистики в логе."""
+    scheme, _, rest = uri.partition('://')
+    s = scheme.lower()[:12]
+    if not rest:
+        return f'{s}:пусто'
+    if s in ('vless', 'trojan', 'tuic'):
+        if '@' not in rest:
+            return f'{s}:нет-@'
+        hp = rest.split('@', 1)[1].partition('#')[0].partition('?')[0]
+        if _split_hostport(hp) is None:
+            return f'{s}:host-port'
+        low = rest.lower()
+        if s == 'vless' and 'security=reality' in low and 'pbk=' not in low:
+            return f'{s}:reality-без-pbk'
+        return f'{s}:прочее'
+    if s == 'vmess':
+        return 'vmess:json-b64'
+    if s == 'ss':
+        return 'ss:формат'
+    if s in ('hysteria', 'hysteria2', 'hy2'):
+        return f'{s}:host-port'
+    return f'{s}:прочее'
+
 # ---------------------------------------------------------------- extraction
 
 def extract_from_element(element):
@@ -732,7 +774,7 @@ def extract_from_element(element):
     return list(set(proxies)), list(set(urls))
 
 def extract_messages_data(html_content, cutoff_date):
-    """Возвращает (прокси с РЕАЛЬНЫМИ датами, url, min_id для пагинации)."""
+    """Возвращает (прокси с реальными датами, url, min_id для пагинации)."""
     soup = BeautifulSoup(html_content, HTML_PARSER)
     messages = soup.find_all('div', class_='tgme_widget_message')
     proxies, urls, min_id = [], [], None
@@ -772,6 +814,7 @@ def _headers_for(url):
     }
 
 async def fetch(session, url, sem, retry_count=2):
+    """Логируются только счётчики — ни URL, ни доменов."""
     if not url.startswith(('http://', 'https://')):
         return ""
     headers = _headers_for(url)
@@ -784,21 +827,26 @@ async def fetch(session, url, sem, retry_count=2):
             async with sem:  # семафор держим только на запрос, не на сон между ретраями
                 async with session.get(url, headers=headers, allow_redirects=True, timeout=timeout) as resp:
                     if resp.status == 200:
-                        text = (await resp.read()).decode('utf-8', errors='ignore')
-                        debug_log(f"✓ {url[:80]}: {len(text)} симв.")
-                        return text
+                        data = await resp.read()
+                        STATS['http_ok'] += 1
+                        STATS['bytes'] += len(data)
+                        _progress()
+                        return data.decode('utf-8', errors='ignore')
                     retryable = resp.status in (403, 429, 500, 502, 503, 504)
         except asyncio.CancelledError:
             raise
         except Exception:
             retryable = True
         if not retryable or attempt == retry_count:
+            STATS['http_fail'] += 1
+            _progress()
             return ""
         await asyncio.sleep(2 * (attempt + 1))
+    STATS['http_fail'] += 1
     return ""
 
 async def fetch_tme_channel(session, sem, channel_url, cutoff, max_pages):
-    """История канала через t.me/s/ с пагинацией ?before= (раньше — только 1 страница)."""
+    """История канала через t.me/s/ с пагинацией ?before=."""
     proxies, urls, before = [], [], None
     for _ in range(max_pages):
         page_url = channel_url + (f'?before={before}' if before else '')
@@ -816,19 +864,21 @@ async def fetch_tme_channel(session, sem, channel_url, cutoff, max_pages):
 async def parse_telethon_sources(sources, cutoff, limit):
     """Один клиент на все источники; для форумов читается конкретная тема."""
     if not SESSION_B64 or not TELETHON_OK or API_ID == 0:
-        debug_log("Telethon не настроен")
+        debug_log("Telethon: не настроен, пропуск")
         return [], []
     session_file = 'tg_session'
     try:
         with open(session_file + '.session', 'wb') as f:
             f.write(base64.b64decode(SESSION_B64))
     except Exception:
+        debug_log("Telethon: ошибка сессии")
         return [], []
     proxies, urls = [], []
     client = TelegramClient(session_file, API_ID, API_HASH)
     try:
         await client.connect()
         if not await client.is_user_authorized():
+            debug_log("Telethon: сессия не авторизована")
             return [], []
         for source_url in sources:
             match = re.match(r'https?://t\.me/(?:c/)?([a-zA-Z0-9_]+)(?:/(\d+))?', source_url)
@@ -843,8 +893,8 @@ async def parse_telethon_sources(sources, cutoff, limit):
                     pass
             try:
                 entity = await client.get_entity(chat_id)
-            except Exception as e:
-                debug_log(f"Telethon: не получить entity {chat_id}: {e}")
+            except Exception:
+                debug_log("Telethon: источник недоступен")
                 continue
             kwargs = {'reply_to': topic_id} if topic_id and getattr(entity, 'forum', False) else {}
             try:
@@ -870,10 +920,10 @@ async def parse_telethon_sources(sources, cutoff, limit):
                                 ISSUE_URLS.add(u)
                             else:
                                 collect_url(ent.url, urls)
-            except Exception as e:
-                debug_log(f"Telethon: ошибка чтения {chat_id}: {e}")
-    except Exception as e:
-        debug_log(f"Telethon: {e}")
+            except Exception:
+                debug_log("Telethon: ошибка чтения источника")
+    except Exception:
+        debug_log("Telethon: ошибка соединения")
     finally:
         try:
             await client.disconnect()
@@ -883,6 +933,7 @@ async def parse_telethon_sources(sources, cutoff, limit):
             os.remove(session_file + '.session')
         except OSError:
             pass
+    debug_log(f"Telethon: источников {len(sources)}, ссылок {len(proxies)}")
     return proxies, urls
 
 def _extract_from_sub_text(text):
@@ -904,7 +955,7 @@ def _sub_key(url):
     return url.rstrip('/')
 
 async def process_subscription(url, session, sem, visited, cutoff):
-    """Каналы t.me внутри подписок тоже парсим как /s/."""
+    """Каналы t.me внутри подписок тоже парсим как /s/. В лог — только счётчики."""
     key = _sub_key(url)
     if key in visited:
         return []
@@ -930,8 +981,7 @@ async def process_subscription(url, session, sem, visited, cutoff):
     if not text:
         return []
     found = _extract_from_sub_text(text)
-    if found:
-        debug_log(f"✓ {len(found)} прокси в {url[:60]}")
+    STATS['sub_links'] += len(found)
     now = now_utc()
     return [(u, now) for u in found]
 
@@ -1038,35 +1088,65 @@ def write_issue_file():
 
 # ---------------------------------------------------------------- pipeline
 
-# разделитель склеенных ссылок: "…#Имяvless://next-uuid@…"
-# в реальных ссылках пути percent-encoded (sstp%3A%2F%2F), поэтому
-# литеральное "scheme://" внутри query не встречается — ложных разрезов нет
+# Расклейка ТОЛЬКО внутри имени (фрагмента). Тело и запрос не режем никогда:
+# внутри path/host встречается 'wss://', а он содержит 'ss://' — прежняя версия
+# резала там ссылку пополам и теряла десятки тысяч ключей.
 _PROXY_SPLIT_RE = re.compile(r'(?=(?:' + _SCHEMES_ALT + r')://)', re.IGNORECASE)
 
-def split_glued_proxies(uri):
-    parts = [p for p in _PROXY_SPLIT_RE.split(uri) if p]
-    return parts if len(parts) > 1 else [uri]
+def _split_uri(uri):
+    """-> (варианты головы, вклеенные хвосты).
+    Оригинал всегда присутствует как запасной вариант — потеря ключа невозможна."""
+    head, sep, frag = uri.partition('#')
+    if not sep or not _PROXY_SPLIT_RE.search(frag):
+        return [uri], []
+    pieces = [p for p in _PROXY_SPLIT_RE.split(frag) if p]
+    name = pieces[0]
+    clean_head = head + ('#' + name if name else '')
+    tails = [t for t in pieces[1:] if '@' in t and ':' in t]
+    variants = [clean_head]
+    if clean_head != uri:
+        variants.append(uri)
+    return variants, tails
 
 async def build_list(items, cutoff, label, ping_sem, ping_cache, whitelist=False):
     """Общий конвейер ALL и WL; пинг-кэш общий -> каждый endpoint проверяется 1 раз."""
-    fresh = []
-    for u, dt in items:
-        if dt >= cutoff:
-            fresh.extend(split_glued_proxies(u))
-    uris = dedupe_by_config(fresh)
+    raw = [u for u, dt in items if dt >= cutoff]
+    uris = dedupe_by_config(raw)
+    debug_log(f"📦 {label}: сырья {len(raw)} {_scheme_hist(raw)} -> после дедупа {len(uris)}")
+
     happ, parsed = [], {}
-    parse_errors = 0
+    fail_reasons = {}
+    glued_fixed = 0
     for u in uris:
         if u.lower().startswith('happ://'):
             happ.append(u)
             continue
-        p = parse_uri_for_clash(u)
-        if p and p.get('server') and p.get('port'):
-            parsed[u] = p
-        else:
-            parse_errors += 1
-    if parse_errors:
-        debug_log(f"⚠️ {label}: не распарсено {parse_errors}")
+        variants, tails = _split_uri(u)
+        if len(variants) > 1 or tails:
+            glued_fixed += 1
+        ok = False
+        for v in variants:
+            p = parse_uri_for_clash(v)
+            if p and p.get('server') and p.get('port'):
+                parsed[v] = p
+                ok = True
+                break
+        for t in tails:
+            p = parse_uri_for_clash(t)
+            if p and p.get('server') and p.get('port'):
+                parsed[t] = p
+        if not ok:
+            r = _fail_reason(u)
+            fail_reasons[r] = fail_reasons.get(r, 0) + 1
+
+    if glued_fixed:
+        debug_log(f"🧩 {label}: расклеено ссылок {glued_fixed}")
+    if fail_reasons:
+        top = sorted(fail_reasons.items(), key=lambda kv: -kv[1])[:8]
+        debug_log(f"⚠️ {label}: не распарсено {sum(fail_reasons.values())} "
+                  + '{' + ', '.join(f'{k}: {v}' for k, v in top) + '}')
+    debug_log(f"✅ {label}: распарсено {len(parsed)} {_scheme_hist(parsed)}")
+
     endpoints = {(p['server'], p['port']) for p in parsed.values()}
     missing = endpoints - ping_cache.keys()
     print(f"[{label}] endpoint'ов: {len(endpoints)}, новых для пинга: {len(missing)}", flush=True)
@@ -1076,6 +1156,7 @@ async def build_list(items, cutoff, label, ping_sem, ping_cache, whitelist=False
     # детерминированный порядок -> минимальные diff'ы между запусками
     alive.sort(key=lambda up: (up[1]['type'], up[1]['server'], up[1]['port'], up[0]))
     print(f"[{label}] живых: {len(alive)}", flush=True)
+
     enabled = get_enabled_protocols()
     clash, txt_uris = [], []
     for u, p in alive:
@@ -1085,7 +1166,7 @@ async def build_list(items, cutoff, label, ping_sem, ping_cache, whitelist=False
             if p.get('type') not in WL_PROTOCOLS or not matches_roots(p):
                 continue
         elif p.get('type') not in enabled:
-            txt_uris.append(u)  # в ALL.txt кладём все протоколы, как раньше
+            txt_uris.append(u)  # в ALL.txt кладём все протоколы
             continue
         ok, _ = validate_proxy(p)
         if ok:
@@ -1131,6 +1212,7 @@ async def main():
             sub_urls.add(clean_url(src))
     print(f"Каналов web: {len(web_channels)}, сообщений: {len(embed_msgs)}, "
           f"Telethon: {len(telethon_sources)}, подписок: {len(sub_urls)}", flush=True)
+
     connector = aiohttp.TCPConnector(limit=MAX_CONCURRENT_HTTP, ttl_dns_cache=300, ssl=False)
     async with aiohttp.ClientSession(connector=connector, timeout=TIMEOUT) as session:
         if web_channels or embed_msgs:
@@ -1146,12 +1228,12 @@ async def main():
                 sub_urls.update(clean_url(u) for u in u2)
             for wc in web_channels:
                 visited.add(_sub_key(wc))
+            debug_log(f"Каналы: ссылок {len(items)}, найдено подписок/ссылок {len(sub_urls)}")
         if telethon_sources:
             p, u = await parse_telethon_sources(telethon_sources, cutoff_wl, LIMIT_WL)
             items.extend(p)
             sub_urls.update(clean_url(x) for x in u)
         # ссылки на каналы, которые уже читаем напрямую, не нужны
-        # (permalink'и постов ведут на те же сообщения -> сотни лишних запросов)
         known_chans = set()
         for src in web_channels + embed_msgs + telethon_sources:
             mm = _TME_RE.match(src)
@@ -1170,10 +1252,12 @@ async def main():
                     drop = set(embeds[MAX_EMBED_SUBS:])
                     subs = [u for u in subs if u not in drop]
                     debug_log(f"⏭️ Embed-лимит: пропущено {len(drop)} чужих сообщений")
-            print(f"[{time.time()-start:.1f}s] Подписок: {len(subs)}", flush=True)
+            print(f"[{time.time()-start:.1f}s] Подписок в очереди: {len(subs)}", flush=True)
             results = await asyncio.gather(*(process_subscription(u, session, http_sem, visited, cutoff_wl) for u in subs))
             for r in results:
                 items.extend(r)
+            debug_log(f"Подписки: обработано {len(subs)}, извлечено ссылок {STATS['sub_links']}")
+
     # дедуп по URI с сохранением самой свежей даты
     seen = {}
     for uri, dt in items:
@@ -1181,6 +1265,9 @@ async def main():
             seen[uri] = dt
     items = list(seen.items())
     print(f"[{time.time()-start:.1f}s] Сырых прокси: {len(items)}", flush=True)
+    debug_log(f"HTTP итого: ok {STATS['http_ok']} / fail {STATS['http_fail']}, "
+              f"скачано {_fmt_bytes(STATS['bytes'])}")
+
     ping_cache = {}
     txt_all, clash_all = await build_list(items, cutoff_all, 'ALL', ping_sem, ping_cache)
     txt_wl, clash_wl = await build_list(items, cutoff_wl, 'WL', ping_sem, ping_cache, whitelist=True)
