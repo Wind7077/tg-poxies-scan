@@ -5,7 +5,7 @@ import asyncio
 import json
 import time
 from datetime import datetime, timezone, timedelta
-from urllib.parse import parse_qs, parse_qsl, quote, unquote, urlparse, urlsplit
+from urllib.parse import parse_qs, parse_qsl, quote, unquote, urlparse, urlsplit, urlencode, urlunsplit
 
 import aiohttp
 import yaml
@@ -67,6 +67,14 @@ BLACKLIST_DOMAINS = [
     'iz.ru', 'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru', 'max.ru',
     'ria.ru', 'lenta.ru', 'rbc.ru', 'vedomosti.ru', 'tass.ru'
+]
+
+# страницы, где ключей заведомо нет (магазины, донаты, статьи, промо)
+JUNK_DOMAINS = [
+    'play.google.com', 'apps.apple.com', 'testflight.apple.com',
+    'donationalerts.com', 'pay.cloudtips.ru', 'finance.ozon.ru',
+    'letmegooglethat.com', 'consumer.ftc.gov', 'cisa.gov',
+    'telegram.org', 'telega.in', 'tgproxy.pink',
 ]
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
@@ -140,9 +148,16 @@ def is_valid_url(url):
         host = (r.hostname or '').lower()
         # точное совпадение домена/поддомена, а не подстроки
         # (старый вариант отсеивал netflix.com из-за 'x.com')
-        for d in BLACKLIST_DOMAINS:
+        for d in BLACKLIST_DOMAINS + JUNK_DOMAINS:
             if host == d or host.endswith('.' + d):
                 return False
+        path = r.path.lower()
+        if host == 'github.com' and '/releases' in path:
+            return False
+        if path.endswith('.md'):
+            return False
+        if host == 'pozor.bond' and path.startswith('/status/'):
+            return False
         return True
     except Exception:
         return False
@@ -181,6 +196,26 @@ def remove_sticky_words(url):
             url = url[:-len(word)]
     return url.rstrip('/')
 
+_TRACK_KEYS = {'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+               'fbclid', 'gclid', 'yclid', 'ysclid', 'ref_type', 'erid'}
+
+def normalize_sub_url(url):
+    """Схлопывает дубли: трекинг-параметры и зеркала hub.mos.ru.
+    Важные параметры (key, id, ref, token) не трогаются."""
+    if 'hub.mos.ru/' in url:
+        url = url.replace('/-/raw/', '/raw/')
+    try:
+        parts = urlsplit(url)
+        if parts.query:
+            pairs = parse_qsl(parts.query, keep_blank_values=True)
+            if any(k.lower() in _TRACK_KEYS for k, _ in pairs):
+                kept = [(k, v) for k, v in pairs if k.lower() not in _TRACK_KEYS]
+                url = urlunsplit((parts.scheme, parts.netloc, parts.path,
+                                  urlencode(kept), parts.fragment))
+    except Exception:
+        pass
+    return url
+
 def clean_url(url):
     url = url.strip()
     while _AMP_RE.search(url):
@@ -201,6 +236,7 @@ def clean_url(url):
     # vless://...path=...https://... (баг старой версии)
     if url.startswith(('http://', 'https://')):
         url = remove_sticky_words(split_glued(url))
+        url = normalize_sub_url(url)
     return url
 
 def is_valid_issue_url(url):
