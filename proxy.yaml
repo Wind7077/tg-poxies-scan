@@ -4,128 +4,6 @@ mode: Rule
 log-level: info
 external-controller: 127.0.0.1:9090
 proxies:
-- name: '🌀 CYBERPORTAL | White Keys #166'
-  type: hysteria2
-  server: 130.49.161.70
-  port: 443
-  udp: true
-  password: p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR
-  sni: hy2.aspidnet.xyz
-  obfs: salamander
-  obfs-password: rG07s3COMIEvdnQipRyWzx_H_2xygNC3
-  network: tcp
-  uuid: ''
-- name: '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #293'
-  type: hysteria2
-  server: 130.49.161.70
-  port: 443
-  udp: true
-  password: p7Q76LzlnS4hIzr1W3staBOnUe_WwSkR
-  sni: hy2.aspidnet.xyz
-  obfs: salamander
-  obfs-password: rG07s3COMIEvdnQipRyWzx_H_2xygNC3
-  alpn:
-  - h3
-  network: tcp
-  uuid: ''
-- name: '#5 🇩🇪LTE Обход все операторы'
-  type: hysteria2
-  server: 87.228.101.153
-  port: 443
-  udp: true
-  password: 66e8be28-4ae2-4f28-8a62-1a9308f8c64e
-  sni: univideo.svc-endpoint.com
-  alpn:
-  - h3
-  network: tcp
-  uuid: ''
-- name: '#6 🇩🇪LTE Обход все операторы'
-  type: hysteria2
-  server: 87.228.101.166
-  port: 443
-  udp: true
-  password: 66e8be28-4ae2-4f28-8a62-1a9308f8c64e
-  sni: univideo.svc-endpoint.com
-  alpn:
-  - h3
-  network: tcp
-  uuid: ''
-- name: '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #201'
-  type: ss
-  server: 172.105.39.124
-  port: 7002
-  cipher: aes-256-gcm
-  password: RexnBgU7EV5ADxG
-  udp: true
-  network: tcp
-  uuid: ''
-- name: Notorgames_0 (41)
-  type: ss
-  server: 185.156.47.97
-  port: 9443
-  cipher: aes-256-gcm
-  password: eveaaTOb8ji8yntw2Z9yWUG0d6Ir8Ld8m3ymH8THdC5egiTH1mXCiBc0Skr7FibH
-  udp: true
-  network: tcp
-  uuid: ''
-- name: 🇧🇪 Бельгия — Брюссельский столичный регион 🎃
-  type: ss
-  server: 38.180.87.217
-  port: 11943
-  cipher: aes-128-gcm
-  password: fa938a7d397bda0f23e32143542ac0bb
-  udp: true
-  network: tcp
-  uuid: ''
-- name: '@nofiltering2'
-  type: ss
-  server: 82.38.31.215
-  port: 8080
-  cipher: chacha20-ietf-poly1305
-  password: k1dBOmOB4oqi7Ump37a1bQ
-  udp: true
-  network: tcp
-  uuid: ''
-- name: Notorgames_0 (25)
-  type: ss
-  server: 84.247.155.196
-  port: 80
-  cipher: aes-256-gcm
-  password: 3eOFeNssde7PYYMv
-  udp: true
-  network: tcp
-  uuid: ''
-- name: '🇯🇵 Япония OT@Hy2UDP (WIFI/LTE) #299'
-  type: ss
-  server: 84.247.155.196
-  port: 443
-  cipher: aes-256-gcm
-  password: 3eOFeNssde7PYYMv
-  udp: true
-  network: tcp
-  uuid: ''
-- name: Notorgames_0 (2)
-  type: ss
-  server: 84.247.155.196
-  port: 443
-  cipher: aes-256-gcm
-  password: 3eOFeNssde7PYYMv
-  udp: true
-  network: tcp
-  uuid: ''
-- name: Телефон / Роутер [owpn.org]
-  type: vless
-  server: 04535dt.us8.h1clayd.click
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: tcp
-  udp: true
-  tls: true
-  server-name: 04535dt.us8.h1clayd.click
-  reality-opts:
-    public-key: UoS8qZ74hP_ECcncCz55lzvlcVss3R7VA0WYZE0YQCY
-    short-id: ba2a3dce62b99092
-  client-fingerprint: firefox
 - name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #95'
   type: vless
   server: 103.133.1.160
@@ -206,37 +84,6 @@ proxies:
     path: /
     headers:
       Host: snip.edgeoneai.cc.cd
-- name: '3832. 🇨🇦 VLESS | SNI: bahari.kiamobilepart.com | TG: @wlrustg'
-  type: vless
-  server: 104.19.250.20
-  port: 443
-  uuid: 24d49ddd-67c1-4821-b5b9-f12107366978
-  network: ws
-  udp: true
-  tls: true
-  server-name: bahari.kiamobilepart.com
-  client-fingerprint: chrome
-  alpn:
-  - h2
-  - http/1.1
-  ws-opts:
-    path: /api
-    headers:
-      Host: bahari.kiamobilepart.com
-- name: 🏳️ ShatakVPN 488007
-  type: vless
-  server: 104.21.41.86
-  port: 443
-  uuid: 26086552-5b79-d167-dd18-1ea000000000
-  network: ws
-  udp: true
-  tls: true
-  server-name: lczoox-b5gygc-24w8tc.rozhaghadri.workers.dev
-  client-fingerprint: chrome
-  ws-opts:
-    path: /sync
-    headers:
-      Host: lczoox-b5gygc-24w8tc.rozhaghadri.workers.dev
 - name: cool [white] 🌐 |#34|
   type: vless
   server: 104.24.21.163
@@ -279,19 +126,6 @@ proxies:
     short-id: 15bcc0a77c3cacdf
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇧🇪 Бельгия [#РКП]
-  type: vless
-  server: 109.69.218.172
-  port: 443
-  uuid: 664f65f4-33b3-43a3-b9e5-68192d1d428e
-  network: tcp
-  udp: true
-  tls: true
-  server-name: zealous-vortex.cdn.cachefleet.com
-  reality-opts:
-    public-key: cv_KJnMzQUZruACPbH-BCgLWrYqPm2dbUymg-gW_sVc
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #494'
   type: vless
   server: 129.101.121.70
@@ -306,6 +140,20 @@ proxies:
     short-id: 75dd7e79a7876314
   flow: xtls-rprx-vision
   client-fingerprint: chrome
+- name: Телефон / Роутер [owpn.org]
+  type: vless
+  server: 13.140.253.35
+  port: 443
+  uuid: bcd3798c-a56f-6bfc-b738-a17c43bd4a50
+  network: ws
+  udp: true
+  tls: true
+  server-name: xray-m0642ki4-silver-nebula-10.cloady.io
+  client-fingerprint: firefox
+  ws-opts:
+    path: /362b2b2c7197d648
+    headers:
+      Host: xray-m0642ki4-silver-nebula-10.cloady.io
 - name: '🌀 CYBERPORTAL | White Keys #210'
   type: vless
   server: 13.140.56.100
@@ -504,34 +352,6 @@ proxies:
   client-fingerprint: chrome
   xhttp-opts:
     path: /assets/v2
-- name: 🇭🇺 🏳 BobrVPN | AntiWhiteList 1 | @bobrvpn0
-  type: vless
-  server: 13.143.191.145
-  port: 443
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: hu1.hat.onl
-  reality-opts:
-    public-key: e2MstqAwJPKVzfqzqkji8g2kkG2vqfXbachwBlbFmGc
-    short-id: 800a19d2ca8f8040
-  client-fingerprint: ios
-  flow: xtls-rprx-vision
-- name: 🇧🇬 🏳 BobrVPN | AntiWhiteList 2 | @bobrvpn0
-  type: vless
-  server: 13.143.198.100
-  port: 443
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: bg1.hat.onl
-  reality-opts:
-    public-key: V3uMWEfDQAPFP6o5ED8Jtk0rJBPs7IlOLf_Wh8w_jXc
-    short-id: 76132b3b39704c44
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #109'
   type: vless
   server: 130.94.66.165
@@ -558,21 +378,7 @@ proxies:
   client-fingerprint: chrome
   xhttp-opts:
     path: /static
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 44 | @bobrvpn0
-  type: vless
-  server: 136.0.11.114
-  port: 447
-  uuid: 629bf04d-48e8-4da2-9641-7625b9e36284
-  network: tcp
-  udp: true
-  tls: true
-  server-name: dl.google.com
-  reality-opts:
-    public-key: 71aju9CrkCaFiG9zKKwUlnPdmYQit8iN51C4M1uZJig
-    short-id: a1b2c3d4e5f60718
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 🇧🇾 Беларусь | 🔗 Каскад [#РКП]
+- name: 'Телефон / Роутер [owpn.org] #2'
   type: vless
   server: 136.234.9.28
   port: 443
@@ -584,39 +390,9 @@ proxies:
   reality-opts:
     public-key: PD8Jdlg3xB9QY--jwQjp8PFPzCS8-Oryw6-HWBcHMFU
     short-id: d3bd772514c87d28
-  client-fingerprint: firefox
+  client-fingerprint: edge
   grpc-opts:
     grpc-service-name: 204adda7e3da
-- name: '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #2'
-  type: vless
-  server: 136.234.9.28
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: fc82dfx.nl8.h1clayd.click
-  reality-opts:
-    public-key: dtO7khFLUkpFDQOtNzo4Th4hJKLoPSY2VtD_9k4Hgiw
-    short-id: 7b2b1a14a6e0630d
-  client-fingerprint: firefox
-  xhttp-opts:
-    path: /0616f2d729aa
-- name: 🇳🇱 Нидерланды [🏳️LTE] | 🥭🔧
-  type: vless
-  server: 136.234.9.4
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: 80cb66x.nl17.h1clayd.click
-  reality-opts:
-    public-key: jhVdP7NFUaEXGfrmOqJlMCHTvqn3fymbzPfPT6NO4i0
-    short-id: f72d4a2c7cbbacb1
-  client-fingerprint: edge
-  xhttp-opts:
-    path: /d610f026b146
 - name: '🌀 CYBERPORTAL | White List #451'
   type: vless
   server: 138.124.109.158
@@ -789,7 +565,17 @@ proxies:
   client-fingerprint: ios
   xhttp-opts:
     path: /x
-- name: 'Телефон / Роутер [owpn.org] #2'
+- name: 'Телефон / Роутер [owpn.org] #3'
+  type: vless
+  server: 140.245.62.225
+  port: 36442
+  uuid: 5269e0b4-0dff-4f97-e0c7-83130bacb009
+  network: tcp
+  udp: true
+  tls: true
+  server-name: xjpp.zjlo.top
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #4'
   type: vless
   server: 143.246.204.21
   port: 443
@@ -889,34 +675,6 @@ proxies:
   client-fingerprint: random
   grpc-opts:
     grpc-service-name: grpc-tunnel
-- name: 'Телефон / Роутер [owpn.org] #3'
-  type: vless
-  server: 144.31.225.74
-  port: 443
-  uuid: 8ac4cf4e-c31c-4fb3-b56d-cf914970fa1b
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: static-nl.song69.fun
-  reality-opts:
-    public-key: ua6CK4GeIj_7Ae90bUHORFUFH2RRt9BksP9CmN-2VlU
-  client-fingerprint: firefox
-  xhttp-opts:
-    path: /static/v2/media
-- name: 🇩🇰 🏳 BobrVPN | AntiWhiteList 56 | @bobrvpn0
-  type: vless
-  server: 144.31.242.123
-  port: 443
-  uuid: 7592ca5c-b352-4562-8856-a9c936a3331b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: dk1.hat.onl
-  reality-opts:
-    public-key: V3uMWEfDQAPFP6o5ED8Jtk0rJBPs7IlOLf_Wh8w_jXc
-    short-id: 76132b3b39704c44
-  client-fingerprint: edge
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #397'
   type: vless
   server: 144.31.50.236
@@ -959,52 +717,6 @@ proxies:
     short-id: a44ff7d2e80213c2
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 🇦🇲 🏳 BobrVPN | AntiWhiteList 62 | @bobrvpn0
-  type: vless
-  server: 145.79.187.16
-  port: 443
-  uuid: 86bd4592-b750-4ab8-bd59-e4c81543f84c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: api.savesafe.info
-  reality-opts:
-    public-key: Zz_n3cpItqh107oNUK15eu-3Ac4TpS5gB_6plrRrZj8
-    short-id: 9f3df965329a8e8f
-  client-fingerprint: edge
-  xhttp-opts:
-    path: /
-    host: api.savesafe.info
-- name: 🇦🇲 🏳 BobrVPN | AntiWhiteList 63 | @bobrvpn0
-  type: vless
-  server: 145.79.187.50
-  port: 443
-  uuid: 86bd4592-b750-4ab8-bd59-e4c81543f84c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: api.savesafe.info
-  reality-opts:
-    public-key: Zz_n3cpItqh107oNUK15eu-3Ac4TpS5gB_6plrRrZj8
-    short-id: 9f3df965329a8e8f
-  client-fingerprint: edge
-  xhttp-opts:
-    host: api.savesafe.info
-- name: 🇦🇲 🏳 BobrVPN | AntiWhiteList 64 | @bobrvpn0
-  type: vless
-  server: 145.79.187.59
-  port: 443
-  uuid: 86bd4592-b750-4ab8-bd59-e4c81543f84c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: api.savesafe.info
-  reality-opts:
-    public-key: Zz_n3cpItqh107oNUK15eu-3Ac4TpS5gB_6plrRrZj8
-    short-id: 9f3df965329a8e8f
-  client-fingerprint: edge
-  xhttp-opts:
-    host: api.savesafe.info
 - name: '🌀 CYBERPORTAL | White List #514'
   type: vless
   server: 146.103.42.248
@@ -1033,7 +745,7 @@ proxies:
     short-id: d8645e158808f1f3
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 576 | @ByeWhiteLists2
+- name: '🌀 CYBERPORTAL | White List #479'
   type: vless
   server: 146.185.243.18
   port: 443
@@ -1614,36 +1326,6 @@ proxies:
   xhttp-opts:
     path: /
     host: fretranxrabet.net
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 49 | @bobrvpn0
-  type: vless
-  server: 151.101.36.111
-  port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: accounts.fastly.com
-  client-fingerprint: ios
-  alpn:
-  - h3
-  xhttp-opts:
-    path: /
-    host: ovd11.global.ssl.fastly.net
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 45 | @bobrvpn0
-  type: vless
-  server: 151.101.36.128
-  port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: accounts.fastly.com
-  client-fingerprint: safari
-  alpn:
-  - h3
-  xhttp-opts:
-    path: /
-    host: ovd7.global.ssl.fastly.net
 - name: cool [white] 🇺🇸 |#35|
   type: vless
   server: 151.101.36.128
@@ -1656,21 +1338,6 @@ proxies:
   client-fingerprint: firefox
   xhttp-opts:
     host: ovd7.global.ssl.fastly.net
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 52 | @bobrvpn0
-  type: vless
-  server: 151.101.36.2
-  port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: accounts.fastly.com
-  client-fingerprint: safari
-  alpn:
-  - h3
-  xhttp-opts:
-    path: /
-    host: oh4.global.ssl.fastly.net
 - name: cool [white] 🇺🇸 |#37|
   type: vless
   server: 151.101.36.2
@@ -1683,36 +1350,6 @@ proxies:
   client-fingerprint: firefox
   xhttp-opts:
     host: oh4.global.ssl.fastly.net
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 47 | @bobrvpn0
-  type: vless
-  server: 151.101.36.201
-  port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: accounts.fastly.com
-  client-fingerprint: edge
-  alpn:
-  - h3
-  xhttp-opts:
-    path: /
-    host: oh6.global.ssl.fastly.net
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 46 | @bobrvpn0
-  type: vless
-  server: 151.101.36.227
-  port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: accounts.fastly.com
-  client-fingerprint: edge
-  alpn:
-  - h3
-  xhttp-opts:
-    path: /
-    host: oh1.global.ssl.fastly.net
 - name: cool [white] 🇺🇸 |#3|
   type: vless
   server: 151.101.36.227
@@ -1725,21 +1362,6 @@ proxies:
   client-fingerprint: firefox
   xhttp-opts:
     host: oh1.global.ssl.fastly.net
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 48 | @bobrvpn0
-  type: vless
-  server: 151.101.36.235
-  port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: accounts.fastly.com
-  client-fingerprint: edge
-  alpn:
-  - h3
-  xhttp-opts:
-    path: /
-    host: ovd13.global.ssl.fastly.net
 - name: cool [white] 🇺🇸 |#31|
   type: vless
   server: 151.101.36.235
@@ -1752,36 +1374,6 @@ proxies:
   client-fingerprint: firefox
   xhttp-opts:
     host: ovd13.global.ssl.fastly.net
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 50 | @bobrvpn0
-  type: vless
-  server: 151.101.36.246
-  port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: accounts.fastly.com
-  client-fingerprint: safari
-  alpn:
-  - h3
-  xhttp-opts:
-    path: /
-    host: ovd12.global.ssl.fastly.net
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 51 | @bobrvpn0
-  type: vless
-  server: 151.101.36.253
-  port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: accounts.fastly.com
-  client-fingerprint: edge
-  alpn:
-  - h3
-  xhttp-opts:
-    path: /
-    host: ovd9.global.ssl.fastly.net
 - name: cool [white] 🇺🇸 |#8|
   type: vless
   server: 151.101.36.253
@@ -1794,21 +1386,6 @@ proxies:
   client-fingerprint: firefox
   xhttp-opts:
     host: ovd9.global.ssl.fastly.net
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 53 | @bobrvpn0
-  type: vless
-  server: 151.101.36.88
-  port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: accounts.fastly.com
-  client-fingerprint: firefox
-  alpn:
-  - h3
-  xhttp-opts:
-    path: /
-    host: ovd5.global.ssl.fastly.net
 - name: cool [white] 🇺🇸 |#25|
   type: vless
   server: 151.101.36.88
@@ -1921,7 +1498,7 @@ proxies:
     short-id: bb82c8
   client-fingerprint: random
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #4'
+- name: 'Телефон / Роутер [owpn.org] #5'
   type: vless
   server: 154.9.240.138
   port: 26990
@@ -1935,7 +1512,7 @@ proxies:
     short-id: e51285e3
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #5'
+- name: 'Телефон / Роутер [owpn.org] #6'
   type: vless
   server: 154.9.240.186
   port: 26990
@@ -1949,7 +1526,7 @@ proxies:
     short-id: e51285e3
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #6'
+- name: 'Телефон / Роутер [owpn.org] #7'
   type: vless
   server: 154.9.240.215
   port: 26990
@@ -2045,71 +1622,6 @@ proxies:
     public-key: DQW3GuEvmRgUQnnKdHjSZhgaEDcu_07Ijuqibd72-0I
     short-id: ca7dd27a72c7c203
   client-fingerprint: chrome
-- name: 🇷🇺 RU | CIDR | 719 | @ByeWhiteLists2
-  type: vless
-  server: 158.160.228.216
-  port: 443
-  uuid: 04913a93-529d-0208-9ffd-b37948df532b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: sYDQC1RUZKqtJau7wrl-i5yAYy613d9e72FRGAwvYUM
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 918 | @ByeWhiteLists2
-  type: vless
-  server: 158.160.228.216
-  port: 443
-  uuid: 04913a93-529d-0212-9ffd-b37948df532b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: sYDQC1RUZKqtJau7wrl-i5yAYy613d9e72FRGAwvYUM
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 841 | @ByeWhiteLists2
-  type: vless
-  server: 158.160.228.216
-  port: 443
-  uuid: 04913a93-529d-021c-9ffd-b37948df532b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: sYDQC1RUZKqtJau7wrl-i5yAYy613d9e72FRGAwvYUM
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 869 | @ByeWhiteLists2
-  type: vless
-  server: 158.160.228.216
-  port: 443
-  uuid: 04913a93-529d-0226-9ffd-b37948df532b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: sYDQC1RUZKqtJau7wrl-i5yAYy613d9e72FRGAwvYUM
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 895 | @ByeWhiteLists2
-  type: vless
-  server: 158.160.228.216
-  port: 443
-  uuid: 04913a93-529d-0230-9ffd-b37948df532b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: sYDQC1RUZKqtJau7wrl-i5yAYy613d9e72FRGAwvYUM
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
 - name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #164'
   type: vless
   server: 161.104.90.9
@@ -2185,6 +1697,20 @@ proxies:
     path: /
     headers:
       Host: snip.edgeoneai.cc.cd
+- name: 'Телефон / Роутер [owpn.org] #8'
+  type: vless
+  server: 162.159.198.1
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
+  network: ws
+  udp: true
+  tls: true
+  server-name: fs.qicai99.com
+  client-fingerprint: chrome
+  ws-opts:
+    path: /fp=chrome
+    headers:
+      Host: fs.qicai99.com
 - name: 🇩🇪 | @WhiteDNS | DE46|1.6MB/s|DNSOK|GPT⁺-DE|CL-DE|SP-DE
   type: vless
   server: 162.159.38.119
@@ -2251,7 +1777,7 @@ proxies:
     short-id: c39cc7310a
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: cool [white] 🇺🇸 |#6|
+- name: 'Телефон / Роутер [owpn.org] #9'
   type: vless
   server: 170.114.45.6
   port: 2096
@@ -2265,7 +1791,7 @@ proxies:
     path: /
     headers:
       Host: pcloud.z-tas.com
-- name: 'Телефон / Роутер [owpn.org] #7'
+- name: 'Телефон / Роутер [owpn.org] #10'
   type: vless
   server: 170.114.46.6
   port: 2096
@@ -2345,20 +1871,6 @@ proxies:
     path: /man
     headers:
       Host: moz.ar-marz.fun
-- name: 🇨🇦 @MrMeshkyChannel 516837
-  type: vless
-  server: 172.67.163.68
-  port: 443
-  uuid: 26086552-5b79-d167-dd18-1ea000000000
-  network: ws
-  udp: true
-  tls: true
-  server-name: lczoox-b5gygc-24w8tc.rozhaghadri.workers.dev
-  client-fingerprint: chrome
-  ws-opts:
-    path: /sync
-    headers:
-      Host: lczoox-b5gygc-24w8tc.rozhaghadri.workers.dev
 - name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #363'
   type: vless
   server: 176.108.242.15
@@ -2387,20 +1899,6 @@ proxies:
   alpn:
   - h2
   - http/1.1
-- name: '🇩🇪 Gh0st_WhiteList #246'
-  type: vless
-  server: 176.109.85.60
-  port: 443
-  uuid: 010be6fa-ab5f-404a-9edf-ab2db1f09f0c
-  network: ws
-  udp: true
-  tls: true
-  server-name: api.file-obmen.top
-  client-fingerprint: ios
-  ws-opts:
-    path: /api/generate
-    headers:
-      Host: api.file-obmen.top
 - name: 'Автовыбор #9'
   type: vless
   server: 176.12.74.226
@@ -2431,18 +1929,6 @@ proxies:
   xhttp-opts:
     path: /de96f7f8682c741950d8ddc8
     host: remanga.org
-- name: 'Телефон / Роутер [owpn.org] #8'
-  type: vless
-  server: 176.53.253.163
-  port: 443
-  uuid: 4b50270b-5caf-4c34-b3da-17b4525604a6
-  network: grpc
-  udp: true
-  tls: true
-  server-name: luminexorizon.ink
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: glush.de3.v1
 - name: 🏳️ Для БС 1
   type: vless
   server: 177.177.215.45
@@ -2465,20 +1951,6 @@ proxies:
   reality-opts:
     public-key: 0gjEApZ0V3smDLC8BbSaSSFMnQIzPRBh5rQ40K-LIVM
   client-fingerprint: random
-  flow: xtls-rprx-vision
-- name: 🇺🇸 🏳 BobrVPN | AntiWhiteList 3 | @bobrvpn0
-  type: vless
-  server: 177.3.252.45
-  port: 443
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: pl2.hat.onl
-  reality-opts:
-    public-key: PL-jIhHOxLpCUmnDvMEsB3YY3n8o7smiAT0P_SV6RCM
-    short-id: 19d6296d2621d9fa
-  client-fingerprint: edge
   flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #360'
   type: vless
@@ -2571,6 +2043,21 @@ proxies:
   network: xhttp
   udp: true
   tls: true
+  server-name: tgg.fastcon.cc
+  client-fingerprint: firefox
+  alpn:
+  - h2
+  xhttp-opts:
+    path: /clips/hls/v4/
+    host: tgg.fastcon.cc
+- name: 'LTE/5G #2'
+  type: vless
+  server: 178.176.128.128
+  port: 443
+  uuid: 50b95deb-6394-46c5-b88a-583e5b3ca7ee
+  network: xhttp
+  udp: true
+  tls: true
   server-name: tgp.fastcon.cc
   client-fingerprint: firefox
   alpn:
@@ -2605,20 +2092,6 @@ proxies:
     short-id: 41ae8e266bc3346f
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇷🇺 RU | — | 946 | @ByeWhiteLists2
-  type: vless
-  server: 178.250.243.56
-  port: 443
-  uuid: d6dba391-9247-4a51-9e9b-eae045378b90
-  network: tcp
-  udp: true
-  tls: true
-  server-name: max.ru
-  reality-opts:
-    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
-    short-id: 6ba85179e30d4fc2
-  flow: xtls-rprx-vision
-  client-fingerprint: chrome
 - name: 'Автовыбор #12'
   type: vless
   server: 178.72.179.126
@@ -2632,48 +2105,6 @@ proxies:
     public-key: FunyCRnU6YPBWd37aiGrpXKftztIQ8mlYhDXiolmFW8
     short-id: 5dc99ae27daa42cf
   client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #369'
-  type: vless
-  server: 178.94.25.73
-  port: 10444
-  uuid: 2dacc738-5720-4824-b8bc-e3db57596ba7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: video.yandex.ru
-  reality-opts:
-    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
-    short-id: 8debcf36f1cc69ff
-  client-fingerprint: safari
-  flow: xtls-rprx-vision
-- name: 🇳🇱 🏳 BobrVPN | AntiWhiteList 4 | @bobrvpn0
-  type: vless
-  server: 179.253.86.209
-  port: 443
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: by1.hat.onl
-  reality-opts:
-    public-key: G0holIaLZLiUOr4g1w80epJhycMy_Cf3q958AlX3hQc
-    short-id: 380d2a64242ce502
-  client-fingerprint: edge
-  flow: xtls-rprx-vision
-- name: 🇳🇱 🏳 BobrVPN | AntiWhiteList 5 | @bobrvpn0
-  type: vless
-  server: 179.253.87.31
-  port: 443
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: rs1.hat.onl
-  reality-opts:
-    public-key: UTkg40vyNnuavVNfJN0owayruc3nX306ZCeesO55WCM
-    short-id: 9e7171a722d2545c
-  client-fingerprint: edge
   flow: xtls-rprx-vision
 - name: 'Автовыбор #13'
   type: vless
@@ -2860,36 +2291,6 @@ proxies:
   client-fingerprint: chrome
   xhttp-opts:
     path: /api/v2/events
-- name: 🇷🇺 🏳 BobrVPN | AntiWhiteList 42 | @bobrvpn0
-  type: vless
-  server: 185.178.208.167
-  port: 443
-  uuid: 4662bf2b-af58-0001-ae5f-ef3d7d3a624f
-  network: ws
-  udp: true
-  tls: true
-  server-name: mbr.rkn-pediki.site
-  client-fingerprint: ios
-  alpn:
-  - http/1.1
-  ws-opts:
-    path: /session
-    headers:
-      Host: mbr.rkn-pediki.site
-- name: '@NOFILTERING2'
-  type: vless
-  server: 185.189.45.195
-  port: 443
-  uuid: dd5bed0b-ee77-481b-9f2c-250a632ddd9f
-  network: tcp
-  udp: true
-  tls: true
-  server-name: get.jarbook.net
-  reality-opts:
-    public-key: BIy6H-jndn24Ukyw83ML8LDB1HL8WLJmfCADEy8lzVs
-    short-id: c6f97313
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
 - name: '🇨🇦 GidroksiFree #3 | 🛡БС | 🟢LTE | 3201ms | ↓0.0Mbps'
   type: vless
   server: 185.218.17.172
@@ -2918,7 +2319,7 @@ proxies:
     short-id: 3c6afdc4124d0560
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #9'
+- name: 'Телефон / Роутер [owpn.org] #11'
   type: vless
   server: 185.221.213.22
   port: 443
@@ -3168,34 +2569,6 @@ proxies:
     path: /service/telemetry/045d381f1166/
     headers:
       Host: bhjolq0d0l.flowersgood.top
-- name: '🌀 CYBERPORTAL | White List #447'
-  type: vless
-  server: 185.86.147.184
-  port: 9449
-  uuid: 576f2d3c-5bb8-4d2e-a7d7-6cebb32be5dc
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: SsPslLCfw2CGDmCs17gTLRSUOsOfv0KgnuLnkyTqCzA
-    short-id: 62002c0a685ac208
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #5'
-  type: vless
-  server: 185.86.147.184
-  port: 9449
-  uuid: 835ff053-08fd-43f2-9886-8c2a3d967d14
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: SsPslLCfw2CGDmCs17gTLRSUOsOfv0KgnuLnkyTqCzA
-    short-id: 62002c0a685ac208
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #379'
   type: vless
   server: 185.95.231.156
@@ -3437,21 +2810,7 @@ proxies:
     path: /man
     headers:
       Host: moz.ar-marz.fun
-- name: '🇨🇿 Czechia — #174'
-  type: vless
-  server: 188.130.208.3
-  port: 443
-  uuid: 85089e3c-ebfc-40e4-91f3-e87d131b97ca
-  network: tcp
-  udp: true
-  tls: true
-  server-name: alterm.su
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 🇷🇺 🏳 BobrVPN | AntiWhiteList 70 | @bobrvpn0
+- name: 🇳🇴 Белые списки  happcluchi vpn
   type: vless
   server: 188.130.209.212
   port: 443
@@ -3463,7 +2822,7 @@ proxies:
   reality-opts:
     public-key: 6vubZmkLVtaiFF8JyGFy7XSy2pc7ywN4P625QLKw8wc
     short-id: 11979c0c9b2da371
-  client-fingerprint: edge
+  client-fingerprint: safari
   flow: xtls-rprx-vision
 - name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #82'
   type: vless
@@ -3552,7 +2911,7 @@ proxies:
     short-id: 219a891b
   client-fingerprint: random
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #10'
+- name: 'Телефон / Роутер [owpn.org] #12'
   type: vless
   server: 188.225.37.175
   port: 443
@@ -3561,14 +2920,14 @@ proxies:
   udp: true
   tls: true
   server-name: cryptoventura.online
-  client-fingerprint: ios
+  client-fingerprint: firefox
   alpn:
   - http/1.1
   ws-opts:
     path: /api/de3/live
     headers:
       Host: cryptoventura.online
-- name: 'Телефон / Роутер [owpn.org] #11'
+- name: 'Телефон / Роутер [owpn.org] #13'
   type: vless
   server: 188.225.37.43
   port: 443
@@ -3635,7 +2994,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: cache.sync.v1
-- name: 'LTE/5G #2'
+- name: 'LTE/5G #3'
   type: vless
   server: 188.225.74.227
   port: 443
@@ -3649,6 +3008,45 @@ proxies:
     short-id: 60a0ef553f964edc
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: 🇪🇪Обходы
+  type: vless
+  server: 188.225.83.133
+  port: 443
+  uuid: 4c346148-ece9-487a-bffb-ba5a399b2d71
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 188.225.83.133
+  reality-opts:
+    public-key: JqmkP6Fys7jN2Fu1iDJuWKVNPhlgHfy_pj1DHFVKVhw
+    short-id: a1b2c3d4e5f6a7b8
+  client-fingerprint: chrome
+- name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #99'
+  type: vless
+  server: 188.225.83.133
+  port: 443
+  uuid: 4c346148-ece9-487a-bffb-ba5a399b2d71
+  network: grpc
+  udp: true
+  tls: true
+  server-name: xnodtwx.artemida.live
+  reality-opts:
+    public-key: JqmkP6Fys7jN2Fu1iDJuWKVNPhlgHfy_pj1DHFVKVhw
+    short-id: a1b2c3d4e5f6a7b8
+  client-fingerprint: random
+- name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #414'
+  type: vless
+  server: 188.225.83.133
+  port: 443
+  uuid: 4c346148-ece9-487a-bffb-ba5a399b2d71
+  network: grpc
+  udp: true
+  tls: true
+  server-name: xnodtwx.artemida.live
+  reality-opts:
+    public-key: JqmkP6Fys7jN2Fu1iDJuWKVNPhlgHfy_pj1DHFVKVhw
+    short-id: a1b2c3d4e5f6a7b8
+  client-fingerprint: random
 - name: 🇪🇺 AUTO — Обход БС 38
   type: vless
   server: 188.72.103.3
@@ -3739,22 +3137,6 @@ proxies:
   xhttp-opts:
     path: /api/v4/lop/
     host: decdn2.bota7.com
-- name: 'LTE/5G #3'
-  type: vless
-  server: 188.72.103.4
-  port: 443
-  uuid: 29777784-b5ad-4e2a-be7b-335f033ab97c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: cdn.oldertown.ru
-  client-fingerprint: firefox
-  alpn:
-  - h2
-  - http/1.1
-  xhttp-opts:
-    path: /api/v4/media/session/poll/nl2
-    host: cdn.oldertown.ru
 - name: 'Автовыбор #19'
   type: vless
   server: 188.72.103.4
@@ -3937,20 +3319,6 @@ proxies:
     public-key: PuAGLfJy6cu1TNoHuKIKSxPetCbZI41fc8hQDjWPIAU
     short-id: 9980e0609b0d3891
   client-fingerprint: random
-- name: 🇱🇻 🏳 BobrVPN | AntiWhiteList 6 | @bobrvpn0
-  type: vless
-  server: 195.123.209.32
-  port: 443
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: lv1.hat.onl
-  reality-opts:
-    public-key: V3uMWEfDQAPFP6o5ED8Jtk0rJBPs7IlOLf_Wh8w_jXc
-    short-id: 76132b3b39704c44
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: 'Автовыбор #21'
   type: vless
   server: 195.123.212.251
@@ -4035,7 +3403,7 @@ proxies:
   grpc-opts:
     grpc-service-name: vless-grpc-reality
   client-fingerprint: chrome
-- name: 🇳🇱 NL | — | 77 | @ByeWhiteLists2
+- name: '🌀 CYBERPORTAL | White List #422'
   type: vless
   server: 195.2.92.183
   port: 443
@@ -4049,7 +3417,7 @@ proxies:
     short-id: ffffffffff
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #12'
+- name: 'Телефон / Роутер [owpn.org] #14'
   type: vless
   server: 195.206.235.121
   port: 443
@@ -4062,36 +3430,6 @@ proxies:
     public-key: 4mgkA2kT_Im0rkGi-fVSUU5CyF5xvMVcjA6MXBSEDAA
     short-id: d5501b156391e01d
   client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #13'
-  type: vless
-  server: 195.206.235.222
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: grpc
-  udp: true
-  tls: true
-  server-name: 15b171g.nl7.h1clayd.click
-  reality-opts:
-    public-key: zbz--PMjcIC4Ggr3j-ibDf0fzXRTj0lM_HzjPJyMkVE
-    short-id: 50a749f0eccb628c
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: 5b79e8a94241
-- name: 'Телефон / Роутер [owpn.org] #14'
-  type: vless
-  server: 195.206.235.48
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: fc82dfx.nl8.h1clayd.click
-  reality-opts:
-    public-key: dtO7khFLUkpFDQOtNzo4Th4hJKLoPSY2VtD_9k4Hgiw
-    short-id: 7b2b1a14a6e0630d
-  client-fingerprint: firefox
-  xhttp-opts:
-    path: /0616f2d729aa
 - name: '🇺🇸 Gh0st_WhiteList #25'
   type: vless
   server: 195.211.98.43
@@ -4120,36 +3458,6 @@ proxies:
     short-id: 247fd6dab1a34a48
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #3'
-  type: vless
-  server: 196.196.148.63
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: grpc
-  udp: true
-  tls: true
-  server-name: 717252g.nl8.h1clayd.click
-  reality-opts:
-    public-key: PD8Jdlg3xB9QY--jwQjp8PFPzCS8-Oryw6-HWBcHMFU
-    short-id: d3bd772514c87d28
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: 204adda7e3da
-- name: '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #4'
-  type: vless
-  server: 196.196.148.63
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: fc82dfx.nl8.h1clayd.click
-  reality-opts:
-    public-key: dtO7khFLUkpFDQOtNzo4Th4hJKLoPSY2VtD_9k4Hgiw
-    short-id: 7b2b1a14a6e0630d
-  client-fingerprint: firefox
-  xhttp-opts:
-    path: /0616f2d729aa
 - name: 'Телефон / Роутер [owpn.org] #15'
   type: vless
   server: 196.196.149.81
@@ -4164,22 +3472,19 @@ proxies:
     short-id: 42426c882c5fcd41
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #5'
+- name: 'Телефон / Роутер [owpn.org] #16'
   type: vless
-  server: 196.245.153.92
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: grpc
+  server: 196.240.125.6
+  port: 8443
+  uuid: 97fd7807-7e2b-49da-8a0e-e40197088f97
+  network: tcp
   udp: true
   tls: true
-  server-name: 717252g.nl8.h1clayd.click
-  reality-opts:
-    public-key: PD8Jdlg3xB9QY--jwQjp8PFPzCS8-Oryw6-HWBcHMFU
-    short-id: d3bd772514c87d28
+  server-name: api-v1-6af3f40b.vmagnum.win
   client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: 204adda7e3da
-- name: 'Телефон / Роутер [owpn.org] #16'
+  alpn:
+  - h2
+- name: 'Телефон / Роутер [owpn.org] #17'
   type: vless
   server: 196.245.52.187
   port: 443
@@ -4354,7 +3659,7 @@ proxies:
     short-id: f00f58383241c807
   client-fingerprint: edge
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #17'
+- name: 'Телефон / Роутер [owpn.org] #18'
   type: vless
   server: 200.169.179.233
   port: 443
@@ -4380,7 +3685,7 @@ proxies:
     short-id: acc1edca2a337172
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #18'
+- name: 'Телефон / Роутер [owpn.org] #19'
   type: vless
   server: 201.58.139.66
   port: 443
@@ -4393,7 +3698,7 @@ proxies:
     public-key: LY0H47MWx87_L_JBzxFAuTzKZB53U7MrZQK8-dNnMxM
     short-id: 6c5c7900406a1ae7
   client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #19'
+- name: 'Телефон / Роутер [owpn.org] #20'
   type: vless
   server: 201.8.89.106
   port: 443
@@ -4435,19 +3740,6 @@ proxies:
     short-id: 01a71fb3926ba422
   client-fingerprint: random
   flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 611 | @ByeWhiteLists2
-  type: vless
-  server: 212.233.121.169
-  port: 443
-  uuid: 50439bc4-12f2-48c1-841a-24f0ba5d8e68
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: 4YI0QbJYHCyl4-VWZPWAMccOmUW0c_XDE_rEZc-dNC0
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #421'
   type: vless
   server: 212.233.122.244
@@ -4462,19 +3754,19 @@ proxies:
     short-id: 9a62a7103e3791eb
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 🇭🇺 HU | — | 97 | @ByeWhiteLists2
+- name: '🌀 CYBERPORTAL | White List #550'
   type: vless
-  server: 217.13.104.133
+  server: 213.165.39.134
   port: 443
-  uuid: 40b33e55-6049-4fac-940e-7b38a3f5f270
+  uuid: 6a251a93-8eee-43b5-92ed-ecadedcfd0a8
   network: tcp
   udp: true
   tls: true
-  server-name: eh.vk.com
+  server-name: platform-api.max.ru
   reality-opts:
-    public-key: ZGwYjRp5RxlVpHUTPzi7pB4ZZuDU5FZEaFgBM71teiQ
-    short-id: 0669a3e6b300d069
-  client-fingerprint: chrome
+    public-key: Gtz3xOdQdWSocdx4NNie6s-bsa9VDiG6thqanJ4h31s
+    short-id: 6f3332a09b0ab6d1
+  client-fingerprint: ios
   flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #430'
   type: vless
@@ -4602,20 +3894,21 @@ proxies:
     short-id: c9a5e27d5463f614
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇦🇪 🏳 BobrVPN | AntiWhiteList 9 | @bobrvpn0
+- name: 🇩🇪 Белые списки  happcluchi vpn
   type: vless
-  server: 217.60.30.53
+  server: 217.60.27.93
   port: 443
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
+  uuid: 549766c3-fa5f-471e-8031-ffc1f8d5064f
+  network: xhttp
   udp: true
   tls: true
-  server-name: de3.hat.onl
+  server-name: tgde.blog-forme.ru
   reality-opts:
-    public-key: OEp5OMlE08EaAunays3K7Lbd0JWKOQKZ8HXiytog4EQ
-    short-id: e8d6c07aa30b81fa
-  client-fingerprint: edge
-  flow: xtls-rprx-vision
+    public-key: 2VsrxDroL0paeyBtGkQ5zfhMOXqwti5kDZPkvh1xJgs
+    short-id: 8424ce89ccd55f65
+  client-fingerprint: qq
+  xhttp-opts:
+    path: /v2/notes/85cf046cfe9c
 - name: '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #336'
   type: vless
   server: 217.60.34.17
@@ -4628,20 +3921,6 @@ proxies:
   reality-opts:
     public-key: yI6maXxTQ8zRHg39X8YMQtKW-IVfNIn0_OCUIQKmcXw
   client-fingerprint: random
-  flow: xtls-rprx-vision
-- name: 🇳🇱 🏳 BobrVPN | AntiWhiteList 8 | @bobrvpn0
-  type: vless
-  server: 217.60.67.12
-  port: 443
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: nl2.hat.onl
-  reality-opts:
-    public-key: PfG1V1-ODHD8CegoTVg8m4G4mw5S1QiA751yWKCkhBc
-    short-id: 054602d818379876
-  client-fingerprint: ios
   flow: xtls-rprx-vision
 - name: '🇺🇸 США OT@Hy2UDP (WIFI/LTE) #369'
   type: vless
@@ -4805,21 +4084,7 @@ proxies:
     path: /stream/PANEL_ZEUS/15038a30cbef/loc-0fp=unsafe
     headers:
       Host: oizs5zecux0s.pouriayy1.workers.dev
-- name: 🇱🇻 LV | — | 179 | @ByeWhiteLists2
-  type: vless
-  server: 31.170.22.68
-  port: 443
-  uuid: 46b81618-5d7f-4b65-b95f-7f782b8242be
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: nDq00UeDI5TKKFipI6rgdVCqiTO98ncHKn90Qp3EsBE
-    short-id: f2b78452f9233f26
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇱🇻 LV | — | 183 | @ByeWhiteLists2
+- name: '🌀 CYBERPORTAL | White List #492'
   type: vless
   server: 31.170.22.68
   port: 443
@@ -4832,20 +4097,6 @@ proxies:
     public-key: nDq00UeDI5TKKFipI6rgdVCqiTO98ncHKn90Qp3EsBE
     short-id: f2b78452f9233f26
   client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 🇫🇷 🏳 BobrVPN | AntiWhiteList 57 | @bobrvpn0
-  type: vless
-  server: 31.185.105.24
-  port: 443
-  uuid: 7592ca5c-b352-4562-8856-a9c936a3331b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: frb1.hat.onl
-  reality-opts:
-    public-key: LSatvkYtdgq5oND_moM9NRW-ZDbdlTvyX9gzeF9r3W8
-    short-id: 1cfdb63f3b860379
-  client-fingerprint: edge
   flow: xtls-rprx-vision
 - name: 'Автовыбор #30'
   type: vless
@@ -4875,6 +4126,34 @@ proxies:
     short-id: f6f2234d3773ad1c
   client-fingerprint: chrome
   flow: xtls-rprx-vision
+- name: '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #156'
+  type: vless
+  server: 31.58.95.10
+  port: 443
+  uuid: c6e3c24c-ce20-4ad5-8c8c-68cb05890ea8
+  network: grpc
+  udp: true
+  tls: true
+  server-name: de-gdd-1.unturned-rust-dead.lol
+  reality-opts:
+    public-key: aYz4_13W8gtAXGBrWeqJXtExahAJ9kUPDapqeyAlYCk
+  client-fingerprint: random
+  grpc-opts:
+    grpc-service-name: gdd-grpc
+- name: '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #51'
+  type: vless
+  server: 31.58.95.10
+  port: 443
+  uuid: c6e3c24c-ce20-4ad5-8c8c-68cb05890ea8
+  network: grpc
+  udp: true
+  tls: true
+  server-name: de-gdd-1.unturned-rust-dead.lol
+  reality-opts:
+    public-key: aYz4_13W8gtAXGBrWeqJXtExahAJ9kUPDapqeyAlYCk
+  client-fingerprint: random
+  grpc-opts:
+    grpc-service-name: gdd-grpc
 - name: '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #340'
   type: vless
   server: 31.58.95.11
@@ -5116,33 +4395,6 @@ proxies:
     short-id: ee2fb8a902f1fa2b
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 440 | @ByeWhiteLists2
-  type: vless
-  server: 37.139.34.251
-  port: 443
-  uuid: 7d40449f-92df-4256-9607-679241455d49
-  network: tcp
-  udp: true
-  tls: true
-  server-name: max.ru
-  reality-opts:
-    public-key: J5QjEJEwCYH0DT4aLuWuVZ5X9UUtUOhyCbQ41iEmnk8
-    short-id: 568276f318726b0f
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 585 | @ByeWhiteLists2
-  type: vless
-  server: 37.139.34.251
-  port: 443
-  uuid: 7d40449f-92df-4256-9607-679241455d49
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yandex.ru
-  reality-opts:
-    public-key: uI8GuyTVaiWvWYQOuKY8AKx8acF0j107xFVWri1jfxA
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #449'
   type: vless
   server: 37.139.34.90
@@ -5213,21 +4465,6 @@ proxies:
     short-id: 2976f793571fb671
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #20'
-  type: vless
-  server: 38917fx.es1.h1clayd.click
-  port: 443
-  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: 38917fx.es1.h1clayd.click
-  reality-opts:
-    public-key: 4mgkA2kT_Im0rkGi-fVSUU5CyF5xvMVcjA6MXBSEDAA
-    short-id: d5501b156391e01d
-  client-fingerprint: firefox
-  xhttp-opts:
-    path: /
 - name: '🌀 CYBERPORTAL | White List #199'
   type: vless
   server: 45.11.26.99
@@ -5340,6 +4577,21 @@ proxies:
     short-id: b16d3571068fe829
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #21'
+  type: vless
+  server: 45.133.151.174
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 35295cx.us8.h1clayd.click
+  reality-opts:
+    public-key: LsaTohbE6CqCH9UbYKwIybVXG3E5Wgz_X9czqas2LAI
+    short-id: 9acff4d98e2fbcc6
+  client-fingerprint: firefox
+  xhttp-opts:
+    path: /1812842934d4
 - name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #139'
   type: vless
   server: 45.133.151.188
@@ -5376,20 +4628,17 @@ proxies:
   uuid: 2b781b4a-5942-48e0-a7f3-5a07b7b488c1
   network: tcp
   udp: true
-- name: 🇷🇺 🏳 BobrVPN | AntiWhiteList 11 | @bobrvpn0
+- name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #49'
   type: vless
-  server: 45.139.27.125
-  port: 443
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
+  server: 45.144.234.157
+  port: 14430
+  uuid: 59b0d30e-9b29-4fda-a35c-b2901ec32db7
+  network: ws
   udp: true
-  tls: true
-  server-name: ru1.hat.onl
-  reality-opts:
-    public-key: obFanw7jqCcrXOlFqJhdOUsduntz_7jte8A11f3MSmQ
-    short-id: 6d0092600a52a7c9
-  client-fingerprint: edge
-  flow: xtls-rprx-vision
+  ws-opts:
+    path: /vless
+    headers:
+      Host: 45.144.234.157
 - name: '🌀 CYBERPORTAL | White List #487'
   type: vless
   server: 45.145.12.148
@@ -5638,20 +4887,6 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: gw.v2.RelayService
-- name: 🇨🇭 🏳 BobrVPN | AntiWhiteList 10 | @bobrvpn0
-  type: vless
-  server: 45.90.56.195
-  port: 443
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ch1.hat.onl
-  reality-opts:
-    public-key: V3uMWEfDQAPFP6o5ED8Jtk0rJBPs7IlOLf_Wh8w_jXc
-    short-id: 76132b3b39704c44
-  client-fingerprint: edge
-  flow: xtls-rprx-vision
 - name: '🇨🇭 Gh0st_WhiteList #69'
   type: vless
   server: 45.90.59.15
@@ -5819,20 +5054,6 @@ proxies:
     short-id: 64c1fe36c7846400
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 🇷🇺 RU | — | 208 | @ByeWhiteLists2
-  type: vless
-  server: 5.129.200.113
-  port: 443
-  uuid: 46b81618-5d7f-4b65-b95f-7f782b8242be
-  network: tcp
-  udp: true
-  tls: true
-  server-name: br-any.eun1.prd.api.max.com
-  reality-opts:
-    public-key: nDq00UeDI5TKKFipI6rgdVCqiTO98ncHKn90Qp3EsBE
-    short-id: f2b78452f9233f26
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #423'
   type: vless
   server: 5.129.234.167
@@ -5929,14 +5150,7 @@ proxies:
     short-id: 4ed920401771c4ab
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇷🇺 🏳 BobrVPN | AntiWhiteList 68 | @bobrvpn0
-  type: vless
-  server: 5.53.124.191
-  port: 8008
-  uuid: b48e1596-e835-4547-bdae-31daadf9ea17
-  network: xhttp
-  udp: true
-- name: 'Телефон / Роутер [owpn.org] #21'
+- name: 'Телефон / Роутер [owpn.org] #22'
   type: vless
   server: 5.59.204.244
   port: 8455
@@ -5950,18 +5164,6 @@ proxies:
     short-id: 10983e6c816181c2
   client-fingerprint: edge
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #22'
-  type: vless
-  server: 50.7.178.197
-  port: 8443
-  uuid: 3f5e89d5-591f-4ac9-b071-b05680b573c3
-  network: grpc
-  udp: true
-  tls: true
-  server-name: fr2.gacvpn.site
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: connect-fr
 - name: '🇳🇱 Gh0st_WhiteList #41'
   type: vless
   server: 51.158.206.103
@@ -6214,49 +5416,7 @@ proxies:
     short-id: a8e8df4f1fb3e3f8
   flow: xtls-rprx-vision
   client-fingerprint: chrome
-- name: 🇷🇺 RU | CIDR | 367 | @ByeWhiteLists2
-  type: vless
-  server: 51.250.74.50
-  port: 443
-  uuid: 4ec64061-fc82-42a1-a94d-2a7904554200
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 361 | @ByeWhiteLists2
-  type: vless
-  server: 51.250.74.50
-  port: 443
-  uuid: 4ec64061-fc82-42a1-a94d-2a7904554200
-  network: tcp
-  udp: true
-  tls: true
-  server-name: api-maps.yandex.ru
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 360 | @ByeWhiteLists2
-  type: vless
-  server: 51.250.74.50
-  port: 443
-  uuid: 5c914259-eea5-4a62-9a65-f2ada4a249e3
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 257 | @ByeWhiteLists2
+- name: '🌀 CYBERPORTAL | White List #412'
   type: vless
   server: 51.250.74.50
   port: 443
@@ -6282,20 +5442,6 @@ proxies:
   reality-opts:
     public-key: mLApF78WJzjM4mijtlx4NPIbSA9Hizk66AVeck51wxY
     short-id: fe2f8495c476efd4
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 470 | @ByeWhiteLists2
-  type: vless
-  server: 51.250.77.186
-  port: 443
-  uuid: b9e3afac-84df-47e0-93a9-8570616e737d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: oqRus6Z_Q1jqJaTEPu7ENbRL0-XKOw54K0jwCCGLtEk
-    short-id: 5d8e1a9c4f72b3
   client-fingerprint: chrome
   flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #431'
@@ -6478,20 +5624,6 @@ proxies:
     path: /ws/996d5cc2-defd-b038-4728-6a450d1c373a
     headers:
       Host: 04b51566-9333-492b-b680-8f80752411f9.fly.dev
-- name: 'Телефон / Роутер [owpn.org] #23'
-  type: vless
-  server: 67.159.44.219
-  port: 443
-  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
-  network: tcp
-  udp: true
-  tls: true
-  server-name: bestgif.su
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: ios
-  flow: xtls-rprx-vision
 - name: '🇸🇬 Сингапур OT@Hy2UDP (WIFI/LTE) #176'
   type: vless
   server: 67.159.52.81
@@ -6534,37 +5666,6 @@ proxies:
     short-id: 48050fab
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 🇪🇪 EE | — | 185 | @ByeWhiteLists2
-  type: vless
-  server: 69.12.83.228
-  port: 443
-  uuid: 595cc792-0257-4673-9079-4e1247519c6f
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ign.com
-  reality-opts:
-    public-key: 6Ra2AsVwORJlxqvQ9YHAfHFk8Z0HZIrWuXxlBEYpwQY
-    short-id: e7b5024fd83a16c9
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '3544. VLESS | SNI: api-xvdhdv8374gdv-dyehgd638-6b85bd-production.up.railway.app
-    | TG: @wlrustg'
-  type: vless
-  server: 69.46.46.107
-  port: 443
-  uuid: 10c3b62f-59da-55cb-b24f-2072ecb4348c
-  network: ws
-  udp: true
-  tls: true
-  server-name: api-xvdhdv8374gdv-dyehgd638-6b85bd-production.up.railway.app
-  client-fingerprint: chrome
-  alpn:
-  - http/1.1
-  ws-opts:
-    path: /ws/Default
-    headers:
-      Host: api-xvdhdv8374gdv-dyehgd638-6b85bd-production.up.railway.app
 - name: '🌀 CYBERPORTAL | White List #474'
   type: vless
   server: 70.34.194.57
@@ -6578,21 +5679,6 @@ proxies:
     public-key: F7NZa0wqjlz9zHlFUUW8rnh9j9GwX7e2rq3CynO3s1o
     short-id: 5e841fab
   client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #24'
-  type: vless
-  server: 717252g.nl8.h1clayd.click
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: grpc
-  udp: true
-  tls: true
-  server-name: 717252g.nl8.h1clayd.click
-  reality-opts:
-    public-key: PD8Jdlg3xB9QY--jwQjp8PFPzCS8-Oryw6-HWBcHMFU
-    short-id: d3bd772514c87d28
-  client-fingerprint: chrome
-  grpc-opts:
-    grpc-service-name: 204adda7e3da
 - name: '🌀 CYBERPORTAL | White Keys #150'
   type: vless
   server: 72.56.241.230
@@ -6623,19 +5709,6 @@ proxies:
   client-fingerprint: random
   grpc-opts:
     grpc-service-name: api.v1.StreamService
-- name: 🇷🇺 AetrisVPN
-  type: vless
-  server: 72.56.37.23
-  port: 443
-  uuid: cd72e2d2-3272-48e7-89da-f7ce120346a8
-  network: tcp
-  udp: true
-  tls: true
-  server-name: i3m74g2te.static-edge.site
-  reality-opts:
-    public-key: fJnm6-PhJGSwHaAdJOzXkYOfCPPCWSlaZrtfm1XsqhA
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #503'
   type: vless
   server: 72.56.96.93
@@ -6665,32 +5738,6 @@ proxies:
   xhttp-opts:
     path: /api/v1/7b672ed7
     host: vk.com
-- name: 🇳🇱 NL | — | 1023 | @ByeWhiteLists2
-  type: vless
-  server: 77.239.112.180
-  port: 443
-  uuid: f724a901-b2a5-40f5-a160-8b42db9908e8
-  network: tcp
-  udp: true
-  tls: true
-  server-name: github.com
-  reality-opts:
-    public-key: KvXGx5NqnYnUxveJ3DSzQ2Zx_FlB6i-narUvQR-igX8
-  flow: xtls-rprx-vision
-  client-fingerprint: chrome
-- name: 🇳🇱
-  type: vless
-  server: 77.246.109.191
-  port: 34045
-  uuid: d8dd94fd-540e-461d-b5d4-acebef02c22a
-  network: tcp
-  udp: true
-  tls: true
-  server-name: visit-this-invitation-link-to-join-tg-enkelte-notif.ekt.me
-  reality-opts:
-    public-key: cDaDzPr3PlS3NM8lreHZbdo-Mhqz8vMBzMSkHXhGIUA
-    short-id: e8ab71d0
-  client-fingerprint: chrome
 - name: 'Автовыбор #43'
   type: vless
   server: 78.159.131.79
@@ -6746,19 +5793,7 @@ proxies:
     public-key: I_0JD13_bJuD6bNhTfb1PFPJUQqEVHl-YFluNwHAPD4
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '🇪🇺📡Антиглушилка • EU №1
-
-    vless://b3a11068-1a7e-4643-85de-7c82cce46943@ee-2e06d85dc0.shamanapp.online:34451/?type=xhttp&host=ee-2e06d85dc0.shamanapp.online&path=/ShamanXHTTP2026&mode=stream-up&security=tls&sni=ee-2e06d85dc0.shamanapp.online&alpn=h2,http/1.1&fp=chrome#🇪🇺📡Антиглушилка
-    • EU №2
-
-    vless://2c634977-584e-4e1f-b501-1b70c77a6743@dismissaltree.net:2053/?type=xhttp&host=&path=/api/v1/upload&mode=auto&security=tls&sni=dismissaltree.net&alpn=h2,http/1.1&fp=chrome#🇪🇺📡Антиглушилка
-    • EU №3
-
-    vless://2c634977-584e-4e1f-b501-1b70c77a6743@185.141.227.180:2053/?type=xhttp&host=&path=/api/v1/upload&mode=auto&extra=%257B%250A%2520%2520%2522downloadSettings%2522%2520:%2520null,%250A%2520%2520%2522extra%2522%2520:%2520null,%250A%2520%2520%2522headers%2522%2520:%2520null,%250A%2520%2520%2522host%2522%2520:%2520%2522%2522,%250A%2520%2520%2522mode%2522%2520:%2520%2522%2522,%250A%2520%2520%2522noGRPCHeader%2522%2520:%2520false,%250A%2520%2520%2522noSSEHeader%2522%2520:%2520false,%250A%2520%2520%2522path%2522%2520:%2520%2522%2522,%250A%2520%2520%2522scMaxBufferedPosts%2522%2520:%25200,%250A%2520%2520%2522scMaxEachPostBytes%2522%2520:%2520%25220%2522,%250A%2520%2520%2522scMinPostsIntervalMs%2522%2520:%2520%25220%2522,%250A%2520%2520%2522scStreamUpServerSecs%2522%2520:%2520%25220%2522,%250A%2520%2520%2522seqKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522seqPlacement%2522%2520:%2520%2522%2522,%250A%2520%2520%2522serverMaxHeaderBytes%2522%2520:%25200,%250A%2520%2520%2522sessionIDKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522sessionIDLength%2522%2520:%2520%25220%2522,%250A%2520%2520%2522sessionIDPlacement%2522%2520:%2520%2522%2522,%250A%2520%2520%2522sessionIDTable%2522%2520:%2520%2522%2522,%250A%2520%2520%2522uplinkChunkSize%2522%2520:%2520%25220%2522,%250A%2520%2520%2522uplinkDataKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522uplinkDataPlacement%2522%2520:%2520%2522%2522,%250A%2520%2520%2522uplinkHTTPMethod%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xmux%2522%2520:%2520%257B%250A%2520%2520%2520%2520%2522cMaxReuseTimes%2522%2520:%2520%252264-128%2522,%250A%2520%2520%2520%2520%2522hKeepAlivePeriod%2522%2520:%25200,%250A%2520%2520%2520%2520%2522hMaxRequestTimes%2522%2520:%2520%25220%2522,%250A%2520%2520%2520%2520%2522hMaxReusableSecs%2522%2520:%2520%25220%2522,%250A%2520%2520%2520%2520%2522maxConcurrency%2522%2520:%2520%252216-32%2522,%250A%2520%2520%2520%2520%2522maxConnections%2522%2520:%2520%25220%2522%250A%2520%2520%257D,%250A%2520%2520%2522xPaddingBytes%2522%2520:%2520%2522100-1000%2522,%250A%2520%2520%2522xPaddingHeader%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xPaddingKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xPaddingMethod%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xPaddingObfsMode%2522%2520:%2520false,%250A%2520%2520%2522xPaddingPlacement%2522%2520:%2520%2522%2522%250A%257D&security=tls&sni=dismissaltree.net&fp=firefox#🇪🇺📡Антиглушилка
-    • EU №4
-
-    vless://f8d52ece-fad4-478d-875d-df6eed3befa7@cz.pythonmakemigreat.wiki:61374/?type=xhttp&host=cz.pythonmakemigreat.wiki&path=/&mode=packet-up&extra=%257B%250A%2520%2520%2522scMaxBufferedPosts%2522%2520:%252010,%250A%2520%2520%2522scMaxEachPostBytes%2522%2520:%2520%2522500000-1000000%2522,%250A%2520%2520%2522scMinPostsIntervalMs%2522%2520:%2520%252220-40%2522,%250A%2520%2520%2522xmux%2522%2520:%2520%257B%250A%2520%2520%2520%2520%2522maxConnections%2522%2520:%25203%250A%2520%2520%257D,%250A%2520%2520%2522xPaddingBytes%2522%2520:%2520%2522100-500%2522%250A%257D&security=reality&fp=chrome&sni=cz.pythonmakemigreat.wiki&pbk=QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI#🇪🇺📡Антиглушилка
-    • EU №5'
+- name: '🌀 CYBERPORTAL | White Keys #231'
   type: vless
   server: 78.159.246.85
   port: 2053
@@ -6768,6 +5803,9 @@ proxies:
   tls: true
   server-name: fitindoor.net
   client-fingerprint: firefox
+  alpn:
+  - h2
+  - http/1.1
   xhttp-opts:
     path: /api/v1/upload
     host: fitindoor.net
@@ -6858,22 +5896,6 @@ proxies:
     short-id: e0215064d8d1fd7c
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #25'
-  type: vless
-  server: 78.40.193.180
-  port: 443
-  uuid: 0f11b72f-1af1-4f0a-b992-87a8241d9213
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: packages.gitlab.com
-  reality-opts:
-    public-key: FLewL4WGvCzo0NM2pGabhZVPlw0WKpNHIC9nksuoL30
-    short-id: 6969b2e2be858cb3
-  client-fingerprint: chrome
-  xhttp-opts:
-    path: /assets/28ca4df9
-    host: 78.40.193.180
 - name: 🇷🇺 Russia | БЕЛЫЙ IP | @RaViraNet (3)`
   type: vless
   server: 79.174.92.222
@@ -6900,7 +5922,7 @@ proxies:
     public-key: _PYBo3dyZRpGC44vADqcmlBCSeAVh1X8l3mulghVsTI
     short-id: a1b2c3d4
   client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #26'
+- name: 'Телефон / Роутер [owpn.org] #23'
   type: vless
   server: 79.182.70.212
   port: 443
@@ -6929,20 +5951,6 @@ proxies:
     path: /
     headers:
       Host: polshaov.ochmaybrooooo.online
-- name: '[OpenRay] 🇩🇪DE-30'
-  type: vless
-  server: 80.240.18.227
-  port: 10051
-  uuid: 711b6476-63fc-4f01-b4e0-d44e17d79383
-  network: ws
-  udp: true
-  tls: true
-  server-name: o-85ley6knn8ut.6nvkygqh144t7xtdyvh0y3o4gzo3ujhnk8n.workers.dev
-  client-fingerprint: chrome
-  ws-opts:
-    path: /@Marisa_kristi
-    headers:
-      Host: o-85ley6knn8ut.6nvkygqh144t7xtdyvh0y3o4gzo3ujhnk8n.workers.dev
 - name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #240'
   type: vless
   server: 80.66.65.251
@@ -7089,20 +6097,6 @@ proxies:
     short-id: cd6065902eea7a02
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '🇩🇪 Gh0st_WhiteList #249'
-  type: vless
-  server: 82.118.19.153
-  port: 443
-  uuid: adcaa148-7c66-4282-a81a-99ec8afa029d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.cloudflare.com
-  reality-opts:
-    public-key: Tiuy8om5Lk0pWL95-8LaFFTwH0vbURVMoOkaW9xGaiE
-    short-id: 670ed9f350bd8ee0
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #523'
   type: vless
   server: 82.22.41.125
@@ -7116,7 +6110,7 @@ proxies:
     public-key: qQZ2JrvOorFCGldu8DzQ4qGF7LOdQGMxqklRgGAXUhU
     short-id: 6843f05f8c4a
   client-fingerprint: firefox
-- name: 'Телефон / Роутер [owpn.org] #27'
+- name: 'Телефон / Роутер [owpn.org] #24'
   type: vless
   server: 83.141.88.177
   port: 443
@@ -7131,6 +6125,20 @@ proxies:
   xhttp-opts:
     path: /api/v1/sync
     host: vector-gate.ru
+- name: '🇬🇧 Gh0st_WhiteList #63'
+  type: vless
+  server: 83.147.18.3
+  port: 443
+  uuid: 9f61cdf4-810d-4052-bbc7-2da0c8e20104
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.cloudflare.com
+  reality-opts:
+    public-key: 3iVJAIGPx6JMlhlRmfpGrHkSmLpHJ4CPvBBH7KsFrFA
+    short-id: fd8cf7e1173f0edb
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
 - name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #385'
   type: vless
   server: 83.147.245.126
@@ -7173,21 +6181,6 @@ proxies:
   xhttp-opts:
     path: /23105a02637c
     host: c7da7fx.fi16.h1clayd.click
-- name: '656. 🇫🇮 VLESS | SNI: 5febc5g.fi16.h1clayd.click | TG: @wlrustg'
-  type: vless
-  server: 83.171.241.146
-  port: 443
-  uuid: fdb8b6ce-cc8a-4d84-86de-22b8ee30307c
-  network: grpc
-  udp: true
-  tls: true
-  server-name: 5febc5g.fi16.h1clayd.click
-  reality-opts:
-    public-key: Q8ahFoY3Ki5gO37-y_q5oG1-EAcCFAvwU2VBQB6euEE
-    short-id: a6dc47e87ba10b83
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: d97908bd03b7
 - name: 'Автовыбор #46'
   type: vless
   server: 83.217.195.128
@@ -7342,7 +6335,7 @@ proxies:
     short-id: 94acb54627612d43
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #28'
+- name: 'Телефон / Роутер [owpn.org] #25'
   type: vless
   server: 87.120.126.43
   port: 443
@@ -7449,20 +6442,6 @@ proxies:
     short-id: 6ba85179e30d4fc2
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 632 | @ByeWhiteLists2
-  type: vless
-  server: 87.239.105.195
-  port: 443
-  uuid: b9e3afac-84df-47e0-93a9-8570616e737d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: m.vk.com
-  reality-opts:
-    public-key: oqRus6Z_Q1jqJaTEPu7ENbRL0-XKOw54K0jwCCGLtEk
-    short-id: 7e2a9d4c5f18b0
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #521'
   type: vless
   server: 87.242.127.51
@@ -7534,19 +6513,7 @@ proxies:
   client-fingerprint: random
   grpc-opts:
     grpc-service-name: grpc
-- name: 🇳🇱 🏳 BobrVPN | AntiWhiteList 15 | @bobrvpn0
-  type: vless
-  server: 89.105.195.147
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: gateway.mediacorphub.org
-  client-fingerprint: edge
-  grpc-opts:
-    grpc-service-name: home.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #29'
+- name: 'Телефон / Роутер [owpn.org] #26'
   type: vless
   server: 89.105.195.147
   port: 443
@@ -7558,7 +6525,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: home.v1.ObjectService
-- name: 🇳🇱 🏳 BobrVPN | AntiWhiteList 16 | @bobrvpn0
+- name: 'Телефон / Роутер [owpn.org] #27'
   type: vless
   server: 89.105.195.148
   port: 443
@@ -7567,10 +6534,10 @@ proxies:
   udp: true
   tls: true
   server-name: api.mediacorphub.org
-  client-fingerprint: edge
+  client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: gw.v2.PushService
-- name: 🇳🇱 🏳 BobrVPN | AntiWhiteList 17 | @bobrvpn0
+- name: 'Телефон / Роутер [owpn.org] #28'
   type: vless
   server: 89.105.195.149
   port: 443
@@ -7579,10 +6546,10 @@ proxies:
   udp: true
   tls: true
   server-name: data.mediacorphub.org
-  client-fingerprint: ios
+  client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: home.v2.MetricsService
-- name: 🇳🇱 🏳 BobrVPN | AntiWhiteList 18 | @bobrvpn0
+- name: 'Телефон / Роутер [owpn.org] #29'
   type: vless
   server: 89.105.195.150
   port: 443
@@ -7590,22 +6557,10 @@ proxies:
   network: grpc
   udp: true
   tls: true
-  server-name: app.mediacorphub.org
+  server-name: images.mediacorphub.org
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: stats.v2.StreamService
-- name: 🇳🇱 🏳 BobrVPN | AntiWhiteList 19 | @bobrvpn0
-  type: vless
-  server: 89.105.195.151
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: hub.mediacorphub.org
-  client-fingerprint: safari
-  grpc-opts:
-    grpc-service-name: hub.v1.ObjectService
 - name: 'Телефон / Роутер [owpn.org] #30'
   type: vless
   server: 89.105.195.151
@@ -7618,18 +6573,6 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: hub.v1.ObjectService
-- name: 🇳🇱 🏳 BobrVPN | AntiWhiteList 20 | @bobrvpn0
-  type: vless
-  server: 89.105.195.152
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: fetch.mediacorphub.org
-  client-fingerprint: edge
-  grpc-opts:
-    grpc-service-name: api.v1.FeedService
 - name: '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #117'
   type: vless
   server: 89.105.195.41
@@ -7675,34 +6618,6 @@ proxies:
     path: /vless-ws
     headers:
       Host: speedtestmark.com
-- name: 🇷🇺 RU | CIDR | 768 | @ByeWhiteLists2
-  type: vless
-  server: 89.208.87.128
-  port: 443
-  uuid: 49e96f3d-e670-4073-ba92-16b6a4a7b621
-  network: tcp
-  udp: true
-  tls: true
-  server-name: analytics.vk.ru
-  reality-opts:
-    public-key: kAfACVGlqkxdp5T0pF_8rP8ElZ6mYSNnpP1NDnSr9H8
-    short-id: deadbeefcafebaab
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | CIDR | 596 | @ByeWhiteLists2
-  type: vless
-  server: 89.208.87.128
-  port: 443
-  uuid: 49e96f3d-e670-4073-ba92-16b6a4a7b621
-  network: tcp
-  udp: true
-  tls: true
-  server-name: m.47news.ru
-  reality-opts:
-    public-key: kAfACVGlqkxdp5T0pF_8rP8ElZ6mYSNnpP1NDnSr9H8
-    short-id: f2e2d4c4b6a70788
-  client-fingerprint: random
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #405'
   type: vless
   server: 89.208.87.173
@@ -7792,34 +6707,21 @@ proxies:
   client-fingerprint: chrome
   grpc-opts:
     grpc-service-name: app.v1.PushService
-- name: 'Телефон / Роутер [owpn.org] #31'
-  type: vless
-  server: 9.247.54.226
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: tcp
-  udp: true
-  tls: true
-  server-name: 04535dt.us8.h1clayd.click
-  reality-opts:
-    public-key: UoS8qZ74hP_ECcncCz55lzvlcVss3R7VA0WYZE0YQCY
-    short-id: ba2a3dce62b99092
-  client-fingerprint: firefox
-- name: '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #6'
+- name: 🇧🇾 Беларусь | 🔗 Каскад [#РКП]
   type: vless
   server: 9.247.54.228
   port: 443
   uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: xhttp
+  network: grpc
   udp: true
   tls: true
-  server-name: fc82dfx.nl8.h1clayd.click
+  server-name: 717252g.nl8.h1clayd.click
   reality-opts:
-    public-key: dtO7khFLUkpFDQOtNzo4Th4hJKLoPSY2VtD_9k4Hgiw
-    short-id: 7b2b1a14a6e0630d
+    public-key: PD8Jdlg3xB9QY--jwQjp8PFPzCS8-Oryw6-HWBcHMFU
+    short-id: d3bd772514c87d28
   client-fingerprint: firefox
-  xhttp-opts:
-    path: /0616f2d729aa
+  grpc-opts:
+    grpc-service-name: 204adda7e3da
 - name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #49'
   type: vless
   server: 90.156.218.163
@@ -7938,34 +6840,6 @@ proxies:
     short-id: 247fd6dab1a34a48
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 🇧🇹 🏳 BobrVPN | AntiWhiteList 54 | @bobrvpn0
-  type: vless
-  server: 93.152.215.254
-  port: 443
-  uuid: 6db6b948-655f-4f68-a9e7-865050e05b31
-  network: tcp
-  udp: true
-  tls: true
-  server-name: remote.propaint.cl
-  reality-opts:
-    public-key: is-86tEDOjNbNAnVwc-YHHYSn1MF9SF68P6VjESfDHQ
-    short-id: a2fcac
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 🇧🇹 🏳 BobrVPN | AntiWhiteList 55 | @bobrvpn0
-  type: vless
-  server: 93.152.215.254
-  port: 443
-  uuid: 6db6b948-655f-4f68-a9e7-865050e05b31
-  network: tcp
-  udp: true
-  tls: true
-  server-name: 93.152.215.254
-  reality-opts:
-    public-key: is-86tEDOjNbNAnVwc-YHHYSn1MF9SF68P6VjESfDHQ
-    short-id: a2fcac
-  client-fingerprint: edge
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #535'
   type: vless
   server: 94.103.1.44
@@ -8014,7 +6888,7 @@ proxies:
     short-id: 15bcc0a77c3cacdf
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 🇮🇷 Иран БС
+- name: 'Телефон / Роутер [owpn.org] #31'
   type: vless
   server: 94.183.164.119
   port: 443
@@ -8157,35 +7031,6 @@ proxies:
   - http/1.1
   ws-opts:
     path: /api/v2/query/zpxgr1pf/
-- name: '569. VLESS | SNI: tz5gtjwlki.j.cloudfront.hls.hlsnode.net | TG: @wlrustg'
-  type: vless
-  server: 95.143.188.113
-  port: 443
-  uuid: c47159bb-2c15-440d-b239-8594d7e7efbb
-  network: grpc
-  udp: true
-  tls: true
-  server-name: tz5gtjwlki.j.cloudfront.hls.hlsnode.net
-  client-fingerprint: safari
-  alpn:
-  - h2
-  grpc-opts:
-    grpc-service-name: sync.v1
-    grpc-mode: multi
-- name: 🇷🇺 RU | CIDR | 692 | @ByeWhiteLists2
-  type: vless
-  server: 95.163.181.131
-  port: 443
-  uuid: 406d882b-4785-44b1-b486-450efaa57721
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: 5bGFIWSo4vlrd9Tv1yFcpdpSjrjYYN20SOWHYfighHc
-    short-id: abde0809
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #505'
   type: vless
   server: 95.163.182.206
@@ -8383,19 +7228,6 @@ proxies:
     short-id: 5f3fd060c992bb2e
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 🇪🇪 EE | — | 218 | @ByeWhiteLists2
-  type: vless
-  server: 95.85.224.28
-  port: 443
-  uuid: 0639f5a2-99b4-451d-9ba0-6f0a0597ac3b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: m.vkvideo.cs7777.vk.ru
-  reality-opts:
-    public-key: PzPuIsJG2yyrnO-9TKGyRxmo8DCJ6VCdpQ5l5l62QQQ
-  flow: xtls-rprx-vision
-  client-fingerprint: chrome
 - name: 'Телефон / Роутер [owpn.org] #32'
   type: vless
   server: 95.85.234.66
@@ -8408,9 +7240,9 @@ proxies:
   reality-opts:
     public-key: MuQH546CBdgYVBzNU_F5fimkbQ0srHxgLKDjl1Wz2Rw
     short-id: '00000000'
-  client-fingerprint: edge
+  client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇩🇪 DE | — | 11 | @ByeWhiteLists2
+- name: '🌀 CYBERPORTAL | White List #502'
   type: vless
   server: 95.85.239.102
   port: 443
@@ -8422,20 +7254,6 @@ proxies:
   reality-opts:
     public-key: JCY4HTvbv3PLZV8lBETziQpoU-DK-FSUp5qK-vCnDwQ
     short-id: d534122e6a18eb59
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 🇷🇺 RU | — | 453 | @ByeWhiteLists2
-  type: vless
-  server: 95.85.240.124
-  port: 443
-  uuid: 7d40449f-92df-4256-9607-679241455d49
-  network: tcp
-  udp: true
-  tls: true
-  server-name: drive.yandex.ru
-  reality-opts:
-    public-key: 5DrNWT7Q8J_9XU8XJjJV0S9KF6OIM3cdg7MWsE9f-EI
-    short-id: 1610c3f3a0a6ee82
   client-fingerprint: qq
   flow: xtls-rprx-vision
 - name: 'Автовыбор #53'
@@ -8466,78 +7284,156 @@ proxies:
   client-fingerprint: random
   grpc-opts:
     grpc-service-name: grpc-tunnel
-- name: '🇩🇪🕊♥️ Германия [Обход БС | Все операторы] #34'
+- name: 'Телефон / Роутер [owpn.org] #33'
   type: vless
-  server: api.weologic.pro
+  server: b3cd32g.es1.h1clayd.click
   port: 443
-  uuid: 73a0f995-f2f1-4d47-a99d-a6dcc1952bf9
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: grpc
+  udp: true
+  tls: true
+  server-name: b3cd32g.es1.h1clayd.click
+  reality-opts:
+    public-key: 7efBhLzPwoTtEC1GlukCdiTllobUfa2_XuAKNSLJx30
+    short-id: e7cffac9f8cfb434
+  client-fingerprint: firefox
+- name: '🌀 CYBERPORTAL | White Keys #96'
+  type: vless
+  server: bg2.univesalsrv.com
+  port: 443
+  uuid: 2f35965a-9a9b-45fd-ba32-987296dfb6be
+  network: grpc
+  udp: true
+  tls: true
+  server-name: bg2.univesalsrv.com
+  reality-opts:
+    public-key: 0f0dh_FUju5cHgQcIwUjHvxQb9aIZ00p0kZRHeE7Ey4
+    short-id: 501ab3325b77e1ca
+  client-fingerprint: chrome
+  grpc-opts:
+    grpc-service-name: api.v2.PushService
+- name: '🇧🇬 Болгария OT@Hy2UDP (WIFI/LTE) #55'
+  type: vless
+  server: bg2.univesalsrv.com
+  port: 443
+  uuid: 2f35965a-9a9b-45fd-ba32-987296dfb6be
+  network: grpc
+  udp: true
+  tls: true
+  server-name: bg2.univesalsrv.com
+  reality-opts:
+    public-key: 0f0dh_FUju5cHgQcIwUjHvxQb9aIZ00p0kZRHeE7Ey4
+    short-id: 501ab3325b77e1ca
+  client-fingerprint: chrome
+  grpc-opts:
+    grpc-service-name: api.v2.PushService
+- name: '🇧🇬 Болгария OT@Hy2UDP (WIFI/LTE) #244'
+  type: vless
+  server: bg2.univesalsrv.com
+  port: 443
+  uuid: 2f35965a-9a9b-45fd-ba32-987296dfb6be
+  network: grpc
+  udp: true
+  tls: true
+  server-name: bg2.univesalsrv.com
+  reality-opts:
+    public-key: 0f0dh_FUju5cHgQcIwUjHvxQb9aIZ00p0kZRHeE7Ey4
+    short-id: 501ab3325b77e1ca
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: api.v2.PushService
+- name: '🌀 CYBERPORTAL | White List #441'
+  type: vless
+  server: cdn3.cloud-vk.com
+  port: 8443
+  uuid: c5167719-2b91-478e-a3dc-ffc52910faf8
+  network: tcp
+  udp: true
+  tls: true
+  server-name: id.vk.ru
+  reality-opts:
+    public-key: vWN_pooUFoy4BkbO0r_SBibQlFSsA9f5wIGgQEfvfEA
+    short-id: a04f384f0af69b46
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #34'
+  type: vless
+  server: cryptoventura.online
+  port: 443
+  uuid: 4b50270b-5caf-4c34-b3da-17b4525604a6
   network: ws
   udp: true
   tls: true
-  server-name: api.weologic.pro
+  server-name: cryptoventura.online
   client-fingerprint: firefox
   alpn:
   - http/1.1
   ws-opts:
-    path: /api/v2/query/zpxgr1pf/
-- name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #78'
+    path: /api/de3/live
+    headers:
+      Host: cryptoventura.online
+- name: '🇷🇺 LTE | Все операторы 3", "network": "tcp", "security": "reality", "sni":
+    "bizorg.su", "fp": "edge", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs",
+    "sid": "428ef87fd47a3a32", "spx": "/", "flow": "xtls-rprx-vision", "encryption":
+    "none"}, {"type": "vless", "name": "6'
   type: vless
-  server: de.vmagnum.win
+  server: fduknew.titun.su
   port: 443
-  uuid: 0af34045-3d5e-4abe-bc8a-16e356daa214
-  network: xhttp
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
   udp: true
   tls: true
-  server-name: api-v3-0af34045.vmagnum.win
-  client-fingerprint: firefox
-  alpn:
-  - h2
-  xhttp-opts:
-    path: /
-    host: api-v3-0af34045.vmagnum.win
-- name: 🇳🇱 🏳 BobrVPN | AntiWhiteList 28 | @bobrvpn0
-  type: vless
-  server: gateway.mediacorphub.org
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: gateway.mediacorphub.org
-  client-fingerprint: firefox
-  alpn:
-  - h2
-  grpc-opts:
-    grpc-service-name: home.v1.ObjectService
-- name: '🌀 CYBERPORTAL | White List #438'
-  type: vless
-  server: nl-xhttp.nerpvpn.net
-  port: 8443
-  uuid: 7dd6b9c8-8987-4bfd-b297-2675f9d32f52
-  network: http
-  udp: true
-  tls: true
-  server-name: strm.yandex.net
+  server-name: bizorg.su
   reality-opts:
-    public-key: TFb79yqa9_eTY8U04gNtPyXQWmWJ2FfVO4Uo4ve8YFA
-    short-id: 96db5da283639a4d
-  client-fingerprint: chrome
-- name: '🇳🇱 Gh0st_WhiteList #236'
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: edge
+  flow: xtls-rprx-vision
+- name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #332'
   type: vless
-  server: ru1.cdn-space.org
+  server: formatno.com
   port: 443
-  uuid: f219ffe2-bc36-495f-a83d-8f9ac4af05fd
+  uuid: a72b971f-2163-48d4-b3a3-6173cee58586
+  network: ws
+  udp: true
+  tls: true
+  server-name: formatno.com
+  client-fingerprint: random
+  alpn:
+  - http/1.1
+  ws-opts:
+    path: /nl7ws
+    headers:
+      Host: formatno.com
+- name: '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇱🇹 Литва #11'
+  type: vless
+  server: lorettmay.top
+  port: 443
+  uuid: 2232d904-8e6a-4202-8240-6efd8aec02e9
+  network: ws
+  udp: true
+  tls: true
+  server-name: lorettmay.top
+  client-fingerprint: chrome
+  ws-opts:
+    path: /blog/posts
+- name: 🇪🇺 AUTO — Обход БС 64
+  type: vless
+  server: represent.stereotip.life
+  port: 443
+  uuid: 55fb73fc-789e-48a8-b116-583d34f25a7d
   network: xhttp
   udp: true
   tls: true
-  server-name: ru1.cdn-space.org
+  server-name: represent.stereotip.life
+  client-fingerprint: firefox
   alpn:
   - h2
+  - http/1.1
   xhttp-opts:
-    path: /assets/api/v3/connect/
-    host: ru1.cdn-space.org
-  client-fingerprint: chrome
-- name: 'Телефон / Роутер [owpn.org] #33'
+    path: /api/v1/assets
+    host: represent.stereotip.life
+- name: 'Телефон / Роутер [owpn.org] #35'
   type: vless
   server: static-de1.song69.fun
   port: 443
@@ -8551,977 +7447,64 @@ proxies:
   client-fingerprint: firefox
   xhttp-opts:
     path: /api/media/v1
-- name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #309'
+- name: '5553. 🇹🇷 VLESS | SNI: delivery.mp.microsoft.com | TG: @wlrustg'
   type: vless
-  server: urge.videofriend.site
+  server: trn15.mobileemdad.top
   port: 443
-  uuid: ed8704b8-9e9e-48e6-b55b-ae9079ab3a59
-  network: grpc
-  udp: true
-  tls: true
-  server-name: urge.videofriend.site
-  reality-opts:
-    public-key: MvPVn6w1rvCh0Vq-Nh1khM8JaDTjiKbVzNV2mX5y0Ag
-    short-id: 36eb9b64363c340b
-  client-fingerprint: random
-  grpc-opts:
-    grpc-service-name: grpc-tunnel
-- name: '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #27'
-  type: vless
-  server: urge.videofriend.site
-  port: 443
-  uuid: ed8704b8-9e9e-48e6-b55b-ae9079ab3a59
-  network: grpc
-  udp: true
-  tls: true
-  server-name: urge.videofriend.site
-  reality-opts:
-    public-key: MvPVn6w1rvCh0Vq-Nh1khM8JaDTjiKbVzNV2mX5y0Ag
-    short-id: 36eb9b64363c340b
-  client-fingerprint: random
-  grpc-opts:
-    grpc-service-name: grpc-tunnel
-- name: '🌀 CYBERPORTAL | White List #533'
-  type: vless
-  server: ww3.levikogjgfdd.ir
-  port: 443
-  uuid: b81b4d1b-7f20-48f1-82dc-d24bef898cab
+  uuid: b200054c-c902-4bbe-bb90-8dc843ed46c8
   network: tcp
   udp: true
   tls: true
-  server-name: passport.yandex.ru
+  server-name: delivery.mp.microsoft.com
   reality-opts:
-    public-key: 33zaT3jHXjtynSQ0Ucw9bK92-XH2zolJmuIeZ1XyZB0
-    short-id: e6
+    public-key: PjR-SM4fOm2fY4mTqWoqZDRyxontvpailM0gBqUxlUQ
+    short-id: f88610dd
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇨🇦 کانادا
-
-    ®️GLOBALTELEHOST C
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  type: vmess
-  server: 134.195.196.154
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇨🇦 کانادا
-
-    ®️GLOBALTELEHOST C
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  type: vmess
-  server: 134.195.196.211
-  port: 18000
-  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: tcp
-  udp: true
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  type: vmess
-  server: 142.202.48.87
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇮🇹 ایتالیا
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  type: vmess
-  server: 149.22.91.20
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇮🇹 ایتالیا
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  type: vmess
-  server: 149.50.215.238
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇮🇹 ایتالیا
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  type: vmess
-  server: 149.50.215.240
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇸🇬 سنگاپور
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  type: vmess
-  server: 149.88.23.202
-  port: 18000
-  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: tcp
-  udp: true
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇨🇦 کانادا
-
-    ®️GLOBALTELEHOST C
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  type: vmess
-  server: 158.51.121.246
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  type: vmess
-  server: 162.251.60.97
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  type: vmess
-  server: 162.251.61.46
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #4'
-  type: vmess
-  server: 162.251.62.35
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #5'
-  type: vmess
-  server: 162.251.62.42
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #6'
-  type: vmess
-  server: 162.251.62.44
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #7'
-  type: vmess
-  server: 167.88.63.47
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #8'
-  type: vmess
-  server: 169.197.142.22
-  port: 18000
-  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: tcp
-  udp: true
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇩🇪 آلمان
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  type: vmess
-  server: 185.177.229.95
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇳🇱 هلند
-
-    ®️DigitalOcean, LL
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  type: vmess
-  server: 188.166.81.135
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇩🇪 آلمان
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  type: vmess
-  server: 193.108.117.61
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇩🇪 آلمان
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  type: vmess
-  server: 193.108.119.87
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '🇪🇺🕊♥️ Европа [Обход БС | Реклама в YouTube] #2'
-  type: vmess
-  server: 195.208.65.155
+- name: '🇨🇦 Канада OT@Hy2UDP (WIFI/LTE) #364'
+  type: vless
+  server: us2-2.998998.best
   port: 443
-  uuid: 27653b37-603c-4c90-b1f5-25c4d23f8932
-  alterId: 0
-  cipher: auto
-  tls: true
+  uuid: 5504eaa8-1395-402f-8e0e-75ecd762e627
   network: ws
   udp: true
-  server-name: renderer-stream-1-871.mirra.now
+  tls: true
+  server-name: server6.9966338.xyz
+  client-fingerprint: chrome
   ws-opts:
-    path: /api/v1/gpu-stream/o36ecpsebqjq/socket
+    path: /fiughoieuhti834t90?ed=2560
     headers:
-      Host: renderer-stream-1-871.mirra.now
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #9'
-  type: vmess
-  server: 216.106.182.225
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #10'
-  type: vmess
-  server: 38.107.226.5
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #11'
-  type: vmess
-  server: 38.110.1.246
-  port: 18000
-  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: tcp
-  udp: true
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #12'
-  type: vmess
-  server: 38.128.66.212
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #13'
-  type: vmess
-  server: 38.128.66.241
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #14'
-  type: vmess
-  server: 38.128.66.249
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #15'
-  type: vmess
-  server: 38.22.17.251
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #16'
-  type: vmess
-  server: 38.22.17.64
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #17'
-  type: vmess
-  server: 38.22.17.89
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇲🇽 Mexico
-
-    ®️LIGHT NODE LIMIT
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  type: vmess
-  server: 38.60.224.173
-  port: 32153
-  uuid: 5cf1f470-3f70-4589-a2a4-4657ea3a1edf
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: tcp
-  udp: true
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #18'
-  type: vmess
-  server: 38.64.138.187
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #19'
-  type: vmess
-  server: 38.91.100.16
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #20'
-  type: vmess
-  server: 38.91.100.69
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #21'
-  type: vmess
-  server: 38.91.106.182
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #22'
-  type: vmess
-  server: 38.91.107.49
-  port: 18000
-  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: tcp
-  udp: true
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #23'
-  type: vmess
-  server: 38.91.107.84
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇫🇷 فرانسه
-
-    ®️OVH SAS
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  type: vmess
-  server: 46.105.222.157
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇬🇧 انگلیس
-
-    ®️OVH SAS
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  type: vmess
-  server: 57.129.132.223
-  port: 80
-  uuid: a25cbf11-2908-4a1b-a3a8-9a571777dca3
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: ws
-  udp: true
-  ws-opts:
-    path: /vmess/
-    headers:
-      Host: google.com
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇸🇪 سوئد
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  type: vmess
-  server: 62.93.166.184
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #24'
-  type: vmess
-  server: 66.163.125.51
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #25'
-  type: vmess
-  server: 67.220.74.188
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #26'
-  type: vmess
-  server: 67.220.74.197
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #27'
-  type: vmess
-  server: 67.220.85.46
-  port: 18000
-  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: tcp
-  udp: true
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #28'
-  type: vmess
-  server: 67.220.95.3
-  port: 18000
-  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: tcp
-  udp: true
-- name: '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #29'
-  type: vmess
-  server: 67.220.95.49
-  port: 1270
-  uuid: 5c040f1d-45db-43bd-8d46-e4950e433735
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-  udp: true
-  server-name: xmfhlpy.com
-  client-fingerprint: chrome
-- name: '🇩🇪🕊♥️ Германия [Обход БС | Реклама в YouTube] #3'
-  type: vmess
-  server: 93.93.88.22
+      Host: server6.9966338.xyz
+- name: 🇪🇺 AUTO — Обход БС 47
+  type: vless
+  server: yan19.aliboba.shop
   port: 443
-  uuid: 27653b37-603c-4c90-b1f5-25c4d23f8932
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: ws
+  uuid: 044895fc-ae51-455c-900a-0d0c355ae44a
+  network: xhttp
   udp: true
-  server-name: renderer-stream-1-871.mirra.now
-  ws-opts:
-    path: /api/v1/gpu-stream/o36ecpsebqjq/socket
-    headers:
-      Host: renderer-stream-1-871.mirra.now
+  tls: true
+  server-name: yan19.aliboba.shop
   client-fingerprint: chrome
+  alpn:
+  - h2
+  - http/1.1
+  xhttp-opts:
+    path: /
 proxy-groups:
 - name: ♻️ Auto
   type: url-test
   proxies:
-  - '🌀 CYBERPORTAL | White Keys #166'
-  - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #293'
-  - '#5 🇩🇪LTE Обход все операторы'
-  - '#6 🇩🇪LTE Обход все операторы'
-  - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #201'
-  - Notorgames_0 (41)
-  - 🇧🇪 Бельгия — Брюссельский столичный регион 🎃
-  - '@nofiltering2'
-  - Notorgames_0 (25)
-  - '🇯🇵 Япония OT@Hy2UDP (WIFI/LTE) #299'
-  - Notorgames_0 (2)
-  - Телефон / Роутер [owpn.org]
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #95'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #42'
   - '🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #4'
   - '🇹🇷 Турция OT@Hy2UDP (WIFI/LTE) #52'
   - 🇪🇺 AUTO — Обход БС 85
   - '🌀 CYBERPORTAL | White Keys #193'
-  - '3832. 🇨🇦 VLESS | SNI: bahari.kiamobilepart.com | TG: @wlrustg'
-  - 🏳️ ShatakVPN 488007
   - cool [white] 🌐 |#34|
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #44'
   - Автовыбор
-  - 🇧🇪 Бельгия [#РКП]
   - '🌀 CYBERPORTAL | White List #494'
+  - Телефон / Роутер [owpn.org]
   - '🌀 CYBERPORTAL | White Keys #210'
   - '🌀 CYBERPORTAL | White Keys #271'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #101'
@@ -9537,14 +7520,9 @@ proxy-groups:
   - '🇧🇪 Бельгия OT@Hy2UDP (WIFI/LTE) #50'
   - '🇧🇪 Бельгия OT@Hy2UDP (WIFI/LTE) #263'
   - '🌀 CYBERPORTAL | White List #432'
-  - 🇭🇺 🏳 BobrVPN | AntiWhiteList 1 | @bobrvpn0
-  - 🇧🇬 🏳 BobrVPN | AntiWhiteList 2 | @bobrvpn0
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #109'
   - Notorgames_0 (210)
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 44 | @bobrvpn0
-  - 🇧🇾 Беларусь | 🔗 Каскад [#РКП]
-  - '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #2'
-  - 🇳🇱 Нидерланды [🏳️LTE] | 🥭🔧
+  - 'Телефон / Роутер [owpn.org] #2'
   - '🌀 CYBERPORTAL | White List #451'
   - '🇬🇧 Великобритания · LTE · ❔ · #16'
   - 'Автовыбор #4'
@@ -9557,24 +7535,20 @@ proxy-groups:
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #100'
   - '🌀 CYBERPORTAL | White Keys #326'
   - '🌀 CYBERPORTAL | White List #506'
-  - 'Телефон / Роутер [owpn.org] #2'
+  - 'Телефон / Роутер [owpn.org] #3'
+  - 'Телефон / Роутер [owpn.org] #4'
   - '🇪🇪 Эстония OT@Hy2UDP (WIFI/LTE) #15'
   - '🌀 CYBERPORTAL | White List #407'
   - '🌀 CYBERPORTAL | White List #511'
   - '🌀 CYBERPORTAL | White List #515'
   - '🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #14'
   - '🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #362'
-  - 'Телефон / Роутер [owpn.org] #3'
-  - 🇩🇰 🏳 BobrVPN | AntiWhiteList 56 | @bobrvpn0
   - '🌀 CYBERPORTAL | White List #397'
   - '🌀 CYBERPORTAL | White List #241'
   - '🇫🇷 Gh0st_WhiteList #61'
-  - 🇦🇲 🏳 BobrVPN | AntiWhiteList 62 | @bobrvpn0
-  - 🇦🇲 🏳 BobrVPN | AntiWhiteList 63 | @bobrvpn0
-  - 🇦🇲 🏳 BobrVPN | AntiWhiteList 64 | @bobrvpn0
   - '🌀 CYBERPORTAL | White List #514'
   - 'Автовыбор #5'
-  - 🇷🇺 RU | CIDR | 576 | @ByeWhiteLists2
+  - '🌀 CYBERPORTAL | White List #479'
   - '🌀 CYBERPORTAL | White Keys #298'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #1'
   - '🌀 CYBERPORTAL | White List #349'
@@ -9615,20 +7589,11 @@ proxy-groups:
   - '🇺🇸 США OT@Hy2UDP (WIFI/LTE) #318'
   - '🌀 CYBERPORTAL | White Keys #148'
   - t.me/Notorgames_0 - 774 🇩🇪
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 49 | @bobrvpn0
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 45 | @bobrvpn0
   - cool [white] 🇺🇸 |#35|
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 52 | @bobrvpn0
   - cool [white] 🇺🇸 |#37|
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 47 | @bobrvpn0
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 46 | @bobrvpn0
   - cool [white] 🇺🇸 |#3|
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 48 | @bobrvpn0
   - cool [white] 🇺🇸 |#31|
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 50 | @bobrvpn0
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 51 | @bobrvpn0
   - cool [white] 🇺🇸 |#8|
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 53 | @bobrvpn0
   - cool [white] 🇺🇸 |#25|
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #107'
   - '🇫🇮 Финляндия OT@Hy2UDP (WIFI/LTE) #23'
@@ -9637,47 +7602,39 @@ proxy-groups:
   - '🇭🇰 Гонконг OT@Hy2UDP (WIFI/LTE) #104'
   - '🇭🇰 Гонконг OT@Hy2UDP (WIFI/LTE) #415'
   - '🇭🇰 Гонконг OT@Hy2UDP (WIFI/LTE) #161'
-  - 'Телефон / Роутер [owpn.org] #4'
   - 'Телефон / Роутер [owpn.org] #5'
   - 'Телефон / Роутер [owpn.org] #6'
+  - 'Телефон / Роутер [owpn.org] #7'
   - '🌀 CYBERPORTAL | White List #495'
   - '🌀 CYBERPORTAL | White List #475'
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇨🇦 Канада · 🇩🇪 Германия #77'
   - '🌀 CYBERPORTAL | White List #480'
   - '🌀 CYBERPORTAL | White List #527'
   - '🌀 CYBERPORTAL | White List #417'
-  - 🇷🇺 RU | CIDR | 719 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 918 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 841 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 869 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 895 | @ByeWhiteLists2
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #164'
   - '🌀 CYBERPORTAL | White List #425'
   - '🌀 CYBERPORTAL | White Keys #179'
   - '🌀 CYBERPORTAL | White Keys #279'
   - '🌀 CYBERPORTAL | White Keys #184'
+  - 'Телефон / Роутер [owpn.org] #8'
   - 🇩🇪 | @WhiteDNS | DE46|1.6MB/s|DNSOK|GPT⁺-DE|CL-DE|SP-DE
   - '🇪🇪 Gh0st_WhiteList #131'
   - '🇪🇪 Gh0st_WhiteList #142'
   - '🇺🇸 Gh0st_WhiteList #28'
   - '🌀 CYBERPORTAL | White Keys #8'
-  - cool [white] 🇺🇸 |#6|
-  - 'Телефон / Роутер [owpn.org] #7'
+  - 'Телефон / Роутер [owpn.org] #9'
+  - 'Телефон / Роутер [owpn.org] #10'
   - '🌀 CYBERPORTAL | White Keys #248'
   - '🌀 CYBERPORTAL | White Keys #72'
   - '🇨🇦 Канада OT@Hy2UDP (WIFI/LTE) #62'
   - '🌀 CYBERPORTAL | White Keys #121'
   - cool [white] 🌐 |#32|
-  - 🇨🇦 @MrMeshkyChannel 516837
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #363'
   - LTE/5G [owpn.org]
-  - '🇩🇪 Gh0st_WhiteList #246'
   - 'Автовыбор #9'
   - 'Автовыбор #10'
-  - 'Телефон / Роутер [owpn.org] #8'
   - 🏳️ Для БС 1
   - '🇸🇪 Швеция OT@Hy2UDP (WIFI/LTE) #391'
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 3 | @bobrvpn0
   - '🌀 CYBERPORTAL | White List #360'
   - '🌀 CYBERPORTAL | Extended WL | 🇧🇾 Беларусь #85 t.me/rjsxrd'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #65'
@@ -9685,13 +7642,10 @@ proxy-groups:
   - 🇪🇺 AUTO — Обход БС 37
   - 🇪🇺 AUTO — Обход БС 39
   - LTE/5G
+  - 'LTE/5G #2'
   - 'Автовыбор #11'
   - '🇦🇹 GidroksiFree #2 | 🛡БС | 🟢LTE | 2073ms | ↓0.0Mbps'
-  - 🇷🇺 RU | — | 946 | @ByeWhiteLists2
   - 'Автовыбор #12'
-  - '🌀 CYBERPORTAL | White List #369'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 4 | @bobrvpn0
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 5 | @bobrvpn0
   - 'Автовыбор #13'
   - 'Автовыбор #14'
   - 'Автовыбор #15'
@@ -9706,11 +7660,9 @@ proxy-groups:
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇷🇴 Румыния · 🇺🇸 США #79'
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇷🇴 Румыния #47'
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇷🇴 Румыния · 🇺🇸 США #85'
-  - 🇷🇺 🏳 BobrVPN | AntiWhiteList 42 | @bobrvpn0
-  - '@NOFILTERING2'
   - '🇨🇦 GidroksiFree #3 | 🛡БС | 🟢LTE | 3201ms | ↓0.0Mbps'
   - Автоподбор
-  - 'Телефон / Роутер [owpn.org] #9'
+  - 'Телефон / Роутер [owpn.org] #11'
   - 🇩🇪Обходы
   - '🌀 CYBERPORTAL | White List #27'
   - '🌀 CYBERPORTAL | White List #24'
@@ -9728,8 +7680,6 @@ proxy-groups:
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #310'
   - '🌀 CYBERPORTAL | White List #500'
   - '🇳🇱🕊♥️ Нидерланды [Обход БС] #4'
-  - '🌀 CYBERPORTAL | White List #447'
-  - '🌀 CYBERPORTAL | White List #5'
   - '🌀 CYBERPORTAL | White List #379'
   - 🇷🇺+RU+#02+•+VLESS+Reality+[Белый+список]+(535ms)
   - cool [white] 🌐 |#28|
@@ -9746,28 +7696,29 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #107'
   - '🌀 CYBERPORTAL | White Keys #227'
   - cool [white] 🌐 |#38|
-  - '🇨🇿 Czechia — #174'
-  - 🇷🇺 🏳 BobrVPN | AntiWhiteList 70 | @bobrvpn0
+  - 🇳🇴 Белые списки  happcluchi vpn
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #82'
   - '🇷🇺➜🇱🇹 GidroksiFree #3 | 🔗Каскад | 🛡БС | 🟢LTE | 1688ms | ↓0.0Mbps'
   - 🇱🇹Обход
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #60'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #77'
   - '🇷🇺➜🇱🇹 GidroksiFree #5 | 🔗Каскад | 🛡БС | 🟢LTE | 1189ms | ↓0.0Mbps'
-  - 'Телефон / Роутер [owpn.org] #10'
-  - 'Телефон / Роутер [owpn.org] #11'
+  - 'Телефон / Роутер [owpn.org] #12'
+  - 'Телефон / Роутер [owpn.org] #13'
   - '🇷🇺➜🇳🇱 GidroksiFree #6 | 🔗Каскад | 🛡БС | 🟢LTE | 2210ms | ↓0.0Mbps'
   - 🇳🇱Обход
   - '🌀 CYBERPORTAL | White List #377'
   - '🇩🇪 Gh0st_WhiteList #146'
-  - 'LTE/5G #2'
+  - 'LTE/5G #3'
+  - 🇪🇪Обходы
+  - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #99'
+  - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #414'
   - 🇪🇺 AUTO — Обход БС 38
   - 🇪🇺 AUTO — Обход БС 40
   - 🇪🇺 AUTO — Обход БС 41
   - 🇪🇺 AUTO — Обход БС 42
   - 🇪🇺 AUTO — Обход БС 36
   - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы] #32'
-  - 'LTE/5G #3'
   - 'Автовыбор #19'
   - РФ LTE bestcdn
   - РФ LTE cdn-2
@@ -9781,24 +7732,19 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #507'
   - '🌀 CYBERPORTAL | White List #49'
   - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #348'
-  - 🇱🇻 🏳 BobrVPN | AntiWhiteList 6 | @bobrvpn0
   - 'Автовыбор #21'
   - '🇱🇻 Gh0st_WhiteList #128'
   - '🇺🇸 Gh0st_WhiteList #1'
   - '🌀 CYBERPORTAL | White List #528'
   - '🌀 CYBERPORTAL | White List #531'
   - '🌀 CYBERPORTAL | White List #508'
-  - 🇳🇱 NL | — | 77 | @ByeWhiteLists2
-  - 'Телефон / Роутер [owpn.org] #12'
-  - 'Телефон / Роутер [owpn.org] #13'
+  - '🌀 CYBERPORTAL | White List #422'
   - 'Телефон / Роутер [owpn.org] #14'
   - '🇺🇸 Gh0st_WhiteList #25'
   - '🌀 CYBERPORTAL | White List #390'
-  - '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #3'
-  - '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #4'
   - 'Телефон / Роутер [owpn.org] #15'
-  - '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #5'
   - 'Телефон / Роутер [owpn.org] #16'
+  - 'Телефон / Роутер [owpn.org] #17'
   - '🌀 CYBERPORTAL | White List #383'
   - '🇺🇸 Gh0st_WhiteList #242'
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #268'
@@ -9810,15 +7756,14 @@ proxy-groups:
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #53'
   - 🧢 Телеграмм бот + сайт 2
   - 🇷🇺+RU+#01+•+VLESS+Reality+[Белый+список]+(272ms)
-  - 'Телефон / Роутер [owpn.org] #17'
-  - 'Автовыбор #24'
   - 'Телефон / Роутер [owpn.org] #18'
+  - 'Автовыбор #24'
   - 'Телефон / Роутер [owpn.org] #19'
+  - 'Телефон / Роутер [owpn.org] #20'
   - '🇨🇦 Gh0st_WhiteList #37'
   - '🇰🇿 Казахстан OT@Hy2UDP (WIFI/LTE) #80'
-  - 🇷🇺 RU | CIDR | 611 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #421'
-  - 🇭🇺 HU | — | 97 | @ByeWhiteLists2
+  - '🌀 CYBERPORTAL | White List #550'
   - '🌀 CYBERPORTAL | White List #430'
   - '🌀 CYBERPORTAL | White List #426'
   - '🌀 CYBERPORTAL | White List #413'
@@ -9828,9 +7773,8 @@ proxy-groups:
   - 'Автовыбор #27'
   - 'Автовыбор #28'
   - 'Автовыбор #29'
-  - 🇦🇪 🏳 BobrVPN | AntiWhiteList 9 | @bobrvpn0
+  - 🇩🇪 Белые списки  happcluchi vpn
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #336'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 8 | @bobrvpn0
   - '🇺🇸 США OT@Hy2UDP (WIFI/LTE) #369'
   - '🇺🇸 США OT@Hy2UDP (WIFI/LTE) #43'
   - '🌀 CYBERPORTAL | White List #382'
@@ -9842,11 +7786,11 @@ proxy-groups:
   - cool [white] 🇺🇸 |#33|
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #113'
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇩🇪 Германия #10'
-  - 🇱🇻 LV | — | 179 | @ByeWhiteLists2
-  - 🇱🇻 LV | — | 183 | @ByeWhiteLists2
-  - 🇫🇷 🏳 BobrVPN | AntiWhiteList 57 | @bobrvpn0
+  - '🌀 CYBERPORTAL | White List #492'
   - 'Автовыбор #30'
   - '🌀 CYBERPORTAL | White List #516'
+  - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #156'
+  - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #51'
   - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #340'
   - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #9'
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #1'
@@ -9864,14 +7808,11 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #11'
   - 'Автовыбор #34'
   - 'Автовыбор #35'
-  - 🇷🇺 RU | CIDR | 440 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 585 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #449'
   - 'Автовыбор #36'
   - '🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #73'
   - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы | Реклама в YouTube] #37'
   - 🇷🇺🕊️ Обход АВТО 12
-  - 'Телефон / Роутер [owpn.org] #20'
   - '🌀 CYBERPORTAL | White List #199'
   - '🌀 CYBERPORTAL | White List #196'
   - '🌀 CYBERPORTAL | White List #200'
@@ -9880,10 +7821,11 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #198'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #51'
   - 'Автовыбор #37'
+  - 'Телефон / Роутер [owpn.org] #21'
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #139'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #19'
   - 'Автовыбор #38'
-  - 🇷🇺 🏳 BobrVPN | AntiWhiteList 11 | @bobrvpn0
+  - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #49'
   - '🌀 CYBERPORTAL | White List #487'
   - '🌀 CYBERPORTAL | White Keys #15'
   - '🌀 CYBERPORTAL | White List #484'
@@ -9901,7 +7843,6 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #270'
   - '🇧🇬 Болгария OT@Hy2UDP (WIFI/LTE) #108'
   - '🇧🇬 Болгария OT@Hy2UDP (WIFI/LTE) #45'
-  - 🇨🇭 🏳 BobrVPN | AntiWhiteList 10 | @bobrvpn0
   - '🇨🇭 Gh0st_WhiteList #69'
   - 'Автовыбор #39'
   - '🇬🇧 Великобритания OT@Hy2UDP (WIFI/LTE) #199'
@@ -9914,7 +7855,6 @@ proxy-groups:
   - '🇺🇸 Gh0st_WhiteList #7'
   - '🇺🇸 Gh0st_WhiteList #34'
   - '🌀 CYBERPORTAL | White List #411'
-  - 🇷🇺 RU | — | 208 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #423'
   - '🌀 CYBERPORTAL | White List #462'
   - 🇪🇺 AUTO — Обход БС 88
@@ -9922,8 +7862,6 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #410'
   - 'Автовыбор #40'
   - 'Автовыбор #41'
-  - 🇷🇺 🏳 BobrVPN | AntiWhiteList 68 | @bobrvpn0
-  - 'Телефон / Роутер [owpn.org] #21'
   - 'Телефон / Роутер [owpn.org] #22'
   - '🇳🇱 Gh0st_WhiteList #41'
   - '🇳🇱 Gh0st_WhiteList #49'
@@ -9943,12 +7881,8 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #518'
   - '🌀 CYBERPORTAL | White List #459'
   - '🌀 CYBERPORTAL | White List #512'
-  - 🇷🇺 RU | CIDR | 367 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 361 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 360 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 257 | @ByeWhiteLists2
+  - '🌀 CYBERPORTAL | White List #412'
   - '🌀 CYBERPORTAL | White List #473'
-  - 🇷🇺 RU | CIDR | 470 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #431'
   - '🌀 CYBERPORTAL | White List #368'
   - '🌀 CYBERPORTAL | White List #519'
@@ -9962,39 +7896,19 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #414'
   - '🌀 CYBERPORTAL | White List #408'
   - '🇺🇸 США OT@Hy2UDP (WIFI/LTE) #301'
-  - 'Телефон / Роутер [owpn.org] #23'
   - '🇸🇬 Сингапур OT@Hy2UDP (WIFI/LTE) #176'
   - '🌀 CYBERPORTAL | White List #378'
   - '🌀 CYBERPORTAL | White List #362'
-  - 🇪🇪 EE | — | 185 | @ByeWhiteLists2
-  - '3544. VLESS | SNI: api-xvdhdv8374gdv-dyehgd638-6b85bd-production.up.railway.app
-    | TG: @wlrustg'
   - '🌀 CYBERPORTAL | White List #474'
-  - 'Телефон / Роутер [owpn.org] #24'
   - '🌀 CYBERPORTAL | White Keys #150'
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #103'
-  - 🇷🇺 AetrisVPN
   - '🌀 CYBERPORTAL | White List #503'
   - '#1 🇷🇺 LTE Белые списки9'
-  - 🇳🇱 NL | — | 1023 | @ByeWhiteLists2
-  - 🇳🇱
   - 'Автовыбор #43'
   - '🌀 CYBERPORTAL | White List #213'
   - '🌀 CYBERPORTAL | White List #62'
   - 🇪🇺 Белые списки  happcluchi vpn
-  - '🇪🇺📡Антиглушилка • EU №1
-
-    vless://b3a11068-1a7e-4643-85de-7c82cce46943@ee-2e06d85dc0.shamanapp.online:34451/?type=xhttp&host=ee-2e06d85dc0.shamanapp.online&path=/ShamanXHTTP2026&mode=stream-up&security=tls&sni=ee-2e06d85dc0.shamanapp.online&alpn=h2,http/1.1&fp=chrome#🇪🇺📡Антиглушилка
-    • EU №2
-
-    vless://2c634977-584e-4e1f-b501-1b70c77a6743@dismissaltree.net:2053/?type=xhttp&host=&path=/api/v1/upload&mode=auto&security=tls&sni=dismissaltree.net&alpn=h2,http/1.1&fp=chrome#🇪🇺📡Антиглушилка
-    • EU №3
-
-    vless://2c634977-584e-4e1f-b501-1b70c77a6743@185.141.227.180:2053/?type=xhttp&host=&path=/api/v1/upload&mode=auto&extra=%257B%250A%2520%2520%2522downloadSettings%2522%2520:%2520null,%250A%2520%2520%2522extra%2522%2520:%2520null,%250A%2520%2520%2522headers%2522%2520:%2520null,%250A%2520%2520%2522host%2522%2520:%2520%2522%2522,%250A%2520%2520%2522mode%2522%2520:%2520%2522%2522,%250A%2520%2520%2522noGRPCHeader%2522%2520:%2520false,%250A%2520%2520%2522noSSEHeader%2522%2520:%2520false,%250A%2520%2520%2522path%2522%2520:%2520%2522%2522,%250A%2520%2520%2522scMaxBufferedPosts%2522%2520:%25200,%250A%2520%2520%2522scMaxEachPostBytes%2522%2520:%2520%25220%2522,%250A%2520%2520%2522scMinPostsIntervalMs%2522%2520:%2520%25220%2522,%250A%2520%2520%2522scStreamUpServerSecs%2522%2520:%2520%25220%2522,%250A%2520%2520%2522seqKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522seqPlacement%2522%2520:%2520%2522%2522,%250A%2520%2520%2522serverMaxHeaderBytes%2522%2520:%25200,%250A%2520%2520%2522sessionIDKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522sessionIDLength%2522%2520:%2520%25220%2522,%250A%2520%2520%2522sessionIDPlacement%2522%2520:%2520%2522%2522,%250A%2520%2520%2522sessionIDTable%2522%2520:%2520%2522%2522,%250A%2520%2520%2522uplinkChunkSize%2522%2520:%2520%25220%2522,%250A%2520%2520%2522uplinkDataKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522uplinkDataPlacement%2522%2520:%2520%2522%2522,%250A%2520%2520%2522uplinkHTTPMethod%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xmux%2522%2520:%2520%257B%250A%2520%2520%2520%2520%2522cMaxReuseTimes%2522%2520:%2520%252264-128%2522,%250A%2520%2520%2520%2520%2522hKeepAlivePeriod%2522%2520:%25200,%250A%2520%2520%2520%2520%2522hMaxRequestTimes%2522%2520:%2520%25220%2522,%250A%2520%2520%2520%2520%2522hMaxReusableSecs%2522%2520:%2520%25220%2522,%250A%2520%2520%2520%2520%2522maxConcurrency%2522%2520:%2520%252216-32%2522,%250A%2520%2520%2520%2520%2522maxConnections%2522%2520:%2520%25220%2522%250A%2520%2520%257D,%250A%2520%2520%2522xPaddingBytes%2522%2520:%2520%2522100-1000%2522,%250A%2520%2520%2522xPaddingHeader%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xPaddingKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xPaddingMethod%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xPaddingObfsMode%2522%2520:%2520false,%250A%2520%2520%2522xPaddingPlacement%2522%2520:%2520%2522%2522%250A%257D&security=tls&sni=dismissaltree.net&fp=firefox#🇪🇺📡Антиглушилка
-    • EU №4
-
-    vless://f8d52ece-fad4-478d-875d-df6eed3befa7@cz.pythonmakemigreat.wiki:61374/?type=xhttp&host=cz.pythonmakemigreat.wiki&path=/&mode=packet-up&extra=%257B%250A%2520%2520%2522scMaxBufferedPosts%2522%2520:%252010,%250A%2520%2520%2522scMaxEachPostBytes%2522%2520:%2520%2522500000-1000000%2522,%250A%2520%2520%2522scMinPostsIntervalMs%2522%2520:%2520%252220-40%2522,%250A%2520%2520%2522xmux%2522%2520:%2520%257B%250A%2520%2520%2520%2520%2522maxConnections%2522%2520:%25203%250A%2520%2520%257D,%250A%2520%2520%2522xPaddingBytes%2522%2520:%2520%2522100-500%2522%250A%257D&security=reality&fp=chrome&sni=cz.pythonmakemigreat.wiki&pbk=QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI#🇪🇺📡Антиглушилка
-    • EU №5'
+  - '🌀 CYBERPORTAL | White Keys #231'
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #381'
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #157'
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #129'
@@ -10006,12 +7920,10 @@ proxy-groups:
     🚀 Эщкерия [🏴BL/SNI] | 🥭🔥Белые
   - 'Автовыбор #44'
   - '🌀 CYBERPORTAL | White List #406'
-  - 'Телефон / Роутер [owpn.org] #25'
   - 🇷🇺 Russia | БЕЛЫЙ IP | @RaViraNet (3)`
   - '🌀 CYBERPORTAL | White List #29'
-  - 'Телефон / Роутер [owpn.org] #26'
+  - 'Телефон / Роутер [owpn.org] #23'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #2'
-  - '[OpenRay] 🇩🇪DE-30'
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #240'
   - '🇷🇺🕊♥️ Россия [Обход БС] #17'
   - '🇹🇷🕊♥️ Турция [Обход БС] #18'
@@ -10022,13 +7934,12 @@ proxy-groups:
   - '🇳🇱 LTE #2'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #37'
   - '🇮🇹 Gh0st_WhiteList #83'
-  - '🇩🇪 Gh0st_WhiteList #249'
   - '🌀 CYBERPORTAL | White List #523'
-  - 'Телефон / Роутер [owpn.org] #27'
+  - 'Телефон / Роутер [owpn.org] #24'
+  - '🇬🇧 Gh0st_WhiteList #63'
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #385'
   - '🌀 CYBERPORTAL | White List #418'
   - '🇫🇮 Gh0st_WhiteList #198'
-  - '656. 🇫🇮 VLESS | SNI: 5febc5g.fi16.h1clayd.click | TG: @wlrustg'
   - 'Автовыбор #46'
   - 'Автовыбор #47'
   - '🌀 CYBERPORTAL | White List #436'
@@ -10040,7 +7951,7 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #416'
   - ⚡️ Авто+8
   - '🇬🇷 Gh0st_WhiteList #147'
-  - 'Телефон / Роутер [owpn.org] #28'
+  - 'Телефон / Роутер [owpn.org] #25'
   - 'Автовыбор #48'
   - 'Автовыбор #49'
   - '🇳🇱 Gh0st_WhiteList #54'
@@ -10048,33 +7959,26 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #4'
   - '🌀 CYBERPORTAL | White List #450'
   - '🌀 CYBERPORTAL | White List #486'
-  - 🇷🇺 RU | CIDR | 632 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #521'
   - '🌀 CYBERPORTAL | White List #3'
   - '🇱🇹 Литва OT@Hy2UDP (WIFI/LTE) #57'
   - '🌀 CYBERPORTAL | White List #429'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #94'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 15 | @bobrvpn0
+  - 'Телефон / Роутер [owpn.org] #26'
+  - 'Телефон / Роутер [owpn.org] #27'
+  - 'Телефон / Роутер [owpn.org] #28'
   - 'Телефон / Роутер [owpn.org] #29'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 16 | @bobrvpn0
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 17 | @bobrvpn0
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 18 | @bobrvpn0
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 19 | @bobrvpn0
   - 'Телефон / Роутер [owpn.org] #30'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 20 | @bobrvpn0
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #117'
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #127'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #43'
-  - 🇷🇺 RU | CIDR | 768 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 596 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #405'
   - '🌀 CYBERPORTAL | White Keys #40'
   - '🇲🇩 Молдова OT@Hy2UDP (WIFI/LTE) #355'
   - '🇲🇩 Молдова OT@Hy2UDP (WIFI/LTE) #389'
   - '🇲🇩 Молдова OT@Hy2UDP (WIFI/LTE) #296'
   - '🌀 CYBERPORTAL | White Keys #320'
-  - 'Телефон / Роутер [owpn.org] #31'
-  - '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #6'
+  - 🇧🇾 Беларусь | 🔗 Каскад [#РКП]
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #49'
   - '🇮🇷 Gh0st_WhiteList #174'
   - 🇸🇪 LTE 5 | Meg
@@ -10083,8 +7987,6 @@ proxy-groups:
   - '🇩🇪Обходы #3'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #57'
   - '🌀 CYBERPORTAL | White List #464'
-  - 🇧🇹 🏳 BobrVPN | AntiWhiteList 54 | @bobrvpn0
-  - 🇧🇹 🏳 BobrVPN | AntiWhiteList 55 | @bobrvpn0
   - '🌀 CYBERPORTAL | White List #535'
   - '🇪🇺 Автовыборvless://3d3cc1bc-3d6f-03f5-a531-19a1797952bc@5.129.242.110:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=rutube.ru&fp=firefox&security=reality&pbk=Bz5EbrFHttwOTc1VWhPBAOeoIMDMMZcM02PTZs5AgD4&sid=1aa948f94316b975#🇬🇧
     Великобританияvless://068c73f5-c2fc-4579-96be-6e37cfcf58ed@us-03.avroraservice.online:8443/?type=xhttp&encryption=none&flow=&path=/xhttp&mode=stream-one&sni=cdn-us.cahmes.space&fp=chrome&security=reality&pbk=KZejN2d1cwCrITHNxFYQVZ4rpMTZzHgJd9p30MZm_3k&sid=6bd33a75ebc0f26e#🇺🇸
@@ -10094,7 +7996,7 @@ proxy-groups:
     Франция #1vless://a47f8110-de83-4c37-b6a7-16010535aef4@153.80.241.133:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=account.yump.online&fp=firefox&security=reality&pbk=8yGIBwwM8YCfGThjfEExF2l_SeJ2tSWRMo7wnnAlm1Y&sid=7120bf1ca9d33e91#🇫🇮
     Финляндия #1'
   - 'Автовыбор #50'
-  - 🇮🇷 Иран БС
+  - 'Телефон / Роутер [owpn.org] #31'
   - '🌀 CYBERPORTAL | White List #483'
   - 'Автовыбор #51'
   - 'Автовыбор #52'
@@ -10104,8 +8006,6 @@ proxy-groups:
   - '🇵🇱Обходы #3'
   - '🇵🇱Обходы #4'
   - '🇩🇪🕊♥️ Германия [Обход БС | Все операторы] #31'
-  - '569. VLESS | SNI: tz5gtjwlki.j.cloudfront.hls.hlsnode.net | TG: @wlrustg'
-  - 🇷🇺 RU | CIDR | 692 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #505'
   - '🌀 CYBERPORTAL | White List #433'
   - '🌀 CYBERPORTAL | White List #537'
@@ -10120,419 +8020,27 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #224'
   - '🌀 CYBERPORTAL | White Keys #211'
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇺🇸 США #69'
-  - 🇪🇪 EE | — | 218 | @ByeWhiteLists2
   - 'Телефон / Роутер [owpn.org] #32'
-  - 🇩🇪 DE | — | 11 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 453 | @ByeWhiteLists2
+  - '🌀 CYBERPORTAL | White List #502'
   - 'Автовыбор #53'
   - '🇫🇮 Финляндия OT@Hy2UDP (WIFI/LTE) #188'
-  - '🇩🇪🕊♥️ Германия [Обход БС | Все операторы] #34'
-  - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #78'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 28 | @bobrvpn0
-  - '🌀 CYBERPORTAL | White List #438'
-  - '🇳🇱 Gh0st_WhiteList #236'
   - 'Телефон / Роутер [owpn.org] #33'
-  - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #309'
-  - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #27'
-  - '🌀 CYBERPORTAL | White List #533'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇨🇦 کانادا
-
-    ®️GLOBALTELEHOST C
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇨🇦 کانادا
-
-    ®️GLOBALTELEHOST C
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇮🇹 ایتالیا
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇮🇹 ایتالیا
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇮🇹 ایتالیا
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇸🇬 سنگاپور
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇨🇦 کانادا
-
-    ®️GLOBALTELEHOST C
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #5'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #6'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #7'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #8'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇩🇪 آلمان
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇳🇱 هلند
-
-    ®️DigitalOcean, LL
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇩🇪 آلمان
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇩🇪 آلمان
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  - '🇪🇺🕊♥️ Европа [Обход БС | Реклама в YouTube] #2'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #9'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #10'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #11'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #12'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #13'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #14'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #15'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #16'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #17'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇲🇽 Mexico
-
-    ®️LIGHT NODE LIMIT
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #18'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #19'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #20'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #21'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #22'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #23'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇫🇷 فرانسه
-
-    ®️OVH SAS
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇬🇧 انگلیس
-
-    ®️OVH SAS
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇸🇪 سوئد
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #24'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #25'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #26'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #27'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #28'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #29'
-  - '🇩🇪🕊♥️ Германия [Обход БС | Реклама в YouTube] #3'
+  - '🌀 CYBERPORTAL | White Keys #96'
+  - '🇧🇬 Болгария OT@Hy2UDP (WIFI/LTE) #55'
+  - '🇧🇬 Болгария OT@Hy2UDP (WIFI/LTE) #244'
+  - '🌀 CYBERPORTAL | White List #441'
+  - 'Телефон / Роутер [owpn.org] #34'
+  - '🇷🇺 LTE | Все операторы 3", "network": "tcp", "security": "reality", "sni": "bizorg.su",
+    "fp": "edge", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs", "sid": "428ef87fd47a3a32",
+    "spx": "/", "flow": "xtls-rprx-vision", "encryption": "none"}, {"type": "vless",
+    "name": "6'
+  - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #332'
+  - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇱🇹 Литва #11'
+  - 🇪🇺 AUTO — Обход БС 64
+  - 'Телефон / Роутер [owpn.org] #35'
+  - '5553. 🇹🇷 VLESS | SNI: delivery.mp.microsoft.com | TG: @wlrustg'
+  - '🇨🇦 Канада OT@Hy2UDP (WIFI/LTE) #364'
+  - 🇪🇺 AUTO — Обход БС 47
   url: http://www.gstatic.com/generate_204
   interval: 300
   tolerance: 50
@@ -10540,31 +8048,17 @@ proxy-groups:
   type: select
   proxies:
   - ♻️ Auto
-  - '🌀 CYBERPORTAL | White Keys #166'
-  - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #293'
-  - '#5 🇩🇪LTE Обход все операторы'
-  - '#6 🇩🇪LTE Обход все операторы'
-  - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #201'
-  - Notorgames_0 (41)
-  - 🇧🇪 Бельгия — Брюссельский столичный регион 🎃
-  - '@nofiltering2'
-  - Notorgames_0 (25)
-  - '🇯🇵 Япония OT@Hy2UDP (WIFI/LTE) #299'
-  - Notorgames_0 (2)
-  - Телефон / Роутер [owpn.org]
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #95'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #42'
   - '🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #4'
   - '🇹🇷 Турция OT@Hy2UDP (WIFI/LTE) #52'
   - 🇪🇺 AUTO — Обход БС 85
   - '🌀 CYBERPORTAL | White Keys #193'
-  - '3832. 🇨🇦 VLESS | SNI: bahari.kiamobilepart.com | TG: @wlrustg'
-  - 🏳️ ShatakVPN 488007
   - cool [white] 🌐 |#34|
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #44'
   - Автовыбор
-  - 🇧🇪 Бельгия [#РКП]
   - '🌀 CYBERPORTAL | White List #494'
+  - Телефон / Роутер [owpn.org]
   - '🌀 CYBERPORTAL | White Keys #210'
   - '🌀 CYBERPORTAL | White Keys #271'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #101'
@@ -10580,14 +8074,9 @@ proxy-groups:
   - '🇧🇪 Бельгия OT@Hy2UDP (WIFI/LTE) #50'
   - '🇧🇪 Бельгия OT@Hy2UDP (WIFI/LTE) #263'
   - '🌀 CYBERPORTAL | White List #432'
-  - 🇭🇺 🏳 BobrVPN | AntiWhiteList 1 | @bobrvpn0
-  - 🇧🇬 🏳 BobrVPN | AntiWhiteList 2 | @bobrvpn0
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #109'
   - Notorgames_0 (210)
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 44 | @bobrvpn0
-  - 🇧🇾 Беларусь | 🔗 Каскад [#РКП]
-  - '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #2'
-  - 🇳🇱 Нидерланды [🏳️LTE] | 🥭🔧
+  - 'Телефон / Роутер [owpn.org] #2'
   - '🌀 CYBERPORTAL | White List #451'
   - '🇬🇧 Великобритания · LTE · ❔ · #16'
   - 'Автовыбор #4'
@@ -10600,24 +8089,20 @@ proxy-groups:
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #100'
   - '🌀 CYBERPORTAL | White Keys #326'
   - '🌀 CYBERPORTAL | White List #506'
-  - 'Телефон / Роутер [owpn.org] #2'
+  - 'Телефон / Роутер [owpn.org] #3'
+  - 'Телефон / Роутер [owpn.org] #4'
   - '🇪🇪 Эстония OT@Hy2UDP (WIFI/LTE) #15'
   - '🌀 CYBERPORTAL | White List #407'
   - '🌀 CYBERPORTAL | White List #511'
   - '🌀 CYBERPORTAL | White List #515'
   - '🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #14'
   - '🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #362'
-  - 'Телефон / Роутер [owpn.org] #3'
-  - 🇩🇰 🏳 BobrVPN | AntiWhiteList 56 | @bobrvpn0
   - '🌀 CYBERPORTAL | White List #397'
   - '🌀 CYBERPORTAL | White List #241'
   - '🇫🇷 Gh0st_WhiteList #61'
-  - 🇦🇲 🏳 BobrVPN | AntiWhiteList 62 | @bobrvpn0
-  - 🇦🇲 🏳 BobrVPN | AntiWhiteList 63 | @bobrvpn0
-  - 🇦🇲 🏳 BobrVPN | AntiWhiteList 64 | @bobrvpn0
   - '🌀 CYBERPORTAL | White List #514'
   - 'Автовыбор #5'
-  - 🇷🇺 RU | CIDR | 576 | @ByeWhiteLists2
+  - '🌀 CYBERPORTAL | White List #479'
   - '🌀 CYBERPORTAL | White Keys #298'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #1'
   - '🌀 CYBERPORTAL | White List #349'
@@ -10658,20 +8143,11 @@ proxy-groups:
   - '🇺🇸 США OT@Hy2UDP (WIFI/LTE) #318'
   - '🌀 CYBERPORTAL | White Keys #148'
   - t.me/Notorgames_0 - 774 🇩🇪
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 49 | @bobrvpn0
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 45 | @bobrvpn0
   - cool [white] 🇺🇸 |#35|
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 52 | @bobrvpn0
   - cool [white] 🇺🇸 |#37|
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 47 | @bobrvpn0
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 46 | @bobrvpn0
   - cool [white] 🇺🇸 |#3|
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 48 | @bobrvpn0
   - cool [white] 🇺🇸 |#31|
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 50 | @bobrvpn0
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 51 | @bobrvpn0
   - cool [white] 🇺🇸 |#8|
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 53 | @bobrvpn0
   - cool [white] 🇺🇸 |#25|
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #107'
   - '🇫🇮 Финляндия OT@Hy2UDP (WIFI/LTE) #23'
@@ -10680,47 +8156,39 @@ proxy-groups:
   - '🇭🇰 Гонконг OT@Hy2UDP (WIFI/LTE) #104'
   - '🇭🇰 Гонконг OT@Hy2UDP (WIFI/LTE) #415'
   - '🇭🇰 Гонконг OT@Hy2UDP (WIFI/LTE) #161'
-  - 'Телефон / Роутер [owpn.org] #4'
   - 'Телефон / Роутер [owpn.org] #5'
   - 'Телефон / Роутер [owpn.org] #6'
+  - 'Телефон / Роутер [owpn.org] #7'
   - '🌀 CYBERPORTAL | White List #495'
   - '🌀 CYBERPORTAL | White List #475'
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇨🇦 Канада · 🇩🇪 Германия #77'
   - '🌀 CYBERPORTAL | White List #480'
   - '🌀 CYBERPORTAL | White List #527'
   - '🌀 CYBERPORTAL | White List #417'
-  - 🇷🇺 RU | CIDR | 719 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 918 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 841 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 869 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 895 | @ByeWhiteLists2
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #164'
   - '🌀 CYBERPORTAL | White List #425'
   - '🌀 CYBERPORTAL | White Keys #179'
   - '🌀 CYBERPORTAL | White Keys #279'
   - '🌀 CYBERPORTAL | White Keys #184'
+  - 'Телефон / Роутер [owpn.org] #8'
   - 🇩🇪 | @WhiteDNS | DE46|1.6MB/s|DNSOK|GPT⁺-DE|CL-DE|SP-DE
   - '🇪🇪 Gh0st_WhiteList #131'
   - '🇪🇪 Gh0st_WhiteList #142'
   - '🇺🇸 Gh0st_WhiteList #28'
   - '🌀 CYBERPORTAL | White Keys #8'
-  - cool [white] 🇺🇸 |#6|
-  - 'Телефон / Роутер [owpn.org] #7'
+  - 'Телефон / Роутер [owpn.org] #9'
+  - 'Телефон / Роутер [owpn.org] #10'
   - '🌀 CYBERPORTAL | White Keys #248'
   - '🌀 CYBERPORTAL | White Keys #72'
   - '🇨🇦 Канада OT@Hy2UDP (WIFI/LTE) #62'
   - '🌀 CYBERPORTAL | White Keys #121'
   - cool [white] 🌐 |#32|
-  - 🇨🇦 @MrMeshkyChannel 516837
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #363'
   - LTE/5G [owpn.org]
-  - '🇩🇪 Gh0st_WhiteList #246'
   - 'Автовыбор #9'
   - 'Автовыбор #10'
-  - 'Телефон / Роутер [owpn.org] #8'
   - 🏳️ Для БС 1
   - '🇸🇪 Швеция OT@Hy2UDP (WIFI/LTE) #391'
-  - 🇺🇸 🏳 BobrVPN | AntiWhiteList 3 | @bobrvpn0
   - '🌀 CYBERPORTAL | White List #360'
   - '🌀 CYBERPORTAL | Extended WL | 🇧🇾 Беларусь #85 t.me/rjsxrd'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #65'
@@ -10728,13 +8196,10 @@ proxy-groups:
   - 🇪🇺 AUTO — Обход БС 37
   - 🇪🇺 AUTO — Обход БС 39
   - LTE/5G
+  - 'LTE/5G #2'
   - 'Автовыбор #11'
   - '🇦🇹 GidroksiFree #2 | 🛡БС | 🟢LTE | 2073ms | ↓0.0Mbps'
-  - 🇷🇺 RU | — | 946 | @ByeWhiteLists2
   - 'Автовыбор #12'
-  - '🌀 CYBERPORTAL | White List #369'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 4 | @bobrvpn0
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 5 | @bobrvpn0
   - 'Автовыбор #13'
   - 'Автовыбор #14'
   - 'Автовыбор #15'
@@ -10749,11 +8214,9 @@ proxy-groups:
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇷🇴 Румыния · 🇺🇸 США #79'
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇷🇴 Румыния #47'
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇷🇴 Румыния · 🇺🇸 США #85'
-  - 🇷🇺 🏳 BobrVPN | AntiWhiteList 42 | @bobrvpn0
-  - '@NOFILTERING2'
   - '🇨🇦 GidroksiFree #3 | 🛡БС | 🟢LTE | 3201ms | ↓0.0Mbps'
   - Автоподбор
-  - 'Телефон / Роутер [owpn.org] #9'
+  - 'Телефон / Роутер [owpn.org] #11'
   - 🇩🇪Обходы
   - '🌀 CYBERPORTAL | White List #27'
   - '🌀 CYBERPORTAL | White List #24'
@@ -10771,8 +8234,6 @@ proxy-groups:
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #310'
   - '🌀 CYBERPORTAL | White List #500'
   - '🇳🇱🕊♥️ Нидерланды [Обход БС] #4'
-  - '🌀 CYBERPORTAL | White List #447'
-  - '🌀 CYBERPORTAL | White List #5'
   - '🌀 CYBERPORTAL | White List #379'
   - 🇷🇺+RU+#02+•+VLESS+Reality+[Белый+список]+(535ms)
   - cool [white] 🌐 |#28|
@@ -10789,28 +8250,29 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #107'
   - '🌀 CYBERPORTAL | White Keys #227'
   - cool [white] 🌐 |#38|
-  - '🇨🇿 Czechia — #174'
-  - 🇷🇺 🏳 BobrVPN | AntiWhiteList 70 | @bobrvpn0
+  - 🇳🇴 Белые списки  happcluchi vpn
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #82'
   - '🇷🇺➜🇱🇹 GidroksiFree #3 | 🔗Каскад | 🛡БС | 🟢LTE | 1688ms | ↓0.0Mbps'
   - 🇱🇹Обход
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #60'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #77'
   - '🇷🇺➜🇱🇹 GidroksiFree #5 | 🔗Каскад | 🛡БС | 🟢LTE | 1189ms | ↓0.0Mbps'
-  - 'Телефон / Роутер [owpn.org] #10'
-  - 'Телефон / Роутер [owpn.org] #11'
+  - 'Телефон / Роутер [owpn.org] #12'
+  - 'Телефон / Роутер [owpn.org] #13'
   - '🇷🇺➜🇳🇱 GidroksiFree #6 | 🔗Каскад | 🛡БС | 🟢LTE | 2210ms | ↓0.0Mbps'
   - 🇳🇱Обход
   - '🌀 CYBERPORTAL | White List #377'
   - '🇩🇪 Gh0st_WhiteList #146'
-  - 'LTE/5G #2'
+  - 'LTE/5G #3'
+  - 🇪🇪Обходы
+  - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #99'
+  - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #414'
   - 🇪🇺 AUTO — Обход БС 38
   - 🇪🇺 AUTO — Обход БС 40
   - 🇪🇺 AUTO — Обход БС 41
   - 🇪🇺 AUTO — Обход БС 42
   - 🇪🇺 AUTO — Обход БС 36
   - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы] #32'
-  - 'LTE/5G #3'
   - 'Автовыбор #19'
   - РФ LTE bestcdn
   - РФ LTE cdn-2
@@ -10824,24 +8286,19 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #507'
   - '🌀 CYBERPORTAL | White List #49'
   - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #348'
-  - 🇱🇻 🏳 BobrVPN | AntiWhiteList 6 | @bobrvpn0
   - 'Автовыбор #21'
   - '🇱🇻 Gh0st_WhiteList #128'
   - '🇺🇸 Gh0st_WhiteList #1'
   - '🌀 CYBERPORTAL | White List #528'
   - '🌀 CYBERPORTAL | White List #531'
   - '🌀 CYBERPORTAL | White List #508'
-  - 🇳🇱 NL | — | 77 | @ByeWhiteLists2
-  - 'Телефон / Роутер [owpn.org] #12'
-  - 'Телефон / Роутер [owpn.org] #13'
+  - '🌀 CYBERPORTAL | White List #422'
   - 'Телефон / Роутер [owpn.org] #14'
   - '🇺🇸 Gh0st_WhiteList #25'
   - '🌀 CYBERPORTAL | White List #390'
-  - '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #3'
-  - '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #4'
   - 'Телефон / Роутер [owpn.org] #15'
-  - '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #5'
   - 'Телефон / Роутер [owpn.org] #16'
+  - 'Телефон / Роутер [owpn.org] #17'
   - '🌀 CYBERPORTAL | White List #383'
   - '🇺🇸 Gh0st_WhiteList #242'
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #268'
@@ -10853,15 +8310,14 @@ proxy-groups:
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #53'
   - 🧢 Телеграмм бот + сайт 2
   - 🇷🇺+RU+#01+•+VLESS+Reality+[Белый+список]+(272ms)
-  - 'Телефон / Роутер [owpn.org] #17'
-  - 'Автовыбор #24'
   - 'Телефон / Роутер [owpn.org] #18'
+  - 'Автовыбор #24'
   - 'Телефон / Роутер [owpn.org] #19'
+  - 'Телефон / Роутер [owpn.org] #20'
   - '🇨🇦 Gh0st_WhiteList #37'
   - '🇰🇿 Казахстан OT@Hy2UDP (WIFI/LTE) #80'
-  - 🇷🇺 RU | CIDR | 611 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #421'
-  - 🇭🇺 HU | — | 97 | @ByeWhiteLists2
+  - '🌀 CYBERPORTAL | White List #550'
   - '🌀 CYBERPORTAL | White List #430'
   - '🌀 CYBERPORTAL | White List #426'
   - '🌀 CYBERPORTAL | White List #413'
@@ -10871,9 +8327,8 @@ proxy-groups:
   - 'Автовыбор #27'
   - 'Автовыбор #28'
   - 'Автовыбор #29'
-  - 🇦🇪 🏳 BobrVPN | AntiWhiteList 9 | @bobrvpn0
+  - 🇩🇪 Белые списки  happcluchi vpn
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #336'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 8 | @bobrvpn0
   - '🇺🇸 США OT@Hy2UDP (WIFI/LTE) #369'
   - '🇺🇸 США OT@Hy2UDP (WIFI/LTE) #43'
   - '🌀 CYBERPORTAL | White List #382'
@@ -10885,11 +8340,11 @@ proxy-groups:
   - cool [white] 🇺🇸 |#33|
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #113'
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇩🇪 Германия #10'
-  - 🇱🇻 LV | — | 179 | @ByeWhiteLists2
-  - 🇱🇻 LV | — | 183 | @ByeWhiteLists2
-  - 🇫🇷 🏳 BobrVPN | AntiWhiteList 57 | @bobrvpn0
+  - '🌀 CYBERPORTAL | White List #492'
   - 'Автовыбор #30'
   - '🌀 CYBERPORTAL | White List #516'
+  - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #156'
+  - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #51'
   - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #340'
   - '🇮🇳 Индия OT@Hy2UDP (WIFI/LTE) #9'
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #1'
@@ -10907,14 +8362,11 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #11'
   - 'Автовыбор #34'
   - 'Автовыбор #35'
-  - 🇷🇺 RU | CIDR | 440 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 585 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #449'
   - 'Автовыбор #36'
   - '🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #73'
   - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы | Реклама в YouTube] #37'
   - 🇷🇺🕊️ Обход АВТО 12
-  - 'Телефон / Роутер [owpn.org] #20'
   - '🌀 CYBERPORTAL | White List #199'
   - '🌀 CYBERPORTAL | White List #196'
   - '🌀 CYBERPORTAL | White List #200'
@@ -10923,10 +8375,11 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #198'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #51'
   - 'Автовыбор #37'
+  - 'Телефон / Роутер [owpn.org] #21'
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #139'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #19'
   - 'Автовыбор #38'
-  - 🇷🇺 🏳 BobrVPN | AntiWhiteList 11 | @bobrvpn0
+  - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #49'
   - '🌀 CYBERPORTAL | White List #487'
   - '🌀 CYBERPORTAL | White Keys #15'
   - '🌀 CYBERPORTAL | White List #484'
@@ -10944,7 +8397,6 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #270'
   - '🇧🇬 Болгария OT@Hy2UDP (WIFI/LTE) #108'
   - '🇧🇬 Болгария OT@Hy2UDP (WIFI/LTE) #45'
-  - 🇨🇭 🏳 BobrVPN | AntiWhiteList 10 | @bobrvpn0
   - '🇨🇭 Gh0st_WhiteList #69'
   - 'Автовыбор #39'
   - '🇬🇧 Великобритания OT@Hy2UDP (WIFI/LTE) #199'
@@ -10957,7 +8409,6 @@ proxy-groups:
   - '🇺🇸 Gh0st_WhiteList #7'
   - '🇺🇸 Gh0st_WhiteList #34'
   - '🌀 CYBERPORTAL | White List #411'
-  - 🇷🇺 RU | — | 208 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #423'
   - '🌀 CYBERPORTAL | White List #462'
   - 🇪🇺 AUTO — Обход БС 88
@@ -10965,8 +8416,6 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #410'
   - 'Автовыбор #40'
   - 'Автовыбор #41'
-  - 🇷🇺 🏳 BobrVPN | AntiWhiteList 68 | @bobrvpn0
-  - 'Телефон / Роутер [owpn.org] #21'
   - 'Телефон / Роутер [owpn.org] #22'
   - '🇳🇱 Gh0st_WhiteList #41'
   - '🇳🇱 Gh0st_WhiteList #49'
@@ -10986,12 +8435,8 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #518'
   - '🌀 CYBERPORTAL | White List #459'
   - '🌀 CYBERPORTAL | White List #512'
-  - 🇷🇺 RU | CIDR | 367 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 361 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 360 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 257 | @ByeWhiteLists2
+  - '🌀 CYBERPORTAL | White List #412'
   - '🌀 CYBERPORTAL | White List #473'
-  - 🇷🇺 RU | CIDR | 470 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #431'
   - '🌀 CYBERPORTAL | White List #368'
   - '🌀 CYBERPORTAL | White List #519'
@@ -11005,39 +8450,19 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #414'
   - '🌀 CYBERPORTAL | White List #408'
   - '🇺🇸 США OT@Hy2UDP (WIFI/LTE) #301'
-  - 'Телефон / Роутер [owpn.org] #23'
   - '🇸🇬 Сингапур OT@Hy2UDP (WIFI/LTE) #176'
   - '🌀 CYBERPORTAL | White List #378'
   - '🌀 CYBERPORTAL | White List #362'
-  - 🇪🇪 EE | — | 185 | @ByeWhiteLists2
-  - '3544. VLESS | SNI: api-xvdhdv8374gdv-dyehgd638-6b85bd-production.up.railway.app
-    | TG: @wlrustg'
   - '🌀 CYBERPORTAL | White List #474'
-  - 'Телефон / Роутер [owpn.org] #24'
   - '🌀 CYBERPORTAL | White Keys #150'
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #103'
-  - 🇷🇺 AetrisVPN
   - '🌀 CYBERPORTAL | White List #503'
   - '#1 🇷🇺 LTE Белые списки9'
-  - 🇳🇱 NL | — | 1023 | @ByeWhiteLists2
-  - 🇳🇱
   - 'Автовыбор #43'
   - '🌀 CYBERPORTAL | White List #213'
   - '🌀 CYBERPORTAL | White List #62'
   - 🇪🇺 Белые списки  happcluchi vpn
-  - '🇪🇺📡Антиглушилка • EU №1
-
-    vless://b3a11068-1a7e-4643-85de-7c82cce46943@ee-2e06d85dc0.shamanapp.online:34451/?type=xhttp&host=ee-2e06d85dc0.shamanapp.online&path=/ShamanXHTTP2026&mode=stream-up&security=tls&sni=ee-2e06d85dc0.shamanapp.online&alpn=h2,http/1.1&fp=chrome#🇪🇺📡Антиглушилка
-    • EU №2
-
-    vless://2c634977-584e-4e1f-b501-1b70c77a6743@dismissaltree.net:2053/?type=xhttp&host=&path=/api/v1/upload&mode=auto&security=tls&sni=dismissaltree.net&alpn=h2,http/1.1&fp=chrome#🇪🇺📡Антиглушилка
-    • EU №3
-
-    vless://2c634977-584e-4e1f-b501-1b70c77a6743@185.141.227.180:2053/?type=xhttp&host=&path=/api/v1/upload&mode=auto&extra=%257B%250A%2520%2520%2522downloadSettings%2522%2520:%2520null,%250A%2520%2520%2522extra%2522%2520:%2520null,%250A%2520%2520%2522headers%2522%2520:%2520null,%250A%2520%2520%2522host%2522%2520:%2520%2522%2522,%250A%2520%2520%2522mode%2522%2520:%2520%2522%2522,%250A%2520%2520%2522noGRPCHeader%2522%2520:%2520false,%250A%2520%2520%2522noSSEHeader%2522%2520:%2520false,%250A%2520%2520%2522path%2522%2520:%2520%2522%2522,%250A%2520%2520%2522scMaxBufferedPosts%2522%2520:%25200,%250A%2520%2520%2522scMaxEachPostBytes%2522%2520:%2520%25220%2522,%250A%2520%2520%2522scMinPostsIntervalMs%2522%2520:%2520%25220%2522,%250A%2520%2520%2522scStreamUpServerSecs%2522%2520:%2520%25220%2522,%250A%2520%2520%2522seqKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522seqPlacement%2522%2520:%2520%2522%2522,%250A%2520%2520%2522serverMaxHeaderBytes%2522%2520:%25200,%250A%2520%2520%2522sessionIDKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522sessionIDLength%2522%2520:%2520%25220%2522,%250A%2520%2520%2522sessionIDPlacement%2522%2520:%2520%2522%2522,%250A%2520%2520%2522sessionIDTable%2522%2520:%2520%2522%2522,%250A%2520%2520%2522uplinkChunkSize%2522%2520:%2520%25220%2522,%250A%2520%2520%2522uplinkDataKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522uplinkDataPlacement%2522%2520:%2520%2522%2522,%250A%2520%2520%2522uplinkHTTPMethod%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xmux%2522%2520:%2520%257B%250A%2520%2520%2520%2520%2522cMaxReuseTimes%2522%2520:%2520%252264-128%2522,%250A%2520%2520%2520%2520%2522hKeepAlivePeriod%2522%2520:%25200,%250A%2520%2520%2520%2520%2522hMaxRequestTimes%2522%2520:%2520%25220%2522,%250A%2520%2520%2520%2520%2522hMaxReusableSecs%2522%2520:%2520%25220%2522,%250A%2520%2520%2520%2520%2522maxConcurrency%2522%2520:%2520%252216-32%2522,%250A%2520%2520%2520%2520%2522maxConnections%2522%2520:%2520%25220%2522%250A%2520%2520%257D,%250A%2520%2520%2522xPaddingBytes%2522%2520:%2520%2522100-1000%2522,%250A%2520%2520%2522xPaddingHeader%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xPaddingKey%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xPaddingMethod%2522%2520:%2520%2522%2522,%250A%2520%2520%2522xPaddingObfsMode%2522%2520:%2520false,%250A%2520%2520%2522xPaddingPlacement%2522%2520:%2520%2522%2522%250A%257D&security=tls&sni=dismissaltree.net&fp=firefox#🇪🇺📡Антиглушилка
-    • EU №4
-
-    vless://f8d52ece-fad4-478d-875d-df6eed3befa7@cz.pythonmakemigreat.wiki:61374/?type=xhttp&host=cz.pythonmakemigreat.wiki&path=/&mode=packet-up&extra=%257B%250A%2520%2520%2522scMaxBufferedPosts%2522%2520:%252010,%250A%2520%2520%2522scMaxEachPostBytes%2522%2520:%2520%2522500000-1000000%2522,%250A%2520%2520%2522scMinPostsIntervalMs%2522%2520:%2520%252220-40%2522,%250A%2520%2520%2522xmux%2522%2520:%2520%257B%250A%2520%2520%2520%2520%2522maxConnections%2522%2520:%25203%250A%2520%2520%257D,%250A%2520%2520%2522xPaddingBytes%2522%2520:%2520%2522100-500%2522%250A%257D&security=reality&fp=chrome&sni=cz.pythonmakemigreat.wiki&pbk=QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI#🇪🇺📡Антиглушилка
-    • EU №5'
+  - '🌀 CYBERPORTAL | White Keys #231'
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #381'
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #157'
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #129'
@@ -11049,12 +8474,10 @@ proxy-groups:
     🚀 Эщкерия [🏴BL/SNI] | 🥭🔥Белые
   - 'Автовыбор #44'
   - '🌀 CYBERPORTAL | White List #406'
-  - 'Телефон / Роутер [owpn.org] #25'
   - 🇷🇺 Russia | БЕЛЫЙ IP | @RaViraNet (3)`
   - '🌀 CYBERPORTAL | White List #29'
-  - 'Телефон / Роутер [owpn.org] #26'
+  - 'Телефон / Роутер [owpn.org] #23'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #2'
-  - '[OpenRay] 🇩🇪DE-30'
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #240'
   - '🇷🇺🕊♥️ Россия [Обход БС] #17'
   - '🇹🇷🕊♥️ Турция [Обход БС] #18'
@@ -11065,13 +8488,12 @@ proxy-groups:
   - '🇳🇱 LTE #2'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #37'
   - '🇮🇹 Gh0st_WhiteList #83'
-  - '🇩🇪 Gh0st_WhiteList #249'
   - '🌀 CYBERPORTAL | White List #523'
-  - 'Телефон / Роутер [owpn.org] #27'
+  - 'Телефон / Роутер [owpn.org] #24'
+  - '🇬🇧 Gh0st_WhiteList #63'
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #385'
   - '🌀 CYBERPORTAL | White List #418'
   - '🇫🇮 Gh0st_WhiteList #198'
-  - '656. 🇫🇮 VLESS | SNI: 5febc5g.fi16.h1clayd.click | TG: @wlrustg'
   - 'Автовыбор #46'
   - 'Автовыбор #47'
   - '🌀 CYBERPORTAL | White List #436'
@@ -11083,7 +8505,7 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #416'
   - ⚡️ Авто+8
   - '🇬🇷 Gh0st_WhiteList #147'
-  - 'Телефон / Роутер [owpn.org] #28'
+  - 'Телефон / Роутер [owpn.org] #25'
   - 'Автовыбор #48'
   - 'Автовыбор #49'
   - '🇳🇱 Gh0st_WhiteList #54'
@@ -11091,33 +8513,26 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #4'
   - '🌀 CYBERPORTAL | White List #450'
   - '🌀 CYBERPORTAL | White List #486'
-  - 🇷🇺 RU | CIDR | 632 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #521'
   - '🌀 CYBERPORTAL | White List #3'
   - '🇱🇹 Литва OT@Hy2UDP (WIFI/LTE) #57'
   - '🌀 CYBERPORTAL | White List #429'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #94'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 15 | @bobrvpn0
+  - 'Телефон / Роутер [owpn.org] #26'
+  - 'Телефон / Роутер [owpn.org] #27'
+  - 'Телефон / Роутер [owpn.org] #28'
   - 'Телефон / Роутер [owpn.org] #29'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 16 | @bobrvpn0
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 17 | @bobrvpn0
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 18 | @bobrvpn0
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 19 | @bobrvpn0
   - 'Телефон / Роутер [owpn.org] #30'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 20 | @bobrvpn0
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #117'
   - '🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #127'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #43'
-  - 🇷🇺 RU | CIDR | 768 | @ByeWhiteLists2
-  - 🇷🇺 RU | CIDR | 596 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #405'
   - '🌀 CYBERPORTAL | White Keys #40'
   - '🇲🇩 Молдова OT@Hy2UDP (WIFI/LTE) #355'
   - '🇲🇩 Молдова OT@Hy2UDP (WIFI/LTE) #389'
   - '🇲🇩 Молдова OT@Hy2UDP (WIFI/LTE) #296'
   - '🌀 CYBERPORTAL | White Keys #320'
-  - 'Телефон / Роутер [owpn.org] #31'
-  - '🇧🇾 Беларусь | 🔗 Каскад [#РКП] #6'
+  - 🇧🇾 Беларусь | 🔗 Каскад [#РКП]
   - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #49'
   - '🇮🇷 Gh0st_WhiteList #174'
   - 🇸🇪 LTE 5 | Meg
@@ -11126,8 +8541,6 @@ proxy-groups:
   - '🇩🇪Обходы #3'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #57'
   - '🌀 CYBERPORTAL | White List #464'
-  - 🇧🇹 🏳 BobrVPN | AntiWhiteList 54 | @bobrvpn0
-  - 🇧🇹 🏳 BobrVPN | AntiWhiteList 55 | @bobrvpn0
   - '🌀 CYBERPORTAL | White List #535'
   - '🇪🇺 Автовыборvless://3d3cc1bc-3d6f-03f5-a531-19a1797952bc@5.129.242.110:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=rutube.ru&fp=firefox&security=reality&pbk=Bz5EbrFHttwOTc1VWhPBAOeoIMDMMZcM02PTZs5AgD4&sid=1aa948f94316b975#🇬🇧
     Великобританияvless://068c73f5-c2fc-4579-96be-6e37cfcf58ed@us-03.avroraservice.online:8443/?type=xhttp&encryption=none&flow=&path=/xhttp&mode=stream-one&sni=cdn-us.cahmes.space&fp=chrome&security=reality&pbk=KZejN2d1cwCrITHNxFYQVZ4rpMTZzHgJd9p30MZm_3k&sid=6bd33a75ebc0f26e#🇺🇸
@@ -11137,7 +8550,7 @@ proxy-groups:
     Франция #1vless://a47f8110-de83-4c37-b6a7-16010535aef4@153.80.241.133:443/?type=tcp&encryption=none&flow=xtls-rprx-vision&sni=account.yump.online&fp=firefox&security=reality&pbk=8yGIBwwM8YCfGThjfEExF2l_SeJ2tSWRMo7wnnAlm1Y&sid=7120bf1ca9d33e91#🇫🇮
     Финляндия #1'
   - 'Автовыбор #50'
-  - 🇮🇷 Иран БС
+  - 'Телефон / Роутер [owpn.org] #31'
   - '🌀 CYBERPORTAL | White List #483'
   - 'Автовыбор #51'
   - 'Автовыбор #52'
@@ -11147,8 +8560,6 @@ proxy-groups:
   - '🇵🇱Обходы #3'
   - '🇵🇱Обходы #4'
   - '🇩🇪🕊♥️ Германия [Обход БС | Все операторы] #31'
-  - '569. VLESS | SNI: tz5gtjwlki.j.cloudfront.hls.hlsnode.net | TG: @wlrustg'
-  - 🇷🇺 RU | CIDR | 692 | @ByeWhiteLists2
   - '🌀 CYBERPORTAL | White List #505'
   - '🌀 CYBERPORTAL | White List #433'
   - '🌀 CYBERPORTAL | White List #537'
@@ -11163,418 +8574,26 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #224'
   - '🌀 CYBERPORTAL | White Keys #211'
   - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇺🇸 США #69'
-  - 🇪🇪 EE | — | 218 | @ByeWhiteLists2
   - 'Телефон / Роутер [owpn.org] #32'
-  - 🇩🇪 DE | — | 11 | @ByeWhiteLists2
-  - 🇷🇺 RU | — | 453 | @ByeWhiteLists2
+  - '🌀 CYBERPORTAL | White List #502'
   - 'Автовыбор #53'
   - '🇫🇮 Финляндия OT@Hy2UDP (WIFI/LTE) #188'
-  - '🇩🇪🕊♥️ Германия [Обход БС | Все операторы] #34'
-  - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #78'
-  - 🇳🇱 🏳 BobrVPN | AntiWhiteList 28 | @bobrvpn0
-  - '🌀 CYBERPORTAL | White List #438'
-  - '🇳🇱 Gh0st_WhiteList #236'
   - 'Телефон / Роутер [owpn.org] #33'
-  - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #309'
-  - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #27'
-  - '🌀 CYBERPORTAL | White List #533'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇨🇦 کانادا
-
-    ®️GLOBALTELEHOST C
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇨🇦 کانادا
-
-    ®️GLOBALTELEHOST C
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇮🇹 ایتالیا
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇮🇹 ایتالیا
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇮🇹 ایتالیا
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇸🇬 سنگاپور
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇨🇦 کانادا
-
-    ®️GLOBALTELEHOST C
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #5'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #6'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #7'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #8'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇩🇪 آلمان
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇳🇱 هلند
-
-    ®️DigitalOcean, LL
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇩🇪 آلمان
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #2'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇩🇪 آلمان
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #3'
-  - '🇪🇺🕊♥️ Европа [Обход БС | Реклама в YouTube] #2'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #9'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #10'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #11'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #12'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #13'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #14'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #15'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #16'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #17'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇲🇽 Mexico
-
-    ®️LIGHT NODE LIMIT
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #18'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #19'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #20'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #21'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #22'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #23'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇫🇷 فرانسه
-
-    ®️OVH SAS
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇬🇧 انگلیس
-
-    ®️OVH SAS
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇸🇪 سوئد
-
-    ®️Datacamp Limited
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #24'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #25'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #26'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #27'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #28'
-  - '👉🆔@Goodbaye_filtering
-
-    📡🇺🇸 آمریکا
-
-    ®️GTHost
-
-    🅿️ping:128ms
-
-    ⚡VIP Strict | VMESS IPv4 #29'
-  - '🇩🇪🕊♥️ Германия [Обход БС | Реклама в YouTube] #3'
+  - '🌀 CYBERPORTAL | White Keys #96'
+  - '🇧🇬 Болгария OT@Hy2UDP (WIFI/LTE) #55'
+  - '🇧🇬 Болгария OT@Hy2UDP (WIFI/LTE) #244'
+  - '🌀 CYBERPORTAL | White List #441'
+  - 'Телефон / Роутер [owpn.org] #34'
+  - '🇷🇺 LTE | Все операторы 3", "network": "tcp", "security": "reality", "sni": "bizorg.su",
+    "fp": "edge", "pbk": "1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs", "sid": "428ef87fd47a3a32",
+    "spx": "/", "flow": "xtls-rprx-vision", "encryption": "none"}, {"type": "vless",
+    "name": "6'
+  - '🇷🇺 Россия OT@Hy2UDP (WIFI/LTE) #332'
+  - '🌀 CYBERPORTAL | VLESS Reality Mobile | 🇱🇹 Литва #11'
+  - 🇪🇺 AUTO — Обход БС 64
+  - 'Телефон / Роутер [owpn.org] #35'
+  - '5553. 🇹🇷 VLESS | SNI: delivery.mp.microsoft.com | TG: @wlrustg'
+  - '🇨🇦 Канада OT@Hy2UDP (WIFI/LTE) #364'
+  - 🇪🇺 AUTO — Обход БС 47
 rules:
 - MATCH,🚀 Proxy
