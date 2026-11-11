@@ -62,8 +62,7 @@ ISSUE_URLS = set()
 
 BLACKLIST_DOMAINS = [
     'youtube.com', 'youtu.be', 'instagram.com', 'twitter.com', 'x.com',
-    'vk.com', 'ok.ru', 'pikabu.ru', 'habr.com', 'dzen.ru', 'yandex.ru',
-    'mail.ru', 'rambler.ru', 'meduza.io', 'kommersant.ru', 'cnews.ru',
+    'vk.com', 'ok.ru', 'pikabu.ru', 'habr.com', 'dzen.ru', 'mail.ru', 'rambler.ru', 'meduza.io', 'kommersant.ru', 'cnews.ru',
     'iz.ru', 'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru', 'max.ru',
     'ria.ru', 'lenta.ru', 'rbc.ru', 'vedomosti.ru', 'tass.ru'
@@ -78,7 +77,7 @@ JUNK_DOMAINS = [
 ]
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
-WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс"
+WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс касаад"
 
 # В proxy.txt / proxy.yaml (WL) попадают ТОЛЬКО эти протоколы:
 WL_PROTOCOLS = {'vless'}
@@ -86,8 +85,8 @@ WL_PROTOCOLS = {'vless'}
 MAX_EMBED_SUBS = 200
 
 ENABLE_VLESS = True
-ENABLE_VMESS = True
-ENABLE_SS = True
+ENABLE_VMESS = False
+ENABLE_SS = False
 ENABLE_TROJAN = False
 ENABLE_HYSTERIA = False
 ENABLE_HYSTERIA2 = True
