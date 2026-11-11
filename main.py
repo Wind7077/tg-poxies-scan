@@ -62,7 +62,8 @@ ISSUE_URLS = set()
 
 BLACKLIST_DOMAINS = [
     'youtube.com', 'youtu.be', 'instagram.com', 'twitter.com', 'x.com',
-    'vk.com', 'ok.ru', 'pikabu.ru', 'habr.com', 'dzen.ru', 'mail.ru', 'rambler.ru', 'meduza.io', 'kommersant.ru', 'cnews.ru',
+    'vk.com', 'ok.ru', 'pikabu.ru', 'habr.com', 'dzen.ru', 'rambler.ru',
+    'mail.ru', 'rambler.ru', 'meduza.io', 'kommersant.ru', 'cnews.ru',
     'iz.ru', 'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru', 'max.ru',
     'ria.ru', 'lenta.ru', 'rbc.ru', 'vedomosti.ru', 'tass.ru'
@@ -77,7 +78,7 @@ JUNK_DOMAINS = [
 ]
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
-WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс касаад"
+WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс каскад"
 
 # В proxy.txt / proxy.yaml (WL) попадают ТОЛЬКО эти протоколы:
 WL_PROTOCOLS = {'vless'}
@@ -327,8 +328,7 @@ def config_key(uri):
 
 def matches_roots(p):
     """Совпадение по НАЧАЛУ слова, а не по подстроке.
-    Старый вариант: 'lte' ловился внутри 'filter', 'бс' — внутри 'обслуж...',
-    '4g'/'5g' — внутри hex-поддоменов -> в WL попадал мусор."""
+    'Белые/белый' -> 'бел', 'Телефон' -> 'теле', 'Автовыбор' -> 'авто'."""
     searchable = ' '.join([
         str(p.get('name', '')), str(p.get('server', '')),
         str(p.get('sni', '')), str(p.get('server-name', '')),
@@ -1038,9 +1038,22 @@ def write_issue_file():
 
 # ---------------------------------------------------------------- pipeline
 
+# разделитель склеенных ссылок: "…#Имяvless://next-uuid@…"
+# в реальных ссылках пути percent-encoded (sstp%3A%2F%2F), поэтому
+# литеральное "scheme://" внутри query не встречается — ложных разрезов нет
+_PROXY_SPLIT_RE = re.compile(r'(?=(?:' + _SCHEMES_ALT + r')://)', re.IGNORECASE)
+
+def split_glued_proxies(uri):
+    parts = [p for p in _PROXY_SPLIT_RE.split(uri) if p]
+    return parts if len(parts) > 1 else [uri]
+
 async def build_list(items, cutoff, label, ping_sem, ping_cache, whitelist=False):
     """Общий конвейер ALL и WL; пинг-кэш общий -> каждый endpoint проверяется 1 раз."""
-    uris = dedupe_by_config([u for u, dt in items if dt >= cutoff])
+    fresh = []
+    for u, dt in items:
+        if dt >= cutoff:
+            fresh.extend(split_glued_proxies(u))
+    uris = dedupe_by_config(fresh)
     happ, parsed = [], {}
     parse_errors = 0
     for u in uris:
