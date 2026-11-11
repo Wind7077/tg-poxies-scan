@@ -1,22 +1,28 @@
 import os
 import re
-import html
 import base64
 import asyncio
-import yaml
 import json
 import time
 from datetime import datetime, timezone, timedelta
 from urllib.parse import parse_qs, parse_qsl, quote, unquote, urlparse, urlsplit
-from bs4 import BeautifulSoup
+
 import aiohttp
+import yaml
+from bs4 import BeautifulSoup
 
 try:
     from telethon import TelegramClient
-    from telethon.tl.types import MessageEntityUrl, MessageEntityTextUrl
+    from telethon.tl.types import MessageEntityTextUrl
     TELETHON_OK = True
 except ImportError:
     TELETHON_OK = False
+
+try:
+    import lxml  # noqa: F401
+    HTML_PARSER = 'lxml'
+except ImportError:
+    HTML_PARSER = 'html.parser'
 
 SOURCES_FILE = 'sources.txt'
 OUT_TXT = 'proxy.txt'
@@ -27,13 +33,15 @@ ISSUE_FILE = 'issue.txt'
 
 MAX_DAYS_WL = 50
 MAX_DAYS_ALL = 10
-LIMIT_WL = 1000
-LIMIT_ALL = 300
+LIMIT_WL = 1000          # сообщений на канал через Telethon
+TME_MAX_PAGES = 10       # страниц истории t.me/s/ на канал (~20 постов каждая)
+TME_SUB_PAGES = 2        # страниц для каналов, найденных внутри подписок
 
 TIMEOUT = aiohttp.ClientTimeout(total=12, connect=7)
+TIMEOUT_LONG = aiohttp.ClientTimeout(total=30, connect=10)
+PING_TIMEOUT = 2.0
 MAX_CONCURRENT_HTTP = 50
 MAX_CONCURRENT_PING = 500
-
 MAX_PER_ENDPOINT = 5
 
 API_ID = int(os.getenv('TELEGRAM_API_ID', '0'))
@@ -42,17 +50,14 @@ SESSION_B64 = os.getenv('TELEGRAM_SESSION', '')
 
 PROXY_SCHEMES = ['vless', 'vmess', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic', 'happ']
 _SCHEMES_ALT = '|'.join(PROXY_SCHEMES)
-_URL_CHARS = r'[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%{}"\\ ]'
-PROXY_REGEX = re.compile(
-    r'(?:' + _SCHEMES_ALT + r')://' + _URL_CHARS + r'+(?:#[^\s]*)?',
-    re.IGNORECASE)
+# '#' и пробел исключены из тела: иначе regex съедал '#' и терял имя целиком
+_URL_BODY = r'[a-zA-Z0-9\-._~:/?\[\]@!$&\'()*+,;=%{}]'
+PROXY_REGEX = re.compile(r'(?:' + _SCHEMES_ALT + r')://' + _URL_BODY + r'+(?:#[^\s"<>]*)?', re.IGNORECASE)
 URL_REGEX = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.IGNORECASE)
 
-ISSUE_SCHEMES = ['csqtt', 'qwdtt', 'olcrtc', 'openflux', 'qwdtt']
+ISSUE_SCHEMES = ['csqtt', 'qwdtt', 'olcrtc', 'openflux']
 _ISSUE_ALT = '|'.join(ISSUE_SCHEMES)
-ISSUE_REGEX = re.compile(
-    r'(?:' + _ISSUE_ALT + r')://' + _URL_CHARS + r'+(?:#[^\s]*)?',
-    re.IGNORECASE)
+ISSUE_REGEX = re.compile(r'(?:' + _ISSUE_ALT + r')://' + _URL_BODY + r'+(?:#[^\s"<>]*)?', re.IGNORECASE)
 ISSUE_URLS = set()
 
 BLACKLIST_DOMAINS = [
@@ -61,12 +66,10 @@ BLACKLIST_DOMAINS = [
     'mail.ru', 'rambler.ru', 'meduza.io', 'kommersant.ru', 'cnews.ru',
     'iz.ru', 'techradar.com', 'openai.com', 'sozd.duma.gov.ru',
     'playgta5.com', 'mrbeast.nocp.uz', 'cloud.mail.ru', 'max.ru',
-    'ria.ru', 'lenta.ru', 'rbc.ru', 'vedomosti.ru',
-    'tass.ru'
+    'ria.ru', 'lenta.ru', 'rbc.ru', 'vedomosti.ru', 'tass.ru'
 ]
 
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
-
 WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс"
 
 ENABLE_VLESS = True
@@ -98,35 +101,58 @@ DEDUP_SCHEMES = {'vless', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic'}
 DEDUP_IGNORE_USER = False
 
 _AMP_RE = re.compile(r'&(?:amp|#0*38|#x0*26);', re.I)
+PROBLEM_DOMAINS = ['kfwl.lol', 'pozor.bond', 'atlanta-subs.ru', 'astra-sub.com', 'taurus-sync.com', 'net4.su']
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', '1') == '1'
 
 def debug_log(msg):
     if DEBUG:
-        print(f"[DEBUG] {msg}")
+        print(f"[DEBUG] {msg}", flush=True)
+
+def now_utc():
+    return datetime.now(timezone.utc)
 
 def decode_base64(s):
     s = s.strip().replace('-', '+').replace('_', '/')
     padding = len(s) % 4
-    if padding: s += '=' * (4 - padding)
-    try: return base64.b64decode(s).decode('utf-8', errors='ignore')
-    except: return ""
+    if padding:
+        s += '=' * (4 - padding)
+    try:
+        return base64.b64decode(s).decode('utf-8', errors='ignore')
+    except Exception:
+        return ""
+
+# ---------------------------------------------------------------- URL helpers
 
 def is_valid_url(url):
     try:
         r = urlparse(url)
-        if not all([r.scheme, r.netloc]): return False
-        if r.scheme == 'tg': return False
-        if any(d in r.netloc for d in BLACKLIST_DOMAINS): return False
+        if not all([r.scheme, r.netloc]):
+            return False
+        if r.scheme == 'tg':
+            return False
+        host = (r.hostname or '').lower()
+        # точное совпадение домена/поддомена, а не подстроки
+        # (старый вариант отсеивал netflix.com из-за 'x.com')
+        for d in BLACKLIST_DOMAINS:
+            if host == d or host.endswith('.' + d):
+                return False
         return True
-    except: return False
+    except Exception:
+        return False
 
 def is_useless_tme(url):
-    if not ('t.me' in url or 'telegram.me' in url): return False
-    if '/proxy?' in url or '/webproxy?' in url: return True
-    if '/+' in url.split('//', 1)[-1][:10]: return True
+    if not ('t.me' in url or 'telegram.me' in url):
+        return False
+    if '/proxy?' in url or '/webproxy?' in url:
+        return True
+    if '/joinchat/' in url:
+        return True
+    if '/+' in url.split('//', 1)[-1][:10]:
+        return True
     path = urlparse(url).path.strip('/')
-    if '/' not in path and path.lower().endswith('bot'): return True
+    if '/' not in path and path.lower().endswith('bot'):
+        return True
     return False
 
 def split_glued(url):
@@ -134,17 +160,13 @@ def split_glued(url):
     rest = url[base:]
     for proto in ['https://', 'http://']:
         idx = rest.find(proto)
-        if idx > 0:
-            char_before = rest[idx-1]
-            if char_before != '/':
-                return url[:base + idx]
+        if idx > 0 and rest[idx - 1] != '/':
+            return url[:base + idx]
     if url.count('@') >= 2:
-        head = rest
-        if '@' in head:
-            at_idx = head.index('@')
-            part_before_at = head[:at_idx]
-            if '/' not in part_before_at and ':' not in part_before_at:
-                return url[:base + at_idx]
+        at_idx = rest.index('@')
+        part_before_at = rest[:at_idx]
+        if '/' not in part_before_at and ':' not in part_before_at:
+            return url[:base + at_idx]
     return url
 
 def remove_sticky_words(url):
@@ -154,6 +176,7 @@ def remove_sticky_words(url):
     return url.rstrip('/')
 
 def clean_url(url):
+    url = url.strip()
     while _AMP_RE.search(url):
         url = _AMP_RE.sub('&', url)
     head, sep, frag = url.partition('#')
@@ -161,72 +184,51 @@ def clean_url(url):
         if ord(c) > 127:
             head, sep, frag = head[:i], '', ''
             break
-    frag = quote(frag, safe="-._~:/?#[]@!$&'()*+,;=%")
+    frag = quote(frag.strip(), safe="-._~:/?#[]@!$&'()*+,;=%")
     if not frag:
         sep = ''
     url = head + sep + frag
-    while url.endswith(')') and url.count(')') > url.count('('): url = url[:-1]
-    url = split_glued(url.rstrip('.,;:!?'))
-    url = remove_sticky_words(url)
+    while url.endswith(')') and url.count(')') > url.count('('):
+        url = url[:-1]
+    url = url.rstrip('.,;:!?')
+    # склейки чиним только у http(s): иначе резались легитимные
+    # vless://...path=...https://... (баг старой версии)
+    if url.startswith(('http://', 'https://')):
+        url = remove_sticky_words(split_glued(url))
     return url
 
 def is_valid_issue_url(url):
-    """Проверяет что issue-ссылка полная и валидная"""
-    if not url or '://' not in url:
+    if not url or '://' not in url or len(url) < 40:
         return False
-    
-    # Минимальная длина (отбрасываем "обрезки")
-    if len(url) < 40:
-        return False
-    
     scheme, rest = url.split('://', 1)
-    
-    # Отбрасываем пустые/мусорные
     if not rest or rest.strip() in (',', ' ', '', '@'):
         return False
-    
-    # Отбрасываем без значимого содержимого
     if rest.startswith(('import', 'jitsi?datachannel@')):
         return False
-    
-    # Если это config?name= — должен быть peer или password
     if scheme == 'qwdtt' and 'config?' in rest:
         if 'peer=' not in rest and 'pass=' not in rest:
             return False
-    
     return True
 
 def split_glued_issues(url):
-    """Разделяет склеенные issue-ссылки: ...textmrtt://... → [..., mrtt://...]"""
-    # Ищем места где scheme:// приклеен к предыдущему тексту
-    results = []
-    pattern = re.compile(r'(?<!^)(?<!\s)(' + '|'.join(ISSUE_SCHEMES) + r')://', re.I)
-    
+    """Старый цикл терял все склеенные ссылки кроме первой."""
+    pattern = re.compile(r'(?<!^)(?<!\s)(' + _ISSUE_ALT + r')://', re.I)
     parts = pattern.split(url)
-    
     if len(parts) == 1:
         return [url]
-    
-    # Собираем обратно по схеме
-    i = 0
-    while i < len(parts):
-        if i + 2 < len(parts) and parts[i+1].lower() in ISSUE_SCHEMES:
-            # Нашли схему - берём prefix + scheme + rest до следующей схемы
-            full = parts[i+1].lower() + '://' + parts[i+2]
-            results.append(full)
-            i += 3
-        else:
-            i += 1
-    
-    return results if results else [url]
+    return [parts[i].lower() + '://' + parts[i + 1] for i in range(1, len(parts) - 1, 2)]
 
 def collect_url(raw, urls):
     u = clean_url(raw)
-    if not u: return
+    if not u:
+        return
     if 't.me' in u or 'telegram.me' in u:
-        if not is_useless_tme(u): urls.append(u)
+        if not is_useless_tme(u):
+            urls.append(u)
     elif is_valid_url(u):
         urls.append(u)
+
+# ---------------------------------------------------------------- dedup
 
 def make_names_unique(proxies):
     used = {}
@@ -235,10 +237,9 @@ def make_names_unique(proxies):
         name = (p.get('name') or '').strip()
         if not name:
             name = f"{p.get('type', 'proxy')}-{p.get('server', 'unknown')}:{p.get('port', 0)}"
-        base_name = name
         if name in used:
             used[name] += 1
-            name = f"{base_name} #{used[name]}"
+            name = f"{name} #{used[name]}"
             renamed += 1
         else:
             used[name] = 1
@@ -246,22 +247,6 @@ def make_names_unique(proxies):
     if renamed:
         debug_log(f"🏷️ Переименовано дубликатов имён: {renamed}")
     return proxies
-
-def deduplicate_proxies(proxies):
-    seen = set()
-    result = []
-    dupes = 0
-    for proxy in proxies:
-        if not proxy:
-            continue
-        if proxy in seen:
-            dupes += 1
-            continue
-        seen.add(proxy)
-        result.append(proxy)
-    if dupes:
-        debug_log(f"🔁 Дубликатов удалено: {dupes}")
-    return result
 
 def _uri_parts(uri):
     try:
@@ -279,24 +264,37 @@ def config_key(uri):
         return uri
     scheme, user, pwd, host, port, path, q, _ = p
     q = {k: v for k, v in q.items() if v and k not in IGNORED_PARAMS}
-    if q.get('type') == 'raw': q['type'] = 'tcp'
+    if q.get('type') == 'raw':
+        q['type'] = 'tcp'
     q.setdefault('type', 'tcp')
-    if q.get('mode') == 'auto': del q['mode']
+    if q.get('mode') == 'auto':
+        del q['mode']
     if q.get('security') == 'tls':
         eff = q.get('sni') or q.get('host')
         if eff:
             q['sni'] = eff
-            if q.get('host') == eff: q.pop('host')
+            if q.get('host') == eff:
+                q.pop('host')
     if q['type'] == 'tcp':
-        q.pop('path', None); q.pop('host', None)
+        q.pop('path', None)
+        q.pop('host', None)
     if DEDUP_IGNORE_USER and scheme == 'vless':
         user = ''
-        if q.get('security') == 'reality': q.pop('sid', None)
+        if q.get('security') == 'reality':
+            q.pop('sid', None)
     return (scheme, user, pwd, host, port, path, tuple(sorted(q.items())))
+
+def matches_roots(p):
+    searchable = ' '.join([
+        str(p.get('name', '')), str(p.get('server', '')),
+        str(p.get('sni', '')), str(p.get('server-name', '')),
+    ]).lower()
+    return any(root in searchable for root in _KEYWORD_ROOTS)
 
 def _rank(uri):
     p = _uri_parts(uri)
-    if not p: return (False, 0)
+    if not p:
+        return (False, 0)
     return (matches_roots({'name': p[7], 'server': p[3], 'sni': p[6].get('sni', '')}), len(p[7]))
 
 def dedupe_by_config(uris):
@@ -315,14 +313,7 @@ def dedupe_by_config(uris):
         result = capped
     return result
 
-def matches_roots(p):
-    searchable = ' '.join([
-        str(p.get('name', '')),
-        str(p.get('server', '')),
-        str(p.get('sni', '')),
-        str(p.get('server-name', '')),
-    ]).lower()
-    return any(root in searchable for root in _KEYWORD_ROOTS)
+# ---------------------------------------------------------------- validate
 
 def get_enabled_protocols():
     protocols = set()
@@ -335,46 +326,17 @@ def get_enabled_protocols():
     if ENABLE_TUIC: protocols.add('tuic')
     return protocols
 
-def filter_by_protocol(proxies):
-    enabled = get_enabled_protocols()
-    stats = {'total_in': len(proxies), 'by_protocol': {}, 'dropped': 0, 'total_out': 0}
-    result = []
-    for p in proxies:
-        ptype = p.get('type', '')
-        if ptype not in enabled:
-            stats['by_protocol'][ptype] = stats['by_protocol'].get(ptype, 0) + 1
-            stats['dropped'] += 1
-            continue
-        result.append(p)
-    stats['total_out'] = len(result)
-    return result, stats
-
-def validate_all(proxies):
-    valid = []
-    invalid = 0
-    for idx, p in enumerate(proxies):
-        ok, reason = validate_proxy(p)
-        if ok:
-            valid.append(p)
-        else:
-            invalid += 1
-            if invalid <= 10:
-                debug_log(f"🚫 [{idx}] Отброшен: {p.get('name','?')[:35]} | {reason}")
-    if invalid:
-        debug_log(f"🚫 Всего отброшено невалидных: {invalid}")
-    return valid
-
 def sanitize_proxy(p):
     net = p.get('network')
     if net not in VALID_NETWORKS:
         p['network'] = 'tcp'
         net = 'tcp'
-    if net != 'ws' and 'ws-opts' in p: del p['ws-opts']
-    if net != 'grpc' and 'grpc-opts' in p: del p['grpc-opts']
-    if net != 'h2' and 'h2-opts' in p: del p['h2-opts']
-    if net != 'http' and 'http-opts' in p: del p['http-opts']
-    if net != 'xhttp' and 'xhttp-opts' in p: del p['xhttp-opts']
-    if 'ws-opts' in p and isinstance(p['ws-opts'], dict):
+    for opt_net, opt_key in (('ws', 'ws-opts'), ('grpc', 'grpc-opts'), ('h2', 'h2-opts'),
+                             ('http', 'http-opts'), ('xhttp', 'xhttp-opts'),
+                             ('httpupgrade', 'http-upgrade-opts')):
+        if net != opt_net and opt_key in p:
+            del p[opt_key]
+    if isinstance(p.get('ws-opts'), dict):
         path = p['ws-opts'].get('path', '/')
         if not isinstance(path, str) or not path.startswith('/'):
             p['ws-opts']['path'] = '/'
@@ -387,24 +349,20 @@ def sanitize_proxy(p):
     if flow and (flow not in VALID_FLOWS or p.get('type') != 'vless'):
         del p['flow']
     if p.get('tls'):
-        sn = p.get('server-name') or p.get('servername')
+        sn = p.get('server-name') or p.get('servername') or p.get('sni')
         if not sn:
-            p['server-name'] = p.get('server', '')
+            sn = p.get('server', '')
+        p['server-name'] = sn
         p.pop('servername', None)
     uuid = p.get('uuid', '')
     if isinstance(uuid, str):
-        cleaned = re.sub(r'[^0-9a-fA-F-]', '', uuid)
-        p['uuid'] = cleaned
+        p['uuid'] = re.sub(r'[^0-9a-fA-F-]', '', uuid)
     return p
 
 def validate_proxy(p):
     if not isinstance(p, dict):
         return False, 'not dict'
-    ptype = p.get('type')
-    server = p.get('server')
-    port = p.get('port')
-    name = p.get('name')
-
+    ptype, server, port, name = p.get('type'), p.get('server'), p.get('port'), p.get('name')
     if not name or not isinstance(name, str):
         return False, 'empty name'
     if not server or not isinstance(server, str):
@@ -415,17 +373,15 @@ def validate_proxy(p):
         return False, 'bad char in server'
     if not isinstance(port, int) or not (1 <= port <= 65535):
         return False, 'bad port'
-
     if ptype in ('vless', 'vmess'):
-        uuid = p.get('uuid', '')
-        if not uuid or not UUID_RE.match(uuid):
+        if not UUID_RE.match(p.get('uuid', '') or ''):
             return False, 'bad uuid format'
         if p.get('network') not in VALID_NETWORKS:
             return False, 'bad network'
         if ptype == 'vmess':
             if not isinstance(p.get('alterId'), int) or p.get('alterId') < 0:
                 return False, 'bad alterId'
-            if p.get('cipher') not in ('auto', 'aes-128-gcm', 'chacha20-poly1305', 'none'):
+            if p.get('cipher') not in ('auto', 'aes-128-gcm', 'chacha20-poly1305', 'none', 'zero'):
                 return False, 'bad vmess cipher'
         if ptype == 'vless' and p.get('flow') and not p.get('tls'):
             return False, 'flow without tls'
@@ -436,18 +392,18 @@ def validate_proxy(p):
         if not p.get('password'):
             return False, 'empty password'
         if p.get('cipher') not in VALID_CIPHERS:
-            return False, f"bad cipher"
-    elif ptype in ('hysteria', 'hysteria2'):
+            return False, 'bad cipher'
+    elif ptype == 'hysteria':
+        if not (p.get('auth-str') or p.get('password')):
+            return False, 'empty auth'
+    elif ptype == 'hysteria2':
         if not p.get('password'):
             return False, 'empty password'
     elif ptype == 'tuic':
-        if not p.get('uuid') or not UUID_RE.match(p.get('uuid', '')):
+        if not UUID_RE.match(p.get('uuid', '') or ''):
             return False, 'bad uuid'
-        if not p.get('password'):
-            return False, 'empty password'
     else:
-        return False, f'unknown type'
-
+        return False, 'unknown type'
     if 'reality-opts' in p:
         ro = p['reality-opts']
         if not ro.get('public-key'):
@@ -457,416 +413,494 @@ def validate_proxy(p):
             return False, 'bad short-id'
         if not p.get('server-name'):
             return False, 'reality without sni'
-
     return True, ''
+
+# ---------------------------------------------------------------- URI parser
+
+def _split_hostport(hp):
+    """host:port с поддержкой IPv6 [::1]:443."""
+    hp = hp.split('/', 1)[0].strip()
+    if hp.startswith('['):
+        m = re.match(r'\[([^\]]+)\]:(\d+)$', hp)
+        if not m:
+            return None
+        host, port = m.group(1), int(m.group(2))
+    else:
+        if ':' not in hp:
+            return None
+        host, p_str = hp.rsplit(':', 1)
+        if not host or not p_str.isdigit():
+            return None
+        port = int(p_str)
+    return (host, port) if 1 <= port <= 65535 else None
+
+def _truthy(v):
+    return str(v).lower() in ('1', 'true', 'yes')
+
+def _transport(res, q):
+    """Общие ws/grpc/httpupgrade/xhttp опции для vless/trojan."""
+    nt = res.get('network', 'tcp')
+    path = unquote(q.get('path', [''])[0])
+    host = q.get('host', [''])[0]
+    if nt == 'ws':
+        ws = {'path': path if path.startswith('/') else '/' + (path or '')}
+        if host:
+            ws['headers'] = {'Host': host}
+        ed = q.get('ed', [''])[0]
+        if ed.isdigit() and int(ed) > 0:
+            ws['max-early-data'] = int(ed)
+            ws['early-data-header-name'] = 'Sec-WebSocket-Protocol'
+        res['ws-opts'] = ws
+    elif nt == 'grpc':
+        service = q.get('serviceName', [''])[0]
+        if service:
+            res['grpc-opts'] = {'grpc-service-name': service}
+        if q.get('mode', [''])[0] == 'multi':
+            res.setdefault('grpc-opts', {})['grpc-mode'] = 'multi'
+    elif nt == 'httpupgrade':
+        opts = {'path': path if path.startswith('/') else '/' + (path or '')}
+        if host:
+            opts['headers'] = {'Host': host}
+        res['http-upgrade-opts'] = opts
+    elif nt == 'xhttp':
+        opts = {}
+        if path:
+            opts['path'] = path
+        if host:
+            opts['host'] = host
+        if opts:
+            res['xhttp-opts'] = opts
+
+def parse_uri_for_clash(uri):
+    def s1(q, key, default=''):
+        v = q.get(key)
+        return v[0] if v and v[0] else default
+    try:
+        scheme, rest = uri.split('://', 1)
+        scheme = scheme.lower()
+        if scheme == 'happ':
+            return None
+
+        if scheme in ('vless', 'trojan'):
+            userinfo, rest2 = rest.split('@', 1)
+            hp_params, _, name_part = rest2.partition('#')
+            hp, _, query_str = hp_params.partition('?')
+            parsed_hp = _split_hostport(hp)
+            if not parsed_hp:
+                return None
+            h, p = parsed_hp
+            q = parse_qs(query_str)
+            name = unquote(name_part).strip() or f"{scheme.upper()}-{h}"
+            if scheme == 'vless':
+                nt = s1(q, 'type', 'tcp')
+                if nt == 'raw':
+                    nt = 'tcp'
+                res = {'name': name, 'type': 'vless', 'server': h, 'port': p,
+                       'uuid': unquote(userinfo), 'network': nt, 'udp': True}
+            else:
+                nt = s1(q, 'type', 'tcp')
+                res = {'name': name, 'type': 'trojan', 'server': h, 'port': p,
+                       'password': unquote(userinfo), 'network': nt, 'udp': True, 'tls': True}
+            security = s1(q, 'security', 'tls' if scheme == 'trojan' else '')
+            sni = s1(q, 'sni') or s1(q, 'peer')
+            fp = s1(q, 'fp')
+            if security == 'reality':
+                pbk = s1(q, 'pbk')
+                sid = s1(q, 'sid').strip()
+                if not pbk:
+                    return None
+                res['tls'] = True
+                res['server-name'] = sni or h
+                ro = {'public-key': pbk}
+                if sid:
+                    if not SID_RE.match(sid):
+                        return None
+                    ro['short-id'] = sid
+                res['reality-opts'] = ro
+                if fp:
+                    res['client-fingerprint'] = fp
+                flow = s1(q, 'flow')
+                if flow:
+                    res['flow'] = flow
+            elif security in ('tls', 'xtls'):
+                res['tls'] = True
+                res['server-name'] = sni or h
+                if fp:
+                    res['client-fingerprint'] = fp
+            if _truthy(s1(q, 'insecure')) or _truthy(s1(q, 'allowInsecure')):
+                res['skip-cert-verify'] = True
+            alpn = s1(q, 'alpn')
+            if alpn:
+                res['alpn'] = alpn.split(',')
+            _transport(res, q)
+            return res
+
+        if scheme == 'vmess':
+            d = json.loads(decode_base64(rest.split('#', 1)[0]))
+            if not isinstance(d, dict):
+                return None
+            try:
+                port = int(str(d.get('port', 0)))
+            except ValueError:
+                return None
+            net = d.get('net', 'tcp')
+            if net == 'raw':
+                net = 'tcp'
+            cipher = d.get('scy') or 'auto'
+            if cipher not in ('auto', 'aes-128-gcm', 'chacha20-poly1305', 'none', 'zero'):
+                cipher = 'auto'
+            res = {'name': d.get('ps') or f"VM-{d.get('add', 'unknown')}",
+                   'type': 'vmess', 'server': d.get('add'), 'port': port,
+                   'uuid': d.get('id', ''), 'alterId': int(str(d.get('aid', 0) or 0)),
+                   'cipher': cipher, 'tls': d.get('tls') == 'tls',
+                   'network': net, 'udp': True}
+            if res['tls']:
+                res['server-name'] = d.get('sni') or d.get('host') or res['server']
+            path = d.get('path') or ''
+            host = d.get('host') or ''
+            if net == 'ws':
+                ws = {}
+                if path:
+                    ws['path'] = path if path.startswith('/') else '/' + path
+                if host:
+                    ws['headers'] = {'Host': host}
+                if ws:
+                    res['ws-opts'] = ws
+            elif net in ('h2', 'http') and path:
+                res[f'{net}-opts'] = {'path': [path]}
+            elif net == 'grpc' and path:
+                res['grpc-opts'] = {'grpc-service-name': path}
+            return res
+
+        if scheme == 'ss':
+            body, _, name_part = rest.partition('#')
+            name = unquote(name_part).strip()
+            if '@' in body:
+                # SIP002: ss://[base64(method:password) | method:password]@host:port
+                userinfo, hp = body.rsplit('@', 1)
+                userinfo = unquote(userinfo)
+                if ':' in userinfo:
+                    cipher, password = userinfo.split(':', 1)
+                else:
+                    decoded = decode_base64(userinfo)
+                    if ':' in decoded:
+                        cipher, password = decoded.split(':', 1)
+                    else:
+                        return None
+            else:
+                # legacy: ss://base64(method:password@host:port)
+                decoded = decode_base64(body)
+                if '@' not in decoded or ':' not in decoded:
+                    return None
+                userinfo, hp = decoded.rsplit('@', 1)
+                if ':' not in userinfo:
+                    return None
+                cipher, password = userinfo.split(':', 1)
+            parsed_hp = _split_hostport(hp)
+            if not parsed_hp or not password:
+                return None
+            h, p = parsed_hp
+            if cipher == 'chacha20-poly1305':
+                cipher = 'chacha20-ietf-poly1305'
+            return {'name': name or f"SS-{h}", 'type': 'ss', 'server': h, 'port': p,
+                    'cipher': cipher, 'password': password, 'udp': True}
+
+        if scheme in ('hysteria', 'hysteria2', 'hy2'):
+            params_auth, _, name_part = rest.partition('#')
+            auth, _, query_str = params_auth.partition('?')
+            if '@' in auth:
+                password, hp = auth.rsplit('@', 1)
+            else:
+                password, hp = '', auth
+            parsed_hp = _split_hostport(hp)
+            if not parsed_hp:
+                return None
+            h, p = parsed_hp
+            q = parse_qs(query_str)
+            ptype = 'hysteria2' if scheme in ('hysteria2', 'hy2') else 'hysteria'
+            res = {'name': unquote(name_part).strip() or f"HY-{h}", 'type': ptype,
+                   'server': h, 'port': p, 'udp': True}
+            password = unquote(password)
+            if ptype == 'hysteria2':
+                res['password'] = password
+            else:
+                res['auth-str'] = password
+            sni = s1(q, 'sni')
+            if sni:
+                res['sni'] = sni
+            if _truthy(s1(q, 'insecure')) or _truthy(s1(q, 'allowInsecure')):
+                res['skip-cert-verify'] = True
+            obfs = s1(q, 'obfs')
+            if obfs and obfs != 'none':
+                res['obfs'] = obfs
+                res['obfs-password'] = s1(q, 'obfs-password')
+            alpn = s1(q, 'alpn')
+            if alpn:
+                res['alpn'] = alpn.split(',')
+            return res
+
+        if scheme == 'tuic':
+            userinfo, rest2 = rest.split('@', 1)
+            hp_params, _, name_part = rest2.partition('#')
+            hp, _, query_str = hp_params.partition('?')
+            parsed_hp = _split_hostport(hp)
+            if not parsed_hp:
+                return None
+            h, p = parsed_hp
+            userinfo = unquote(userinfo)
+            uuid, _, password = userinfo.partition(':')
+            q = parse_qs(query_str)
+            res = {'name': unquote(name_part).strip() or f"TUIC-{h}", 'type': 'tuic',
+                   'server': h, 'port': p, 'uuid': uuid, 'password': password,
+                   'congestion-controller': s1(q, 'congestion_control', 'bbr'),
+                   'udp-relay-mode': s1(q, 'udp_relay_mode', 'native'),
+                   'udp': True, 'sni': s1(q, 'sni', h)}
+            if _truthy(s1(q, 'allow_insecure')) or _truthy(s1(q, 'insecure')):
+                res['skip-cert-verify'] = True
+            alpn = s1(q, 'alpn')
+            if alpn:
+                res['alpn'] = alpn.split(',')
+            return res
+    except Exception:
+        pass
+    return None
+
+# ---------------------------------------------------------------- extraction
 
 def extract_from_element(element):
     proxies, urls = [], []
     if hasattr(element, 'find_all'):
         for a in element.find_all('a', href=True):
             href = a['href'].strip()
-            if any(href.startswith(f"{s}://") for s in PROXY_SCHEMES):
+            if any(href.lower().startswith(f"{s}://") for s in PROXY_SCHEMES):
                 proxies.append(clean_url(href))
-            elif any(href.startswith(f"{s}://") for s in ISSUE_SCHEMES):
+            elif any(href.lower().startswith(f"{s}://") for s in ISSUE_SCHEMES):
                 ISSUE_URLS.add(clean_url(href))
             elif href.startswith('http'):
                 collect_url(href, urls)
     text = element.get_text() if hasattr(element, 'get_text') else str(element)
-    proxies.extend([clean_url(m.group(0)) for m in PROXY_REGEX.finditer(text)])
+    proxies.extend(clean_url(m.group(0)) for m in PROXY_REGEX.finditer(text))
     for m in ISSUE_REGEX.finditer(text):
         ISSUE_URLS.add(clean_url(m.group(0)))
     for m in URL_REGEX.finditer(text):
         collect_url(m.group(0), urls)
     return list(set(proxies)), list(set(urls))
 
-async def fetch(session, url, sem, retry_count=2):
-    async with sem:
-        try:
-            if not url.startswith(('http://', 'https://')): return ""
-            
-            is_tme = 't.me/' in url or 'telegram.me/' in url
-            
-            if is_tme:
-                headers = {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
-                    'Connection': 'keep-alive',
-                    'Upgrade-Insecure-Requests': '1',
-                }
-            else:
-                headers = {
-                    'User-Agent': 'Happ/1.0 (com.happ; build:100; iOS 17.0.0) Alamofire/5.8.0',
-                    'Accept': '*/*',
-                    'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
-                }
-            
-            if 'kfwl.lol' in url:
-                headers['Referer'] = 'https://t.me/'
-            
-            timeout = TIMEOUT
-            problem_domains = ['kfwl.lol', 'pozor.bond', 'atlanta-subs.ru', 'astra-sub.com', 'taurus-sync.com', 'net4.su']
-            if any(d in url for d in problem_domains):
-                timeout = aiohttp.ClientTimeout(total=30, connect=10)
-            
-            for attempt in range(retry_count + 1):
-                try:
-                    async with session.get(url, headers=headers, allow_redirects=True, ssl=False, timeout=timeout) as resp:
-                        if resp.status == 200:
-                            data = await resp.read()
-                            text = data.decode('utf-8', errors='ignore')
-                            debug_log(f"✓ {url[:80]}: {len(text)} симв.")
-                            return text
-                        elif resp.status in [403, 429, 503]:
-                            if attempt < retry_count:
-                                await asyncio.sleep(2 * (attempt + 1))
-                                continue
-                            return ""
-                        else:
-                            return ""
-                except (asyncio.TimeoutError, aiohttp.ServerTimeoutError):
-                    if attempt < retry_count:
-                        await asyncio.sleep(2 * (attempt + 1))
-                        continue
-                    return ""
-                except Exception:
-                    if attempt < retry_count:
-                        await asyncio.sleep(1)
-                        continue
-                    return ""
-        except Exception:
-            pass
-        return ""
-
 def extract_messages_data(html_content, cutoff_date):
-    soup = BeautifulSoup(html_content, 'html.parser')
+    """Возвращает (прокси с РЕАЛЬНЫМИ датами, url, min_id для пагинации)."""
+    soup = BeautifulSoup(html_content, HTML_PARSER)
     messages = soup.find_all('div', class_='tgme_widget_message')
-    p, u = [], []
+    proxies, urls, min_id = [], [], None
     for msg in messages:
+        post = msg.get('data-post', '')
+        mid = post.rsplit('/', 1)[-1]
+        if mid.isdigit():
+            mid = int(mid)
+            min_id = mid if min_id is None else min(min_id, mid)
+        dt = now_utc()
         time_tag = msg.find('time')
         if time_tag and time_tag.get('datetime'):
             try:
                 dt = datetime.fromisoformat(time_tag['datetime'].replace('Z', '+00:00'))
-                if dt < cutoff_date: continue
-            except: pass
+            except ValueError:
+                pass
+        if dt < cutoff_date:
+            continue
         px, ur = extract_from_element(msg)
-        p.extend(px); u.extend(ur)
-    debug_log(f"Найдено сообщений: {len(messages)}")
-    return p, u
+        proxies.extend((p, dt) for p in px)
+        urls.extend(ur)
+    return proxies, urls, min_id
 
-async def parse_with_telethon(source_url, cutoff_date, limit):
+# ---------------------------------------------------------------- network
+
+def _headers_for(url):
+    if 't.me/' in url or 'telegram.me/' in url:
+        return {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
+        }
+    return {
+        'User-Agent': 'Happ/1.0 (com.happ; build:100; iOS 17.0.0) Alamofire/5.8.0',
+        'Accept': '*/*',
+        'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
+    }
+
+async def fetch(session, url, sem, retry_count=2):
+    if not url.startswith(('http://', 'https://')):
+        return ""
+    headers = _headers_for(url)
+    if 'kfwl.lol' in url:
+        headers['Referer'] = 'https://t.me/'
+    timeout = TIMEOUT_LONG if any(d in url for d in PROBLEM_DOMAINS) else TIMEOUT
+    for attempt in range(retry_count + 1):
+        retryable = False
+        try:
+            async with sem:  # семафор держим только на запрос, не на сон между ретраями
+                async with session.get(url, headers=headers, allow_redirects=True, timeout=timeout) as resp:
+                    if resp.status == 200:
+                        text = (await resp.read()).decode('utf-8', errors='ignore')
+                        debug_log(f"✓ {url[:80]}: {len(text)} симв.")
+                        return text
+                    retryable = resp.status in (403, 429, 500, 502, 503, 504)
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            retryable = True
+        if not retryable or attempt == retry_count:
+            return ""
+        await asyncio.sleep(2 * (attempt + 1))
+    return ""
+
+async def fetch_tme_channel(session, sem, channel_url, cutoff, max_pages):
+    """История канала через t.me/s/ с пагинацией ?before= (раньше — только 1 страница)."""
+    proxies, urls, before = [], [], None
+    for _ in range(max_pages):
+        page_url = channel_url + (f'?before={before}' if before else '')
+        html_text = await fetch(session, page_url, sem)
+        if not html_text:
+            break
+        p, u, min_id = extract_messages_data(html_text, cutoff)
+        proxies.extend(p)
+        urls.extend(u)
+        if not min_id or (before is not None and min_id >= before):
+            break
+        before = min_id
+    return proxies, urls
+
+async def parse_telethon_sources(sources, cutoff, limit):
+    """Один клиент на все источники; для форумов читается конкретная тема."""
     if not SESSION_B64 or not TELETHON_OK or API_ID == 0:
         debug_log("Telethon не настроен")
         return [], []
-    match = re.match(r'https?://t\.me/(?:c/)?([a-zA-Z0-9_]+)(?:/(\d+))?', source_url)
-    if not match: return [], []
-    chat_id = match.group(1)
-    topic_id = int(match.group(2)) if match.group(2) else None
-    if '/c/' in source_url:
-        try: chat_id = int(f"-100{chat_id}")
-        except: pass
     session_file = 'tg_session'
     try:
-        session_data = base64.b64decode(SESSION_B64)
         with open(session_file + '.session', 'wb') as f:
-            f.write(session_data)
+            f.write(base64.b64decode(SESSION_B64))
     except Exception:
         return [], []
     proxies, urls = [], []
-    client = None
+    client = TelegramClient(session_file, API_ID, API_HASH)
     try:
-        client = TelegramClient(session_file, API_ID, API_HASH)
         await client.connect()
         if not await client.is_user_authorized():
             return [], []
-        try:
-            entity = await client.get_entity(chat_id)
-        except Exception:
-            return [], []
-        msg_count = 0
-        try:
-            async for msg in client.iter_messages(entity, limit=limit):
-                if not msg.date: continue
-                msg_date = msg.date.replace(tzinfo=timezone.utc)
-                if msg_date < cutoff_date: break
-                msg_count += 1
-                text = msg.text or msg.message or ''
-                for m in PROXY_REGEX.finditer(text):
-                    proxies.append(clean_url(m.group(0)))
-                for m in ISSUE_REGEX.finditer(text):
-                    ISSUE_URLS.add(clean_url(m.group(0)))
-                for m in URL_REGEX.finditer(text):
-                    collect_url(m.group(0), urls)
-                if msg.entities:
-                    for ent in msg.entities:
+        for source_url in sources:
+            match = re.match(r'https?://t\.me/(?:c/)?([a-zA-Z0-9_]+)(?:/(\d+))?', source_url)
+            if not match:
+                continue
+            chat_id = match.group(1)
+            topic_id = int(match.group(2)) if match.group(2) else None
+            if '/c/' in source_url:
+                try:
+                    chat_id = int(f"-100{chat_id}")
+                except ValueError:
+                    pass
+            try:
+                entity = await client.get_entity(chat_id)
+            except Exception as e:
+                debug_log(f"Telethon: не получить entity {chat_id}: {e}")
+                continue
+            kwargs = {'reply_to': topic_id} if topic_id and getattr(entity, 'forum', False) else {}
+            try:
+                async for msg in client.iter_messages(entity, limit=limit, **kwargs):
+                    if not msg.date:
+                        continue
+                    dt = msg.date if msg.date.tzinfo else msg.date.replace(tzinfo=timezone.utc)
+                    if dt < cutoff:
+                        break
+                    text = msg.text or msg.message or ''
+                    for m in PROXY_REGEX.finditer(text):
+                        proxies.append((clean_url(m.group(0)), dt))
+                    for m in ISSUE_REGEX.finditer(text):
+                        ISSUE_URLS.add(clean_url(m.group(0)))
+                    for m in URL_REGEX.finditer(text):
+                        collect_url(m.group(0), urls)
+                    for ent in (msg.entities or []):
                         if isinstance(ent, MessageEntityTextUrl) and ent.url:
                             u = clean_url(ent.url)
-                            if any(u.startswith(f"{s}://") for s in PROXY_SCHEMES):
-                                proxies.append(u)
-                            elif any(u.startswith(f"{s}://") for s in ISSUE_SCHEMES):
+                            if any(u.lower().startswith(f"{s}://") for s in PROXY_SCHEMES):
+                                proxies.append((u, dt))
+                            elif any(u.lower().startswith(f"{s}://") for s in ISSUE_SCHEMES):
                                 ISSUE_URLS.add(u)
                             else:
                                 collect_url(ent.url, urls)
+            except Exception as e:
+                debug_log(f"Telethon: ошибка чтения {chat_id}: {e}")
+    except Exception as e:
+        debug_log(f"Telethon: {e}")
+    finally:
+        try:
+            await client.disconnect()
         except Exception:
             pass
-    except Exception:
-        pass
-    finally:
-        if client:
-            try: await client.disconnect()
-            except: pass
-        try: os.remove(session_file + '.session')
-        except: pass
-    return list(set(proxies)), list(set(urls))
+        try:
+            os.remove(session_file + '.session')
+        except OSError:
+            pass
+    return proxies, urls
 
-async def process_subscription(url, session, sem, visited):
-    if url in visited: return []
-    visited.add(url)
-    if url.startswith('happ://'): return [url]
-    if not url.startswith(('http://', 'https://')): return []
-    if is_useless_tme(url): return []
-    if 'kfwl.lol' in url:
-        text = await fetch(session, url, sem, retry_count=1)
-        if not text or len(text) < 50: return []
-        decoded = decode_base64(text)
-        search_text = decoded if decoded and len(decoded) > 50 else text
-        found = [clean_url(p) for p in PROXY_REGEX.findall(search_text)]
-        for m in ISSUE_REGEX.finditer(search_text):
-            ISSUE_URLS.add(clean_url(m.group(0)))
-        if found: debug_log(f"✓ {len(found)} прокси в {url[:60]}")
-        return found
-    text = await fetch(session, url, sem)
-    if not text: return []
+def _extract_from_sub_text(text):
     decoded = decode_base64(text)
     search_text = decoded if decoded and len(decoded) > 50 else text
     found = [clean_url(p) for p in PROXY_REGEX.findall(search_text)]
     for m in ISSUE_REGEX.finditer(search_text):
         ISSUE_URLS.add(clean_url(m.group(0)))
-    if found: debug_log(f"✓ {len(found)} прокси в {url[:60]}")
     return found
 
-async def check_proxy_tcp(host, port, sem):
-    async with sem:
-        try:
-            _, w = await asyncio.wait_for(asyncio.open_connection(host, int(port)), timeout=2.0)
-            w.close(); await w.wait_closed()
-            return True
-        except: return False
+async def process_subscription(url, session, sem, visited, cutoff):
+    """Каналы t.me внутри подписок тоже парсим как /s/ (раньше от них было ~0 толку)."""
+    if url in visited:
+        return []
+    visited.add(url)
+    if url.startswith('happ://'):
+        return [(url, now_utc())]
+    if not url.startswith(('http://', 'https://')) or is_useless_tme(url):
+        return []
+    if 't.me/' in url or 'telegram.me/' in url:
+        mm = re.match(r'https?://(?:t\.me|telegram\.me)/(?:s/)?([a-zA-Z0-9_]+)(?:/(\d+))?', url)
+        if not mm:
+            return []
+        chan, msg_id = mm.group(1), mm.group(2)
+        if msg_id:
+            html_text = await fetch(session, f'https://t.me/{chan}/{msg_id}?embed=1&mode=tme', sem)
+            if not html_text:
+                return []
+            p, _, _ = extract_messages_data(html_text, cutoff)
+            return p
+        p, _ = await fetch_tme_channel(session, sem, f'https://t.me/s/{chan}', cutoff, TME_SUB_PAGES)
+        return p
+    text = await fetch(session, url, sem)
+    if not text:
+        return []
+    found = _extract_from_sub_text(text)
+    if found:
+        debug_log(f"✓ {len(found)} прокси в {url[:60]}")
+    now = now_utc()
+    return [(u, now) for u in found]
 
-def is_valid_hex(s):
-    return bool(s) and bool(SID_RE.match(s))
-
-def parse_uri_for_clash(uri):
-    def safe_int(s, default=0):
-        s = s.split('/')[0].split('#')[0].split('?')[0].strip()
-        try: return int(s)
-        except: return default
-    def safe_str(values_list, default=''):
-        if not values_list: return default
-        val = values_list[0]
-        return val if val else default
-    try:
-        s, rest = uri.split('://', 1)
-        s = s.lower()
-        if s == 'happ': return None
-
-        if s == 'vless':
-            uuid, rest2 = rest.split('@', 1)
-            if '#' in rest2:
-                hp_params, name_part = rest2.split('#', 1)
-            else:
-                hp_params, name_part = rest2, ''
-            if '?' in hp_params:
-                hp, query_str = hp_params.split('?', 1)
-            else:
-                hp, query_str = hp_params, ''
-            if '/' in hp: hp = hp.split('/')[0]
-            if ':' not in hp: return None
-            h, p_str = hp.split(':', 1)
-            p = safe_int(p_str)
-            if not p: return None
-            name = unquote(name_part) if name_part else f"VLESS-{h}"
-            q = parse_qs(query_str) if query_str else {}
-            nt = safe_str(q.get('type'), 'tcp')
-            if nt == 'raw': nt = 'tcp'
-            res = {
-                'name': name, 'type': 'vless', 'server': h, 'port': p,
-                'uuid': uuid, 'network': nt, 'udp': True,
-            }
-            security = safe_str(q.get('security'), '')
-            sni = safe_str(q.get('sni'), '')
-            fp = safe_str(q.get('fp'), '')
-            flow = safe_str(q.get('flow'), '')
-            host_header = safe_str(q.get('host'), '')
-            if security == 'reality':
-                pbk = safe_str(q.get('pbk'), '')
-                sid = safe_str(q.get('sid'), '').strip()
-                if not pbk: return None
-                res['tls'] = True
-                res['server-name'] = sni if sni else h
-                reality_opts = {'public-key': pbk}
-                if sid and is_valid_hex(sid):
-                    reality_opts['short-id'] = sid
-                elif sid: return None
-                res['reality-opts'] = reality_opts
-                if fp: res['client-fingerprint'] = fp
-                if flow: res['flow'] = flow
-            elif security == 'tls':
-                res['tls'] = True
-                res['server-name'] = sni if sni else h
-                if fp: res['client-fingerprint'] = fp
-            if nt == 'ws':
-                path = safe_str(q.get('path'), '/')
-                ws_opts = {'path': unquote(path) if unquote(path).startswith('/') else '/' + unquote(path)}
-                if host_header:
-                    ws_opts['headers'] = {'Host': host_header}
-                res['ws-opts'] = ws_opts
-            elif nt == 'grpc':
-                service = safe_str(q.get('serviceName'), '')
-                if service:
-                    res['grpc-opts'] = {'grpc-service-name': service}
-            elif nt == 'xhttp':
-                res['network'] = 'xhttp'
-            return res
-
-        elif s == 'vmess':
+async def ping_endpoints(endpoints, sem):
+    """Каждый уникальный (host, port) пингуется один раз. {endpoint: rtt|None}."""
+    async def one(hp):
+        async with sem:
+            t0 = time.perf_counter()
             try:
-                d = json.loads(decode_base64(rest))
-                if not isinstance(d, dict): return None
-                res = {
-                    'name': d.get('ps', f"VM-{d.get('add', 'unknown')}"),
-                    'type': 'vmess', 'server': d.get('add'),
-                    'port': safe_int(str(d.get('port', 0))),
-                    'uuid': d.get('id', ''),
-                    'alterId': safe_int(str(d.get('aid', 0))),
-                    'cipher': 'auto',
-                    'tls': d.get('tls') == 'tls',
-                    'network': d.get('net', 'tcp'),
-                    'udp': True
-                }
-                if res['tls']:
-                    res['server-name'] = d.get('sni', d.get('host', '')) or res['server']
-                if res['network'] == 'ws' and d.get('host'):
-                    res['ws-opts'] = {'headers': {'Host': d['host']}}
-                return res
-            except (json.JSONDecodeError, ValueError):
-                return None
+                _, w = await asyncio.wait_for(asyncio.open_connection(hp[0], hp[1]), timeout=PING_TIMEOUT)
+                rtt = time.perf_counter() - t0
+                w.close()
+                try:
+                    await w.wait_closed()
+                except Exception:
+                    pass
+                return hp, rtt
+            except asyncio.CancelledError:
+                raise
+            except Exception:
+                return hp, None
+    results = await asyncio.gather(*(one(hp) for hp in endpoints))
+    return dict(results)
 
-        elif s == 'trojan':
-            password, rest2 = rest.split('@', 1)
-            if '#' in rest2:
-                hp_params, name_part = rest2.split('#', 1)
-            else:
-                hp_params, name_part = rest2, ''
-            if '?' in hp_params:
-                hp, query_str = hp_params.split('?', 1)
-            else:
-                hp, query_str = hp_params, ''
-            if '/' in hp: hp = hp.split('/')[0]
-            if ':' not in hp: return None
-            h, p_str = hp.split(':', 1)
-            p = safe_int(p_str)
-            if not p: return None
-            name = unquote(name_part) if name_part else f"Trojan-{h}"
-            q = parse_qs(query_str) if query_str else {}
-            res = {
-                'name': name, 'type': 'trojan', 'server': h, 'port': p,
-                'password': password, 'udp': True
-            }
-            sni = safe_str(q.get('sni'), '')
-            host_header = safe_str(q.get('host'), '')
-            if sni: res['sni'] = sni
-            if safe_str(q.get('security'), '') in ['tls', 'xtls']:
-                res['tls'] = True
-                res['server-name'] = sni if sni else h
-            if host_header: res['host'] = host_header
-            return res
-
-        elif s == 'ss':
-            if '@' in rest:
-                userinfo, hp_name = rest.split('@', 1)
-                if '#' in hp_name:
-                    hp, name_part = hp_name.split('#', 1)
-                else:
-                    hp, name_part = hp_name, ''
-                if '/' in hp: hp = hp.split('/')[0]
-                if ':' in hp:
-                    h, p_str = hp.split(':', 1)
-                    p = safe_int(p_str)
-                    if not p: return None
-                    if ':' in userinfo:
-                        cipher, password = userinfo.split(':', 1)
-                    else:
-                        cipher = 'aes-256-gcm'
-                        password = decode_base64(userinfo)
-                    name = unquote(name_part) if name_part else f"SS-{h}"
-                    return {
-                        'name': name, 'type': 'ss', 'server': h, 'port': p,
-                        'cipher': cipher, 'password': password, 'udp': True
-                    }
-
-        elif s in ['hysteria', 'hysteria2', 'hy2']:
-            if '#' in rest:
-                params_auth, name_part = rest.split('#', 1)
-            else:
-                params_auth, name_part = rest, ''
-            if '?' in params_auth:
-                auth, query_str = params_auth.split('?', 1)
-            else:
-                auth, query_str = params_auth, ''
-            if '@' in auth:
-                password, hp = auth.split('@', 1)
-            else:
-                password, hp = '', auth
-            if '/' in hp: hp = hp.split('/')[0]
-            if ':' in hp:
-                h, p_str = hp.split(':', 1)
-                p = safe_int(p_str)
-                if not p: return None
-                name = unquote(name_part) if name_part else f"Hysteria-{h}"
-                q = parse_qs(query_str) if query_str else {}
-                res = {
-                    'name': name, 'type': 'hysteria2' if s == 'hy2' else s,
-                    'server': h, 'port': p, 'password': password, 'udp': True
-                }
-                sni = safe_str(q.get('sni'), '')
-                if sni:
-                    res['sni'] = sni
-                    res['server-name'] = sni
-                return res
-
-        elif s == 'tuic':
-            if '@' in rest:
-                userinfo, rest2 = rest.split('@', 1)
-                if '#' in rest2:
-                    hp_params, name_part = rest2.split('#', 1)
-                else:
-                    hp_params, name_part = rest2, ''
-                if '?' in hp_params:
-                    hp, query_str = hp_params.split('?', 1)
-                else:
-                    hp, query_str = hp_params, ''
-                if '/' in hp: hp = hp.split('/')[0]
-                if ':' in hp:
-                    h, p_str = hp.split(':', 1)
-                    p = safe_int(p_str)
-                    if not p: return None
-                    if ':' in userinfo:
-                        uuid, password = userinfo.split(':', 1)
-                    else:
-                        uuid, password = userinfo, ''
-                    name = unquote(name_part) if name_part else f"TUIC-{h}"
-                    q = parse_qs(query_str) if query_str else {}
-                    return {
-                        'name': name, 'type': 'tuic', 'server': h, 'port': p,
-                        'uuid': uuid, 'password': password,
-                        'congestion-controller': safe_str(q.get('congestion_control'), 'bbr'),
-                        'udp-relay-mode': safe_str(q.get('udp_relay_mode'), 'native'),
-                        'udp': True, 'sni': safe_str(q.get('sni'), h)
-                    }
-    except Exception:
-        pass
-    return None
+# ---------------------------------------------------------------- output
 
 _GO_NUM_RE = re.compile(r'^[-+]?(\.[0-9]+|[0-9]+(\.[0-9]*)?)([eE][-+]?[0-9]+)?$')
 _YAML_WORDS = {'y', 'n', 'yes', 'no', 'on', 'off', 'true', 'false', 'null', '~'}
@@ -881,261 +915,192 @@ def _str_repr(dumper, data):
 
 QuoteDumper.add_representer(str, _str_repr)
 
+def _read_old_body(filename):
+    """Тело файла без шапки-комментариев."""
+    if not os.path.exists(filename):
+        return None
+    with open(filename, 'r', encoding='utf-8') as f:
+        lines = f.read().splitlines()
+    while lines and lines[0].startswith('#'):
+        lines.pop(0)
+    return '\n'.join(lines)
+
+def _write_if_changed(filename, body, header_lines=()):
+    """Запись только при изменении тела -> нет пустых ежечасных коммитов."""
+    if _read_old_body(filename) == body:
+        debug_log(f"📄 {filename}: без изменений, пропуск записи")
+        return False
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(list(header_lines) + [body]) + '\n')
+    return True
+
 def write_yaml(filename, clash_proxies):
     names = [p['name'] for p in clash_proxies] if clash_proxies else ['DIRECT']
     clash_config = {
         'mixed-port': 7890, 'allow-lan': False, 'mode': 'Rule', 'log-level': 'info',
         'external-controller': '127.0.0.1:9090', 'proxies': clash_proxies,
         'proxy-groups': [
-            {'name': '♻️ Auto', 'type': 'url-test', 'proxies': names, 'url': 'http://www.gstatic.com/generate_204', 'interval': 300},
+            {'name': '♻️ Auto', 'type': 'url-test', 'proxies': names,
+             'url': 'http://www.gstatic.com/generate_204', 'interval': 300, 'tolerance': 50},
             {'name': '🚀 Proxy', 'type': 'select', 'proxies': ['♻️ Auto'] + names}
         ],
         'rules': ['MATCH,🚀 Proxy']
     }
+    body = yaml.dump(clash_config, Dumper=QuoteDumper, sort_keys=False, allow_unicode=True).rstrip('\n')
+    if os.path.exists(filename):
+        with open(filename, 'r', encoding='utf-8') as f:
+            if f.read().rstrip('\n') == body:
+                debug_log(f"📄 {filename}: без изменений, пропуск записи")
+                return False
     with open(filename, 'w', encoding='utf-8') as f:
-        yaml.dump(clash_config, f, Dumper=QuoteDumper, sort_keys=False, allow_unicode=True)
+        f.write(body + '\n')
+    return True
 
 def write_txt(filename, uris, count_alive):
-    ts = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+    ts = now_utc().strftime('%Y-%m-%d %H:%M:%S UTC')
     header = [f"# Обновлено: {ts}", f"# Живых: {count_alive}", "#"]
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write("\n".join(header + uris))
+    return _write_if_changed(filename, '\n'.join(uris), header)
 
 def write_issue_file():
-    """Сохраняет собранные issue-ссылки в issue.txt с валидацией"""
     if not ISSUE_URLS:
         debug_log(f"📄 {ISSUE_FILE}: нет ссылок")
         return
-    
-    # Разделяем склеенные и валидируем
     clean_urls = set()
     for url in ISSUE_URLS:
         for split_url in split_glued_issues(url):
             cleaned = clean_url(split_url)
             if is_valid_issue_url(cleaned):
                 clean_urls.add(cleaned)
-    
     if not clean_urls:
         debug_log(f"📄 {ISSUE_FILE}: нет валидных ссылок")
         return
-    
     sorted_urls = sorted(clean_urls)
-    ts = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+    ts = now_utc().strftime('%Y-%m-%d %H:%M:%S UTC')
     header = [f"# Обновлено: {ts}", f"# Найдено: {len(sorted_urls)}", "#"]
-    
-    with open(ISSUE_FILE, 'w', encoding='utf-8') as f:
-        f.write("\n".join(header + sorted_urls))
-    
-    debug_log(f"📄 {ISSUE_FILE}: {len(sorted_urls)} валидных ссылок (из {len(ISSUE_URLS)} сырых)")
+    _write_if_changed(ISSUE_FILE, '\n'.join(sorted_urls), header)
+    debug_log(f"📄 {ISSUE_FILE}: {len(sorted_urls)} валидных (из {len(ISSUE_URLS)} сырых)")
+
+# ---------------------------------------------------------------- pipeline
+
+async def build_list(items, cutoff, label, ping_sem, ping_cache, whitelist=False):
+    """Общий конвейер ALL и WL; пинг-кэш общий -> каждый endpoint проверяется 1 раз."""
+    uris = dedupe_by_config([u for u, dt in items if dt >= cutoff])
+    happ, parsed = [], {}
+    parse_errors = 0
+    for u in uris:
+        if u.lower().startswith('happ://'):
+            happ.append(u)
+            continue
+        p = parse_uri_for_clash(u)
+        if p and p.get('server') and p.get('port'):
+            parsed[u] = p
+        else:
+            parse_errors += 1
+    if parse_errors:
+        debug_log(f"⚠️ {label}: не распарсено {parse_errors}")
+    endpoints = {(p['server'], p['port']) for p in parsed.values()}
+    missing = endpoints - ping_cache.keys()
+    print(f"[{label}] endpoint'ов: {len(endpoints)}, новых для пинга: {len(missing)}", flush=True)
+    if missing:
+        ping_cache.update(await ping_endpoints(missing, ping_sem))
+    alive = [(u, p) for u, p in parsed.items() if ping_cache.get((p['server'], p['port'])) is not None]
+    # детерминированный порядок -> минимальные diff'ы между запусками
+    alive.sort(key=lambda up: (up[1]['type'], up[1]['server'], up[1]['port'], up[0]))
+    print(f"[{label}] живых: {len(alive)}", flush=True)
+    enabled = get_enabled_protocols()
+    clash, txt_uris = [], []
+    for u, p in alive:
+        p = sanitize_proxy(dict(p))
+        if p.get('type') not in enabled:
+            if not whitelist:
+                txt_uris.append(u)  # в ALL.txt кладём все протоколы, как раньше
+            continue
+        if whitelist and not matches_roots(p):
+            continue
+        ok, _ = validate_proxy(p)
+        if ok:
+            clash.append(p)
+            txt_uris.append(u)
+        elif not whitelist:
+            txt_uris.append(u)
+    clash = make_names_unique(clash)
+    txt_uris = sorted(set(txt_uris + (happ if not whitelist else [])))
+    types = {}
+    for p in clash:
+        types[p['type']] = types.get(p['type'], 0) + 1
+    debug_log(f"📊 {label}: yaml={len(clash)} {types}, txt={len(txt_uris)}")
+    return txt_uris, clash
 
 async def main():
     start = time.time()
     if not os.path.exists(SOURCES_FILE):
-        print("sources.txt не найден!"); return
+        print("sources.txt не найден!")
+        return
     with open(SOURCES_FILE, 'r', encoding='utf-8') as f:
         sources = [l.strip() for l in f if l.strip() and not l.startswith('#')]
     http_sem = asyncio.Semaphore(MAX_CONCURRENT_HTTP)
     ping_sem = asyncio.Semaphore(MAX_CONCURRENT_PING)
-    
-    cutoff_all = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS_ALL)
-    cutoff_wl = datetime.now(timezone.utc) - timedelta(days=MAX_DAYS_WL)
-    
-    all_proxies_with_dates = []
-    sub_urls, visited = [], set()
-    web_sources, telethon_sources = [], []
+    cutoff_all = now_utc() - timedelta(days=MAX_DAYS_ALL)
+    cutoff_wl = now_utc() - timedelta(days=MAX_DAYS_WL)
+    items = []            # (uri, реальная дата сообщения)
+    sub_urls = set()
+    visited = set()
+    web_channels, embed_msgs, telethon_sources = [], [], []
     for src in sources:
-        if not src.startswith('http'): continue
-        if src.startswith('https://t.me/'):
-            if 'LowiKForum' in src or any(x in src.lower() for x in ['chat', 'forum']):
+        if not src.startswith('http'):
+            continue
+        if re.match(r'https?://(t\.me|telegram\.me)/', src):
+            if 'LowiKForum' in src or any(x in src.lower() for x in ('chat', 'forum')):
                 telethon_sources.append(src)
+            elif re.search(r'/\d+$', src):
+                embed_msgs.append(src + '?embed=1&mode=tme')
             else:
-                web_sources.append(src)
+                chan = re.sub(r'^https?://(t\.me|telegram\.me)/(s/)?', '', src).strip('/')
+                web_channels.append(f'https://t.me/s/{chan}')
         else:
-            sub_urls.append(clean_url(src))
-    
-    print(f"[{time.time()-start:.1f}s] Web: {len(web_sources)}, Telethon: {len(telethon_sources)}")
-    print(f"[{time.time()-start:.1f}s] Периоды: ALL={MAX_DAYS_ALL}д (limit={LIMIT_ALL}), WL={MAX_DAYS_WL}д (limit={LIMIT_WL})")
-    
-    if web_sources:
-        async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
-            tasks = []
-            for src in web_sources:
-                if re.search(r'/\d+$', src):
-                    url = f"{src}?embed=1&mode=tme"
-                else:
-                    url = src.replace('https://t.me/', 'https://t.me/s/')
-                tasks.append((url, fetch(session, url, http_sem)))
-            results = await asyncio.gather(*[t[1] for t in tasks])
-            for (u, _), html_content in zip(tasks, results):
-                if html_content:
-                    p, u2 = extract_messages_data(html_content, cutoff_wl)
-                    debug_log(f"Из {u[:60]}: {len(p)} прокси, {len(u2)} URL")
-                    now = datetime.now(timezone.utc)
-                    for proxy in p:
-                        all_proxies_with_dates.append((proxy, now, None))
-                    for l in u2: sub_urls.append(clean_url(l))
-    
-    if telethon_sources:
-        if TELETHON_OK and SESSION_B64 and API_ID != 0:
-            print(f"[{time.time()-start:.1f}s] Парсим через Telethon ({len(telethon_sources)} источников)...")
-            for src in telethon_sources:
-                p, u = await parse_with_telethon(src, cutoff_wl, LIMIT_WL)
-                now = datetime.now(timezone.utc)
-                for proxy in p:
-                    all_proxies_with_dates.append((proxy, now, None))
-                for l in u: sub_urls.append(clean_url(l))
-        else:
-            debug_log(f"⚠️ Telethon не настроен, пропускаем {len(telethon_sources)} источников")
-    
-    if sub_urls:
-        clean_subs = set()
-        for url in sub_urls:
-            u = url.rstrip('/')
-            if u not in clean_subs:
-                clean_subs.add(u)
-        print(f"[{time.time()-start:.1f}s] Обрабатываем {len(clean_subs)} подписок...")
-        async with aiohttp.ClientSession(timeout=TIMEOUT) as session:
-            tasks = [process_subscription(url, session, http_sem, visited) for url in clean_subs]
+            sub_urls.add(clean_url(src))
+    print(f"Каналов web: {len(web_channels)}, сообщений: {len(embed_msgs)}, "
+          f"Telethon: {len(telethon_sources)}, подписок: {len(sub_urls)}", flush=True)
+    connector = aiohttp.TCPConnector(limit=MAX_CONCURRENT_HTTP, ttl_dns_cache=300, ssl=False)
+    async with aiohttp.ClientSession(connector=connector, timeout=TIMEOUT) as session:
+        if web_channels or embed_msgs:
+            tasks = [fetch_tme_channel(session, http_sem, u, cutoff_wl, TME_MAX_PAGES) for u in web_channels]
+            tasks += [fetch(session, u, http_sem) for u in embed_msgs]
             results = await asyncio.gather(*tasks)
-            now = datetime.now(timezone.utc)
             for r in results:
-                for proxy in r:
-                    all_proxies_with_dates.append((proxy, now, None))
-    
-    seen_uris = {}
-    for uri, date, _ in all_proxies_with_dates:
-        if uri not in seen_uris or date > seen_uris[uri][1]:
-            seen_uris[uri] = (uri, date, None)
-    all_proxies_with_dates = list(seen_uris.values())
-    
-    print(f"[{time.time()-start:.1f}s] Сырых прокси: {len(all_proxies_with_dates)}")
-
-    proxies_all = [uri for uri, date, _ in all_proxies_with_dates if date >= cutoff_all]
-    n0_all = len(proxies_all)
-    proxies_all = dedupe_by_config(proxies_all)
-    debug_log(f"🔁 ALL: дублей удалено {n0_all - len(proxies_all)} (осталось {len(proxies_all)})")
-
-    happ_all, ping_list_all = [], []
-    for u in proxies_all:
-        (happ_all if u.lower().startswith('happ://') else ping_list_all).append(u)
-    
-    print(f"[{time.time()-start:.1f}s] Пингуем {len(ping_list_all)} серверов для ALL...")
-    alive_all = []
-    tasks, pmap = [], {}
-    parse_errors = 0
-    for u in ping_list_all:
-        parsed = parse_uri_for_clash(u)
-        if parsed and parsed.get('server') and parsed.get('port'):
-            tasks.append(check_proxy_tcp(parsed['server'], parsed['port'], ping_sem))
-            pmap[len(tasks)-1] = (u, parsed)
-        else:
-            parse_errors += 1
-    if parse_errors:
-        debug_log(f"⚠️ ALL: не распарсено {parse_errors} прокси")
-    if tasks:
-        results = await asyncio.gather(*tasks)
-        for i, ok in enumerate(results):
-            if ok: alive_all.append(pmap[i])
-    print(f"[{time.time()-start:.1f}s] ALL живых: {len(alive_all)}")
-    
-    type_stats_all = {}
-    for _, p in alive_all:
-        t = p.get('type', 'unknown')
-        type_stats_all[t] = type_stats_all.get(t, 0) + 1
-    debug_log(f"📊 ALL типы: {type_stats_all}")
-
-    alive_uris_all = [u for u, _ in alive_all]
-    
-    clash_all = [sanitize_proxy(p) for _, p in alive_all]
-    clash_all, _ = filter_by_protocol(clash_all)
-    clash_all = validate_all(clash_all)
-    clash_all = make_names_unique(clash_all)
-
-    all_txt_uris = alive_uris_all + happ_all
-    all_txt_uris = deduplicate_proxies(all_txt_uris)
-
-    write_txt(OUT_ALL_TXT, all_txt_uris, len(alive_all))
+                if isinstance(r, tuple):
+                    p, u2 = r
+                else:
+                    p, u2, _ = extract_messages_data(r, cutoff_wl) if r else ([], [], None)
+                items.extend(p)
+                sub_urls.update(clean_url(u) for u in u2)
+            visited.update(web_channels)
+        if telethon_sources:
+            p, u = await parse_telethon_sources(telethon_sources, cutoff_wl, LIMIT_WL)
+            items.extend(p)
+            sub_urls.update(clean_url(x) for x in u)
+        if sub_urls:
+            subs = sorted(u.rstrip('/') for u in sub_urls if u)
+            print(f"[{time.time()-start:.1f}s] Подписок: {len(subs)}", flush=True)
+            results = await asyncio.gather(*(process_subscription(u, session, http_sem, visited, cutoff_wl) for u in subs))
+            for r in results:
+                items.extend(r)
+    # дедуп по URI с сохранением самой свежей даты
+    seen = {}
+    for uri, dt in items:
+        if uri not in seen or dt > seen[uri]:
+            seen[uri] = dt
+    items = list(seen.items())
+    print(f"[{time.time()-start:.1f}s] Сырых прокси: {len(items)}", flush=True)
+    ping_cache = {}
+    txt_all, clash_all = await build_list(items, cutoff_all, 'ALL', ping_sem, ping_cache)
+    txt_wl, clash_wl = await build_list(items, cutoff_wl, 'WL', ping_sem, ping_cache, whitelist=True)
+    write_txt(OUT_ALL_TXT, txt_all, len(txt_all))
     write_yaml(OUT_ALL_YAML, clash_all)
-    debug_log(f"📄 proxy-all.txt: {len(all_txt_uris)} ссылок")
-    debug_log(f"📄 proxy-all.yaml: {len(clash_all)} прокси")
-
-    proxies_wl = [uri for uri, date, _ in all_proxies_with_dates if date >= cutoff_wl]
-    n0_wl = len(proxies_wl)
-    proxies_wl = dedupe_by_config(proxies_wl)
-    debug_log(f"🔁 WL: дублей удалено {n0_wl - len(proxies_wl)} (осталось {len(proxies_wl)})")
-
-    happ_wl, ping_list_wl = [], []
-    for u in proxies_wl:
-        (happ_wl if u.lower().startswith('happ://') else ping_list_wl).append(u)
-    
-    print(f"[{time.time()-start:.1f}s] Пингуем {len(ping_list_wl)} серверов для WL...")
-    alive_wl = []
-    tasks, pmap = [], {}
-    parse_errors = 0
-    for u in ping_list_wl:
-        parsed = parse_uri_for_clash(u)
-        if parsed and parsed.get('server') and parsed.get('port'):
-            tasks.append(check_proxy_tcp(parsed['server'], parsed['port'], ping_sem))
-            pmap[len(tasks)-1] = (u, parsed)
-        else:
-            parse_errors += 1
-    if parse_errors:
-        debug_log(f"⚠️ WL: не распарсено {parse_errors} прокси")
-    if tasks:
-        results = await asyncio.gather(*tasks)
-        for i, ok in enumerate(results):
-            if ok: alive_wl.append(pmap[i])
-    print(f"[{time.time()-start:.1f}s] WL живых: {len(alive_wl)}")
-    
-    type_stats_wl = {}
-    for _, p in alive_wl:
-        t = p.get('type', 'unknown')
-        type_stats_wl[t] = type_stats_wl.get(t, 0) + 1
-    debug_log(f"📊 WL типы: {type_stats_wl}")
-
-    alive_uris_wl = [u for u, _ in alive_wl]
-    enabled_protocols = get_enabled_protocols()
-
-    clash_wl = [sanitize_proxy(p) for _, p in alive_wl]
-    clash_wl, _ = filter_by_protocol(clash_wl)
-
-    before_filter = len(clash_wl)
-    clash_wl = [p for p in clash_wl if matches_roots(p)]
-    debug_log(f"🎯 ФИЛЬТР по корням: было {before_filter}, стало {len(clash_wl)}")
-
-    clash_wl = validate_all(clash_wl)
-    clash_wl = make_names_unique(clash_wl)
-
-    wl_uris = []
-    for uri, parsed in alive_wl:
-        if parsed.get('type') not in enabled_protocols:
-            continue
-        if not matches_roots(parsed):
-            continue
-        wl_uris.append(uri)
-
-    wl_uris = deduplicate_proxies(wl_uris)
-
-    write_txt(OUT_TXT, wl_uris, len(wl_uris))
+    write_txt(OUT_TXT, txt_wl, len(txt_wl))
     write_yaml(OUT_YAML, clash_wl)
-    debug_log(f"📄 proxy.txt: {len(wl_uris)} ссылок")
-    debug_log(f"📄 proxy.yaml: {len(clash_wl)} прокси")
-
-    final_types_all = {}
-    for p in clash_all:
-        t = p.get('type', 'unknown')
-        final_types_all[t] = final_types_all.get(t, 0) + 1
-    debug_log(f"📊 ИТОГО proxy-all.yaml: {len(clash_all)} прокси {final_types_all}")
-
-    final_types_wl = {}
-    for p in clash_wl:
-        t = p.get('type', 'unknown')
-        final_types_wl[t] = final_types_wl.get(t, 0) + 1
-    debug_log(f"📊 ИТОГО proxy.yaml: {len(clash_wl)} прокси {final_types_wl}")
-
     write_issue_file()
-    
-    print(f"✅ Готово за {time.time()-start:.1f} сек!")
+    print(f"✅ Готово за {time.time()-start:.1f} сек! (пингов всего: {len(ping_cache)})", flush=True)
 
 if __name__ == '__main__':
     asyncio.run(main())
