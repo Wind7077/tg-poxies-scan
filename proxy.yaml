@@ -230,29 +230,6 @@ proxies:
     path: /apiv1/esa1-asda2jcvnbpseflkn-kjweksad
     headers:
       Host: testing.bomjweb.tech
-- name: 'BUNKER 🖤 | Бельгия 🇧🇪 #1216 | YT×TG×GPT×GEM | 1783ms'
-  type: vless
-  server: eu90.cdn77.icu
-  port: 20011
-  uuid: 2f094d48-7186-47ca-9e57-e977bbac3b08
-  network: tcp
-  udp: true
-  tls: true
-  server-name: eu17.cdn77.icu
-  reality-opts:
-    public-key: EltWI8AOqkN8lMjRycweRRoFRah5hu6xiKtgBmQOdE8
-    short-id: 1ed136481e0ede74
-  client-fingerprint: firefox
-- name: 'BUNKER 🖤 | Россия 🇷🇺 #1230 | TG×GPT | 1298ms'
-  type: vless
-  server: cdn432.whitenetwork.cloud
-  port: 52831
-  uuid: 03cc7a29-6616-4f97-a4ec-d0d781ece3d6
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: origin.mtrxnet.click
-  client-fingerprint: firefox
 - name: 🇷🇺 🏳 BobrVPN | AntiWhiteList 11 | @bobrvpn0
   type: vless
   server: 45.139.27.125
@@ -856,19 +833,6 @@ proxies:
     short-id: 1cfdb63f3b860379
   client-fingerprint: edge
   flow: xtls-rprx-vision
-- name: 'BUNKER 🖤 | Россия 🇷🇺 #1256 | TG×GPT | 583ms'
-  type: vless
-  server: dwedfs.whitenw.net
-  port: 8445
-  uuid: 84a56b88-2f89-4a57-b925-74abd5b7fd87
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: I_0JD13_bJuD6bNhTfb1PFPJUQqEVHl-YFluNwHAPD4
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: 🇦🇲 🏳 BobrVPN | AntiWhiteList 62 | @bobrvpn0
   type: vless
   server: 145.79.187.16
@@ -1037,20 +1001,6 @@ proxies:
     short-id: 9e7171a722d2545c
   client-fingerprint: edge
   flow: xtls-rprx-vision
-- name: 🇷🇺 🏳 BobrVPN | AntiWhiteList 7 | @bobrvpn0
-  type: vless
-  server: 185.147.27.23
-  port: 2083
-  uuid: 042bec60-62d7-4148-a0da-5709ae3ee5a6
-  network: tcp
-  udp: true
-  tls: true
-  server-name: frb1.hat.onl
-  reality-opts:
-    public-key: LSatvkYtdgq5oND_moM9NRW-ZDbdlTvyX9gzeF9r3W8
-    short-id: 1cfdb63f3b860379
-  client-fingerprint: safari
-  flow: xtls-rprx-vision
 - name: 🇱🇻 🏳 BobrVPN | AntiWhiteList 6 | @bobrvpn0
   type: vless
   server: 195.123.209.32
@@ -1093,19 +1043,658 @@ proxies:
     short-id: 054602d818379876
   client-fingerprint: ios
   flow: xtls-rprx-vision
-- name: 'BUNKER 🖤 | Россия 🇷🇺 #338 | TG×GPT | 566ms'
+- name: 🇧🇾 Беларусь | VLESS TCP Reality
   type: vless
-  server: sub-edge-18-1g.whitenw.net
-  port: 10458
-  uuid: 63b27e94-9aae-47f4-b92d-a5b0c736d9f3
+  server: 95.128.71.79
+  port: 10444
+  uuid: 8cef7621-c6f0-486e-b51d-59c30c5b0b25
+  network: tcp
+  udp: true
+  tls: true
+  server-name: ads.x5.ru
+  reality-opts:
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 🇷🇺 Россия | VLESS gRPC Reality
+  type: vless
+  server: 83.171.241.146
+  port: 443
+  uuid: fdb8b6ce-cc8a-4d84-86de-22b8ee30307c
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 5febc5g.fi16.h1clayd.click
+  reality-opts:
+    public-key: Q8ahFoY3Ki5gO37-y_q5oG1-EAcCFAvwU2VBQB6euEE
+    short-id: a6dc47e87ba10b83
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: d97908bd03b7
+- name: Телефон / Роутер [owpn.org]
+  type: vless
+  server: 138.16.249.118
+  port: 14443
+  uuid: 010be6fa-ab5f-404a-9edf-ab2db1f09f0c
+  network: ws
+  udp: true
+  tls: true
+  server-name: lt.krevetkabs111.net
+  client-fingerprint: android
+  ws-opts:
+    path: /api/generate
+    headers:
+      Host: lt.krevetkabs111.net
+- name: 'Телефон / Роутер [owpn.org] #2'
+  type: vless
+  server: 185.221.213.22
+  port: 443
+  uuid: 010be6fa-ab5f-404a-9edf-ab2db1f09f0c
+  network: ws
+  udp: true
+  tls: true
+  server-name: Frfast11.onlineai.pro
+  client-fingerprint: chrome
+  ws-opts:
+    path: /assets/sync-6d2f4a
+- name: 'Телефон / Роутер [owpn.org] #3'
+  type: vless
+  server: frfast11.onlineai.pro
+  port: 443
+  uuid: 010be6fa-ab5f-404a-9edf-ab2db1f09f0c
+  network: ws
+  udp: true
+  tls: true
+  server-name: Frfast11.onlineai.pro
+  client-fingerprint: firefox
+  ws-opts:
+    path: /assets/sync-6d2f4a
+    headers:
+      Host: Frfast11.onlineai.pro
+- name: 'Телефон / Роутер [owpn.org] #4'
+  type: vless
+  server: inff.krevetkabs111.net
+  port: 14443
+  uuid: 010be6fa-ab5f-404a-9edf-ab2db1f09f0c
+  network: ws
+  udp: true
+  tls: true
+  server-name: inff.krevetkabs111.net
+  client-fingerprint: firefox
+  ws-opts:
+    path: /api/generate
+    headers:
+      Host: inff.krevetkabs111.net
+- name: 'Телефон / Роутер [owpn.org] #5'
+  type: vless
+  server: lt.krevetkabs111.net
+  port: 14443
+  uuid: 010be6fa-ab5f-404a-9edf-ab2db1f09f0c
+  network: ws
+  udp: true
+  tls: true
+  server-name: lt.krevetkabs111.net
+  client-fingerprint: edge
+  ws-opts:
+    path: /api/generate
+    headers:
+      Host: lt.krevetkabs111.net
+- name: 'Телефон / Роутер [owpn.org] #6'
+  type: vless
+  server: lt.neuroblur.top
+  port: 14443
+  uuid: 010be6fa-ab5f-404a-9edf-ab2db1f09f0c
+  network: ws
+  udp: true
+  tls: true
+  server-name: lt.neuroblur.top
+  client-fingerprint: firefox
+  ws-opts:
+    path: /api/generate
+    headers:
+      Host: lt.neuroblur.top
+- name: 'Телефон / Роутер [owpn.org] #7'
+  type: vless
+  server: 201.58.139.66
+  port: 443
+  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 57aac2t.pl7.h1clayd.click
+  reality-opts:
+    public-key: LY0H47MWx87_L_JBzxFAuTzKZB53U7MrZQK8-dNnMxM
+    short-id: 6c5c7900406a1ae7
+  client-fingerprint: chrome
+- name: 'Телефон / Роутер [owpn.org] #8'
+  type: vless
+  server: 143.246.204.21
+  port: 443
+  uuid: 0f11b72f-1af1-4f0a-b992-87a8241d9213
   network: xhttp
   udp: true
   tls: true
-  server-name: max.ru
+  server-name: packages.gitlab.com
   reality-opts:
-    public-key: NcusujNOLaj9kiNIAMzg3BKdb3WYXMdkCgfeNHyie1E
-    short-id: 67ca97db5f330f5f
+    public-key: YEyZf6GvVcUG2VJnxyWOJQd8_ORz0n8Tw8Hs417OPxo
+    short-id: 5b524cdb28b6824a
   client-fingerprint: chrome
+- name: 'Телефон / Роутер [owpn.org] #9'
+  type: vless
+  server: srv21.buddygpt.ru
+  port: 443
+  uuid: 0f11b72f-1af1-4f0a-b992-87a8241d9213
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: packages.gitlab.com
+  reality-opts:
+    public-key: YEyZf6GvVcUG2VJnxyWOJQd8_ORz0n8Tw8Hs417OPxo
+    short-id: 5b524cdb28b6824a
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #10'
+  type: vless
+  server: get.mediacorphub.org
+  port: 443
+  uuid: 1653818d-532e-46be-b825-384107fb7c3a
+  network: grpc
+  udp: true
+  tls: true
+  server-name: get.mediacorphub.org
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: gw.v2.PushService
+- name: 'Телефон / Роутер [owpn.org] #11'
+  type: vless
+  server: net.mediacorphub.org
+  port: 443
+  uuid: 1653818d-532e-46be-b825-384107fb7c3a
+  network: grpc
+  udp: true
+  tls: true
+  server-name: net.mediacorphub.org
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: home.v2.MetricsService
+- name: 'Телефон / Роутер [owpn.org] #12'
+  type: vless
+  server: 95.85.234.66
+  port: 443
+  uuid: 3659f248-1797-4d6e-9982-a308565fec79
+  network: tcp
+  udp: true
+  tls: true
+  server-name: fl-modx.webedg.net
+  reality-opts:
+    public-key: MuQH546CBdgYVBzNU_F5fimkbQ0srHxgLKDjl1Wz2Rw
+    short-id: '00000000'
+  client-fingerprint: ios
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #13'
+  type: vless
+  server: 200.169.179.233
+  port: 443
+  uuid: 38308ff1-5aa9-494f-a25a-0f2870d56b3e
+  network: grpc
+  udp: true
+  tls: true
+  server-name: vps3.nemnogogo.com
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: mobile.api.Event
+- name: 'Телефон / Роутер [owpn.org] #14'
+  type: vless
+  server: 201.24.116.192
+  port: 443
+  uuid: 38308ff1-5aa9-494f-a25a-0f2870d56b3e
+  network: grpc
+  udp: true
+  tls: true
+  server-name: vps3.nemnogogo.com
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: mobile.api.Event
+- name: 'Телефон / Роутер [owpn.org] #15'
+  type: vless
+  server: 185.255.115.103
+  port: 443
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 4935e4t.de25.h1clayd.click
+  reality-opts:
+    public-key: MzgB17ZFbKqs8pbC3EscTzHid_ENc-k_Cp6nXl-2knw
+    short-id: 6976d670818644cc
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #16'
+  type: vless
+  server: 195.206.235.202
+  port: 443
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 4935e4t.de25.h1clayd.click
+  reality-opts:
+    public-key: MzgB17ZFbKqs8pbC3EscTzHid_ENc-k_Cp6nXl-2knw
+    short-id: 6976d670818644cc
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #17'
+  type: vless
+  server: 38917fx.es1.h1clayd.click
+  port: 443
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 38917fx.es1.h1clayd.click
+  reality-opts:
+    public-key: 4mgkA2kT_Im0rkGi-fVSUU5CyF5xvMVcjA6MXBSEDAA
+    short-id: d5501b156391e01d
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #18'
+  type: vless
+  server: 4935e4t.de25.h1clayd.click
+  port: 443
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 4935e4t.de25.h1clayd.click
+  reality-opts:
+    public-key: MzgB17ZFbKqs8pbC3EscTzHid_ENc-k_Cp6nXl-2knw
+    short-id: 6976d670818644cc
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #19'
+  type: vless
+  server: 79.182.70.212
+  port: 443
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 7aa271t.es1.h1clayd.click
+  reality-opts:
+    public-key: ZSmetD4e9QG5CiXhniHg5HJB68L4kwbgAkJmMHtVwEE
+    short-id: 42426c882c5fcd41
+  client-fingerprint: edge
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #20'
+  type: vless
+  server: 188.225.37.175
+  port: 443
+  uuid: 4b50270b-5caf-4c34-b3da-17b4525604a6
+  network: ws
+  udp: true
+  tls: true
+  server-name: cryptoventura.online
+  client-fingerprint: edge
+  ws-opts:
+    path: /api/de3/live
+    headers:
+      Host: cryptoventura.online
+- name: 'Телефон / Роутер [owpn.org] #21'
+  type: vless
+  server: cryptoventura.online
+  port: 443
+  uuid: 4b50270b-5caf-4c34-b3da-17b4525604a6
+  network: ws
+  udp: true
+  tls: true
+  server-name: cryptoventura.online
+  client-fingerprint: edge
+  ws-opts:
+    path: /api/de3/live
+    headers:
+      Host: cryptoventura.online
+- name: 'Телефон / Роутер [owpn.org] #22'
+  type: vless
+  server: 188.225.37.43
+  port: 443
+  uuid: 4cabcd59-a405-4c00-96f5-03507e1e28fa
+  network: ws
+  udp: true
+  tls: true
+  server-name: torvani.cyou
+  client-fingerprint: firefox
+  ws-opts:
+    path: /api/boards/live
+    headers:
+      Host: torvani.cyou
+- name: 'Телефон / Роутер [owpn.org] #23'
+  type: vless
+  server: 154.9.240.138
+  port: 26990
+  uuid: 57beeeb0-03fc-4fc9-94da-7604488a7134
+  network: tcp
+  udp: true
+  tls: true
+  server-name: us1p1.xn--ghq880n3na965a.com
+  reality-opts:
+    public-key: KfOrtENkHAXDFlsCluw6fv62Q-WuJXCKI98XZihtemA
+    short-id: e51285e3
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #24'
+  type: vless
+  server: 154.9.240.186
+  port: 26990
+  uuid: 57beeeb0-03fc-4fc9-94da-7604488a7134
+  network: tcp
+  udp: true
+  tls: true
+  server-name: us1p1.xn--ghq880n3na965a.com
+  reality-opts:
+    public-key: KfOrtENkHAXDFlsCluw6fv62Q-WuJXCKI98XZihtemA
+    short-id: e51285e3
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #25'
+  type: vless
+  server: 154.9.240.215
+  port: 26990
+  uuid: 57beeeb0-03fc-4fc9-94da-7604488a7134
+  network: tcp
+  udp: true
+  tls: true
+  server-name: us1p1.xn--ghq880n3na965a.com
+  reality-opts:
+    public-key: KfOrtENkHAXDFlsCluw6fv62Q-WuJXCKI98XZihtemA
+    short-id: e51285e3
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #26'
+  type: vless
+  server: 201.8.89.106
+  port: 443
+  uuid: 8ac4cf4e-c31c-4fb3-b56d-cf914970fa1b
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: static-de1.song69.fun
+  reality-opts:
+    public-key: BJx6C70Sf7yjCUqE-HSdRpiNhG7qdoP5Wp0qnntVpmI
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #27'
+  type: vless
+  server: static-de1.song69.fun
+  port: 443
+  uuid: 8ac4cf4e-c31c-4fb3-b56d-cf914970fa1b
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: static-de1.song69.fun
+  reality-opts:
+    public-key: BJx6C70Sf7yjCUqE-HSdRpiNhG7qdoP5Wp0qnntVpmI
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #28'
+  type: vless
+  server: 67.159.44.219
+  port: 443
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
+  udp: true
+  tls: true
+  server-name: bestgif.su
+  reality-opts:
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #29'
+  type: vless
+  server: 162.159.198.1
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
+  network: ws
+  udp: true
+  tls: true
+  server-name: fs.qicai99.com
+  ws-opts:
+    path: /fp=chrome
+    headers:
+      Host: fs.qicai99.com
+  client-fingerprint: chrome
+- name: 'Телефон / Роутер [owpn.org] #30'
+  type: vless
+  server: 45.157.235.170
+  port: 443
+  uuid: ba4e5cac-7af3-4fd3-9e0b-9020773d3dda
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 89c231x.de18.h1clayd.click
+  reality-opts:
+    public-key: KpRFjR-9PKEVEi6QpAUeVInXsQrFQjMSdQLOCDKZqXE
+    short-id: 584c33c4837e2db0
+  client-fingerprint: edge
+- name: 'Телефон / Роутер [owpn.org] #31'
+  type: vless
+  server: 89c231x.de18.h1clayd.click
+  port: 443
+  uuid: ba4e5cac-7af3-4fd3-9e0b-9020773d3dda
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 89c231x.de18.h1clayd.click
+  reality-opts:
+    public-key: KpRFjR-9PKEVEi6QpAUeVInXsQrFQjMSdQLOCDKZqXE
+    short-id: 584c33c4837e2db0
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #32'
+  type: vless
+  server: 87.120.126.43
+  port: 443
+  uuid: cbd6c099-5d4f-467e-86d2-92cb292892fb
+  network: tcp
+  udp: true
+  tls: true
+  server-name: gr.connect-qik.uk
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #33'
+  type: vless
+  server: 136.234.9.4
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: 80cb66x.nl17.h1clayd.click
+  reality-opts:
+    public-key: jhVdP7NFUaEXGfrmOqJlMCHTvqn3fymbzPfPT6NO4i0
+    short-id: f72d4a2c7cbbacb1
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #34'
+  type: vless
+  server: 15b171g.nl7.h1clayd.click
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 15b171g.nl7.h1clayd.click
+  reality-opts:
+    public-key: zbz--PMjcIC4Ggr3j-ibDf0fzXRTj0lM_HzjPJyMkVE
+    short-id: 50a749f0eccb628c
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: 5b79e8a94241
+- name: 'Телефон / Роутер [owpn.org] #35'
+  type: vless
+  server: 195.206.235.222
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: e60833x.nl7.h1clayd.click
+  reality-opts:
+    public-key: jIRVNEf9SpuWP2nJrAbHGGIUnfzOmwZZlrNGw-Y-O2Q
+    short-id: 2d2598d60447a967
+  client-fingerprint: firefox
+- name: 'Телефон / Роутер [owpn.org] #36'
+  type: vless
+  server: 196.245.153.104
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 15b171g.nl7.h1clayd.click
+  reality-opts:
+    public-key: zbz--PMjcIC4Ggr3j-ibDf0fzXRTj0lM_HzjPJyMkVE
+    short-id: 50a749f0eccb628c
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: 5b79e8a94241
+- name: 'Телефон / Роутер [owpn.org] #37'
+  type: vless
+  server: 196.245.153.156
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 961ec0g.nl17.h1clayd.click
+  reality-opts:
+    public-key: xn7KVKS5MOnsFrYrEeRS04JssBCOxh12rxegaDFyGkA
+    short-id: 6d289ff0f47c0aac
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: 7d5abcd7d8a1
+- name: 'Телефон / Роутер [owpn.org] #38'
+  type: vless
+  server: 79.182.70.232
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 5d0319t.nl7.h1clayd.click
+  reality-opts:
+    public-key: l-GzBDuNuhnjxoRlZqKvT7jAt_sbVAxhGFsAttO5kXs
+    short-id: 361d0dd59c70516f
+  client-fingerprint: chrome
+- name: 'Телефон / Роутер [owpn.org] #39'
+  type: vless
+  server: 50.7.115.242
+  port: 443
+  uuid: cf1b08a7-55b7-4241-b80a-c59116272b43
+  network: tcp
+  udp: true
+  tls: true
+  server-name: tarn.hazelmoor.top
+  reality-opts:
+    public-key: Mwczt2QjgQo3q8N10PVx8bWNubwiNhgka5GvxUy-GHQ
+    short-id: 7d1c7473
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #40'
+  type: vless
+  server: 50.7.38.218
+  port: 443
+  uuid: cf1b08a7-55b7-4241-b80a-c59116272b43
+  network: grpc
+  udp: true
+  tls: true
+  server-name: dock.foghollow.top
+  reality-opts:
+    public-key: EpfNfUY-xtHzn-b8SX58Spb3FUV1GC1qWJ-wAkXunjA
+    short-id: c8d752a5b8522c12
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: grpc
+- name: 'Телефон / Роутер [owpn.org] #41'
+  type: vless
+  server: 84.32.190.136
+  port: 443
+  uuid: cf1b08a7-55b7-4241-b80a-c59116272b43
+  network: grpc
+  udp: true
+  tls: true
+  server-name: verbena.keyhit.top
+  reality-opts:
+    public-key: cqpkt5cXnUXZ25PAFnQzFZfcgD6_gqsFEJGbiQSEExM
+    short-id: 1cdbb2b216944016
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: grpc
+- name: 'Телефон / Роутер [owpn.org] #42'
+  type: vless
+  server: dock.foghollow.top
+  port: 443
+  uuid: cf1b08a7-55b7-4241-b80a-c59116272b43
+  network: grpc
+  udp: true
+  tls: true
+  server-name: dock.foghollow.top
+  reality-opts:
+    public-key: EpfNfUY-xtHzn-b8SX58Spb3FUV1GC1qWJ-wAkXunjA
+    short-id: c8d752a5b8522c12
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: grpc
+- name: 'Телефон / Роутер [owpn.org] #43'
+  type: vless
+  server: grove.oakhollow.top
+  port: 443
+  uuid: cf1b08a7-55b7-4241-b80a-c59116272b43
+  network: grpc
+  udp: true
+  tls: true
+  server-name: grove.oakhollow.top
+  reality-opts:
+    public-key: afJl8rD_HbWjSxuktnRgL5m1yLGHr4Zgw0oLGCARbQ8
+    short-id: ea78466bb1ce4cec
+  client-fingerprint: qq
+  grpc-opts:
+    grpc-service-name: grpc
+- name: 'Телефон / Роутер [owpn.org] #44'
+  type: vless
+  server: 13.140.253.35
+  port: 443
+  uuid: f1a7e2c8-b140-50d1-8acf-e62090f96599
+  network: ws
+  udp: true
+  tls: true
+  server-name: xray-bprkdwje-clever-comet-4.cloady.io
+  client-fingerprint: firefox
+  ws-opts:
+    path: /27dbf143acdd7bca
+    headers:
+      Host: xray-bprkdwje-clever-comet-4.cloady.io
+- name: 'Телефон / Роутер [owpn.org] #45'
+  type: vless
+  server: xray-bprkdwje-clever-comet-4.cloady.io
+  port: 443
+  uuid: f1a7e2c8-b140-50d1-8acf-e62090f96599
+  network: ws
+  udp: true
+  tls: true
+  server-name: xray-bprkdwje-clever-comet-4.cloady.io
+  client-fingerprint: chrome
+  ws-opts:
+    path: /27dbf143acdd7bca
+    headers:
+      Host: xray-bprkdwje-clever-comet-4.cloady.io
+- name: 'Телефон / Роутер [owpn.org] #46'
+  type: vless
+  server: 83.171.241.146
+  port: 443
+  uuid: fdb8b6ce-cc8a-4d84-86de-22b8ee30307c
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: c7da7fx.fi16.h1clayd.click
+  reality-opts:
+    public-key: AuvC4tv_SHuN8nRLiOnxqgSi-WL6Aav-mfvlobmhSAE
+    short-id: 17bcca1ed549cb02
+  client-fingerprint: ios
 - name: 🇷🇺 Бункер 😻 | Russia | 07
   type: vless
   server: lte.maxlink.online
@@ -1154,6 +1743,54 @@ proxies:
     short-id: 2976f793571fb671
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: LTE/5G [owpn.org]
+  type: vless
+  server: 95.163.232.240
+  port: 443
+  uuid: 010be6fa-ab5f-404a-9edf-ab2db1f09f0c
+  network: ws
+  udp: true
+  tls: true
+  server-name: files.neurixai.app
+  client-fingerprint: qq
+  ws-opts:
+    path: /api/generate
+- name: 'LTE/5G [owpn.org] #2'
+  type: vless
+  server: 188.225.73.41
+  port: 443
+  uuid: 4cabcd59-a405-4c00-96f5-03507e1e28fa
+  network: grpc
+  udp: true
+  tls: true
+  server-name: cadrin.wtf
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: cache.sync.v1
+- name: 'LTE/5G [owpn.org] #3'
+  type: vless
+  server: bhjolq0d0l.flowersgood.top
+  port: 443
+  uuid: 7955bf18-35c4-412d-aabd-c0b36c793063
+  network: ws
+  udp: true
+  tls: true
+  server-name: bhjolq0d0l.flowersgood.top
+  client-fingerprint: chrome
+  ws-opts:
+    path: /service/telemetry/045d381f1166/
+    headers:
+      Host: bhjolq0d0l.flowersgood.top
+- name: 'LTE/5G [owpn.org] #4'
+  type: vless
+  server: 176.108.245.237
+  port: 443
+  uuid: 87c35d3a-36f1-fade-90b7-af60506efbb8
+  network: tcp
+  udp: true
+  tls: true
+  server-name: tfusq-ru-40sb.fade.mom
+  client-fingerprint: edge
 - name: 🇷🇺 AetrisVPN
   type: vless
   server: 72.56.37.23
@@ -1167,19 +1804,6 @@ proxies:
     public-key: fJnm6-PhJGSwHaAdJOzXkYOfCPPCWSlaZrtfm1XsqhA
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: LTE TEST
-  type: vless
-  server: sub-edge-18-1g.whitenw.net
-  port: 10458
-  uuid: 1fe05401-0b24-4fbf-b9ba-0d2fc279263e
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: max.ru
-  reality-opts:
-    public-key: NcusujNOLaj9kiNIAMzg3BKdb3WYXMdkCgfeNHyie1E
-    short-id: 67ca97db5f330f5f
-  client-fingerprint: chrome
 - name: 'LTE #3'
   type: vless
   server: ad.bomjweb.tech
@@ -1433,8 +2057,6 @@ proxy-groups:
   - 'LTE #1vless://75cadbe3-1f0f-46df-80c9-e0149f77fd00@login.bomjweb.tech:443?path=/apiv1/esa1-asda2jcvnbpseflkn-kjweksad&security=tls&encryption=none&host=login.bomjweb.tech&fp=firefox&type=ws&sni=login.bomjweb.tech#LTE
     #2vless://75cadbe3-1f0f-46df-80c9-e0149f77fd00@ad.bomjweb.tech:443?path=/apiv1/esa1-asda2jcvnbpseflkn-kjweksad&security=tls&encryption=none&host=ad.bomjweb.tech&fp=firefox&type=ws&sni=ad.bomjweb.tech#LTE
     #3LTE'
-  - 'BUNKER 🖤 | Бельгия 🇧🇪 #1216 | YT×TG×GPT×GEM | 1783ms'
-  - 'BUNKER 🖤 | Россия 🇷🇺 #1230 | TG×GPT | 1298ms'
   - 🇷🇺 🏳 BobrVPN | AntiWhiteList 11 | @bobrvpn0
   - 🇨🇭 🏳 BobrVPN | AntiWhiteList 10 | @bobrvpn0
   - 🇳🇱 🏳 BobrVPN | AntiWhiteList 13 | @bobrvpn0
@@ -1484,7 +2106,6 @@ proxy-groups:
   - 🇳🇱 🏳 BobrVPN | AntiWhiteList 60 | @bobrvpn0
   - 🇩🇰 🏳 BobrVPN | AntiWhiteList 59 | @bobrvpn0
   - 🇫🇷 🏳 BobrVPN | AntiWhiteList 61 | @bobrvpn0
-  - 'BUNKER 🖤 | Россия 🇷🇺 #1256 | TG×GPT | 583ms'
   - 🇦🇲 🏳 BobrVPN | AntiWhiteList 62 | @bobrvpn0
   - 🇦🇲 🏳 BobrVPN | AntiWhiteList 63 | @bobrvpn0
   - 🇦🇲 🏳 BobrVPN | AntiWhiteList 64 | @bobrvpn0
@@ -1498,17 +2119,66 @@ proxy-groups:
   - 🇺🇸 🏳 BobrVPN | AntiWhiteList 3 | @bobrvpn0
   - 🇳🇱 🏳 BobrVPN | AntiWhiteList 4 | @bobrvpn0
   - 🇳🇱 🏳 BobrVPN | AntiWhiteList 5 | @bobrvpn0
-  - 🇷🇺 🏳 BobrVPN | AntiWhiteList 7 | @bobrvpn0
   - 🇱🇻 🏳 BobrVPN | AntiWhiteList 6 | @bobrvpn0
   - 🇦🇪 🏳 BobrVPN | AntiWhiteList 9 | @bobrvpn0
   - 🇳🇱 🏳 BobrVPN | AntiWhiteList 8 | @bobrvpn0
-  - 'BUNKER 🖤 | Россия 🇷🇺 #338 | TG×GPT | 566ms'
+  - 🇧🇾 Беларусь | VLESS TCP Reality
+  - 🇷🇺 Россия | VLESS gRPC Reality
+  - Телефон / Роутер [owpn.org]
+  - 'Телефон / Роутер [owpn.org] #2'
+  - 'Телефон / Роутер [owpn.org] #3'
+  - 'Телефон / Роутер [owpn.org] #4'
+  - 'Телефон / Роутер [owpn.org] #5'
+  - 'Телефон / Роутер [owpn.org] #6'
+  - 'Телефон / Роутер [owpn.org] #7'
+  - 'Телефон / Роутер [owpn.org] #8'
+  - 'Телефон / Роутер [owpn.org] #9'
+  - 'Телефон / Роутер [owpn.org] #10'
+  - 'Телефон / Роутер [owpn.org] #11'
+  - 'Телефон / Роутер [owpn.org] #12'
+  - 'Телефон / Роутер [owpn.org] #13'
+  - 'Телефон / Роутер [owpn.org] #14'
+  - 'Телефон / Роутер [owpn.org] #15'
+  - 'Телефон / Роутер [owpn.org] #16'
+  - 'Телефон / Роутер [owpn.org] #17'
+  - 'Телефон / Роутер [owpn.org] #18'
+  - 'Телефон / Роутер [owpn.org] #19'
+  - 'Телефон / Роутер [owpn.org] #20'
+  - 'Телефон / Роутер [owpn.org] #21'
+  - 'Телефон / Роутер [owpn.org] #22'
+  - 'Телефон / Роутер [owpn.org] #23'
+  - 'Телефон / Роутер [owpn.org] #24'
+  - 'Телефон / Роутер [owpn.org] #25'
+  - 'Телефон / Роутер [owpn.org] #26'
+  - 'Телефон / Роутер [owpn.org] #27'
+  - 'Телефон / Роутер [owpn.org] #28'
+  - 'Телефон / Роутер [owpn.org] #29'
+  - 'Телефон / Роутер [owpn.org] #30'
+  - 'Телефон / Роутер [owpn.org] #31'
+  - 'Телефон / Роутер [owpn.org] #32'
+  - 'Телефон / Роутер [owpn.org] #33'
+  - 'Телефон / Роутер [owpn.org] #34'
+  - 'Телефон / Роутер [owpn.org] #35'
+  - 'Телефон / Роутер [owpn.org] #36'
+  - 'Телефон / Роутер [owpn.org] #37'
+  - 'Телефон / Роутер [owpn.org] #38'
+  - 'Телефон / Роутер [owpn.org] #39'
+  - 'Телефон / Роутер [owpn.org] #40'
+  - 'Телефон / Роутер [owpn.org] #41'
+  - 'Телефон / Роутер [owpn.org] #42'
+  - 'Телефон / Роутер [owpn.org] #43'
+  - 'Телефон / Роутер [owpn.org] #44'
+  - 'Телефон / Роутер [owpn.org] #45'
+  - 'Телефон / Роутер [owpn.org] #46'
   - 🇷🇺 Бункер 😻 | Russia | 07
   - 🇷🇺 Бункер 😻 | Russia | 41
   - 🇨🇭⚡ Автоподключение 65.
   - 🇷🇺🕊️ Обход АВТО 12.
+  - LTE/5G [owpn.org]
+  - 'LTE/5G [owpn.org] #2'
+  - 'LTE/5G [owpn.org] #3'
+  - 'LTE/5G [owpn.org] #4'
   - 🇷🇺 AetrisVPN
-  - LTE TEST
   - 'LTE #3'
   - 'LTE #2'
   - VLESS-sub-edge-05-1g.whitenw.net
@@ -1714,8 +2384,6 @@ proxy-groups:
   - 'LTE #1vless://75cadbe3-1f0f-46df-80c9-e0149f77fd00@login.bomjweb.tech:443?path=/apiv1/esa1-asda2jcvnbpseflkn-kjweksad&security=tls&encryption=none&host=login.bomjweb.tech&fp=firefox&type=ws&sni=login.bomjweb.tech#LTE
     #2vless://75cadbe3-1f0f-46df-80c9-e0149f77fd00@ad.bomjweb.tech:443?path=/apiv1/esa1-asda2jcvnbpseflkn-kjweksad&security=tls&encryption=none&host=ad.bomjweb.tech&fp=firefox&type=ws&sni=ad.bomjweb.tech#LTE
     #3LTE'
-  - 'BUNKER 🖤 | Бельгия 🇧🇪 #1216 | YT×TG×GPT×GEM | 1783ms'
-  - 'BUNKER 🖤 | Россия 🇷🇺 #1230 | TG×GPT | 1298ms'
   - 🇷🇺 🏳 BobrVPN | AntiWhiteList 11 | @bobrvpn0
   - 🇨🇭 🏳 BobrVPN | AntiWhiteList 10 | @bobrvpn0
   - 🇳🇱 🏳 BobrVPN | AntiWhiteList 13 | @bobrvpn0
@@ -1765,7 +2433,6 @@ proxy-groups:
   - 🇳🇱 🏳 BobrVPN | AntiWhiteList 60 | @bobrvpn0
   - 🇩🇰 🏳 BobrVPN | AntiWhiteList 59 | @bobrvpn0
   - 🇫🇷 🏳 BobrVPN | AntiWhiteList 61 | @bobrvpn0
-  - 'BUNKER 🖤 | Россия 🇷🇺 #1256 | TG×GPT | 583ms'
   - 🇦🇲 🏳 BobrVPN | AntiWhiteList 62 | @bobrvpn0
   - 🇦🇲 🏳 BobrVPN | AntiWhiteList 63 | @bobrvpn0
   - 🇦🇲 🏳 BobrVPN | AntiWhiteList 64 | @bobrvpn0
@@ -1779,17 +2446,66 @@ proxy-groups:
   - 🇺🇸 🏳 BobrVPN | AntiWhiteList 3 | @bobrvpn0
   - 🇳🇱 🏳 BobrVPN | AntiWhiteList 4 | @bobrvpn0
   - 🇳🇱 🏳 BobrVPN | AntiWhiteList 5 | @bobrvpn0
-  - 🇷🇺 🏳 BobrVPN | AntiWhiteList 7 | @bobrvpn0
   - 🇱🇻 🏳 BobrVPN | AntiWhiteList 6 | @bobrvpn0
   - 🇦🇪 🏳 BobrVPN | AntiWhiteList 9 | @bobrvpn0
   - 🇳🇱 🏳 BobrVPN | AntiWhiteList 8 | @bobrvpn0
-  - 'BUNKER 🖤 | Россия 🇷🇺 #338 | TG×GPT | 566ms'
+  - 🇧🇾 Беларусь | VLESS TCP Reality
+  - 🇷🇺 Россия | VLESS gRPC Reality
+  - Телефон / Роутер [owpn.org]
+  - 'Телефон / Роутер [owpn.org] #2'
+  - 'Телефон / Роутер [owpn.org] #3'
+  - 'Телефон / Роутер [owpn.org] #4'
+  - 'Телефон / Роутер [owpn.org] #5'
+  - 'Телефон / Роутер [owpn.org] #6'
+  - 'Телефон / Роутер [owpn.org] #7'
+  - 'Телефон / Роутер [owpn.org] #8'
+  - 'Телефон / Роутер [owpn.org] #9'
+  - 'Телефон / Роутер [owpn.org] #10'
+  - 'Телефон / Роутер [owpn.org] #11'
+  - 'Телефон / Роутер [owpn.org] #12'
+  - 'Телефон / Роутер [owpn.org] #13'
+  - 'Телефон / Роутер [owpn.org] #14'
+  - 'Телефон / Роутер [owpn.org] #15'
+  - 'Телефон / Роутер [owpn.org] #16'
+  - 'Телефон / Роутер [owpn.org] #17'
+  - 'Телефон / Роутер [owpn.org] #18'
+  - 'Телефон / Роутер [owpn.org] #19'
+  - 'Телефон / Роутер [owpn.org] #20'
+  - 'Телефон / Роутер [owpn.org] #21'
+  - 'Телефон / Роутер [owpn.org] #22'
+  - 'Телефон / Роутер [owpn.org] #23'
+  - 'Телефон / Роутер [owpn.org] #24'
+  - 'Телефон / Роутер [owpn.org] #25'
+  - 'Телефон / Роутер [owpn.org] #26'
+  - 'Телефон / Роутер [owpn.org] #27'
+  - 'Телефон / Роутер [owpn.org] #28'
+  - 'Телефон / Роутер [owpn.org] #29'
+  - 'Телефон / Роутер [owpn.org] #30'
+  - 'Телефон / Роутер [owpn.org] #31'
+  - 'Телефон / Роутер [owpn.org] #32'
+  - 'Телефон / Роутер [owpn.org] #33'
+  - 'Телефон / Роутер [owpn.org] #34'
+  - 'Телефон / Роутер [owpn.org] #35'
+  - 'Телефон / Роутер [owpn.org] #36'
+  - 'Телефон / Роутер [owpn.org] #37'
+  - 'Телефон / Роутер [owpn.org] #38'
+  - 'Телефон / Роутер [owpn.org] #39'
+  - 'Телефон / Роутер [owpn.org] #40'
+  - 'Телефон / Роутер [owpn.org] #41'
+  - 'Телефон / Роутер [owpn.org] #42'
+  - 'Телефон / Роутер [owpn.org] #43'
+  - 'Телефон / Роутер [owpn.org] #44'
+  - 'Телефон / Роутер [owpn.org] #45'
+  - 'Телефон / Роутер [owpn.org] #46'
   - 🇷🇺 Бункер 😻 | Russia | 07
   - 🇷🇺 Бункер 😻 | Russia | 41
   - 🇨🇭⚡ Автоподключение 65.
   - 🇷🇺🕊️ Обход АВТО 12.
+  - LTE/5G [owpn.org]
+  - 'LTE/5G [owpn.org] #2'
+  - 'LTE/5G [owpn.org] #3'
+  - 'LTE/5G [owpn.org] #4'
   - 🇷🇺 AetrisVPN
-  - LTE TEST
   - 'LTE #3'
   - 'LTE #2'
   - VLESS-sub-edge-05-1g.whitenw.net
