@@ -72,6 +72,11 @@ BLACKLIST_DOMAINS = [
 STICKY_WORDS = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 WHITELIST_ROOTS = "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс"
 
+# В proxy.txt / proxy.yaml (WL) попадают ТОЛЬКО эти протоколы:
+WL_PROTOCOLS = {'vless'}
+# максимум embed-сообщений чужих каналов, докачиваемых из подписок (0 = без лимита)
+MAX_EMBED_SUBS = 200
+
 ENABLE_VLESS = True
 ENABLE_VMESS = True
 ENABLE_SS = True
@@ -94,6 +99,7 @@ UUID_RE = re.compile(r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]
 SID_RE = re.compile(r'^(?:[0-9a-fA-F]{2}){0,8}$')
 
 _KEYWORD_ROOTS = [w.lower() for w in WHITELIST_ROOTS.split() if w]
+_TOKEN_RE = re.compile(r'[^0-9a-zа-яё]+')
 
 IGNORED_PARAMS = {'fp', 'alpn', 'extra', 'headertype', 'encryption', 'allowinsecure',
                   'insecure', 'fm', 'packetencoding', 'spx', 'ed'}
@@ -285,11 +291,15 @@ def config_key(uri):
     return (scheme, user, pwd, host, port, path, tuple(sorted(q.items())))
 
 def matches_roots(p):
+    """Совпадение по НАЧАЛУ слова, а не по подстроке.
+    Старый вариант: 'lte' ловился внутри 'filter', 'бс' — внутри 'обслуж...',
+    '4g'/'5g' — внутри hex-поддоменов -> в WL попадал мусор."""
     searchable = ' '.join([
         str(p.get('name', '')), str(p.get('server', '')),
         str(p.get('sni', '')), str(p.get('server-name', '')),
     ]).lower()
-    return any(root in searchable for root in _KEYWORD_ROOTS)
+    tokens = [t for t in _TOKEN_RE.split(searchable) if t]
+    return any(t.startswith(root) for t in tokens for root in _KEYWORD_ROOTS)
 
 def _rank(uri):
     p = _uri_parts(uri)
@@ -848,17 +858,28 @@ def _extract_from_sub_text(text):
         ISSUE_URLS.add(clean_url(m.group(0)))
     return found
 
+_TME_RE = re.compile(r'https?://(?:t\.me|telegram\.me)/(?:s/)?([a-zA-Z0-9_]+)(?:/(\d+))?')
+
+def _sub_key(url):
+    """Единый ключ для t.me-ссылок: /s/, регистр и хвосты не важны."""
+    mm = _TME_RE.match(url)
+    if mm:
+        chan, msg_id = mm.group(1).lower(), mm.group(2)
+        return f'tg:{chan}/{msg_id}' if msg_id else f'tg:{chan}'
+    return url.rstrip('/')
+
 async def process_subscription(url, session, sem, visited, cutoff):
-    """Каналы t.me внутри подписок тоже парсим как /s/ (раньше от них было ~0 толку)."""
-    if url in visited:
+    """Каналы t.me внутри подписок тоже парсим как /s/."""
+    key = _sub_key(url)
+    if key in visited:
         return []
-    visited.add(url)
+    visited.add(key)
     if url.startswith('happ://'):
         return [(url, now_utc())]
     if not url.startswith(('http://', 'https://')) or is_useless_tme(url):
         return []
     if 't.me/' in url or 'telegram.me/' in url:
-        mm = re.match(r'https?://(?:t\.me|telegram\.me)/(?:s/)?([a-zA-Z0-9_]+)(?:/(\d+))?', url)
+        mm = _TME_RE.match(url)
         if not mm:
             return []
         chan, msg_id = mm.group(1), mm.group(2)
@@ -1011,11 +1032,12 @@ async def build_list(items, cutoff, label, ping_sem, ping_cache, whitelist=False
     clash, txt_uris = [], []
     for u, p in alive:
         p = sanitize_proxy(dict(p))
-        if p.get('type') not in enabled:
-            if not whitelist:
-                txt_uris.append(u)  # в ALL.txt кладём все протоколы, как раньше
-            continue
-        if whitelist and not matches_roots(p):
+        if whitelist:
+            # WL: только протоколы из WL_PROTOCOLS и только с ключевыми словами
+            if p.get('type') not in WL_PROTOCOLS or not matches_roots(p):
+                continue
+        elif p.get('type') not in enabled:
+            txt_uris.append(u)  # в ALL.txt кладём все протоколы, как раньше
             continue
         ok, _ = validate_proxy(p)
         if ok:
@@ -1074,13 +1096,32 @@ async def main():
                     p, u2, _ = extract_messages_data(r, cutoff_wl) if r else ([], [], None)
                 items.extend(p)
                 sub_urls.update(clean_url(u) for u in u2)
-            visited.update(web_channels)
+            for wc in web_channels:
+                visited.add(_sub_key(wc))
         if telethon_sources:
             p, u = await parse_telethon_sources(telethon_sources, cutoff_wl, LIMIT_WL)
             items.extend(p)
             sub_urls.update(clean_url(x) for x in u)
+        # ссылки на каналы, которые уже читаем напрямую, не нужны
+        # (permalink'и постов ведут на те же сообщения -> сотни лишних запросов)
+        known_chans = set()
+        for src in web_channels + embed_msgs + telethon_sources:
+            mm = _TME_RE.match(src)
+            if mm:
+                known_chans.add(mm.group(1).lower())
+        if known_chans:
+            n0 = len(sub_urls)
+            sub_urls = {u for u in sub_urls
+                        if not ((mm := _TME_RE.match(u)) and mm.group(1).lower() in known_chans)}
+            debug_log(f"⏭️ Пропущено ссылок на уже прочитанные каналы: {n0 - len(sub_urls)}")
         if sub_urls:
-            subs = sorted(u.rstrip('/') for u in sub_urls if u)
+            subs = sorted({u.rstrip('/') for u in sub_urls if u})
+            if MAX_EMBED_SUBS > 0:
+                embeds = [u for u in subs if (mm := _TME_RE.match(u)) and mm.group(2)]
+                if len(embeds) > MAX_EMBED_SUBS:
+                    drop = set(embeds[MAX_EMBED_SUBS:])
+                    subs = [u for u in subs if u not in drop]
+                    debug_log(f"⏭️ Embed-лимит: пропущено {len(drop)} чужих сообщений")
             print(f"[{time.time()-start:.1f}s] Подписок: {len(subs)}", flush=True)
             results = await asyncio.gather(*(process_subscription(u, session, http_sem, visited, cutoff_wl) for u in subs))
             for r in results:
