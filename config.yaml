@@ -83,7 +83,7 @@ verify:
   test_url: http://www.gstatic.com/generate_204
   geo_top: 0
   geo_url: https://api.ipify.org?format=json
-
+  
   l3:
     enabled: true
     telegram: "https://api.telegram.org/robots.txt"
@@ -102,6 +102,12 @@ cache:
   ping_fail_ttl_hours: 3
   content_hash: true
 
+# Блок нужен, чтобы pipeline.py не упал при проверке cfg.telegram.session_b64
+telegram:
+  api_id: 0
+  api_hash: ""
+  session_b64: ""
+
 telethon:
   all_channels: true
   attachments: true
@@ -118,7 +124,13 @@ logging:
   live_sources_top: 0
   progress_every: 200
 
-problem_domains: [kfwl.lol, pozor.bond, atlanta-subs.ru, astra-sub.com, taurus-sync.com, net4.su]
+problem_domains:
+  - kfwl.lol
+  - pozor.bond
+  - atlanta-subs.ru
+  - astra-sub.com
+  - taurus-sync.com
+  - net4.su
 
 blacklist_domains:
   - youtube.com
