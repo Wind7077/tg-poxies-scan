@@ -4,58 +4,16 @@ mode: Rule
 log-level: info
 external-controller: 127.0.0.1:9090
 proxies:
-- name: 🟢 Телефон / Роутер [owpn.org] · 144ms
-  type: vless
-  server: 162.159.198.1
-  port: 443
-  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
-  network: ws
-  udp: true
-  tls: true
-  server-name: fs.qicai99.com
-  client-fingerprint: chrome
-  ws-opts:
-    path: /
-    headers:
-      Host: fs.qicai99.com
-- name: 🟢 🇳🇱NL_249|1.7MB/s|S004-260618 · 332ms
-  type: vless
-  server: 89.105.218.154
-  port: 443
-  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
-  network: tcp
-  udp: true
-  tls: true
-  server-name: golos.mail.ru
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🟢 🇳🇱 Нидерланды | VLESS TCP Reality · 339ms
-  type: vless
-  server: 89.105.218.154
-  port: 443
-  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
-  network: tcp
-  udp: true
-  tls: true
-  server-name: golos.mail.ru
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '🟢 🌀 CYBERPORTAL | White Keys #187 · 345ms'
+- name: '🟢 🌀 CYBERPORTAL | White Keys #187 · 270ms'
   type: vless
   server: 152.69.195.67
   port: 47878
   uuid: eb8613e3-8393-4cff-a3ad-6501fd4adc63
   network: tcp
   udp: true
-- name: 🟢 🇳🇱 Нидерланды | VLESS TCP Reality · 358ms
+- name: '🟢 🇳🇱 The Netherlands #232 · 371ms'
   type: vless
-  server: 89.105.218.147
+  server: 89.105.218.142
   port: 443
   uuid: 90157e25-cee1-4217-921e-91f300bc1a24
   network: tcp
@@ -67,21 +25,35 @@ proxies:
     short-id: 428ef87fd47a3a32
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '🟢 🇫🇷➜🇷🇺 GidroksiFree #15 | 🔗Каскад | 🔴WIFI | 693ms | ↓0.0Mbps · 381ms'
+- name: 🔵 🇳🇱NL_249|1.7MB/s|S004-260618 · 374ms
   type: vless
-  server: 67.159.44.219
+  server: 89.105.218.154
   port: 443
   uuid: 90157e25-cee1-4217-921e-91f300bc1a24
   network: tcp
   udp: true
   tls: true
-  server-name: 67.159.44.219
+  server-name: golos.mail.ru
   reality-opts:
     public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
     short-id: 428ef87fd47a3a32
-  client-fingerprint: safari
+  client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '🟢 🇫🇷➜🇷🇺 GidroksiFree #16 | 🔗Каскад | 🔴WIFI | 617ms | ↓0.0Mbps · 382ms'
+- name: 🔵 🇳🇱 Нидерланды | VLESS TCP Reality · 375ms
+  type: vless
+  server: 89.105.218.154
+  port: 443
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
+  udp: true
+  tls: true
+  server-name: golos.mail.ru
+  reality-opts:
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: '🟢 🇫🇷➜🇷🇺 GidroksiFree #16 | 🔗Каскад | 🔴WIFI | 617ms | ↓0.0Mbps · 402ms'
   type: vless
   server: 67.159.44.219
   port: 443
@@ -95,21 +67,21 @@ proxies:
     short-id: 428ef87fd47a3a32
   client-fingerprint: safari
   flow: xtls-rprx-vision
-- name: '🟢 🇪🇪 GidroksiFree #1 | 🛡БС | 🟢LTE | 1901ms | ↓0.0Mbps · 437ms'
+- name: '🟢 🇬🇧➜🇷🇺 GidroksiFree #113 | 🔗Каскад | 🔴WIFI | 652ms | ↓0.0Mbps · 411ms'
   type: vless
-  server: 185.215.184.86
+  server: 50.7.227.78
   port: 443
   uuid: 90157e25-cee1-4217-921e-91f300bc1a24
   network: tcp
   udp: true
   tls: true
-  server-name: 185.215.184.86
+  server-name: bizorg.su
   reality-opts:
     public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
     short-id: 428ef87fd47a3a32
-  client-fingerprint: firefox
+  client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '🟢 🇪🇪➜🇷🇺 GidroksiFree #7 | 🔗Каскад | 🟢LTE | 1629ms | ↓0.0Mbps · 463ms'
+- name: '🟢 🇪🇪➜🇷🇺 GidroksiFree #6 | 🔗Каскад | 🟢LTE | 2159ms | ↓0.0Mbps · 454ms'
   type: vless
   server: 185.215.184.54
   port: 443
@@ -117,13 +89,55 @@ proxies:
   network: tcp
   udp: true
   tls: true
+  server-name: 185.215.184.54
+  reality-opts:
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🟢 🇪🇪➜🇷🇺 GidroksiFree #5 | 🔗Каскад | 🟢LTE | 1004ms | ↓0.0Mbps · 473ms'
+  type: vless
+  server: 185.215.184.50
+  port: 443
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
+  udp: true
+  tls: true
   server-name: dvizhok.su
   reality-opts:
     public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
     short-id: 428ef87fd47a3a32
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🟢 🇪🇪➜🇷🇺 GidroksiFree #4 | 🔗Каскад | 🟢LTE | 1371ms | ↓0.0Mbps · 463ms'
+- name: '🟢 🇪🇪➜🇷🇺 GidroksiFree #8 | 🔗Каскад | 🟢LTE | 3822ms | ↓0.0Mbps · 481ms'
+  type: vless
+  server: 185.215.184.50
+  port: 443
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 185.215.184.50
+  reality-opts:
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 🟢 Телефон / Роутер [owpn.org] · 483ms
+  type: vless
+  server: 31.7.60.250
+  port: 443
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
+  udp: true
+  tls: true
+  server-name: perevodchiki.su
+  reality-opts:
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🟢 🇪🇪➜🇷🇺 GidroksiFree #4 | 🔗Каскад | 🟢LTE | 1371ms | ↓0.0Mbps · 489ms'
   type: vless
   server: 185.215.184.86
   port: 443
@@ -137,7 +151,111 @@ proxies:
     short-id: 428ef87fd47a3a32
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🟢 Беларусь🇧🇾 1 · 500ms
+- name: 🟢 Телефон / Роутер [owpn.org] · 536ms
+  type: vless
+  server: f0d7aft.nl13.h1clayd.click
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: tcp
+  udp: true
+  tls: true
+  server-name: f0d7aft.nl13.h1clayd.click
+  reality-opts:
+    public-key: kkCGiCQCKnkozJR1KKCRNtmdBECmThCgI9VSv7iDcWI
+    short-id: 8956c57cb4c4f8d2
+  client-fingerprint: chrome
+- name: '🟢 🌀 CYBERPORTAL | White Keys #211 · 593ms'
+  type: vless
+  server: 95.174.68.188
+  port: 14430
+  uuid: 965ffbbe-c6b6-4d5f-8dea-6d8abc55d9c0
+  network: ws
+  udp: true
+  ws-opts:
+    path: /vless
+    headers:
+      Host: 95.174.68.188
+- name: 🟢 Телефон / Роутер [owpn.org] · 669ms
+  type: vless
+  server: 185.215.184.50
+  port: 443
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 185.215.184.50
+  reality-opts:
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🟢 🌀 CYBERPORTAL | White Keys #271 · 705ms'
+  type: vless
+  server: 13.140.56.100
+  port: 14430
+  uuid: 68512eac-cd53-4de3-8d1e-08f6e04af1a9
+  network: ws
+  udp: true
+  ws-opts:
+    path: /vless
+    headers:
+      Host: 13.140.56.100
+- name: '🟢 🌀 CYBERPORTAL | White Keys #273 · 715ms'
+  type: vless
+  server: 13.140.56.100
+  port: 14430
+  uuid: 68512eac-cd53-4de3-8d1e-08f6e04af1a9
+  network: ws
+  udp: true
+  ws-opts:
+    path: /vless
+    headers:
+      Host: 13.140.56.100
+- name: '🟢 🌀 CYBERPORTAL | White Keys #210 · 716ms'
+  type: vless
+  server: 13.140.56.100
+  port: 14430
+  uuid: 68512eac-cd53-4de3-8d1e-08f6e04af1a9
+  network: ws
+  udp: true
+  ws-opts:
+    path: /vless
+    headers:
+      Host: 13.140.56.100
+- name: '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #101 · 717ms'
+  type: vless
+  server: 13.140.56.100
+  port: 14430
+  uuid: 68512eac-cd53-4de3-8d1e-08f6e04af1a9
+  network: ws
+  udp: true
+  ws-opts:
+    path: /vless
+    headers:
+      Host: 13.140.56.100
+- name: '🟢 🌀 CYBERPORTAL | White Keys #212 · 717ms'
+  type: vless
+  server: 13.140.56.100
+  port: 14430
+  uuid: 68512eac-cd53-4de3-8d1e-08f6e04af1a9
+  network: ws
+  udp: true
+  ws-opts:
+    path: /vless
+    headers:
+      Host: 13.140.56.100
+- name: '🟢 🌀 CYBERPORTAL | White Keys #224 · 772ms'
+  type: vless
+  server: 95.174.68.188
+  port: 14430
+  uuid: 965ffbbe-c6b6-4d5f-8dea-6d8abc55d9c0
+  network: ws
+  udp: true
+  ws-opts:
+    path: /vless
+    headers:
+      Host: 95.174.68.188
+- name: 🟢 Беларусь🇧🇾 1 · 801ms
   type: vless
   server: f860eat.by2.h1clayd.click
   port: 443
@@ -150,7 +268,21 @@ proxies:
     public-key: RXAskull5vbk9XitLXw1LeFObIKvlyp_jlxRQSzG5Rs
     short-id: 1219e1fdad18b41c
   client-fingerprint: firefox
-- name: 🟢 Беларусь🇧🇾 2 · 562ms
+- name: 🟢 Телефон / Роутер [owpn.org] · 831ms
+  type: vless
+  server: 188.225.37.43
+  port: 443
+  uuid: 4cabcd59-a405-4c00-96f5-03507e1e28fa
+  network: ws
+  udp: true
+  tls: true
+  server-name: torvani.cyou
+  client-fingerprint: firefox
+  ws-opts:
+    path: /api/boards/live
+    headers:
+      Host: torvani.cyou
+- name: 🟢 Беларусь🇧🇾 2 · 888ms
   type: vless
   server: cf6406g.by2.h1clayd.click
   port: 443
@@ -165,31 +297,23 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: a2a366869e24
-- name: '🟢 🌀 CYBERPORTAL | White Keys #224 · 572ms'
+- name: '🟢 🇨🇭➜🇷🇺 GidroksiFree #88 | 🔗Каскад | 🔴WIFI | 5075ms | ↓0.0Mbps · 932ms'
   type: vless
-  server: 95.174.68.188
-  port: 14430
-  uuid: 965ffbbe-c6b6-4d5f-8dea-6d8abc55d9c0
-  network: ws
+  server: 81.17.18.106
+  port: 443
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
   udp: true
-  ws-opts:
-    path: /vless
-    headers:
-      Host: 95.174.68.188
-- name: '🟢 🌀 CYBERPORTAL | White Keys #211 · 572ms'
+  tls: true
+  server-name: perevodchiki.su
+  reality-opts:
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🟢 🇪🇪➜🇷🇺 GidroksiFree #7 | 🔗Каскад | 🟢LTE | 1629ms | ↓0.0Mbps · 982ms'
   type: vless
-  server: 95.174.68.188
-  port: 14430
-  uuid: 965ffbbe-c6b6-4d5f-8dea-6d8abc55d9c0
-  network: ws
-  udp: true
-  ws-opts:
-    path: /vless
-    headers:
-      Host: 95.174.68.188
-- name: '🟢 🇪🇪➜🇷🇺 GidroksiFree #5 | 🔗Каскад | 🟢LTE | 1004ms | ↓0.0Mbps · 628ms'
-  type: vless
-  server: 185.215.184.50
+  server: 185.215.184.54
   port: 443
   uuid: 90157e25-cee1-4217-921e-91f300bc1a24
   network: tcp
@@ -201,134 +325,7 @@ proxies:
     short-id: 428ef87fd47a3a32
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🟢 🌀 CYBERPORTAL | White Keys #212 · 699ms'
-  type: vless
-  server: 13.140.56.100
-  port: 14430
-  uuid: 68512eac-cd53-4de3-8d1e-08f6e04af1a9
-  network: ws
-  udp: true
-  ws-opts:
-    path: /vless
-    headers:
-      Host: 13.140.56.100
-- name: '🟢 🌀 CYBERPORTAL | White Keys #273 · 702ms'
-  type: vless
-  server: 13.140.56.100
-  port: 14430
-  uuid: 68512eac-cd53-4de3-8d1e-08f6e04af1a9
-  network: ws
-  udp: true
-  ws-opts:
-    path: /vless
-    headers:
-      Host: 13.140.56.100
-- name: '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #101 · 709ms'
-  type: vless
-  server: 13.140.56.100
-  port: 14430
-  uuid: 68512eac-cd53-4de3-8d1e-08f6e04af1a9
-  network: ws
-  udp: true
-  ws-opts:
-    path: /vless
-    headers:
-      Host: 13.140.56.100
-- name: '🟢 🌀 CYBERPORTAL | White Keys #210 · 724ms'
-  type: vless
-  server: 13.140.56.100
-  port: 14430
-  uuid: 68512eac-cd53-4de3-8d1e-08f6e04af1a9
-  network: ws
-  udp: true
-  ws-opts:
-    path: /vless
-    headers:
-      Host: 13.140.56.100
-- name: '🟢 🌀 CYBERPORTAL | White Keys #271 · 732ms'
-  type: vless
-  server: 13.140.56.100
-  port: 14430
-  uuid: 68512eac-cd53-4de3-8d1e-08f6e04af1a9
-  network: ws
-  udp: true
-  ws-opts:
-    path: /vless
-    headers:
-      Host: 13.140.56.100
-- name: '🟢 🇬🇧➜🇷🇺 GidroksiFree #113 | 🔗Каскад | 🔴WIFI | 652ms | ↓0.0Mbps · 756ms'
-  type: vless
-  server: 50.7.227.78
-  port: 443
-  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
-  network: tcp
-  udp: true
-  tls: true
-  server-name: bizorg.su
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🟢 Телефон / Роутер [owpn.org] · 822ms
-  type: vless
-  server: 188.225.37.43
-  port: 443
-  uuid: 4cabcd59-a405-4c00-96f5-03507e1e28fa
-  network: ws
-  udp: true
-  tls: true
-  server-name: torvani.cyou
-  client-fingerprint: firefox
-  ws-opts:
-    path: /api/boards/live
-    headers:
-      Host: torvani.cyou
-- name: '🟢 🇪🇪➜🇷🇺 GidroksiFree #6 | 🔗Каскад | 🟢LTE | 2159ms | ↓0.0Mbps · 923ms'
-  type: vless
-  server: 185.215.184.54
-  port: 443
-  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
-  network: tcp
-  udp: true
-  tls: true
-  server-name: 185.215.184.54
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🟢 🇪🇪➜🇷🇺 GidroksiFree #8 | 🔗Каскад | 🟢LTE | 3822ms | ↓0.0Mbps · 1045ms'
-  type: vless
-  server: 185.215.184.50
-  port: 443
-  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
-  network: tcp
-  udp: true
-  tls: true
-  server-name: 185.215.184.50
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 🟢 Телефон / Роутер [owpn.org] · 1194ms
-  type: vless
-  server: 188.225.37.175
-  port: 443
-  uuid: 4b50270b-5caf-4c34-b3da-17b4525604a6
-  network: ws
-  udp: true
-  tls: true
-  server-name: cryptoventura.online
-  client-fingerprint: firefox
-  alpn:
-  - http/1.1
-  ws-opts:
-    path: /api/de3/live
-    headers:
-      Host: cryptoventura.online
-- name: '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #65 · 1351ms'
+- name: '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #65 · 1084ms'
   type: vless
   server: 178.172.227.124
   port: 14430
@@ -339,7 +336,7 @@ proxies:
     path: /vless
     headers:
       Host: 178.172.227.124
-- name: 🟢 Телефон / Роутер [owpn.org] · 1467ms
+- name: 🟢 Телефон / Роутер [owpn.org] · 1548ms
   type: vless
   server: edge.mediacorphub.org
   port: 443
@@ -351,64 +348,23 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: hub.v1.ObjectService
-- name: '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #49 · 1487ms'
+- name: 🟢 Телефон / Роутер [owpn.org] · 1723ms
   type: vless
-  server: 45.144.234.157
-  port: 14430
-  uuid: 59b0d30e-9b29-4fda-a35c-b2901ec32db7
-  network: ws
-  udp: true
-  ws-opts:
-    path: /vless
-    headers:
-      Host: 45.144.234.157
-- name: 🟢 cool [white] 🇺🇸 |#12| · 1526ms
-  type: vless
-  server: 3.169.9.125
+  server: 188.225.37.175
   port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
+  uuid: 4b50270b-5caf-4c34-b3da-17b4525604a6
   network: ws
   udp: true
   tls: true
-  server-name: d1afk2ndm8pox3.cloudfront.net
+  server-name: cryptoventura.online
   client-fingerprint: chrome
   alpn:
   - http/1.1
   ws-opts:
-    path: /
+    path: /api/de3/live
     headers:
-      Host: d1afk2ndm8pox3.cloudfront.net
-- name: 🟢 🇩🇪 Белые списки  happcluchi vpn · 1890ms
-  type: vless
-  server: lvi.su
-  port: 443
-  uuid: 7b91b2c3-8af3-449b-a555-00c9460989f4
-  network: ws
-  udp: true
-  tls: true
-  server-name: lvi.su
-  client-fingerprint: chrome
-  ws-opts:
-    path: /vpn-relay?token=27fede42482b3c29d4c1c9640876c250&pool=whitelist2
-    headers:
-      Host: lvi.su
-- name: 🟢 cool [white] 🇺🇸 |#25| · 2759ms
-  type: vless
-  server: 3.169.9.125
-  port: 443
-  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
-  network: ws
-  udp: true
-  tls: true
-  server-name: d3kw8eszm8s6l1.cloudfront.net
-  client-fingerprint: chrome
-  alpn:
-  - http/1.1
-  ws-opts:
-    path: /
-    headers:
-      Host: d3kw8eszm8s6l1.cloudfront.net
-- name: '🟢 🌀 CYBERPORTAL | White Keys #189 · 2828ms'
+      Host: cryptoventura.online
+- name: '🟢 🌀 CYBERPORTAL | White Keys #121 · 1872ms'
   type: vless
   server: 172.64.229.129
   port: 2052
@@ -419,7 +375,7 @@ proxies:
     path: /rain1226
     headers:
       Host: eu02.123450908.xyz
-- name: '🟢 🌀 CYBERPORTAL | White Keys #121 · 3422ms'
+- name: '🟢 🌀 CYBERPORTAL | White Keys #189 · 1886ms'
   type: vless
   server: 172.64.229.129
   port: 2052
@@ -430,7 +386,34 @@ proxies:
     path: /rain1226
     headers:
       Host: eu02.123450908.xyz
-- name: 🟢 cool [white] 🇺🇸 |#11| · 4104ms
+- name: 🟢 cool [white] 🌐 |#19| · 2173ms
+  type: vless
+  server: 104.16.10.185
+  port: 443
+  uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
+  network: ws
+  udp: true
+  tls: true
+  server-name: jp3.yohototo.top
+  client-fingerprint: chrome
+  ws-opts:
+    path: /tyxyws
+    headers:
+      Host: jp3.yohototo.top
+- name: 🟢 Телефон / Роутер [owpn.org] · 2193ms
+  type: vless
+  server: 563019t.pl5.h1clayd.click
+  port: 443
+  uuid: 3d7c1ba4-64bd-4883-a698-352805c973a6
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 563019t.pl5.h1clayd.click
+  reality-opts:
+    public-key: RRq5gp7X6-zQsS6TVwyP28eQ6BXL7WNgnC7Rhjwc428
+    short-id: 9531c699faae36c6
+  client-fingerprint: firefox
+- name: 🟢 cool [white] 🇺🇸 |#11| · 2441ms
   type: vless
   server: 3.169.9.125
   port: 443
@@ -446,7 +429,49 @@ proxies:
     path: /
     headers:
       Host: d2ex4nxd2e01ub.cloudfront.net
-- name: 🟢 cool [white] 🇺🇸 |#10| · 4164ms
+- name: '🟢 🇪🇪 GidroksiFree #1 | 🛡БС | 🟢LTE | 1901ms | ↓0.0Mbps · 2498ms'
+  type: vless
+  server: 185.215.184.86
+  port: 443
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 185.215.184.86
+  reality-opts:
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 🟢 🇩🇪 Белые списки  happcluchi vpn · 2597ms
+  type: vless
+  server: lvi.su
+  port: 443
+  uuid: 7b91b2c3-8af3-449b-a555-00c9460989f4
+  network: ws
+  udp: true
+  tls: true
+  server-name: lvi.su
+  client-fingerprint: chrome
+  ws-opts:
+    path: /vpn-relay?token=27fede42482b3c29d4c1c9640876c250&pool=whitelist2
+    headers:
+      Host: lvi.su
+- name: 🟢 cool [white] 🇺🇸 |#20| · 4003ms
+  type: vless
+  server: 3.169.9.125
+  port: 443
+  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
+  network: ws
+  udp: true
+  tls: true
+  server-name: djzrntowvoo42.cloudfront.net
+  client-fingerprint: firefox
+  ws-opts:
+    path: /
+    headers:
+      Host: djzrntowvoo42.cloudfront.net
+- name: 🟢 cool [white] 🇺🇸 |#10| · 4485ms
   type: vless
   server: 3.169.9.125
   port: 443
@@ -462,60 +487,64 @@ proxies:
     path: /
     headers:
       Host: djb2br1cgydas.cloudfront.net
-- name: 🟢 Телефон / Роутер [owpn.org] · 4583ms
+- name: 🟢 cool [white] 🇺🇸 |#25| · 4747ms
   type: vless
-  server: 185.215.184.79
+  server: 3.169.9.125
   port: 443
-  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
-  network: tcp
+  uuid: 67cd3349-f789-4cbb-8b91-4b6b1654ce7c
+  network: ws
   udp: true
   tls: true
-  server-name: dvizhok.su
-  reality-opts:
-    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
-    short-id: 428ef87fd47a3a32
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
+  server-name: d3kw8eszm8s6l1.cloudfront.net
+  client-fingerprint: chrome
+  alpn:
+  - http/1.1
+  ws-opts:
+    path: /
+    headers:
+      Host: d3kw8eszm8s6l1.cloudfront.net
 proxy-groups:
 - name: ♻️ Auto
   type: url-test
   proxies:
-  - 🟢 Телефон / Роутер [owpn.org] · 144ms
-  - 🟢 🇳🇱NL_249|1.7MB/s|S004-260618 · 332ms
-  - 🟢 🇳🇱 Нидерланды | VLESS TCP Reality · 339ms
-  - '🟢 🌀 CYBERPORTAL | White Keys #187 · 345ms'
-  - 🟢 🇳🇱 Нидерланды | VLESS TCP Reality · 358ms
-  - '🟢 🇫🇷➜🇷🇺 GidroksiFree #15 | 🔗Каскад | 🔴WIFI | 693ms | ↓0.0Mbps · 381ms'
-  - '🟢 🇫🇷➜🇷🇺 GidroksiFree #16 | 🔗Каскад | 🔴WIFI | 617ms | ↓0.0Mbps · 382ms'
-  - '🟢 🇪🇪 GidroksiFree #1 | 🛡БС | 🟢LTE | 1901ms | ↓0.0Mbps · 437ms'
-  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #7 | 🔗Каскад | 🟢LTE | 1629ms | ↓0.0Mbps · 463ms'
-  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #4 | 🔗Каскад | 🟢LTE | 1371ms | ↓0.0Mbps · 463ms'
-  - 🟢 Беларусь🇧🇾 1 · 500ms
-  - 🟢 Беларусь🇧🇾 2 · 562ms
-  - '🟢 🌀 CYBERPORTAL | White Keys #224 · 572ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #211 · 572ms'
-  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #5 | 🔗Каскад | 🟢LTE | 1004ms | ↓0.0Mbps · 628ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #212 · 699ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #273 · 702ms'
-  - '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #101 · 709ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #210 · 724ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #271 · 732ms'
-  - '🟢 🇬🇧➜🇷🇺 GidroksiFree #113 | 🔗Каскад | 🔴WIFI | 652ms | ↓0.0Mbps · 756ms'
-  - 🟢 Телефон / Роутер [owpn.org] · 822ms
-  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #6 | 🔗Каскад | 🟢LTE | 2159ms | ↓0.0Mbps · 923ms'
-  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #8 | 🔗Каскад | 🟢LTE | 3822ms | ↓0.0Mbps · 1045ms'
-  - 🟢 Телефон / Роутер [owpn.org] · 1194ms
-  - '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #65 · 1351ms'
-  - 🟢 Телефон / Роутер [owpn.org] · 1467ms
-  - '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #49 · 1487ms'
-  - 🟢 cool [white] 🇺🇸 |#12| · 1526ms
-  - 🟢 🇩🇪 Белые списки  happcluchi vpn · 1890ms
-  - 🟢 cool [white] 🇺🇸 |#25| · 2759ms
-  - '🟢 🌀 CYBERPORTAL | White Keys #189 · 2828ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #121 · 3422ms'
-  - 🟢 cool [white] 🇺🇸 |#11| · 4104ms
-  - 🟢 cool [white] 🇺🇸 |#10| · 4164ms
-  - 🟢 Телефон / Роутер [owpn.org] · 4583ms
+  - '🟢 🌀 CYBERPORTAL | White Keys #187 · 270ms'
+  - '🟢 🇳🇱 The Netherlands #232 · 371ms'
+  - 🔵 🇳🇱NL_249|1.7MB/s|S004-260618 · 374ms
+  - 🔵 🇳🇱 Нидерланды | VLESS TCP Reality · 375ms
+  - '🟢 🇫🇷➜🇷🇺 GidroksiFree #16 | 🔗Каскад | 🔴WIFI | 617ms | ↓0.0Mbps · 402ms'
+  - '🟢 🇬🇧➜🇷🇺 GidroksiFree #113 | 🔗Каскад | 🔴WIFI | 652ms | ↓0.0Mbps · 411ms'
+  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #6 | 🔗Каскад | 🟢LTE | 2159ms | ↓0.0Mbps · 454ms'
+  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #5 | 🔗Каскад | 🟢LTE | 1004ms | ↓0.0Mbps · 473ms'
+  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #8 | 🔗Каскад | 🟢LTE | 3822ms | ↓0.0Mbps · 481ms'
+  - 🟢 Телефон / Роутер [owpn.org] · 483ms
+  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #4 | 🔗Каскад | 🟢LTE | 1371ms | ↓0.0Mbps · 489ms'
+  - 🟢 Телефон / Роутер [owpn.org] · 536ms
+  - '🟢 🌀 CYBERPORTAL | White Keys #211 · 593ms'
+  - 🟢 Телефон / Роутер [owpn.org] · 669ms
+  - '🟢 🌀 CYBERPORTAL | White Keys #271 · 705ms'
+  - '🟢 🌀 CYBERPORTAL | White Keys #273 · 715ms'
+  - '🟢 🌀 CYBERPORTAL | White Keys #210 · 716ms'
+  - '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #101 · 717ms'
+  - '🟢 🌀 CYBERPORTAL | White Keys #212 · 717ms'
+  - '🟢 🌀 CYBERPORTAL | White Keys #224 · 772ms'
+  - 🟢 Беларусь🇧🇾 1 · 801ms
+  - 🟢 Телефон / Роутер [owpn.org] · 831ms
+  - 🟢 Беларусь🇧🇾 2 · 888ms
+  - '🟢 🇨🇭➜🇷🇺 GidroksiFree #88 | 🔗Каскад | 🔴WIFI | 5075ms | ↓0.0Mbps · 932ms'
+  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #7 | 🔗Каскад | 🟢LTE | 1629ms | ↓0.0Mbps · 982ms'
+  - '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #65 · 1084ms'
+  - 🟢 Телефон / Роутер [owpn.org] · 1548ms
+  - 🟢 Телефон / Роутер [owpn.org] · 1723ms
+  - '🟢 🌀 CYBERPORTAL | White Keys #121 · 1872ms'
+  - '🟢 🌀 CYBERPORTAL | White Keys #189 · 1886ms'
+  - 🟢 cool [white] 🌐 |#19| · 2173ms
+  - 🟢 Телефон / Роутер [owpn.org] · 2193ms
+  - 🟢 cool [white] 🇺🇸 |#11| · 2441ms
+  - '🟢 🇪🇪 GidroksiFree #1 | 🛡БС | 🟢LTE | 1901ms | ↓0.0Mbps · 2498ms'
+  - 🟢 🇩🇪 Белые списки  happcluchi vpn · 2597ms
+  - 🟢 cool [white] 🇺🇸 |#20| · 4003ms
+  - 🟢 cool [white] 🇺🇸 |#10| · 4485ms
+  - 🟢 cool [white] 🇺🇸 |#25| · 4747ms
   url: http://www.gstatic.com/generate_204
   interval: 300
   tolerance: 50
@@ -523,41 +552,43 @@ proxy-groups:
   type: select
   proxies:
   - ♻️ Auto
-  - 🟢 Телефон / Роутер [owpn.org] · 144ms
-  - 🟢 🇳🇱NL_249|1.7MB/s|S004-260618 · 332ms
-  - 🟢 🇳🇱 Нидерланды | VLESS TCP Reality · 339ms
-  - '🟢 🌀 CYBERPORTAL | White Keys #187 · 345ms'
-  - 🟢 🇳🇱 Нидерланды | VLESS TCP Reality · 358ms
-  - '🟢 🇫🇷➜🇷🇺 GidroksiFree #15 | 🔗Каскад | 🔴WIFI | 693ms | ↓0.0Mbps · 381ms'
-  - '🟢 🇫🇷➜🇷🇺 GidroksiFree #16 | 🔗Каскад | 🔴WIFI | 617ms | ↓0.0Mbps · 382ms'
-  - '🟢 🇪🇪 GidroksiFree #1 | 🛡БС | 🟢LTE | 1901ms | ↓0.0Mbps · 437ms'
-  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #7 | 🔗Каскад | 🟢LTE | 1629ms | ↓0.0Mbps · 463ms'
-  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #4 | 🔗Каскад | 🟢LTE | 1371ms | ↓0.0Mbps · 463ms'
-  - 🟢 Беларусь🇧🇾 1 · 500ms
-  - 🟢 Беларусь🇧🇾 2 · 562ms
-  - '🟢 🌀 CYBERPORTAL | White Keys #224 · 572ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #211 · 572ms'
-  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #5 | 🔗Каскад | 🟢LTE | 1004ms | ↓0.0Mbps · 628ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #212 · 699ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #273 · 702ms'
-  - '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #101 · 709ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #210 · 724ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #271 · 732ms'
-  - '🟢 🇬🇧➜🇷🇺 GidroksiFree #113 | 🔗Каскад | 🔴WIFI | 652ms | ↓0.0Mbps · 756ms'
-  - 🟢 Телефон / Роутер [owpn.org] · 822ms
-  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #6 | 🔗Каскад | 🟢LTE | 2159ms | ↓0.0Mbps · 923ms'
-  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #8 | 🔗Каскад | 🟢LTE | 3822ms | ↓0.0Mbps · 1045ms'
-  - 🟢 Телефон / Роутер [owpn.org] · 1194ms
-  - '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #65 · 1351ms'
-  - 🟢 Телефон / Роутер [owpn.org] · 1467ms
-  - '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #49 · 1487ms'
-  - 🟢 cool [white] 🇺🇸 |#12| · 1526ms
-  - 🟢 🇩🇪 Белые списки  happcluchi vpn · 1890ms
-  - 🟢 cool [white] 🇺🇸 |#25| · 2759ms
-  - '🟢 🌀 CYBERPORTAL | White Keys #189 · 2828ms'
-  - '🟢 🌀 CYBERPORTAL | White Keys #121 · 3422ms'
-  - 🟢 cool [white] 🇺🇸 |#11| · 4104ms
-  - 🟢 cool [white] 🇺🇸 |#10| · 4164ms
-  - 🟢 Телефон / Роутер [owpn.org] · 4583ms
+  - '🟢 🌀 CYBERPORTAL | White Keys #187 · 270ms'
+  - '🟢 🇳🇱 The Netherlands #232 · 371ms'
+  - 🔵 🇳🇱NL_249|1.7MB/s|S004-260618 · 374ms
+  - 🔵 🇳🇱 Нидерланды | VLESS TCP Reality · 375ms
+  - '🟢 🇫🇷➜🇷🇺 GidroksiFree #16 | 🔗Каскад | 🔴WIFI | 617ms | ↓0.0Mbps · 402ms'
+  - '🟢 🇬🇧➜🇷🇺 GidroksiFree #113 | 🔗Каскад | 🔴WIFI | 652ms | ↓0.0Mbps · 411ms'
+  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #6 | 🔗Каскад | 🟢LTE | 2159ms | ↓0.0Mbps · 454ms'
+  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #5 | 🔗Каскад | 🟢LTE | 1004ms | ↓0.0Mbps · 473ms'
+  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #8 | 🔗Каскад | 🟢LTE | 3822ms | ↓0.0Mbps · 481ms'
+  - 🟢 Телефон / Роутер [owpn.org] · 483ms
+  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #4 | 🔗Каскад | 🟢LTE | 1371ms | ↓0.0Mbps · 489ms'
+  - 🟢 Телефон / Роутер [owpn.org] · 536ms
+  - '🟢 🌀 CYBERPORTAL | White Keys #211 · 593ms'
+  - 🟢 Телефон / Роутер [owpn.org] · 669ms
+  - '🟢 🌀 CYBERPORTAL | White Keys #271 · 705ms'
+  - '🟢 🌀 CYBERPORTAL | White Keys #273 · 715ms'
+  - '🟢 🌀 CYBERPORTAL | White Keys #210 · 716ms'
+  - '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #101 · 717ms'
+  - '🟢 🌀 CYBERPORTAL | White Keys #212 · 717ms'
+  - '🟢 🌀 CYBERPORTAL | White Keys #224 · 772ms'
+  - 🟢 Беларусь🇧🇾 1 · 801ms
+  - 🟢 Телефон / Роутер [owpn.org] · 831ms
+  - 🟢 Беларусь🇧🇾 2 · 888ms
+  - '🟢 🇨🇭➜🇷🇺 GidroksiFree #88 | 🔗Каскад | 🔴WIFI | 5075ms | ↓0.0Mbps · 932ms'
+  - '🟢 🇪🇪➜🇷🇺 GidroksiFree #7 | 🔗Каскад | 🟢LTE | 1629ms | ↓0.0Mbps · 982ms'
+  - '🟢 🇪🇺 Автовыбор 🔍 (@vpnruss1) #65 · 1084ms'
+  - 🟢 Телефон / Роутер [owpn.org] · 1548ms
+  - 🟢 Телефон / Роутер [owpn.org] · 1723ms
+  - '🟢 🌀 CYBERPORTAL | White Keys #121 · 1872ms'
+  - '🟢 🌀 CYBERPORTAL | White Keys #189 · 1886ms'
+  - 🟢 cool [white] 🌐 |#19| · 2173ms
+  - 🟢 Телефон / Роутер [owpn.org] · 2193ms
+  - 🟢 cool [white] 🇺🇸 |#11| · 2441ms
+  - '🟢 🇪🇪 GidroksiFree #1 | 🛡БС | 🟢LTE | 1901ms | ↓0.0Mbps · 2498ms'
+  - 🟢 🇩🇪 Белые списки  happcluchi vpn · 2597ms
+  - 🟢 cool [white] 🇺🇸 |#20| · 4003ms
+  - 🟢 cool [white] 🇺🇸 |#10| · 4485ms
+  - 🟢 cool [white] 🇺🇸 |#25| · 4747ms
 rules:
 - MATCH,🚀 Proxy
