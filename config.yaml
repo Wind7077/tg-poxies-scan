@@ -1,3 +1,7 @@
+# ============================================================
+#  tg-poxies-scan — все настройки здесь, код править не нужно
+# ============================================================
+
 sources_file: sources.txt
 
 outputs:
@@ -12,43 +16,44 @@ outputs:
   stats: stats.json
   live_sources: sources-live.txt
 
+# Окна свежести: WL шире (белые ключи живут дольше), ALL — только свежее
 windows:
   wl_days: 50
   all_days: 10
 
 limits:
-  tme_pages: 10
-  tme_sub_pages: 2
-  telethon_limit: 1000
-  max_embed: 200
-  per_endpoint: 5
-  best: 50
-  max_attachment_mb: 2
+  tme_pages: 10            # страниц истории t.me/s/ на канал (~20 постов каждая)
+  tme_sub_pages: 2         # страниц для каналов, найденных внутри подписок
+  telethon_limit: 1000     # сообщений на канал через Telethon
+  max_embed: 200           # максимум чужих embed-сообщений (0 = без лимита)
+  per_endpoint: 5          # сколько конфигов оставляем на один host:port
+  best: 50                 # размер proxy-best.* (топ по задержке)
+  max_attachment_mb: 2     # максимальный размер вложения-документа в Telegram
 
 concurrency:
   http: 50
   ping: 500
   tls: 100
-  core: 24
+  core: 24                 # одновременных проверок через mihomo
 
 timeouts:
   http_total: 12
   http_connect: 7
-  long_total: 30
+  long_total: 30           # для problem_domains
   ping: 2.0
   tls: 3.0
   core_delay_ms: 5000
 
 protocols:
-  all: [vless, vmess, ss, trojan, hysteria2, tuic]
-  wl: [vless]
+  all: [vless, vmess, ss, trojan, hysteria2, tuic]   # что попадает в proxy-all.yaml
+  wl: [vless]                                        # что попадает в proxy.yaml / proxy.txt
 
 whitelist:
   roots: "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс каскад"
-  use_roots: true
-  use_sni: true
-  use_cidr: true
-  require_tls: false
+  use_roots: true          # совпадение по НАЧАЛУ слова: Белые->бел, Телефон->теле, Автовыбор->авто
+  use_sni: true            # + распознавание по SNI из белого списка (технический признак обхода БС)
+  use_cidr: true           # + по входному IP из диапазонов ниже
+  require_tls: false       # true = отсекать конфиги без TLS (security=none) — для обхода по SNI они бесполезны
   sni_domains:
     - yandex.ru
     - yandex.net
@@ -73,43 +78,49 @@ whitelist:
     - kinopoisk.ru
     - rbc.ru
     - kommersant.ru
-  cidr: []          # можно вписать свои диапазоны: ["95.163.0.0/16", ...]
+  cidr: []                 # свои диапазоны белого списка, напр. ["95.163.0.0/16", "213.180.192.0/19"]
 
 verify:
-  level: 2          # 0 = только TCP, 1 = +TLS для WL, 2 = +mihomo (реальный запрос)
+  # 0 = только TCP-порт (быстро, но "живой" ≠ рабочий)
+  # 1 = + TLS/Reality-рукопожатие для WL  ← СТАРТ ЗДЕСЬ
+  # 2 = + реальный запрос через mihomo (лучшее качество, качает бинарник в рантайме)
+  level: 1
   core_api: https://api.github.com/repos/MetaCubeX/mihomo/releases/latest
   controller: 127.0.0.1:19090
   mixed_port: 17890
   test_url: http://www.gstatic.com/generate_204
-  geo_top: 0        # >0 = определить реальную страну выхода для топ-N (медленнее)
+  geo_top: 0               # >0 = определять реальную страну выхода для топ-N (медленнее)
   geo_url: https://api.ipify.org?format=json
 
 cache:
-  enabled: true
+  enabled: true            # ETag/Last-Modified + пинг-кэш + контент-хэш (живёт в actions/cache, не в репо)
   dir: .cache
-  http_ttl_hours: 6
-  ping_ok_ttl_hours: 12
-  ping_fail_ttl_hours: 3
-  content_hash: true
+  http_ttl_hours: 6        # сколько верим кэшу при ответе 304
+  ping_ok_ttl_hours: 12    # живой endpoint не перепроверяем
+  ping_fail_ttl_hours: 3   # мёртвый перепроверяем чаще
+  content_hash: true       # одинаковое тело подписки парсим один раз
 
 telethon:
-  all_channels: true
-  attachments: true
+  all_channels: false      # СТАРТ: false (каналы через проверенный t.me/s/, форумы через Telethon)
+                           # true = все каналы через Telethon + вложения; включать после зелёного прогона
+  attachments: true        # читать вложения-документы (.txt с ключами) — работает только через Telethon
 
 guards:
-  enabled: true
-  min_parse_rate: 0.6
-  forbid_empty_wl: true
-  max_all_drop_pct: 70
+  enabled: true            # circuit breaker: не публиковать сломанный результат
+  min_parse_rate: 0.6      # если распарсилось меньше 60% — стоп, файлы не перезаписываем
+  forbid_empty_wl: true    # WL=0 при непустом прошлом — стоп
+  max_all_drop_pct: 70     # ALL упал больше чем на 70% — стоп
 
 logging:
   debug: true
-  show_live_sources: true
-  live_sources_top: 0     # 0 = все
-  progress_every: 200
+  show_live_sources: true  # печатать ПОЛНЫЕ ссылки источников, давших живые прокси
+  live_sources_top: 0      # 0 = все; N = только топ-N по каждому списку
+  progress_every: 200      # прогресс HTTP каждые N запросов (без URL), 0 = выключить
 
+# домены, которым нужен увеличенный таймаут
 problem_domains: [kfwl.lol, pozor.bond, atlanta-subs.ru, astra-sub.com, taurus-sync.com, net4.su]
 
+# соцсети/СМИ — подписок там нет (сравнение по домену/поддомену, не по подстроке)
 blacklist_domains:
   - youtube.com
   - youtu.be
@@ -140,6 +151,7 @@ blacklist_domains:
   - vedomosti.ru
   - tass.ru
 
+# страницы, где ключей заведомо нет (магазины, донаты, статьи, промо)
 junk_domains:
   - play.google.com
   - apps.apple.com
