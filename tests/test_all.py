@@ -90,7 +90,8 @@ def test_glue_head_always_parses():
     """Голова склейки обязана парситься так же, как исходная ссылка."""
     glued = VLESS_REALITY + VLESS_WS
     assert parse(glued) is not None
-    assert parse(dedup.split_uri(glued)[0]) is not None
+    variants, _ = dedup.split_uri(glued)
+    assert parse(variants[0]) is not None
 
 
 def test_clean_url_keeps_vless():
