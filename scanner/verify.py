@@ -76,7 +76,7 @@ async def l1_tls(items, cfg):
 
 
 async def _ensure_core(cfg, session):
-    """Скачивает mihomo последней версии. Возвращает путь или None (мягкий откат)."""
+    """Скачивает mihomo последней версии. Возвращает путь или None."""
     bindir = Path(cfg.cache.dir) / 'bin'
     bindir.mkdir(parents=True, exist_ok=True)
     binary = bindir / 'mihomo'
@@ -117,7 +117,7 @@ async def l2_core(named, cfg, session):
     """named: [(name, clash_dict)] -> (delays, geo, l3_tg, l3_yt).
 
     L2 — задержка через ядро (test_url).
-    L3 — доступность Telegram/YouTube через ТО ЖЕ ядро, отдельным url в /delay.
+    L3 — доступность Telegram/YouTube через ТО ЖЕ ядро, с ретраями.
     Любой сбой -> пустые словари, пайплайн продолжает работу на L1.
     """
     if not named:
@@ -184,28 +184,41 @@ async def l2_core(named, cfg, session):
             ok = sum(1 for v in delays.values() if v)
             log.info(f'[L2] через ядро проверено {len(named)}, реально работают {ok}')
 
-            # ---------- L3: Telegram / YouTube ----------
+            # ---------- L3: Telegram / YouTube с ретраями ----------
             l3cfg = getattr(cfg.verify, 'l3', None)
             if l3cfg and getattr(l3cfg, 'enabled', False):
-                services = [('tg', getattr(l3cfg, 'telegram', '') or ''),
-                            ('yt', getattr(l3cfg, 'youtube', '') or '')]
-                services = [(k, u) for k, u in services if u]
-                l3tmo = int(getattr(l3cfg, 'timeout_ms', 6000))
+                tg_url = getattr(l3cfg, 'telegram', '') or ''
+                yt_url = getattr(l3cfg, 'youtube', '') or ''
+                l3_tmo = int(getattr(l3cfg, 'timeout_ms', 12000))
+                l3_retries = max(1, int(getattr(l3cfg, 'retries', 2)))
                 only_alive = bool(getattr(l3cfg, 'only_alive', True))
                 targets = [n for n, _ in named if delays.get(n) or not only_alive]
 
-                async def probe(name, key, url):
-                    async with sem:
+                async def probe_service(name, url):
+                    """Один сервис, несколько попыток. Возвращает True/False."""
+                    for attempt in range(l3_retries):
                         try:
-                            d = await _delay(name, url, l3tmo)
-                            return name, key, d is not None
+                            d = await _delay(name, url, l3_tmo)
+                            if d is not None:
+                                return True
                         except Exception:
-                            return name, key, False
+                            pass
+                        if attempt < l3_retries - 1:
+                            await asyncio.sleep(0.5)
+                    return False
 
-                if targets and services:
-                    jobs = [probe(n, k, u) for n in targets for k, u in services]
-                    for name, key, good in await asyncio.gather(*jobs):
-                        (l3_tg if key == 'tg' else l3_yt)[name] = good
+                async def l3_check(name):
+                    async with sem:
+                        tg = await probe_service(name, tg_url) if tg_url else None
+                        yt = await probe_service(name, yt_url) if yt_url else None
+                        return name, tg, yt
+
+                if targets and (tg_url or yt_url):
+                    for name, tg, yt in await asyncio.gather(*(l3_check(n) for n in targets)):
+                        if tg is not None:
+                            l3_tg[name] = tg
+                        if yt is not None:
+                            l3_yt[name] = yt
                     tg_ok = sum(1 for v in l3_tg.values() if v)
                     yt_ok = sum(1 for v in l3_yt.values() if v)
                     log.info(f'[L3] проверено {len(targets)} → '
