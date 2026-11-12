@@ -77,27 +77,22 @@ whitelist:
 
 verify:
   level: 2
-  # ... твои текущие core_api / controller / mixed_port / test_url / geo_top ...
-  l3:
-    enabled: true
-    telegram: "https://api.telegram.org/robots.txt"
-    youtube: "https://www.youtube.com/generate_204"
-    timeout_ms: 6000        # было 6000-8000 — мало для медленных прокси
-    retries: 2               # вторая попытка, если первая не удалась
-    only_alive: true         # проверять только прошедшие L2
-    require_mode: telegram   # both | any | telegram | youtube | off
-    tag_names: true
+  core_api: https://api.github.com/repos/MetaCubeX/mihomo/releases/latest
+  controller: 127.0.0.1:19090
+  mixed_port: 17890
+  test_url: http://www.gstatic.com/generate_204
+  geo_top: 0
+  geo_url: https://api.ipify.org?format=json
 
-  # ---- L3: доступность конкретных сервисов через то же ядро mihomo ----
   l3:
     enabled: true
     telegram: "https://api.telegram.org/robots.txt"
     youtube: "https://www.youtube.com/generate_204"
-    timeout_ms: 6000
-    only_alive: true        # проверять только те, что прошли L2 (быстрее в разы)
-    require_telegram: true  # отсеивать, если TG недоступен
-    require_youtube: false  # YT часто режет VPS — по умолчанию не отсеиваем
-    tag_names: true         # 🟢 TG+YT / 🟡 TG / 🔵 YT / ⚪️ ничего
+    timeout_ms: 12000
+    retries: 2
+    only_alive: true
+    require_mode: telegram     # both | any | telegram | youtube | off
+    tag_names: true
 
 cache:
   enabled: true
