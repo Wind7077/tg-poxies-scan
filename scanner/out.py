@@ -141,11 +141,21 @@ def guard(cfg, stats, prev):
     if not g.enabled:
         return []
     problems = []
-    cand, parsed = stats.get('candidates', 0), stats.get('parsed', 0)
-    rate = (parsed / cand) if cand else 1.0
-    stats['parse_rate'] = round(rate, 3)
-    if cand and rate < float(g.min_parse_rate):
-        problems.append(f'parse_rate {rate:.2f} < {g.min_parse_rate}')
+    parsed = int(stats.get('parsed', 0))
+    # Знаменатель — ЧИСЛО ПОПЫТОК ПАРСИНГА (уникальные кандидаты после дедупа:
+    # распарсено + не распарсено), а не stats['candidates']: тот считается ДО
+    # дедупа и содержит одну и ту же ссылку из каждого источника (52 384 против
+    # 24 369 уникальных). Из-за этого здоровый прогон давал 0.45 и блокировал
+    # публикацию, хотя реальная доля была ~0.96.
+    fails = stats.get('parse_fails') or {}
+    attempts = parsed + sum(int(v) for v in fails.values())
+    if not attempts:
+        attempts = int(stats.get('reps') or 0)
+    rate = (parsed / attempts) if attempts else 1.0
+    stats['parse_attempts'] = attempts
+    stats['parse_rate'] = round(rate, 4)
+    if attempts and rate < float(g.min_parse_rate):
+        problems.append(f'parse_rate {rate:.2f} ({parsed}/{attempts}) < {g.min_parse_rate}')
     if g.forbid_empty_wl and stats.get('wl', 0) == 0 and prev.get('wl', 0) > 0:
         problems.append(f"WL=0 при прошлом {prev['wl']}")
     if prev.get('all', 0) > 0:
