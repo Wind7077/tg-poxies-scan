@@ -36,6 +36,7 @@ async def run(config_path='config.yaml'):
 
     web, embed, tg, subs = classify_sources(lines, cfg)
     use_tg = bool(cfg.telethon.all_channels) and cfg.telegram.session_b64
+    tg_fallback_web, tg_fallback_embed = list(web), list(embed)
     if use_tg:
         tg = tg + web + embed
         web, embed = [], []
@@ -48,20 +49,26 @@ async def run(config_path='config.yaml'):
 
     async with make_session(cfg) as session:
         if web or embed:
-            jobs = [(u, web_channel(session, http_sem, u, cutoff_wl, cfg.limits.tme_pages, cfg))
-                    for u in web]
-            jobs += [(u, _one_embed(session, http_sem, u, cutoff_wl, cfg)) for u in embed]
-            results = await asyncio.gather(*(c for _, c in jobs))
-            for (src, _), (p, urls) in zip(jobs, results):
-                items.extend((u, dt, src) for u, dt in p)
-                subs.update(clean_url(x) for x in urls)
+            p, urls = await _read_web(session, http_sem, web, embed, cutoff_wl, cfg)
+            items.extend(p)
+            subs.update(clean_url(x) for x in urls)
             for w in web:
                 visited.add(sub_key(w))
             log.debug(f'Каналы: ссылок {len(items)}, найдено подписок {len(subs)}')
 
         if tg:
             p, urls = await telethon_channels(tg, cutoff_wl, cfg)
-            items.extend(p)
+            if not p and (tg_fallback_web or tg_fallback_embed):
+                # сессия протухла/не авторизована — не теряем каналы, читаем по-старому
+                log.info('⚠️ Telethon ничего не дал — откат на t.me/s/')
+                web, embed = tg_fallback_web, tg_fallback_embed
+                p2, urls2 = await _read_web(session, http_sem, web, embed, cutoff_wl, cfg)
+                items.extend(p2)
+                subs.update(clean_url(x) for x in urls2)
+                for w in web:
+                    visited.add(sub_key(w))
+            else:
+                items.extend(p)
             subs.update(clean_url(x) for x in urls)
 
         known = set()
@@ -102,15 +109,16 @@ async def run(config_path='config.yaml'):
                     e[1].add(src)
         log.info(f'[{time.time()-start:.1f}s] Сырых прокси: {len(merged)}')
 
-        # ---------- ОДИН проход: расклейка → дедуп → парсинг ----------
-        fresh, origin = [], {}
-        glued = 0
+        # ---------- расклейка → дедуп → парсинг ----------
+        fresh, origin, fallback, glued = [], {}, {}, 0
         for uri in merged:
             variants, tails = split_uri(uri)
             cand = variants[0]
             fresh.append(cand)
             origin.setdefault(cand, set()).add(uri)
-            if len(variants) > 1 or tails:
+            if len(variants) > 1:
+                fallback[cand] = variants[1]
+            if tails or len(variants) > 1:
                 glued += 1
             for t in tails:
                 fresh.append(t)
@@ -127,10 +135,10 @@ async def run(config_path='config.yaml'):
                 continue
             p = parse(rep)
             used = rep
-            if p is None and len(split_uri(rep)[0]) > 1:
-                p = parse(split_uri(rep)[-1])
-                if p is not None:
-                    used = split_uri(rep)[-1]
+            if p is None and rep in fallback:
+                p2 = parse(fallback[rep])
+                if p2 is not None:
+                    p, used = p2, fallback[rep]
                     rescued += 1
             if p and p.get('server') and p.get('port'):
                 p = sanitize(p)
@@ -175,9 +183,11 @@ async def run(config_path='config.yaml'):
                 wl_reasons[why] = wl_reasons.get(why, 0) + 1
         log.debug(f'🎯 WL до проверки: {len(wl_items)} {log.hist(wl_reasons)}')
 
-        # ---------- L1 / L2 ----------
+        # ---------- L1 / L2 / L3 ----------
         level = int(cfg.verify.level)
-        delays, geo = {}, {}
+        delays, geo, l3_tg, l3_yt = {}, {}, {}, {}
+        l3_dropped = 0
+
         if level >= 1 and wl_items:
             tls_jobs = []
             for u, p in wl_items:
@@ -196,13 +206,42 @@ async def run(config_path='config.yaml'):
                 q = dict(p)
                 q['name'] = f'p{i}'
                 named.append((f'p{i}', q))
-            d, g = await l2_core(named, cfg, session)
+
+            res = await l2_core(named, cfg, session)
+            if len(res) == 2:                      # обратная совместимость
+                d, g = res
+                tg_raw, yt_raw = {}, {}
+            else:
+                d, g, tg_raw, yt_raw = res
+
             if d:
                 idx = {f'p{i}': u for i, (u, _) in enumerate(wl_items)}
                 delays = {idx[k]: v for k, v in d.items() if k in idx}
                 geo = {idx[k]: v for k, v in g.items() if k in idx}
+                l3_tg = {idx[k]: v for k, v in tg_raw.items() if k in idx}
+                l3_yt = {idx[k]: v for k, v in yt_raw.items() if k in idx}
+
                 wl_items = [(u, p) for u, p in wl_items if delays.get(u)]
                 log.info(f'[L2] подтверждено рабочих: {len(wl_items)}')
+
+                l3cfg = getattr(cfg.verify, 'l3', None)
+                if l3cfg and getattr(l3cfg, 'enabled', False) and (l3_tg or l3_yt):
+                    req_tg = bool(getattr(l3cfg, 'require_telegram', False))
+                    req_yt = bool(getattr(l3cfg, 'require_youtube', False))
+                    kept = []
+                    for u, p in wl_items:
+                        tg_ok = l3_tg.get(u)
+                        yt_ok = l3_yt.get(u)
+                        if req_tg and tg_ok is False:
+                            l3_dropped += 1
+                            continue
+                        if req_yt and yt_ok is False:
+                            l3_dropped += 1
+                            continue
+                        kept.append((u, p))
+                    wl_items = kept
+                    log.info(f'[L3] отсеяно {l3_dropped}, осталось {len(wl_items)} '
+                             f'(require TG={req_tg}, YT={req_yt})')
             else:
                 log.debug('⚠️ L2 недоступен — остаёмся на L1')
 
@@ -214,25 +253,30 @@ async def run(config_path='config.yaml'):
     for u, p in alive:
         if dates.get(u, now_utc()) < cutoff_all:
             continue
-        keep_yaml = p.get('type') in all_proto and validate(p)[0]
         all_txt.append(u)
-        if keep_yaml:
+        if p.get('type') in all_proto and validate(p)[0]:
             all_clash.append(dict(p))
         for s in prov.get(u, ()):
             all_src[s] = all_src.get(s, 0) + 1
 
-    # WL: сохраняем пары (uri, clash_dict) для корректного best
-    wl_pairs = []          # [(uri, clash_dict)]
-    wl_txt, wl_src = [], {}
+    l3cfg = getattr(cfg.verify, 'l3', None)
+    tag_l3 = bool(l3cfg and getattr(l3cfg, 'enabled', False)
+                  and getattr(l3cfg, 'tag_names', True))
+
+    wl_pairs, wl_src = [], {}
     for u, p in wl_items:
         if not validate(p)[0]:
             continue
         q = dict(p)
+        if tag_l3 and (u in l3_tg or u in l3_yt):
+            tg_ok = l3_tg.get(u) is True
+            yt_ok = l3_yt.get(u) is True
+            mark = '🟢' if (tg_ok and yt_ok) else ('🟡' if tg_ok else ('🔵' if yt_ok else '⚪️'))
+            q['name'] = f"{mark} {q.get('name', '')}".strip()
         if u in geo:
             q['name'] = f"{geo[u]} · {q.get('name', '')}".strip(' ·')
-        if u in delays and delays[u]:
+        if delays.get(u):
             q['name'] = f"{q.get('name', '')} · {delays[u]}ms".strip(' ·')
-        wl_txt.append(u)
         wl_pairs.append((u, q))
         for s in prov.get(u, ()):
             wl_src[s] = wl_src.get(s, 0) + 1
@@ -240,12 +284,12 @@ async def run(config_path='config.yaml'):
     all_clash = unique_names(all_clash)
     wl_clash = unique_names([p for _, p in wl_pairs])
     all_txt = sorted(set(all_txt))
-    wl_txt = sorted(set(wl_txt))
+    wl_txt = sorted({u for u, _ in wl_pairs})
 
-    # Best: сортируем по задержке из wl_pairs (НЕ из раздельных списков)
-    best = sorted(wl_pairs, key=lambda up: delays.get(up[0]) or 10 ** 9)[:int(cfg.limits.best)]
+    # best: пары (uri, конфиг) не разъезжаются, сортировка по реальной задержке
+    best = sorted(wl_pairs, key=lambda up: (delays.get(up[0]) or 10 ** 9, up[0]))[:int(cfg.limits.best)]
     best_txt = [u for u, _ in best]
-    best_clash = [p for _, p in best]
+    best_clash = [dict(p) for _, p in best]
 
     stats = {
         'ts': now_utc().isoformat(),
@@ -255,6 +299,13 @@ async def run(config_path='config.yaml'):
         'all': len(all_txt), 'all_yaml': len(all_clash),
         'wl': len(wl_txt), 'wl_yaml': len(wl_clash),
         'wl_reasons': wl_reasons, 'verify_level': level,
+        'l3': {
+            'checked_tg': len(l3_tg), 'checked_yt': len(l3_yt),
+            'tg_ok': sum(1 for v in l3_tg.values() if v),
+            'yt_ok': sum(1 for v in l3_yt.values() if v),
+            'both_ok': sum(1 for u in l3_tg if l3_tg.get(u) and l3_yt.get(u)),
+            'dropped': l3_dropped,
+        },
         'http': dict(log.STATS), 'seconds': round(time.time() - start, 1),
         'sources_wl': len(wl_src), 'sources_all': len(all_src),
     }
@@ -290,6 +341,19 @@ async def run(config_path='config.yaml'):
     log.live_sources('ALL', all_src)
     log.info(f'✅ Готово за {time.time()-start:.1f} сек!')
     return 0
+
+
+async def _read_web(session, sem, web, embed, cutoff, cfg):
+    """Каналы + embed-сообщения через t.me/s/. -> (items, urls)"""
+    jobs = [(u, web_channel(session, sem, u, cutoff, cfg.limits.tme_pages, cfg)) for u in web]
+    jobs += [(u, _one_embed(session, sem, u, cutoff, cfg)) for u in embed]
+    if not jobs:
+        return [], []
+    items, urls = [], []
+    for (src, _), (p, u) in zip(jobs, await asyncio.gather(*(c for _, c in jobs))):
+        items.extend((uri, dt, src) for uri, dt in p)
+        urls.extend(u)
+    return items, urls
 
 
 async def _one_embed(session, sem, src, cutoff, cfg):
