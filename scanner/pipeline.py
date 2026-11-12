@@ -1,5 +1,6 @@
 import asyncio
 import time
+from datetime import timedelta
 from pathlib import Path
 
 from . import log
@@ -30,8 +31,8 @@ async def run(config_path='config.yaml'):
              if l.strip() and not l.startswith('#')]
 
     cache = Cache(cfg)
-    cutoff_wl = now_utc() - __import__('datetime').timedelta(days=int(cfg.windows.wl_days))
-    cutoff_all = now_utc() - __import__('datetime').timedelta(days=int(cfg.windows.all_days))
+    cutoff_wl = now_utc() - timedelta(days=int(cfg.windows.wl_days))
+    cutoff_all = now_utc() - timedelta(days=int(cfg.windows.all_days))
 
     web, embed, tg, subs = classify_sources(lines, cfg)
     use_tg = bool(cfg.telethon.all_channels) and cfg.telegram.session_b64
@@ -50,7 +51,8 @@ async def run(config_path='config.yaml'):
             jobs = [(u, web_channel(session, http_sem, u, cutoff_wl, cfg.limits.tme_pages, cfg))
                     for u in web]
             jobs += [(u, _one_embed(session, http_sem, u, cutoff_wl, cfg)) for u in embed]
-            for (src, _), (p, urls) in zip(jobs, await asyncio.gather(*(c for _, c in jobs))):
+            results = await asyncio.gather(*(c for _, c in jobs))
+            for (src, _), (p, urls) in zip(jobs, results):
                 items.extend((u, dt, src) for u, dt in p)
                 subs.update(clean_url(x) for x in urls)
             for w in web:
@@ -101,15 +103,14 @@ async def run(config_path='config.yaml'):
         log.info(f'[{time.time()-start:.1f}s] Сырых прокси: {len(merged)}')
 
         # ---------- ОДИН проход: расклейка → дедуп → парсинг ----------
-        fresh, origin, fallback, glued = [], {}, {}, 0
-        for uri, (dt, _srcs) in merged.items():
+        fresh, origin = [], {}
+        glued = 0
+        for uri in merged:
             variants, tails = split_uri(uri)
             cand = variants[0]
             fresh.append(cand)
             origin.setdefault(cand, set()).add(uri)
-            if len(variants) > 1:
-                fallback[cand] = variants[1]
-            if tails or len(variants) > 1:
+            if len(variants) > 1 or tails:
                 glued += 1
             for t in tails:
                 fresh.append(t)
@@ -126,16 +127,16 @@ async def run(config_path='config.yaml'):
                 continue
             p = parse(rep)
             used = rep
-            if p is None and rep in fallback:
-                p2 = parse(fallback[rep])
-                if p2 is not None:
-                    p, used = p2, fallback[rep]
+            if p is None and len(split_uri(rep)[0]) > 1:
+                p = parse(split_uri(rep)[-1])
+                if p is not None:
+                    used = split_uri(rep)[-1]
                     rescued += 1
             if p and p.get('server') and p.get('port'):
                 p = sanitize(p)
                 parsed[used] = p
                 srcs, dts = set(), []
-                for m in members[rep]:
+                for m in members.get(rep, [rep]):
                     for orig in origin.get(m, (m,)):
                         e = merged.get(orig)
                         if e:
@@ -183,21 +184,18 @@ async def run(config_path='config.yaml'):
                 if p.get('tls') and p.get('type') in ('vless', 'trojan', 'vmess'):
                     sni = p.get('server-name') or p.get('sni') or ''
                     tls_jobs.append((u, p['server'], p['port'], sni))
-            tls_ok = await l1_tls(tls_jobs, cfg)
             if tls_jobs:
+                tls_ok = await l1_tls(tls_jobs, cfg)
                 wl_items = [(u, p) for u, p in wl_items
                             if u not in tls_ok or tls_ok[u]]
                 log.debug(f'🔐 после L1 осталось {len(wl_items)}')
 
         if level >= 2 and wl_items:
             named = []
-            seen_names = set()
             for i, (u, p) in enumerate(wl_items):
-                nm = f'p{i}'
                 q = dict(p)
-                q['name'] = nm
-                named.append((nm, q))
-                seen_names.add(u)
+                q['name'] = f'p{i}'
+                named.append((f'p{i}', q))
             d, g = await l2_core(named, cfg, session)
             if d:
                 idx = {f'p{i}': u for i, (u, _) in enumerate(wl_items)}
@@ -223,7 +221,9 @@ async def run(config_path='config.yaml'):
         for s in prov.get(u, ()):
             all_src[s] = all_src.get(s, 0) + 1
 
-    wl_txt, wl_clash, wl_src = [], [], {}
+    # WL: сохраняем пары (uri, clash_dict) для корректного best
+    wl_pairs = []          # [(uri, clash_dict)]
+    wl_txt, wl_src = [], {}
     for u, p in wl_items:
         if not validate(p)[0]:
             continue
@@ -233,17 +233,17 @@ async def run(config_path='config.yaml'):
         if u in delays and delays[u]:
             q['name'] = f"{q.get('name', '')} · {delays[u]}ms".strip(' ·')
         wl_txt.append(u)
-        wl_clash.append(q)
+        wl_pairs.append((u, q))
         for s in prov.get(u, ()):
             wl_src[s] = wl_src.get(s, 0) + 1
 
     all_clash = unique_names(all_clash)
-    wl_clash = unique_names(wl_clash)
+    wl_clash = unique_names([p for _, p in wl_pairs])
     all_txt = sorted(set(all_txt))
     wl_txt = sorted(set(wl_txt))
 
-    best = sorted([(u, p) for u, p in zip(wl_txt, wl_clash) if True],
-                  key=lambda up: delays.get(up[0]) or 10 ** 9)[:int(cfg.limits.best)]
+    # Best: сортируем по задержке из wl_pairs (НЕ из раздельных списков)
+    best = sorted(wl_pairs, key=lambda up: delays.get(up[0]) or 10 ** 9)[:int(cfg.limits.best)]
     best_txt = [u for u, _ in best]
     best_clash = [p for _, p in best]
 
@@ -262,6 +262,9 @@ async def run(config_path='config.yaml'):
     prev = {'wl': prev_count(o.wl_txt), 'all': prev_count(o.all_txt)}
     problems = guard(cfg, stats, prev)
     stats['guard_problems'] = problems
+    log.debug(f'🛡️ parse_rate {stats.get("parse_rate")} '
+              f'({stats.get("parse_attempts")} попыток, дедуп {len(fresh)}→{len(reps)}), '
+              f'prev ALL={prev["all"]} WL={prev["wl"]}')
     write_stats(o.stats, stats)
 
     log.debug(f'📊 ALL: txt={len(all_txt)} yaml={len(all_clash)} | '
