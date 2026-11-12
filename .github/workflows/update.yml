@@ -1,168 +1,101 @@
-# ============================================================
-#  tg-poxies-scan — все настройки здесь, код править не нужно
-# ============================================================
+name: Update Proxies
 
-sources_file: sources.txt
-
-outputs:
-  all_txt: proxy-all.txt
-  all_yaml: proxy-all.yaml
-  wl_txt: proxy.txt
-  wl_yaml: proxy.yaml
-  best_txt: proxy-best.txt
-  best_yaml: proxy-best.yaml
-  wl_base64: proxy-base64.txt
-  issue: issue.txt
-  stats: stats.json
-  live_sources: sources-live.txt
-
-# Окна свежести: WL шире (белые ключи живут дольше), ALL — только свежее
-windows:
-  wl_days: 50
-  all_days: 10
-
-limits:
-  tme_pages: 10            # страниц истории t.me/s/ на канал (~20 постов каждая)
-  tme_sub_pages: 2         # страниц для каналов, найденных внутри подписок
-  telethon_limit: 1000     # сообщений на канал через Telethon
-  max_embed: 200           # максимум чужих embed-сообщений (0 = без лимита)
-  per_endpoint: 5          # сколько конфигов оставляем на один host:port
-  best: 50                 # размер proxy-best.* (топ по задержке)
-  max_attachment_mb: 2     # максимальный размер вложения-документа в Telegram
+on:
+  schedule:
+    # каждый час в 23 минуты (UTC)
+    - cron: '23 * * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scanner/**'
+      - 'tests/**'
+      - 'config.yaml'
+      - 'main.py'
+      - 'conftest.py'
+      - 'pytest.ini'
+      - 'requirements.txt'
+      - '.github/workflows/update.yml'
 
 concurrency:
-  http: 50
-  ping: 500
-  tls: 100
-  core: 24                 # одновременных проверок через mihomo
+  group: update-proxies
+  cancel-in-progress: false
 
-timeouts:
-  http_total: 12
-  http_connect: 7
-  long_total: 30           # для problem_domains
-  ping: 2.0
-  tls: 3.0
-  core_delay_ms: 5000
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-protocols:
-  all: [vless, vmess, ss, trojan, hysteria2, tuic]   # что попадает в proxy-all.yaml
-  wl: [vless]                                        # что попадает в proxy.yaml / proxy.txt
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
 
-whitelist:
-  roots: "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс каскад"
-  use_roots: true          # совпадение по НАЧАЛУ слова: Белые->бел, Телефон->теле, Автовыбор->авто
-  use_sni: true            # + распознавание по SNI из белого списка (технический признак обхода БС)
-  use_cidr: true           # + по входному IP из диапазонов ниже
-  require_tls: false       # true = отсекать конфиги без TLS (security=none) — для обхода по SNI они бесполезны
-  sni_domains:
-    - yandex.ru
-    - yandex.net
-    - yandexcloud.net
-    - yastatic.net
-    - ya.ru
-    - vk.com
-    - vk.ru
-    - ok.ru
-    - okcdn.ru
-    - max.ru
-    - avito.ru
-    - rutube.ru
-    - dzen.ru
-    - x5.ru
-    - tbank.ru
-    - sberbank.ru
-    - gosuslugi.ru
-    - ozon.ru
-    - wildberries.ru
-    - mail.ru
-    - kinopoisk.ru
-    - rbc.ru
-    - kommersant.ru
-  cidr: []                 # свои диапазоны белого списка, напр. ["95.163.0.0/16", "213.180.192.0/19"]
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-verify:
-  # 0 = только TCP-порт (быстро, но "живой" ≠ рабочий)
-  # 1 = + TLS/Reality-рукопожатие для WL  ← СТАРТ ЗДЕСЬ
-  # 2 = + реальный запрос через mihomo (лучшее качество, качает бинарник в рантайме)
-  level: 1
-  core_api: https://api.github.com/repos/MetaCubeX/mihomo/releases/latest
-  controller: 127.0.0.1:19090
-  mixed_port: 17890
-  test_url: http://www.gstatic.com/generate_204
-  geo_top: 0               # >0 = определять реальную страну выхода для топ-N (медленнее)
-  geo_url: https://api.ipify.org?format=json
+      - name: Check layout
+        run: |
+          ls -la
+          ls -la scanner
+          python -c "import scanner; print('scanner OK:', scanner.__file__)"
 
-cache:
-  enabled: true            # ETag/Last-Modified + пинг-кэш + контент-хэш (живёт в actions/cache, не в репо)
-  dir: .cache
-  http_ttl_hours: 6        # сколько верим кэшу при ответе 304
-  ping_ok_ttl_hours: 12    # живой endpoint не перепроверяем
-  ping_fail_ttl_hours: 3   # мёртвый перепроверяем чаще
-  content_hash: true       # одинаковое тело подписки парсим один раз
+      - name: Unit tests
+        run: python -m pytest -q tests
 
-telethon:
-  all_channels: false      # СТАРТ: false (каналы через проверенный t.me/s/, форумы через Telethon)
-                           # true = все каналы через Telethon + вложения; включать после зелёного прогона
-  attachments: true        # читать вложения-документы (.txt с ключами) — работает только через Telethon
+  build:
+    needs: tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-guards:
-  enabled: true            # circuit breaker: не публиковать сломанный результат
-  min_parse_rate: 0.6      # если распарсилось меньше 60% — стоп, файлы не перезаписываем
-  forbid_empty_wl: true    # WL=0 при непустом прошлом — стоп
-  max_all_drop_pct: 70     # ALL упал больше чем на 70% — стоп
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
 
-logging:
-  debug: true
-  show_live_sources: true  # печатать ПОЛНЫЕ ссылки источников, давших живые прокси
-  live_sources_top: 0      # 0 = все; N = только топ-N по каждому списку
-  progress_every: 200      # прогресс HTTP каждые N запросов (без URL), 0 = выключить
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-# домены, которым нужен увеличенный таймаут
-problem_domains: [kfwl.lol, pozor.bond, atlanta-subs.ru, astra-sub.com, taurus-sync.com, net4.su]
+      - name: Restore scan cache
+        uses: actions/cache@v4
+        with:
+          path: .cache
+          key: proxyscan-${{ github.run_id }}
+          restore-keys: proxyscan-
 
-# соцсети/СМИ — подписок там нет (сравнение по домену/поддомену, не по подстроке)
-blacklist_domains:
-  - youtube.com
-  - youtu.be
-  - instagram.com
-  - twitter.com
-  - x.com
-  - vk.com
-  - ok.ru
-  - pikabu.ru
-  - habr.com
-  - dzen.ru
-  - rambler.ru
-  - mail.ru
-  - meduza.io
-  - kommersant.ru
-  - cnews.ru
-  - iz.ru
-  - techradar.com
-  - openai.com
-  - sozd.duma.gov.ru
-  - playgta5.com
-  - mrbeast.nocp.uz
-  - cloud.mail.ru
-  - max.ru
-  - ria.ru
-  - lenta.ru
-  - rbc.ru
-  - vedomosti.ru
-  - tass.ru
+      - name: Run scanner
+        env:
+          TELEGRAM_SESSION: ${{ secrets.TELEGRAM_SESSION }}
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+        run: python main.py
 
-# страницы, где ключей заведомо нет (магазины, донаты, статьи, промо)
-junk_domains:
-  - play.google.com
-  - apps.apple.com
-  - testflight.apple.com
-  - donationalerts.com
-  - pay.cloudtips.ru
-  - finance.ozon.ru
-  - letmegooglethat.com
-  - consumer.ftc.gov
-  - cisa.gov
-  - telegram.org
-  - telega.in
-  - tgproxy.pink
-  - translate.yandex.ru
+      - name: Commit and push
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          for f in proxy.txt proxy.yaml proxy-all.txt proxy-all.yaml \
+                   proxy-best.txt proxy-best.yaml proxy-base64.txt \
+                   issue.txt stats.json sources-live.txt; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
+          if ! git diff --staged --quiet; then
+            git commit -m "🤖 Auto-update proxies [skip ci]"
+            git push || (git pull --rebase && git push)
+          else
+            echo "Нет изменений — коммит не нужен"
+          fi
