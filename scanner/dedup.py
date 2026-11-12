@@ -1,7 +1,7 @@
 import re
 from urllib.parse import parse_qsl, unquote, urlsplit
 
-from .extract import SCHEMES_ALT
+from .extract import PROXY_SCHEMES
 from .wl import roots_match
 
 IGNORED = {'fp', 'alpn', 'extra', 'headertype', 'encryption', 'allowinsecure',
@@ -11,18 +11,29 @@ DEDUP_SCHEMES = {'vless', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic'}
 # Расклейка ТОЛЬКО внутри имени. Тело/запрос не режем никогда:
 # внутри path/host встречается wss://, а он содержит ss:// — прежняя версия
 # резала там ссылку пополам и теряла десятки тысяч ключей (WL=0).
-_SPLIT_RE = re.compile(r'(?=(?:' + SCHEMES_ALT + r')://)', re.I)
+# Порядок альтернатив важен: 'vless' должен стоять перед 'ss', иначе подстрока
+# 'ss://' внутри 'vless://' ошибочно принимается за границу склейки. Граница —
+# только совпадение схемы, непосредственно следующее за предыдущей границей.
+_SPLIT_SCHEMES = '|'.join(sorted(PROXY_SCHEMES, key=len, reverse=True))
+_BOUNDARY_RE = re.compile(r'(?:' + _SPLIT_SCHEMES + r')://', re.I)
 
 
 def split_uri(uri):
     """-> (варианты головы, вклеенные хвосты). Оригинал всегда запасной вариант."""
     head, sep, frag = uri.partition('#')
-    if not sep or not _SPLIT_RE.search(frag):
+    if not sep or not _BOUNDARY_RE.search(frag):
         return [uri], []
-    parts = _SPLIT_RE.split(frag)
-    name = parts[0]
+    pos, i = [], 0
+    while True:
+        m = _BOUNDARY_RE.search(frag, i)
+        if not m:
+            break
+        pos.append(m.start())
+        i = m.end()
+    pieces = [frag[:pos[0]]] + [frag[i:] for i in pos]
+    name = pieces[0]
     clean = head + ('#' + name if name else '')
-    tails = [t for t in parts[1:] if '@' in t and ':' in t]
+    tails = [t for t in pieces[1:] if '@' in t and ':' in t]
     variants = [clean] + ([uri] if clean != uri else [])
     return variants, tails
 
