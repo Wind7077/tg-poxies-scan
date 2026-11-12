@@ -8,21 +8,46 @@ IGNORED = {'fp', 'alpn', 'extra', 'headertype', 'encryption', 'allowinsecure',
            'insecure', 'fm', 'packetencoding', 'spx', 'ed'}
 DEDUP_SCHEMES = {'vless', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic'}
 
-# Расклейка ТОЛЬКО внутри имени. Тело/запрос не режем никогда:
-# внутри path/host встречается wss://, а он содержит ss:// — прежняя версия
-# резала там ссылку пополам и теряла десятки тысяч ключей (WL=0).
-_SPLIT_RE = re.compile(r'(?=(?:' + SCHEMES_ALT + r')://)', re.I)
+# Расклейка ТОЛЬКО внутри имени (фрагмента). Тело и запрос не режем никогда.
+# ВАЖНО: finditer (неперекрывающиеся матчи), а не zero-width split:
+# внутри 'vless://' есть подстрока 'ss://', и split находил её как второй матч,
+# превращая хвост в 'ss://uuid@host' — ссылка ломалась.
+_SCHEME_RE = re.compile(r'(?:' + SCHEMES_ALT + r')://', re.I)
+
+
+def _link_starts(frag):
+    """Позиции начал вклеенных ссылок внутри имени.
+    Матч принимается, только если за схемой идёт структура ссылки —
+    это отсекает 'wss://' и прочий мусор в именах."""
+    starts = []
+    for m in _SCHEME_RE.finditer(frag):
+        scheme = m.group(0)[:-3].lower()
+        rest = frag[m.end():m.end() + 400]
+        rest = re.split(r'\s', rest, 1)[0]      # до первого пробела
+        rest = rest.split('#', 1)[0]            # тело ссылки, без имени
+        if scheme in ('vmess', 'happ'):
+            # у этих схем тело — base64, без '@' и ':'
+            if len(rest) >= 20:
+                starts.append(m.start())
+        elif '@' in rest and ':' in rest:
+            starts.append(m.start())
+    return starts
 
 
 def split_uri(uri):
-    """-> (варианты головы, вклеенные хвосты). Оригинал всегда запасной вариант."""
+    """-> (варианты головы, вклеенные хвосты).
+    Оригинал всегда присутствует как запасной вариант — потеря ключа невозможна."""
     head, sep, frag = uri.partition('#')
-    if not sep or not _SPLIT_RE.search(frag):
+    if not sep:
         return [uri], []
-    parts = _SPLIT_RE.split(frag)
-    name = parts[0]
+    starts = _link_starts(frag)
+    if not starts:
+        return [uri], []
+    name = frag[:starts[0]]
     clean = head + ('#' + name if name else '')
-    tails = [t for t in parts[1:] if '@' in t and ':' in t]
+    bounds = starts + [len(frag)]
+    tails = [frag[bounds[i]:bounds[i + 1]] for i in range(len(starts))]
+    tails = [t for t in tails if t]
     variants = [clean] + ([uri] if clean != uri else [])
     return variants, tails
 
@@ -70,7 +95,8 @@ def rank(uri, cfg):
 
 
 def dedupe(uris, cfg, per_endpoint=None):
-    """-> (представители, {представитель: все дубликаты})"""
+    """-> (представители, {представитель: все его дубликаты}).
+    Дубликаты нужны, чтобы отдать кредит всем источникам конфига."""
     groups = {}
     for u in sorted(set(uris)):
         groups.setdefault(config_key(u), []).append(u)
@@ -78,7 +104,7 @@ def dedupe(uris, cfg, per_endpoint=None):
     for g in groups.values():
         rep = max(g, key=lambda x: rank(x, cfg))
         rep_members[rep] = g
-    reps = list(rep_members)
+    reps = list(rep_members.keys())
     cap = cfg.limits.per_endpoint if per_endpoint is None else per_endpoint
     if cap and int(cap) > 0:
         per, capped = {}, []
