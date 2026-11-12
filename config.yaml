@@ -1,0 +1,156 @@
+sources_file: sources.txt
+
+outputs:
+  all_txt: proxy-all.txt
+  all_yaml: proxy-all.yaml
+  wl_txt: proxy.txt
+  wl_yaml: proxy.yaml
+  best_txt: proxy-best.txt
+  best_yaml: proxy-best.yaml
+  wl_base64: proxy-base64.txt
+  issue: issue.txt
+  stats: stats.json
+  live_sources: sources-live.txt
+
+windows:
+  wl_days: 50
+  all_days: 10
+
+limits:
+  tme_pages: 10
+  tme_sub_pages: 2
+  telethon_limit: 1000
+  max_embed: 200
+  per_endpoint: 5
+  best: 50
+  max_attachment_mb: 2
+
+concurrency:
+  http: 50
+  ping: 500
+  tls: 100
+  core: 24
+
+timeouts:
+  http_total: 12
+  http_connect: 7
+  long_total: 30
+  ping: 2.0
+  tls: 3.0
+  core_delay_ms: 5000
+
+protocols:
+  all: [vless, vmess, ss, trojan, hysteria2, tuic]
+  wl: [vless]
+
+whitelist:
+  roots: "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс каскад"
+  use_roots: true
+  use_sni: true
+  use_cidr: true
+  require_tls: false
+  sni_domains:
+    - yandex.ru
+    - yandex.net
+    - yandexcloud.net
+    - yastatic.net
+    - ya.ru
+    - vk.com
+    - vk.ru
+    - ok.ru
+    - okcdn.ru
+    - max.ru
+    - avito.ru
+    - rutube.ru
+    - dzen.ru
+    - x5.ru
+    - tbank.ru
+    - sberbank.ru
+    - gosuslugi.ru
+    - ozon.ru
+    - wildberries.ru
+    - mail.ru
+    - kinopoisk.ru
+    - rbc.ru
+    - kommersant.ru
+  cidr: []          # можно вписать свои диапазоны: ["95.163.0.0/16", ...]
+
+verify:
+  level: 2          # 0 = только TCP, 1 = +TLS для WL, 2 = +mihomo (реальный запрос)
+  core_api: https://api.github.com/repos/MetaCubeX/mihomo/releases/latest
+  controller: 127.0.0.1:19090
+  mixed_port: 17890
+  test_url: http://www.gstatic.com/generate_204
+  geo_top: 0        # >0 = определить реальную страну выхода для топ-N (медленнее)
+  geo_url: https://api.ipify.org?format=json
+
+cache:
+  enabled: true
+  dir: .cache
+  http_ttl_hours: 6
+  ping_ok_ttl_hours: 12
+  ping_fail_ttl_hours: 3
+  content_hash: true
+
+telethon:
+  all_channels: true
+  attachments: true
+
+guards:
+  enabled: true
+  min_parse_rate: 0.6
+  forbid_empty_wl: true
+  max_all_drop_pct: 70
+
+logging:
+  debug: true
+  show_live_sources: true
+  live_sources_top: 0     # 0 = все
+  progress_every: 200
+
+problem_domains: [kfwl.lol, pozor.bond, atlanta-subs.ru, astra-sub.com, taurus-sync.com, net4.su]
+
+blacklist_domains:
+  - youtube.com
+  - youtu.be
+  - instagram.com
+  - twitter.com
+  - x.com
+  - vk.com
+  - ok.ru
+  - pikabu.ru
+  - habr.com
+  - dzen.ru
+  - rambler.ru
+  - mail.ru
+  - meduza.io
+  - kommersant.ru
+  - cnews.ru
+  - iz.ru
+  - techradar.com
+  - openai.com
+  - sozd.duma.gov.ru
+  - playgta5.com
+  - mrbeast.nocp.uz
+  - cloud.mail.ru
+  - max.ru
+  - ria.ru
+  - lenta.ru
+  - rbc.ru
+  - vedomosti.ru
+  - tass.ru
+
+junk_domains:
+  - play.google.com
+  - apps.apple.com
+  - testflight.apple.com
+  - donationalerts.com
+  - pay.cloudtips.ru
+  - finance.ozon.ru
+  - letmegooglethat.com
+  - consumer.ftc.gov
+  - cisa.gov
+  - telegram.org
+  - telega.in
+  - tgproxy.pink
+  - translate.yandex.ru
