@@ -86,6 +86,20 @@ proxies:
     public-key: cv_KJnMzQUZruACPbH-BCgLWrYqPm2dbUymg-gW_sVc
   client-fingerprint: chrome
   flow: xtls-rprx-vision
+- name: '🌀 CYBERPORTAL | White List #494'
+  type: vless
+  server: 129.101.121.70
+  port: 8443
+  uuid: a96ad3ea-4820-43d2-bbf3-27c6bf19d652
+  network: tcp
+  udp: true
+  tls: true
+  server-name: storage.yandex.net
+  reality-opts:
+    public-key: xX9ZxZRrF_EER9-8fOegxR97HV5KaMaftAD7eq10UXw
+    short-id: 75dd7e79a7876314
+  flow: xtls-rprx-vision
+  client-fingerprint: chrome
 - name: '🌀 CYBERPORTAL | White Keys #210'
   type: vless
   server: 13.140.56.100
@@ -335,21 +349,6 @@ proxies:
     short-id: 8238d76df92c2560
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: Телефон / Роутер [owpn.org]
-  type: vless
-  server: 143.246.204.21
-  port: 443
-  uuid: 0f11b72f-1af1-4f0a-b992-87a8241d9213
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: packages.gitlab.com
-  reality-opts:
-    public-key: YEyZf6GvVcUG2VJnxyWOJQd8_ORz0n8Tw8Hs417OPxo
-    short-id: 5b524cdb28b6824a
-  client-fingerprint: chrome
-  xhttp-opts:
-    path: /assets/1117b6ce
 - name: '🌀 CYBERPORTAL | White List #407'
   type: vless
   server: 144.124.226.216
@@ -534,6 +533,20 @@ proxies:
   client-fingerprint: chrome
   grpc-opts:
     grpc-service-name: GunService
+- name: '🌀 CYBERPORTAL | White List #470'
+  type: vless
+  server: 147.45.97.168
+  port: 2053
+  uuid: fc7d8276-2f79-48f2-92c7-2fa5c0d9aa2a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: market.yandex.ru
+  reality-opts:
+    public-key: FWkH7C_t9obV_NI48ir9DHJed6OVBQTh-Hi8fVnUlDM
+    short-id: 118dc2786b9de6b6
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
 - name: 'Автовыбор #7'
   type: vless
   server: 150.241.68.88
@@ -575,6 +588,20 @@ proxies:
     public-key: 6XyN6_u1Sy_gRvm4MQg0yQLmVw0ZDdQtrxNgNllzLGU
     short-id: 8d10f24eef4c357a
   client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: '🇳🇱➜🇪🇸 GidroksiFree #88 | 🔗Каскад | 🔴WIFI | 6896ms | ↓0.0Mbps'
+  type: vless
+  server: 150.251.141.246
+  port: 443
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 7aa271t.es1.h1clayd.click
+  reality-opts:
+    public-key: ZSmetD4e9QG5CiXhniHg5HJB68L4kwbgAkJmMHtVwEE
+    short-id: 42426c882c5fcd41
+  client-fingerprint: firefox
   flow: xtls-rprx-vision
 - name: '🇳🇱➜🇪🇸 GidroksiFree #89 | 🔗Каскад | 🔴WIFI | 9453ms | ↓0.0Mbps'
   type: vless
@@ -795,19 +822,6 @@ proxies:
     path: /ws/f690da42-27ac-48ea-a15a-db69e06bfc11
     headers:
       Host: whitepanel-ui-production-146a.up.railway.app
-- name: 'Телефон / Роутер [owpn.org] #2'
-  type: vless
-  server: 153.56.228.154
-  port: 443
-  uuid: f1c3915d-7be6-4449-976e-bd48742eeec1
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: de.cultcorp.net
-  client-fingerprint: random
-  xhttp-opts:
-    path: /api/v4/assets/nVwx8JaRlrk8PLpTSi9rhA2dOYLWQ4TVKbqrDyFGPU8/
-    host: 153.56.228.154
 - name: '🌀 CYBERPORTAL | White Keys #331'
   type: vless
   server: 154.19.187.190
@@ -890,20 +904,6 @@ proxies:
     public-key: DQW3GuEvmRgUQnnKdHjSZhgaEDcu_07Ijuqibd72-0I
     short-id: ca7dd27a72c7c203
   client-fingerprint: chrome
-- name: '🌀 CYBERPORTAL | White List #425'
-  type: vless
-  server: 161.97.160.224
-  port: 443
-  uuid: b81b4d1b-7f20-48f1-82dc-d24bef898cab
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: 33zaT3jHXjtynSQ0Ucw9bK92-XH2zolJmuIeZ1XyZB0
-    short-id: e6
-  flow: xtls-rprx-vision
-  client-fingerprint: chrome
 - name: '🌀 CYBERPORTAL | White Keys #179'
   type: vless
   server: 162.159.130.234
@@ -952,6 +952,20 @@ proxies:
     path: /
     headers:
       Host: snip.edgeoneai.cc.cd
+- name: Телефон / Роутер [owpn.org]
+  type: vless
+  server: 162.159.198.1
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
+  network: ws
+  udp: true
+  tls: true
+  server-name: fs.qicai99.com
+  client-fingerprint: chrome
+  ws-opts:
+    path: /fp=chrome
+    headers:
+      Host: fs.qicai99.com
 - name: '🌀 CYBERPORTAL | White Keys #8'
   type: vless
   server: 169.40.42.89
@@ -1076,19 +1090,6 @@ proxies:
   xhttp-opts:
     path: /de96f7f8682c741950d8ddc8
     host: remanga.org
-- name: '🇷🇺➜🇺🇸 GidroksiFree #32 | 🔗Каскад | 🔴WIFI | 3628ms | ↓0.0Mbps'
-  type: vless
-  server: 177.1.183.105
-  port: 443
-  uuid: e460e79d-5dd9-451d-8d1a-a84c8b70c9a7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ru-gr2.fluxnode777.ru
-  reality-opts:
-    public-key: QTMA6f7XeUaTPvxqcldgWa452jhPZuakmSdXTQf8glA
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #360'
   type: vless
   server: 178.172.227.124
@@ -1186,7 +1187,7 @@ proxies:
     short-id: 5dc99ae27daa42cf
   client-fingerprint: qq
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #3'
+- name: 'Телефон / Роутер [owpn.org] #2'
   type: vless
   server: 179.253.81.242
   port: 443
@@ -1392,6 +1393,20 @@ proxies:
     short-id: 428ef87fd47a3a32
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #3'
+  type: vless
+  server: 185.215.184.79
+  port: 443
+  uuid: 90157e25-cee1-4217-921e-91f300bc1a24
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 185.215.184.79
+  reality-opts:
+    public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
+    short-id: 428ef87fd47a3a32
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: '🇪🇪➜🇷🇺 GidroksiFree #3 | 🔗Каскад | 🟢LTE | 6701ms | ↓0.0Mbps'
   type: vless
   server: 185.215.184.86
@@ -1460,34 +1475,6 @@ proxies:
     public-key: kDEc42JBZxig3BrLD3V1ofs3oJZk15-ANWN-rM0JW10
     short-id: f28145401b4f633a
   client-fingerprint: firefox
-- name: '🌀 CYBERPORTAL | White List #447'
-  type: vless
-  server: 185.86.147.184
-  port: 9449
-  uuid: 576f2d3c-5bb8-4d2e-a7d7-6cebb32be5dc
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: SsPslLCfw2CGDmCs17gTLRSUOsOfv0KgnuLnkyTqCzA
-    short-id: 62002c0a685ac208
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #5'
-  type: vless
-  server: 185.86.147.184
-  port: 9449
-  uuid: 835ff053-08fd-43f2-9886-8c2a3d967d14
-  network: tcp
-  udp: true
-  tls: true
-  server-name: passport.yandex.ru
-  reality-opts:
-    public-key: SsPslLCfw2CGDmCs17gTLRSUOsOfv0KgnuLnkyTqCzA
-    short-id: 62002c0a685ac208
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #379'
   type: vless
   server: 185.95.231.156
@@ -1808,6 +1795,20 @@ proxies:
     short-id: bdaddda4cbc8c7bf
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: '🌀 CYBERPORTAL | White List #442'
+  type: vless
+  server: 193.108.52.167
+  port: 8082
+  uuid: b4bc10bf-80f9-40c9-b4e5-29817c2f0992
+  network: grpc
+  udp: true
+  tls: true
+  server-name: id.vk.com
+  reality-opts:
+    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
+  grpc-opts:
+    grpc-service-name: vless-grpc-reality
+  client-fingerprint: chrome
 - name: '🌀 CYBERPORTAL | White List #453'
   type: vless
   server: 193.148.58.79
@@ -1903,20 +1904,6 @@ proxies:
   xhttp-opts:
     path: /
     host: www.google.com
-- name: 🇺🇸 США | 🔗 Каскад [#РКП]
-  type: vless
-  server: 194.67.125.188
-  port: 443
-  uuid: a03c34f9-3972-4df8-8e53-3df474654b7f
-  network: tcp
-  udp: true
-  tls: true
-  server-name: us1.serverslocal.ru
-  reality-opts:
-    public-key: VbUdI9MaHFYPBJ1gmmfGyUX415RdeS2yg7ojhX43_m8
-    short-id: b5ea2877aadeb97c
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: 'Автовыбор #17'
   type: vless
   server: 195.123.212.251
@@ -1934,6 +1921,20 @@ proxies:
 - name: '🌀 CYBERPORTAL | White List #528'
   type: vless
   server: 195.15.213.198
+  port: 8082
+  uuid: b4bc10bf-80f9-40c9-b4e5-29817c2f0992
+  network: grpc
+  udp: true
+  tls: true
+  server-name: id.vk.com
+  reality-opts:
+    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
+  grpc-opts:
+    grpc-service-name: vless-grpc-reality
+  client-fingerprint: chrome
+- name: '🌀 CYBERPORTAL | White List #531'
+  type: vless
+  server: 195.15.213.253
   port: 8082
   uuid: b4bc10bf-80f9-40c9-b4e5-29817c2f0992
   network: grpc
@@ -2000,6 +2001,20 @@ proxies:
     public-key: 7efBhLzPwoTtEC1GlukCdiTllobUfa2_XuAKNSLJx30
     short-id: e7cffac9f8cfb434
   client-fingerprint: edge
+- name: '🇬🇧➜🇩🇪 GidroksiFree #19 | 🔗Каскад | 🔴WIFI | 15434ms | ↓0.0Mbps'
+  type: vless
+  server: 195.206.235.202
+  port: 443
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 4935e4t.de25.h1clayd.click
+  reality-opts:
+    public-key: MzgB17ZFbKqs8pbC3EscTzHid_ENc-k_Cp6nXl-2knw
+    short-id: 6976d670818644cc
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
 - name: '🇬🇧➜🇦🇱 GidroksiFree #11 | 🔗Каскад | 🔴WIFI | 5118ms | ↓0.0Mbps'
   type: vless
   server: 195.206.235.222
@@ -2013,6 +2028,21 @@ proxies:
     public-key: l-GzBDuNuhnjxoRlZqKvT7jAt_sbVAxhGFsAttO5kXs
     short-id: 361d0dd59c70516f
   client-fingerprint: chrome
+- name: '🇬🇧➜🇦🇱 GidroksiFree #52 | 🔗Каскад | 🔴WIFI | 2878ms | ↓0.0Mbps'
+  type: vless
+  server: 195.206.235.222
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 15b171g.nl7.h1clayd.click
+  reality-opts:
+    public-key: zbz--PMjcIC4Ggr3j-ibDf0fzXRTj0lM_HzjPJyMkVE
+    short-id: 50a749f0eccb628c
+  client-fingerprint: edge
+  grpc-opts:
+    grpc-service-name: 5b79e8a94241
 - name: '🇬🇧➜🇳🇱 GidroksiFree #78 | 🔗Каскад | 🔴WIFI | 988ms | ↓0.0Mbps'
   type: vless
   server: 195.206.235.74
@@ -2072,6 +2102,21 @@ proxies:
   client-fingerprint: firefox
   xhttp-opts:
     path: /d20896a4ce30
+- name: '🇸🇰➜🇦🇱 GidroksiFree #106 | 🔗Каскад | 🔴WIFI | 4790ms | ↓0.0Mbps'
+  type: vless
+  server: 196.245.153.104
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 15b171g.nl7.h1clayd.click
+  reality-opts:
+    public-key: zbz--PMjcIC4Ggr3j-ibDf0fzXRTj0lM_HzjPJyMkVE
+    short-id: 50a749f0eccb628c
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: 5b79e8a94241
 - name: '🇸🇰➜🇦🇱 GidroksiFree #112 | 🔗Каскад | 🔴WIFI | 12245ms | ↓0.0Mbps'
   type: vless
   server: 196.245.153.104
@@ -2544,21 +2589,6 @@ proxies:
     short-id: c9a5e27d5463f614
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇩🇪 Белые списки  happcluchi vpn
-  type: vless
-  server: 217.60.27.93
-  port: 443
-  uuid: 549766c3-fa5f-471e-8031-ffc1f8d5064f
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: tgde.blog-forme.ru
-  reality-opts:
-    public-key: 2VsrxDroL0paeyBtGkQ5zfhMOXqwti5kDZPkvh1xJgs
-    short-id: 8424ce89ccd55f65
-  client-fingerprint: qq
-  xhttp-opts:
-    path: /v2/notes/85cf046cfe9c
 - name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #71'
   type: vless
   server: 263651t.fi3.h1clayd.click
@@ -2901,21 +2931,6 @@ proxies:
     short-id: 2976f793571fb671
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #8'
-  type: vless
-  server: 38917fx.es1.h1clayd.click
-  port: 443
-  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: 38917fx.es1.h1clayd.click
-  reality-opts:
-    public-key: 4mgkA2kT_Im0rkGi-fVSUU5CyF5xvMVcjA6MXBSEDAA
-    short-id: d5501b156391e01d
-  client-fingerprint: firefox
-  xhttp-opts:
-    path: /
 - name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #51'
   type: vless
   server: 45.128.60.127
@@ -2930,6 +2945,49 @@ proxies:
     short-id: 557d83da1a36996f
   client-fingerprint: chrome
   flow: xtls-rprx-vision
+- name: 🇺🇸 США | 🔗 Каскад [#РКП]
+  type: vless
+  server: 45.133.151.171
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 04535dt.us8.h1clayd.click
+  reality-opts:
+    public-key: UoS8qZ74hP_ECcncCz55lzvlcVss3R7VA0WYZE0YQCY
+    short-id: ba2a3dce62b99092
+  client-fingerprint: edge
+- name: '🇺🇸 США | 🔗 Каскад [#РКП] #2'
+  type: vless
+  server: 45.133.151.171
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 0592efg.us8.h1clayd.click
+  reality-opts:
+    public-key: cO3wYHISTeorXcM8ffaDCDdqZ-olBQL-GyZqb-W7rTk
+    short-id: bd8f712209a9c283
+  client-fingerprint: edge
+  grpc-opts:
+    grpc-service-name: 99f2107b03f8
+- name: '🇺🇸 США | 🔗 Каскад [#РКП] #3'
+  type: vless
+  server: 45.133.151.171
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 0592efg.us8.h1clayd.click
+  reality-opts:
+    public-key: cO3wYHISTeorXcM8ffaDCDdqZ-olBQL-GyZqb-W7rTk
+    short-id: bd8f712209a9c283
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: 99f2107b03f8
 - name: '🇷🇺➜🇺🇸 GidroksiFree #41 | 🔗Каскад | 🔴WIFI | 10745ms | ↓0.0Mbps'
   type: vless
   server: 45.133.151.174
@@ -2943,21 +3001,6 @@ proxies:
     public-key: UoS8qZ74hP_ECcncCz55lzvlcVss3R7VA0WYZE0YQCY
     short-id: ba2a3dce62b99092
   client-fingerprint: firefox
-- name: '🇺🇸 США | 🔗 Каскад [#РКП] #2'
-  type: vless
-  server: 45.133.151.174
-  port: 443
-  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
-  network: grpc
-  udp: true
-  tls: true
-  server-name: 0592efg.us8.h1clayd.click
-  reality-opts:
-    public-key: cO3wYHISTeorXcM8ffaDCDdqZ-olBQL-GyZqb-W7rTk
-    short-id: bd8f712209a9c283
-  client-fingerprint: edge
-  grpc-opts:
-    grpc-service-name: 99f2107b03f8
 - name: 'Автовыбор #33'
   type: vless
   server: 45.139.26.194
@@ -3164,21 +3207,6 @@ proxies:
     short-id: bf8b003cb32c968b
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇦🇴———ОБХОД———
-  type: vless
-  server: 46.8.209.56
-  port: 443
-  uuid: ffd57de6-db06-475c-9a4b-11d27432ff25
-  network: grpc
-  udp: true
-  tls: true
-  server-name: smartcaptcha.yandexcloud.net
-  reality-opts:
-    public-key: MfnF5tCwX-bgNiJACkHrrRitLyisFQ-BS7NhhefqnhA
-    short-id: b1f0f405caad32ae
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: UpdateService
 - name: '🌀 CYBERPORTAL | White List #411'
   type: vless
   server: 5.129.193.147
@@ -3193,7 +3221,7 @@ proxies:
     short-id: 64c1fe36c7846400
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #9'
+- name: 'Телефон / Роутер [owpn.org] #8'
   type: vless
   server: 5.129.202.80
   port: 443
@@ -3443,6 +3471,19 @@ proxies:
     short-id: 2476f063981ffd92
   client-fingerprint: qq
   flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #9'
+  type: vless
+  server: 563019t.pl5.h1clayd.click
+  port: 443
+  uuid: 3d7c1ba4-64bd-4883-a698-352805c973a6
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 563019t.pl5.h1clayd.click
+  reality-opts:
+    public-key: RRq5gp7X6-zQsS6TVwyP28eQ6BXL7WNgnC7Rhjwc428
+    short-id: 9531c699faae36c6
+  client-fingerprint: firefox
 - name: '🌀 CYBERPORTAL | White List #519'
   type: vless
   server: 62.106.66.56
@@ -3555,7 +3596,7 @@ proxies:
     short-id: d020b987f84eb78a
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '🇫🇷➜🇷🇺 GidroksiFree #15 | 🔗Каскад | 🔴WIFI | 572ms | ↓0.0Mbps'
+- name: '🇫🇷➜🇷🇺 GidroksiFree #14 | 🔗Каскад | 🔴WIFI | 607ms | ↓0.0Mbps'
   type: vless
   server: 67.159.44.219
   port: 443
@@ -3563,7 +3604,7 @@ proxies:
   network: tcp
   udp: true
   tls: true
-  server-name: bestgif.su
+  server-name: 67.159.44.219
   reality-opts:
     public-key: 1vSZjvhZO01oAEH3b7eebR1qF5dLU1Dq2E7xu8pwGSs
     short-id: 428ef87fd47a3a32
@@ -3582,6 +3623,20 @@ proxies:
     public-key: k2hPp0tTW0Da-HK94wYpSCLbuK44LfGqC2MSJIM1Ti0
     short-id: 48050fab
   client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: '🌀 CYBERPORTAL | White List #362'
+  type: vless
+  server: 67.220.73.204
+  port: 18662
+  uuid: 814bd064-544d-4255-a070-5705c03f6da9
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.apple.com
+  reality-opts:
+    public-key: k2hPp0tTW0Da-HK94wYpSCLbuK44LfGqC2MSJIM1Ti0
+    short-id: 48050fab
+  client-fingerprint: chrome
   flow: xtls-rprx-vision
 - name: '🌀 CYBERPORTAL | White List #474'
   type: vless
@@ -3739,20 +3794,6 @@ proxies:
     short-id: 428ef87fd47a3a32
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🇷🇺🕊♥️ Россия [Обход БС] #17'
-  type: vless
-  server: 81.177.140.23
-  port: 53898
-  uuid: bb190cdb-82ae-4212-b6cd-8ae9e6b768dd
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ea0gmd8p.mtrxnet.click
-  reality-opts:
-    public-key: aV_BHCeZ30y4-5rpUIHaWHMYAgogLsw4AE06Rw2X4WE
-    short-id: e202a94ad1711af2
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
 - name: '🇹🇷🕊♥️ Турция [Обход БС] #18'
   type: vless
   server: 81.177.215.122
@@ -3893,6 +3934,20 @@ proxies:
   grpc-opts:
     grpc-service-name: vless-grpc-reality
   client-fingerprint: chrome
+- name: '🌀 CYBERPORTAL | White List #477'
+  type: vless
+  server: 83.228.197.161
+  port: 8082
+  uuid: b4bc10bf-80f9-40c9-b4e5-29817c2f0992
+  network: grpc
+  udp: true
+  tls: true
+  server-name: id.vk.com
+  reality-opts:
+    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
+  client-fingerprint: chrome
+  grpc-opts:
+    grpc-service-name: vless-grpc-reality
 - name: '🌀 CYBERPORTAL | White List #491'
   type: vless
   server: 83.228.197.174
@@ -3961,6 +4016,20 @@ proxies:
     public-key: Ec54Eop0jZft7rcJsPN4RHc4xG9smXhtenM52pJFUQI
     short-id: 27e53bbcab7593d7
   client-fingerprint: random
+  flow: xtls-rprx-vision
+- name: '🇩🇪➜🇷🇴 GidroksiFree #98 | 🔗Каскад | 🔴WIFI | 7345ms | ↓0.0Mbps'
+  type: vless
+  server: 86.107.179.250
+  port: 443
+  uuid: e75ad2eb-6c1f-45ce-8023-f5f10875df66
+  network: tcp
+  udp: true
+  tls: true
+  server-name: edge-5c4a0a8e13a6.eu-cdn391.com
+  reality-opts:
+    public-key: 8ekBZQk5UXxYvELwhchzklwJ5H9-W3rkZ1eAVVF1xlI
+    short-id: b39ae58a4dcff57d
+  client-fingerprint: firefox
   flow: xtls-rprx-vision
 - name: 'Автовыбор #42'
   type: vless
@@ -4118,54 +4187,28 @@ proxies:
     grpc-service-name: grpc
 - name: 'Телефон / Роутер [owpn.org] #10'
   type: vless
-  server: 88.80.150.15
+  server: 89.105.195.149
   port: 443
-  uuid: 1d46250c-f015-439d-a7fd-c4d9e2a4c63d
+  uuid: 1653818d-532e-46be-b825-384107fb7c3a
   network: grpc
   udp: true
   tls: true
-  server-name: bg2.oncloudvpn.com
-  client-fingerprint: edge
-  alpn:
-  - h2
+  server-name: data.mediacorphub.org
+  client-fingerprint: firefox
   grpc-opts:
-    grpc-service-name: grpc
+    grpc-service-name: home.v2.MetricsService
 - name: 'Телефон / Роутер [owpn.org] #11'
   type: vless
-  server: 89.105.195.148
+  server: 89.105.195.152
   port: 443
   uuid: 1653818d-532e-46be-b825-384107fb7c3a
   network: grpc
   udp: true
   tls: true
-  server-name: api.mediacorphub.org
-  client-fingerprint: firefox
+  server-name: fetch.mediacorphub.org
+  client-fingerprint: chrome
   grpc-opts:
-    grpc-service-name: gw.v2.PushService
-- name: 'Телефон / Роутер [owpn.org] #12'
-  type: vless
-  server: 89.105.195.150
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: images.mediacorphub.org
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: stats.v2.StreamService
-- name: 'Телефон / Роутер [owpn.org] #13'
-  type: vless
-  server: 89.105.195.151
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: edge.mediacorphub.org
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: hub.v1.ObjectService
+    grpc-service-name: api.v1.FeedService
 - name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #43'
   type: vless
   server: 89.105.218.106
@@ -4457,7 +4500,22 @@ proxies:
   xhttp-opts:
     path: /ccxf5snr06b8xxb6
     host: fafeqdhlett2p5la6d.cdn.cachefleet.com
-- name: '🇺🇸 США | 🔗 Каскад [#РКП] #3'
+- name: '🇪🇪 Эстония | 🔗 Каскад [#РКП] #2'
+  type: vless
+  server: 95.129.234.108
+  port: 8443
+  uuid: b229d38c-35ec-4a0b-9c86-8fceba243d6c
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: linden-crest.cdn.cachefleet.com
+  client-fingerprint: firefox
+  alpn:
+  - h2
+  xhttp-opts:
+    path: /ccxf5snr06b8xxb6
+    host: fafeqdhlett2p5la6d.cdn.cachefleet.com
+- name: '🇺🇸 США | 🔗 Каскад [#РКП] #4'
   type: vless
   server: 95.129.234.113
   port: 8443
@@ -4472,7 +4530,7 @@ proxies:
   xhttp-opts:
     path: /ccxf5snr06b8xxb6
     host: is-tw-relay.cdn.cachefleet.com
-- name: '🇪🇪 Эстония | 🔗 Каскад [#РКП] #2'
+- name: '🇪🇪 Эстония | 🔗 Каскад [#РКП] #3'
   type: vless
   server: 95.129.234.113
   port: 8443
@@ -4487,7 +4545,7 @@ proxies:
   xhttp-opts:
     path: /ccxf5snr06b8xxb6
     host: is-tw-relay.cdn.cachefleet.com
-- name: '🇺🇸 США | 🔗 Каскад [#РКП] #4'
+- name: '🇺🇸 США | 🔗 Каскад [#РКП] #5'
   type: vless
   server: 95.129.234.113
   port: 8443
@@ -4775,19 +4833,7 @@ proxies:
   client-fingerprint: firefox
   grpc-opts:
     grpc-service-name: a2a366869e24
-- name: 'Телефон / Роутер [owpn.org] #14'
-  type: vless
-  server: edge.mediacorphub.org
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: edge.mediacorphub.org
-  client-fingerprint: ios
-  grpc-opts:
-    grpc-service-name: hub.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #15'
+- name: 'Телефон / Роутер [owpn.org] #12'
   type: vless
   server: f0d7aft.nl13.h1clayd.click
   port: 443
@@ -4918,6 +4964,7 @@ proxy-groups:
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #44'
   - Автовыбор
   - 🇧🇪 Бельгия | VLESS TCP Reality
+  - '🌀 CYBERPORTAL | White List #494'
   - '🌀 CYBERPORTAL | White Keys #210'
   - '🌀 CYBERPORTAL | White Keys #271'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #101'
@@ -4937,7 +4984,6 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #326'
   - '🌀 CYBERPORTAL | White List #506'
   - 🇳🇱 Нидерланды | 🔗 Каскад [#РКП]
-  - Телефон / Роутер [owpn.org]
   - '🌀 CYBERPORTAL | White List #407'
   - '🌀 CYBERPORTAL | White List #511'
   - '🌀 CYBERPORTAL | White List #515'
@@ -4951,9 +4997,11 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #353'
   - 'Автовыбор #5'
   - 'Автовыбор #6'
+  - '🌀 CYBERPORTAL | White List #470'
   - 'Автовыбор #7'
   - '🌀 CYBERPORTAL | White List #525'
   - '🌀 CYBERPORTAL | White List #472'
+  - '🇳🇱➜🇪🇸 GidroksiFree #88 | 🔗Каскад | 🔴WIFI | 6896ms | ↓0.0Mbps'
   - '🇳🇱➜🇪🇸 GidroksiFree #89 | 🔗Каскад | 🔴WIFI | 9453ms | ↓0.0Mbps'
   - '🌀 CYBERPORTAL | White Keys #267'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #21'
@@ -4971,17 +5019,16 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #187'
   - 'United States | whitepanel-ui-production-146a.up.railway.app | WebSocket | [#LSO
     - #LinSpisokObhod]'
-  - 'Телефон / Роутер [owpn.org] #2'
   - '🌀 CYBERPORTAL | White Keys #331'
   - '🌀 CYBERPORTAL | White List #495'
   - '🌀 CYBERPORTAL | White List #475'
   - '🌀 CYBERPORTAL | White List #480'
   - '🌀 CYBERPORTAL | White List #527'
   - '🌀 CYBERPORTAL | White List #417'
-  - '🌀 CYBERPORTAL | White List #425'
   - '🌀 CYBERPORTAL | White Keys #179'
   - '🌀 CYBERPORTAL | White Keys #279'
   - '🌀 CYBERPORTAL | White Keys #184'
+  - Телефон / Роутер [owpn.org]
   - '🌀 CYBERPORTAL | White Keys #8'
   - cool [white] 🇺🇸 |#16|
   - cool [white] 🇺🇸 |#8|
@@ -4991,7 +5038,6 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #121'
   - 'Автовыбор #8'
   - 'Автовыбор #9'
-  - '🇷🇺➜🇺🇸 GidroksiFree #32 | 🔗Каскад | 🔴WIFI | 3628ms | ↓0.0Mbps'
   - '🌀 CYBERPORTAL | White List #360'
   - '🌀 CYBERPORTAL | White List #290'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #65'
@@ -4999,7 +5045,7 @@ proxy-groups:
   - LTE/5G
   - 'LTE/5G #2'
   - 'Автовыбор #10'
-  - 'Телефон / Роутер [owpn.org] #3'
+  - 'Телефон / Роутер [owpn.org] #2'
   - 'Автовыбор #11'
   - 'Автовыбор #12'
   - 'Автовыбор #13'
@@ -5014,13 +5060,12 @@ proxy-groups:
   - '🇪🇪➜🇷🇺 GidroksiFree #8 | 🔗Каскад | 🟢LTE | 2190ms | ↓0.0Mbps'
   - '🇪🇪➜🇷🇺 GidroksiFree #7 | 🔗Каскад | 🟢LTE | 2335ms | ↓0.0Mbps'
   - '🇪🇪➜🇷🇺 GidroksiFree #10 | 🔗Каскад | 🟢LTE | 13829ms | ↓0.0Mbps'
+  - 'Телефон / Роутер [owpn.org] #3'
   - '🇪🇪➜🇷🇺 GidroksiFree #3 | 🔗Каскад | 🟢LTE | 6701ms | ↓0.0Mbps'
   - '🇪🇪➜🇷🇺 GidroksiFree #5 | 🔗Каскад | 🟢LTE | 5760ms | ↓0.0Mbps'
   - 🇨🇭⚡ Автоподключение 65
   - '🌀 CYBERPORTAL | White List #497'
   - '🌀 CYBERPORTAL | White List #500'
-  - '🌀 CYBERPORTAL | White List #447'
-  - '🌀 CYBERPORTAL | White List #5'
   - '🌀 CYBERPORTAL | White List #379'
   - 🇷🇺+RU+#02+•+VLESS+Reality+[Белый+список]+(550ms)
   - '🌀 CYBERPORTAL | White Keys #160'
@@ -5042,6 +5087,7 @@ proxy-groups:
   - '🇳🇱 Нидерланды | 🔗 Каскад [#РКП] #2'
   - '🇫🇮 Финляндия | 🔗 Каскад [#РКП] #3'
   - '🌀 CYBERPORTAL | White Keys #25'
+  - '🌀 CYBERPORTAL | White List #442'
   - '🌀 CYBERPORTAL | White List #453'
   - '🇬🇧 Великобритания · LTE · ❔ · #19'
   - '🌀 CYBERPORTAL | White List #409'
@@ -5049,18 +5095,21 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #241'
   - '🌀 CYBERPORTAL | White List #507'
   - '🌀 CYBERPORTAL | White List #49'
-  - 🇺🇸 США | 🔗 Каскад [#РКП]
   - 'Автовыбор #17'
   - '🌀 CYBERPORTAL | White List #528'
+  - '🌀 CYBERPORTAL | White List #531'
   - '🌀 CYBERPORTAL | White List #508'
   - '🌀 CYBERPORTAL | White List #422'
   - '🇬🇧➜🇪🇸 GidroksiFree #24 | 🔗Каскад | 🔴WIFI | 3219ms | ↓0.0Mbps'
   - '🇬🇧➜🇪🇸 GidroksiFree #21 | 🔗Каскад | 🔴WIFI | 4985ms | ↓0.0Mbps'
+  - '🇬🇧➜🇩🇪 GidroksiFree #19 | 🔗Каскад | 🔴WIFI | 15434ms | ↓0.0Mbps'
   - '🇬🇧➜🇦🇱 GidroksiFree #11 | 🔗Каскад | 🔴WIFI | 5118ms | ↓0.0Mbps'
+  - '🇬🇧➜🇦🇱 GidroksiFree #52 | 🔗Каскад | 🔴WIFI | 2878ms | ↓0.0Mbps'
   - '🇬🇧➜🇳🇱 GidroksiFree #78 | 🔗Каскад | 🔴WIFI | 988ms | ↓0.0Mbps'
   - '🇬🇧➜🇳🇱 GidroksiFree #16 | 🔗Каскад | 🔴WIFI | 2845ms | ↓0.0Mbps'
   - '🌀 CYBERPORTAL | White List #390'
   - '🇸🇰➜🇦🇱 GidroksiFree #108 | 🔗Каскад | 🔴WIFI | 6587ms | ↓0.0Mbps'
+  - '🇸🇰➜🇦🇱 GidroksiFree #106 | 🔗Каскад | 🔴WIFI | 4790ms | ↓0.0Mbps'
   - '🇸🇰➜🇦🇱 GidroksiFree #112 | 🔗Каскад | 🔴WIFI | 12245ms | ↓0.0Mbps'
   - '🇸🇰➜🇳🇱 GidroksiFree #104 | 🔗Каскад | 🔴WIFI | 1367ms | ↓0.0Mbps'
   - '🇸🇰➜🇳🇱 GidroksiFree #61 | 🔗Каскад | 🔴WIFI | 3344ms | ↓0.0Mbps'
@@ -5095,7 +5144,6 @@ proxy-groups:
   - 'Автовыбор #23'
   - 'Автовыбор #24'
   - 'Автовыбор #25'
-  - 🇩🇪 Белые списки  happcluchi vpn
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #71'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #108'
   - cool [white] 🇺🇸 |#20|
@@ -5120,10 +5168,11 @@ proxy-groups:
   - 'Автовыбор #32'
   - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы | Реклама в YouTube] #37'
   - 🇷🇺🕊️ Обход АВТО 12
-  - 'Телефон / Роутер [owpn.org] #8'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #51'
-  - '🇷🇺➜🇺🇸 GidroksiFree #41 | 🔗Каскад | 🔴WIFI | 10745ms | ↓0.0Mbps'
+  - 🇺🇸 США | 🔗 Каскад [#РКП]
   - '🇺🇸 США | 🔗 Каскад [#РКП] #2'
+  - '🇺🇸 США | 🔗 Каскад [#РКП] #3'
+  - '🇷🇺➜🇺🇸 GidroksiFree #41 | 🔗Каскад | 🔴WIFI | 10745ms | ↓0.0Mbps'
   - 'Автовыбор #33'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #49'
   - '🌀 CYBERPORTAL | White List #487'
@@ -5139,9 +5188,8 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #328'
   - 'Автовыбор #34'
   - 🇺🇿 Белые списки  happcluchi vpn
-  - 🇦🇴———ОБХОД———
   - '🌀 CYBERPORTAL | White List #411'
-  - 'Телефон / Роутер [owpn.org] #9'
+  - 'Телефон / Роутер [owpn.org] #8'
   - '🌀 CYBERPORTAL | White List #423'
   - '🌀 CYBERPORTAL | White List #462'
   - '🌀 CYBERPORTAL | White List #400'
@@ -5159,6 +5207,7 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #512'
   - '🌀 CYBERPORTAL | White List #473'
   - '🌀 CYBERPORTAL | White List #431'
+  - 'Телефон / Роутер [owpn.org] #9'
   - '🌀 CYBERPORTAL | White List #519'
   - 'Автовыбор #36'
   - '🌀 CYBERPORTAL | White Keys #155'
@@ -5167,8 +5216,9 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #415'
   - '🌀 CYBERPORTAL | White List #414'
   - '🌀 CYBERPORTAL | White List #408'
-  - '🇫🇷➜🇷🇺 GidroksiFree #15 | 🔗Каскад | 🔴WIFI | 572ms | ↓0.0Mbps'
+  - '🇫🇷➜🇷🇺 GidroksiFree #14 | 🔗Каскад | 🔴WIFI | 607ms | ↓0.0Mbps'
   - '🌀 CYBERPORTAL | White List #378'
+  - '🌀 CYBERPORTAL | White List #362'
   - '🌀 CYBERPORTAL | White List #474'
   - '🌀 CYBERPORTAL | White Keys #150'
   - '🌀 CYBERPORTAL | White List #503'
@@ -5180,7 +5230,6 @@ proxy-groups:
   - '🇦🇱➜🇪🇸 GidroksiFree #23 | 🔗Каскад | 🔴WIFI | 3075ms | ↓0.0Mbps'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #2'
   - '🇨🇭➜🇷🇺 GidroksiFree #86 | 🔗Каскад | 🔴WIFI | 5067ms | ↓0.0Mbps'
-  - '🇷🇺🕊♥️ Россия [Обход БС] #17'
   - '🇹🇷🕊♥️ Турция [Обход БС] #18'
   - 'Автовыбор #39'
   - '🇳🇱🕊♥️ Нидерланды [Обход БС] #30'
@@ -5191,11 +5240,13 @@ proxy-groups:
   - 'Автовыбор #40'
   - 'Автовыбор #41'
   - '🌀 CYBERPORTAL | White List #436'
+  - '🌀 CYBERPORTAL | White List #477'
   - '🌀 CYBERPORTAL | White List #491'
   - '🌀 CYBERPORTAL | White List #501'
   - '🌀 CYBERPORTAL | White List #532'
   - '🌀 CYBERPORTAL | White List #471'
   - '🌀 CYBERPORTAL | White List #416'
+  - '🇩🇪➜🇷🇴 GidroksiFree #98 | 🔗Каскад | 🔴WIFI | 7345ms | ↓0.0Mbps'
   - 'Автовыбор #42'
   - 'Автовыбор #43'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #5'
@@ -5209,8 +5260,6 @@ proxy-groups:
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #94'
   - 'Телефон / Роутер [owpn.org] #10'
   - 'Телефон / Роутер [owpn.org] #11'
-  - 'Телефон / Роутер [owpn.org] #12'
-  - 'Телефон / Роутер [owpn.org] #13'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #43'
   - '🌀 CYBERPORTAL | White List #405'
   - '🌀 CYBERPORTAL | White Keys #40'
@@ -5231,9 +5280,10 @@ proxy-groups:
   - 'Автовыбор #46'
   - 🛡️+Белый+список+РФ+#04+•+VLESS+(2039ms)
   - 🇪🇪 Эстония | 🔗 Каскад [#РКП]
-  - '🇺🇸 США | 🔗 Каскад [#РКП] #3'
   - '🇪🇪 Эстония | 🔗 Каскад [#РКП] #2'
   - '🇺🇸 США | 🔗 Каскад [#РКП] #4'
+  - '🇪🇪 Эстония | 🔗 Каскад [#РКП] #3'
+  - '🇺🇸 США | 🔗 Каскад [#РКП] #5'
   - 🇸🇪 LTE 6 | Meg
   - '🇩🇪🕊♥️ Германия [Обход БС | Все операторы] #31'
   - '🌀 CYBERPORTAL | White List #505'
@@ -5253,8 +5303,7 @@ proxy-groups:
   - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы] #15'
   - '🌀 CYBERPORTAL | White List #441'
   - Беларусь🇧🇾 2
-  - 'Телефон / Роутер [owpn.org] #14'
-  - 'Телефон / Роутер [owpn.org] #15'
+  - 'Телефон / Роутер [owpn.org] #12'
   - Беларусь🇧🇾 1
   - '🌀 CYBERPORTAL | White List #456'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #76'
@@ -5276,6 +5325,7 @@ proxy-groups:
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #44'
   - Автовыбор
   - 🇧🇪 Бельгия | VLESS TCP Reality
+  - '🌀 CYBERPORTAL | White List #494'
   - '🌀 CYBERPORTAL | White Keys #210'
   - '🌀 CYBERPORTAL | White Keys #271'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #101'
@@ -5295,7 +5345,6 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #326'
   - '🌀 CYBERPORTAL | White List #506'
   - 🇳🇱 Нидерланды | 🔗 Каскад [#РКП]
-  - Телефон / Роутер [owpn.org]
   - '🌀 CYBERPORTAL | White List #407'
   - '🌀 CYBERPORTAL | White List #511'
   - '🌀 CYBERPORTAL | White List #515'
@@ -5309,9 +5358,11 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #353'
   - 'Автовыбор #5'
   - 'Автовыбор #6'
+  - '🌀 CYBERPORTAL | White List #470'
   - 'Автовыбор #7'
   - '🌀 CYBERPORTAL | White List #525'
   - '🌀 CYBERPORTAL | White List #472'
+  - '🇳🇱➜🇪🇸 GidroksiFree #88 | 🔗Каскад | 🔴WIFI | 6896ms | ↓0.0Mbps'
   - '🇳🇱➜🇪🇸 GidroksiFree #89 | 🔗Каскад | 🔴WIFI | 9453ms | ↓0.0Mbps'
   - '🌀 CYBERPORTAL | White Keys #267'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #21'
@@ -5329,17 +5380,16 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #187'
   - 'United States | whitepanel-ui-production-146a.up.railway.app | WebSocket | [#LSO
     - #LinSpisokObhod]'
-  - 'Телефон / Роутер [owpn.org] #2'
   - '🌀 CYBERPORTAL | White Keys #331'
   - '🌀 CYBERPORTAL | White List #495'
   - '🌀 CYBERPORTAL | White List #475'
   - '🌀 CYBERPORTAL | White List #480'
   - '🌀 CYBERPORTAL | White List #527'
   - '🌀 CYBERPORTAL | White List #417'
-  - '🌀 CYBERPORTAL | White List #425'
   - '🌀 CYBERPORTAL | White Keys #179'
   - '🌀 CYBERPORTAL | White Keys #279'
   - '🌀 CYBERPORTAL | White Keys #184'
+  - Телефон / Роутер [owpn.org]
   - '🌀 CYBERPORTAL | White Keys #8'
   - cool [white] 🇺🇸 |#16|
   - cool [white] 🇺🇸 |#8|
@@ -5349,7 +5399,6 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #121'
   - 'Автовыбор #8'
   - 'Автовыбор #9'
-  - '🇷🇺➜🇺🇸 GidroksiFree #32 | 🔗Каскад | 🔴WIFI | 3628ms | ↓0.0Mbps'
   - '🌀 CYBERPORTAL | White List #360'
   - '🌀 CYBERPORTAL | White List #290'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #65'
@@ -5357,7 +5406,7 @@ proxy-groups:
   - LTE/5G
   - 'LTE/5G #2'
   - 'Автовыбор #10'
-  - 'Телефон / Роутер [owpn.org] #3'
+  - 'Телефон / Роутер [owpn.org] #2'
   - 'Автовыбор #11'
   - 'Автовыбор #12'
   - 'Автовыбор #13'
@@ -5372,13 +5421,12 @@ proxy-groups:
   - '🇪🇪➜🇷🇺 GidroksiFree #8 | 🔗Каскад | 🟢LTE | 2190ms | ↓0.0Mbps'
   - '🇪🇪➜🇷🇺 GidroksiFree #7 | 🔗Каскад | 🟢LTE | 2335ms | ↓0.0Mbps'
   - '🇪🇪➜🇷🇺 GidroksiFree #10 | 🔗Каскад | 🟢LTE | 13829ms | ↓0.0Mbps'
+  - 'Телефон / Роутер [owpn.org] #3'
   - '🇪🇪➜🇷🇺 GidroksiFree #3 | 🔗Каскад | 🟢LTE | 6701ms | ↓0.0Mbps'
   - '🇪🇪➜🇷🇺 GidroksiFree #5 | 🔗Каскад | 🟢LTE | 5760ms | ↓0.0Mbps'
   - 🇨🇭⚡ Автоподключение 65
   - '🌀 CYBERPORTAL | White List #497'
   - '🌀 CYBERPORTAL | White List #500'
-  - '🌀 CYBERPORTAL | White List #447'
-  - '🌀 CYBERPORTAL | White List #5'
   - '🌀 CYBERPORTAL | White List #379'
   - 🇷🇺+RU+#02+•+VLESS+Reality+[Белый+список]+(550ms)
   - '🌀 CYBERPORTAL | White Keys #160'
@@ -5400,6 +5448,7 @@ proxy-groups:
   - '🇳🇱 Нидерланды | 🔗 Каскад [#РКП] #2'
   - '🇫🇮 Финляндия | 🔗 Каскад [#РКП] #3'
   - '🌀 CYBERPORTAL | White Keys #25'
+  - '🌀 CYBERPORTAL | White List #442'
   - '🌀 CYBERPORTAL | White List #453'
   - '🇬🇧 Великобритания · LTE · ❔ · #19'
   - '🌀 CYBERPORTAL | White List #409'
@@ -5407,18 +5456,21 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #241'
   - '🌀 CYBERPORTAL | White List #507'
   - '🌀 CYBERPORTAL | White List #49'
-  - 🇺🇸 США | 🔗 Каскад [#РКП]
   - 'Автовыбор #17'
   - '🌀 CYBERPORTAL | White List #528'
+  - '🌀 CYBERPORTAL | White List #531'
   - '🌀 CYBERPORTAL | White List #508'
   - '🌀 CYBERPORTAL | White List #422'
   - '🇬🇧➜🇪🇸 GidroksiFree #24 | 🔗Каскад | 🔴WIFI | 3219ms | ↓0.0Mbps'
   - '🇬🇧➜🇪🇸 GidroksiFree #21 | 🔗Каскад | 🔴WIFI | 4985ms | ↓0.0Mbps'
+  - '🇬🇧➜🇩🇪 GidroksiFree #19 | 🔗Каскад | 🔴WIFI | 15434ms | ↓0.0Mbps'
   - '🇬🇧➜🇦🇱 GidroksiFree #11 | 🔗Каскад | 🔴WIFI | 5118ms | ↓0.0Mbps'
+  - '🇬🇧➜🇦🇱 GidroksiFree #52 | 🔗Каскад | 🔴WIFI | 2878ms | ↓0.0Mbps'
   - '🇬🇧➜🇳🇱 GidroksiFree #78 | 🔗Каскад | 🔴WIFI | 988ms | ↓0.0Mbps'
   - '🇬🇧➜🇳🇱 GidroksiFree #16 | 🔗Каскад | 🔴WIFI | 2845ms | ↓0.0Mbps'
   - '🌀 CYBERPORTAL | White List #390'
   - '🇸🇰➜🇦🇱 GidroksiFree #108 | 🔗Каскад | 🔴WIFI | 6587ms | ↓0.0Mbps'
+  - '🇸🇰➜🇦🇱 GidroksiFree #106 | 🔗Каскад | 🔴WIFI | 4790ms | ↓0.0Mbps'
   - '🇸🇰➜🇦🇱 GidroksiFree #112 | 🔗Каскад | 🔴WIFI | 12245ms | ↓0.0Mbps'
   - '🇸🇰➜🇳🇱 GidroksiFree #104 | 🔗Каскад | 🔴WIFI | 1367ms | ↓0.0Mbps'
   - '🇸🇰➜🇳🇱 GidroksiFree #61 | 🔗Каскад | 🔴WIFI | 3344ms | ↓0.0Mbps'
@@ -5453,7 +5505,6 @@ proxy-groups:
   - 'Автовыбор #23'
   - 'Автовыбор #24'
   - 'Автовыбор #25'
-  - 🇩🇪 Белые списки  happcluchi vpn
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #71'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #108'
   - cool [white] 🇺🇸 |#20|
@@ -5478,10 +5529,11 @@ proxy-groups:
   - 'Автовыбор #32'
   - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы | Реклама в YouTube] #37'
   - 🇷🇺🕊️ Обход АВТО 12
-  - 'Телефон / Роутер [owpn.org] #8'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #51'
-  - '🇷🇺➜🇺🇸 GidroksiFree #41 | 🔗Каскад | 🔴WIFI | 10745ms | ↓0.0Mbps'
+  - 🇺🇸 США | 🔗 Каскад [#РКП]
   - '🇺🇸 США | 🔗 Каскад [#РКП] #2'
+  - '🇺🇸 США | 🔗 Каскад [#РКП] #3'
+  - '🇷🇺➜🇺🇸 GidroksiFree #41 | 🔗Каскад | 🔴WIFI | 10745ms | ↓0.0Mbps'
   - 'Автовыбор #33'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #49'
   - '🌀 CYBERPORTAL | White List #487'
@@ -5497,9 +5549,8 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White Keys #328'
   - 'Автовыбор #34'
   - 🇺🇿 Белые списки  happcluchi vpn
-  - 🇦🇴———ОБХОД———
   - '🌀 CYBERPORTAL | White List #411'
-  - 'Телефон / Роутер [owpn.org] #9'
+  - 'Телефон / Роутер [owpn.org] #8'
   - '🌀 CYBERPORTAL | White List #423'
   - '🌀 CYBERPORTAL | White List #462'
   - '🌀 CYBERPORTAL | White List #400'
@@ -5517,6 +5568,7 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #512'
   - '🌀 CYBERPORTAL | White List #473'
   - '🌀 CYBERPORTAL | White List #431'
+  - 'Телефон / Роутер [owpn.org] #9'
   - '🌀 CYBERPORTAL | White List #519'
   - 'Автовыбор #36'
   - '🌀 CYBERPORTAL | White Keys #155'
@@ -5525,8 +5577,9 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #415'
   - '🌀 CYBERPORTAL | White List #414'
   - '🌀 CYBERPORTAL | White List #408'
-  - '🇫🇷➜🇷🇺 GidroksiFree #15 | 🔗Каскад | 🔴WIFI | 572ms | ↓0.0Mbps'
+  - '🇫🇷➜🇷🇺 GidroksiFree #14 | 🔗Каскад | 🔴WIFI | 607ms | ↓0.0Mbps'
   - '🌀 CYBERPORTAL | White List #378'
+  - '🌀 CYBERPORTAL | White List #362'
   - '🌀 CYBERPORTAL | White List #474'
   - '🌀 CYBERPORTAL | White Keys #150'
   - '🌀 CYBERPORTAL | White List #503'
@@ -5538,7 +5591,6 @@ proxy-groups:
   - '🇦🇱➜🇪🇸 GidroksiFree #23 | 🔗Каскад | 🔴WIFI | 3075ms | ↓0.0Mbps'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #2'
   - '🇨🇭➜🇷🇺 GidroksiFree #86 | 🔗Каскад | 🔴WIFI | 5067ms | ↓0.0Mbps'
-  - '🇷🇺🕊♥️ Россия [Обход БС] #17'
   - '🇹🇷🕊♥️ Турция [Обход БС] #18'
   - 'Автовыбор #39'
   - '🇳🇱🕊♥️ Нидерланды [Обход БС] #30'
@@ -5549,11 +5601,13 @@ proxy-groups:
   - 'Автовыбор #40'
   - 'Автовыбор #41'
   - '🌀 CYBERPORTAL | White List #436'
+  - '🌀 CYBERPORTAL | White List #477'
   - '🌀 CYBERPORTAL | White List #491'
   - '🌀 CYBERPORTAL | White List #501'
   - '🌀 CYBERPORTAL | White List #532'
   - '🌀 CYBERPORTAL | White List #471'
   - '🌀 CYBERPORTAL | White List #416'
+  - '🇩🇪➜🇷🇴 GidroksiFree #98 | 🔗Каскад | 🔴WIFI | 7345ms | ↓0.0Mbps'
   - 'Автовыбор #42'
   - 'Автовыбор #43'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #5'
@@ -5567,8 +5621,6 @@ proxy-groups:
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #94'
   - 'Телефон / Роутер [owpn.org] #10'
   - 'Телефон / Роутер [owpn.org] #11'
-  - 'Телефон / Роутер [owpn.org] #12'
-  - 'Телефон / Роутер [owpn.org] #13'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #43'
   - '🌀 CYBERPORTAL | White List #405'
   - '🌀 CYBERPORTAL | White Keys #40'
@@ -5589,9 +5641,10 @@ proxy-groups:
   - 'Автовыбор #46'
   - 🛡️+Белый+список+РФ+#04+•+VLESS+(2039ms)
   - 🇪🇪 Эстония | 🔗 Каскад [#РКП]
-  - '🇺🇸 США | 🔗 Каскад [#РКП] #3'
   - '🇪🇪 Эстония | 🔗 Каскад [#РКП] #2'
   - '🇺🇸 США | 🔗 Каскад [#РКП] #4'
+  - '🇪🇪 Эстония | 🔗 Каскад [#РКП] #3'
+  - '🇺🇸 США | 🔗 Каскад [#РКП] #5'
   - 🇸🇪 LTE 6 | Meg
   - '🇩🇪🕊♥️ Германия [Обход БС | Все операторы] #31'
   - '🌀 CYBERPORTAL | White List #505'
@@ -5611,8 +5664,7 @@ proxy-groups:
   - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы] #15'
   - '🌀 CYBERPORTAL | White List #441'
   - Беларусь🇧🇾 2
-  - 'Телефон / Роутер [owpn.org] #14'
-  - 'Телефон / Роутер [owpn.org] #15'
+  - 'Телефон / Роутер [owpn.org] #12'
   - Беларусь🇧🇾 1
   - '🌀 CYBERPORTAL | White List #456'
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #76'

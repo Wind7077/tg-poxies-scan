@@ -159,21 +159,6 @@ proxies:
     short-id: 64c1fe36c7846400
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: Телефон / Роутер [owpn.org]
-  type: vless
-  server: 143.246.204.21
-  port: 443
-  uuid: 0f11b72f-1af1-4f0a-b992-87a8241d9213
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: packages.gitlab.com
-  reality-opts:
-    public-key: YEyZf6GvVcUG2VJnxyWOJQd8_ORz0n8Tw8Hs417OPxo
-    short-id: 5b524cdb28b6824a
-  client-fingerprint: chrome
-  xhttp-opts:
-    path: /assets/1117b6ce
 - name: '🇬🇧 Великобритания · LTE · ❔ · #19'
   type: vless
   server: 193.163.203.170
@@ -226,54 +211,30 @@ proxies:
     short-id: 247fd6dab1a34a48
   client-fingerprint: chrome
   flow: xtls-rprx-vision
+- name: 'Телефон / Роутер [owpn.org] #10'
+  type: vless
+  server: 89.105.195.149
+  port: 443
+  uuid: 1653818d-532e-46be-b825-384107fb7c3a
+  network: grpc
+  udp: true
+  tls: true
+  server-name: data.mediacorphub.org
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: home.v2.MetricsService
 - name: 'Телефон / Роутер [owpn.org] #11'
   type: vless
-  server: 89.105.195.148
+  server: 89.105.195.152
   port: 443
   uuid: 1653818d-532e-46be-b825-384107fb7c3a
   network: grpc
   udp: true
   tls: true
-  server-name: api.mediacorphub.org
-  client-fingerprint: firefox
+  server-name: fetch.mediacorphub.org
+  client-fingerprint: chrome
   grpc-opts:
-    grpc-service-name: gw.v2.PushService
-- name: 'Телефон / Роутер [owpn.org] #12'
-  type: vless
-  server: 89.105.195.150
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: images.mediacorphub.org
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: stats.v2.StreamService
-- name: 'Телефон / Роутер [owpn.org] #13'
-  type: vless
-  server: 89.105.195.151
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: edge.mediacorphub.org
-  client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: hub.v1.ObjectService
-- name: 'Телефон / Роутер [owpn.org] #14'
-  type: vless
-  server: edge.mediacorphub.org
-  port: 443
-  uuid: 1653818d-532e-46be-b825-384107fb7c3a
-  network: grpc
-  udp: true
-  tls: true
-  server-name: edge.mediacorphub.org
-  client-fingerprint: ios
-  grpc-opts:
-    grpc-service-name: hub.v1.ObjectService
+    grpc-service-name: api.v1.FeedService
 - name: 'Автовыбор #8'
   type: vless
   server: 176.12.74.226
@@ -521,20 +482,6 @@ proxies:
     short-id: bbe46bd8f6b96839
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #10'
-  type: vless
-  server: 88.80.150.15
-  port: 443
-  uuid: 1d46250c-f015-439d-a7fd-c4d9e2a4c63d
-  network: grpc
-  udp: true
-  tls: true
-  server-name: bg2.oncloudvpn.com
-  client-fingerprint: edge
-  alpn:
-  - h2
-  grpc-opts:
-    grpc-service-name: grpc
 - name: '🌀 CYBERPORTAL | White List #480'
   type: vless
   server: 158.160.146.238
@@ -688,6 +635,56 @@ proxies:
     short-id: 15bcc0a77c3cacdf
   client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: Автовыбор
+  type: vless
+  server: 109.122.197.61
+  port: 443
+  uuid: 2b781b4a-5942-48e0-a7f3-5a07b7b488c1
+  network: tcp
+  udp: true
+  tls: true
+  server-name: de-root.sworkingvpn.com
+  reality-opts:
+    public-key: AhLy7ha7FF2EQfu-3SxOFKUwExyHActYPHtyv82KNCI
+    short-id: 15bcc0a77c3cacdf
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 'Автовыбор #5'
+  type: vless
+  server: 147.45.60.15
+  port: 443
+  uuid: 2b781b4a-5942-48e0-a7f3-5a07b7b488c1
+  network: tcp
+  udp: true
+  tls: true
+  server-name: us-root.sworkingvpn.com
+  reality-opts:
+    public-key: AhLy7ha7FF2EQfu-3SxOFKUwExyHActYPHtyv82KNCI
+    short-id: 15bcc0a77c3cacdf
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 'Автовыбор #14'
+  type: vless
+  server: 185.147.26.209
+  port: 443
+  uuid: 2b781b4a-5942-48e0-a7f3-5a07b7b488c1
+  network: grpc
+  udp: true
+  tls: true
+  server-name: ru-pro.sworkingvpn.com
+  reality-opts:
+    public-key: AhLy7ha7FF2EQfu-3SxOFKUwExyHActYPHtyv82KNCI
+    short-id: 15bcc0a77c3cacdf
+  client-fingerprint: firefox
+  grpc-opts:
+    grpc-service-name: API
+- name: 'Автовыбор #15'
+  type: vless
+  server: 185.147.26.63
+  port: 80
+  uuid: 2b781b4a-5942-48e0-a7f3-5a07b7b488c1
+  network: tcp
+  udp: true
 proxy-groups:
 - name: ♻️ Auto
   type: url-test
@@ -703,15 +700,12 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #475'
   - '🌀 CYBERPORTAL | White List #489'
   - '🌀 CYBERPORTAL | White List #411'
-  - Телефон / Роутер [owpn.org]
   - '🇬🇧 Великобритания · LTE · ❔ · #19'
   - '🌀 CYBERPORTAL | White List #409'
   - '🌀 CYBERPORTAL | White List #390'
   - '🌀 CYBERPORTAL | White List #464'
+  - 'Телефон / Роутер [owpn.org] #10'
   - 'Телефон / Роутер [owpn.org] #11'
-  - 'Телефон / Роутер [owpn.org] #12'
-  - 'Телефон / Роутер [owpn.org] #13'
-  - 'Телефон / Роутер [owpn.org] #14'
   - 'Автовыбор #8'
   - 'Автовыбор #10'
   - 'Автовыбор #17'
@@ -730,7 +724,6 @@ proxy-groups:
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #65'
   - '🌀 CYBERPORTAL | White List #474'
   - '🌀 CYBERPORTAL | White List #397'
-  - 'Телефон / Роутер [owpn.org] #10'
   - '🌀 CYBERPORTAL | White List #480'
   - '🌀 CYBERPORTAL | White List #507'
   - 🇩🇪Обходы
@@ -742,6 +735,10 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #416'
   - 🇫🇮 Финляндия | 🔗 Каскад [#РКП]
   - 🇪🇺 Автовыбор
+  - Автовыбор
+  - 'Автовыбор #5'
+  - 'Автовыбор #14'
+  - 'Автовыбор #15'
   url: http://www.gstatic.com/generate_204
   interval: 300
   tolerance: 50
@@ -760,15 +757,12 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #475'
   - '🌀 CYBERPORTAL | White List #489'
   - '🌀 CYBERPORTAL | White List #411'
-  - Телефон / Роутер [owpn.org]
   - '🇬🇧 Великобритания · LTE · ❔ · #19'
   - '🌀 CYBERPORTAL | White List #409'
   - '🌀 CYBERPORTAL | White List #390'
   - '🌀 CYBERPORTAL | White List #464'
+  - 'Телефон / Роутер [owpn.org] #10'
   - 'Телефон / Роутер [owpn.org] #11'
-  - 'Телефон / Роутер [owpn.org] #12'
-  - 'Телефон / Роутер [owpn.org] #13'
-  - 'Телефон / Роутер [owpn.org] #14'
   - 'Автовыбор #8'
   - 'Автовыбор #10'
   - 'Автовыбор #17'
@@ -787,7 +781,6 @@ proxy-groups:
   - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #65'
   - '🌀 CYBERPORTAL | White List #474'
   - '🌀 CYBERPORTAL | White List #397'
-  - 'Телефон / Роутер [owpn.org] #10'
   - '🌀 CYBERPORTAL | White List #480'
   - '🌀 CYBERPORTAL | White List #507'
   - 🇩🇪Обходы
@@ -799,5 +792,9 @@ proxy-groups:
   - '🌀 CYBERPORTAL | White List #416'
   - 🇫🇮 Финляндия | 🔗 Каскад [#РКП]
   - 🇪🇺 Автовыбор
+  - Автовыбор
+  - 'Автовыбор #5'
+  - 'Автовыбор #14'
+  - 'Автовыбор #15'
 rules:
 - MATCH,🚀 Proxy
