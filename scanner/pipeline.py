@@ -59,7 +59,6 @@ async def run(config_path='config.yaml'):
         if tg:
             p, urls = await telethon_channels(tg, cutoff_wl, cfg)
             if not p and (tg_fallback_web or tg_fallback_embed):
-                # сессия протухла/не авторизована — не теряем каналы, читаем по-старому
                 log.info('⚠️ Telethon ничего не дал — откат на t.me/s/')
                 web, embed = tg_fallback_web, tg_fallback_embed
                 p2, urls2 = await _read_web(session, http_sem, web, embed, cutoff_wl, cfg)
@@ -96,7 +95,7 @@ async def run(config_path='config.yaml'):
                                                          cutoff_wl, cfg, cache) for u in rows)):
                 items.extend(r)
 
-        # дедуп по URI: свежая дата + все источники
+        # дедуп по URI
         merged = {}
         for uri, dt, src in items:
             e = merged.get(uri)
@@ -208,7 +207,7 @@ async def run(config_path='config.yaml'):
                 named.append((f'p{i}', q))
 
             res = await l2_core(named, cfg, session)
-            if len(res) == 2:                      # обратная совместимость
+            if len(res) == 2:
                 d, g = res
                 tg_raw, yt_raw = {}, {}
             else:
@@ -224,24 +223,35 @@ async def run(config_path='config.yaml'):
                 wl_items = [(u, p) for u, p in wl_items if delays.get(u)]
                 log.info(f'[L2] подтверждено рабочих: {len(wl_items)}')
 
+                # ---------- L3 фильтрация ----------
                 l3cfg = getattr(cfg.verify, 'l3', None)
                 if l3cfg and getattr(l3cfg, 'enabled', False) and (l3_tg or l3_yt):
-                    req_tg = bool(getattr(l3cfg, 'require_telegram', False))
-                    req_yt = bool(getattr(l3cfg, 'require_youtube', False))
+                    mode = (getattr(l3cfg, 'require_mode', 'telegram') or 'off').lower()
                     kept = []
                     for u, p in wl_items:
-                        tg_ok = l3_tg.get(u)
-                        yt_ok = l3_yt.get(u)
-                        if req_tg and tg_ok is False:
-                            l3_dropped += 1
-                            continue
-                        if req_yt and yt_ok is False:
+                        tg = l3_tg.get(u)   # True / False / None(не проверялось)
+                        yt = l3_yt.get(u)
+                        checked = (tg is not None) or (yt is not None)
+                        if checked:
+                            if mode == 'both':
+                                ok_l3 = (tg is True) and (yt is True)
+                            elif mode == 'any':
+                                ok_l3 = (tg is True) or (yt is True)
+                            elif mode == 'telegram':
+                                ok_l3 = (tg is True)
+                            elif mode == 'youtube':
+                                ok_l3 = (yt is True)
+                            else:  # off
+                                ok_l3 = True
+                        else:
+                            ok_l3 = True  # не проверялось — не отсеиваем
+                        if not ok_l3:
                             l3_dropped += 1
                             continue
                         kept.append((u, p))
                     wl_items = kept
-                    log.info(f'[L3] отсеяно {l3_dropped}, осталось {len(wl_items)} '
-                             f'(require TG={req_tg}, YT={req_yt})')
+                    log.info(f'[L3] режим={mode}, отсеяно {l3_dropped}, '
+                             f'осталось {len(wl_items)}')
             else:
                 log.debug('⚠️ L2 недоступен — остаёмся на L1')
 
@@ -286,7 +296,6 @@ async def run(config_path='config.yaml'):
     all_txt = sorted(set(all_txt))
     wl_txt = sorted({u for u, _ in wl_pairs})
 
-    # best: пары (uri, конфиг) не разъезжаются, сортировка по реальной задержке
     best = sorted(wl_pairs, key=lambda up: (delays.get(up[0]) or 10 ** 9, up[0]))[:int(cfg.limits.best)]
     best_txt = [u for u, _ in best]
     best_clash = [dict(p) for _, p in best]
@@ -305,6 +314,8 @@ async def run(config_path='config.yaml'):
             'yt_ok': sum(1 for v in l3_yt.values() if v),
             'both_ok': sum(1 for u in l3_tg if l3_tg.get(u) and l3_yt.get(u)),
             'dropped': l3_dropped,
+            'mode': (getattr(cfg.verify.l3, 'require_mode', 'off')
+                     if l3cfg and getattr(l3cfg, 'enabled', False) else 'off'),
         },
         'http': dict(log.STATS), 'seconds': round(time.time() - start, 1),
         'sources_wl': len(wl_src), 'sources_all': len(all_src),
@@ -344,7 +355,6 @@ async def run(config_path='config.yaml'):
 
 
 async def _read_web(session, sem, web, embed, cutoff, cfg):
-    """Каналы + embed-сообщения через t.me/s/. -> (items, urls)"""
     jobs = [(u, web_channel(session, sem, u, cutoff, cfg.limits.tme_pages, cfg)) for u in web]
     jobs += [(u, _one_embed(session, sem, u, cutoff, cfg)) for u in embed]
     if not jobs:
