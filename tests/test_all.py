@@ -53,7 +53,7 @@ def test_parse(uri, check):
 
 
 def test_glue_split_only_in_name():
-    """Главный регресс-тест: wss:// внутри path НЕ должен резаться."""
+    """РЕГРЕССИЯ: wss:// внутри path содержит ss:// — резать там нельзя."""
     uri = ('vless://11111111-2222-3333-4444-555555555555@h.com:443?type=ws'
            '&path=/wss://x&security=tls#name')
     variants, tails = dedup.split_uri(uri)
@@ -63,10 +63,34 @@ def test_glue_split_only_in_name():
 def test_glue_split_real():
     a = 'vless://11111111-2222-3333-4444-555555555555@a.com:443?security=tls#A'
     b = 'vless://11111111-2222-3333-4444-555555555555@b.com:443?security=tls#B'
-    glued = a + b
-    variants, tails = dedup.split_uri(glued)
-    assert variants[0] == a and variants[1] == glued
+    variants, tails = dedup.split_uri(a + b)
+    assert variants[0] == a and variants[1] == a + b
     assert tails == [b]
+
+
+def test_glue_no_overlap_inside_scheme():
+    """РЕГРЕССИЯ: 'vless://' содержит 'ss://' — хвост не должен терять схему."""
+    a = 'vless://11111111-2222-3333-4444-555555555555@a.com:443?security=tls#A'
+    b = 'vless://11111111-2222-3333-4444-555555555555@b.com:443?security=tls#B'
+    variants, tails = dedup.split_uri(a + b)
+    assert tails == [b]
+    assert all(t.startswith('vless://') for t in tails)
+    assert all(parse(t) for t in tails)
+
+
+def test_glue_wss_in_name_not_split():
+    """'wss://' внутри имени — не ссылка, резать нечего."""
+    uri = ('vless://11111111-2222-3333-4444-555555555555@a.com:443'
+           '?security=tls#name-wss://x')
+    variants, tails = dedup.split_uri(uri)
+    assert variants == [uri] and tails == []
+
+
+def test_glue_head_always_parses():
+    """Голова склейки обязана парситься так же, как исходная ссылка."""
+    glued = VLESS_REALITY + VLESS_WS
+    assert parse(glued) is not None
+    assert parse(dedup.split_uri(glued)[0]) is not None
 
 
 def test_clean_url_keeps_vless():
@@ -77,12 +101,12 @@ def test_clean_url_keeps_vless():
 def test_blacklist_boundary():
     assert extract.is_valid_url('https://netflix.com/sub', CFG)
     assert not extract.is_valid_url('https://x.com/a', CFG)
+    assert not extract.is_valid_url('https://sub.x.com/a', CFG)
     assert not extract.is_valid_url('https://play.google.com/x', CFG)
 
 
 def test_normalize_utm_and_mirrors():
-    a = 'https://x.com/s?utm_source=tg&id=5'
-    assert extract.normalize_sub_url(a) == 'https://x.com/s?id=5'
+    assert extract.normalize_sub_url('https://x.com/s?utm_source=tg&id=5') == 'https://x.com/s?id=5'
     assert (extract.normalize_sub_url('https://hub.mos.ru/a/-/raw/main/wl') ==
             extract.normalize_sub_url('https://hub.mos.ru/a/raw/main/wl'))
     keep = 'https://s.com/sub?key=abc'
@@ -103,7 +127,9 @@ def test_wl_sni_and_roots():
     assert ok and why.startswith('sni')
     assert wl.roots_match({'name': 'Телефон / Роутер'}, CFG)   # теле — как задумано
     assert wl.roots_match({'name': 'Автовыбор'}, CFG)          # авто — как задумано
-    assert not wl.roots_match({'name': 'Filter'}, CFG)         # ложное 'lte' больше не ловится
+    assert wl.roots_match({'name': 'Белые списки | МТС'}, CFG)
+    assert not wl.roots_match({'name': 'Filter'}, CFG)         # ложное 'lte' не ловится
+    assert not wl.roots_match({'name': 'обслуживание'}, CFG)   # ложное 'бс' не ловится
 
 
 def test_issue_glue():
