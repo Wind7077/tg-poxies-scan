@@ -1,4 +1,3 @@
-"""L0 TCP → L1 TLS/SNI → L2 реальный запрос через mihomo (п.2)."""
 import asyncio
 import gzip
 import json
@@ -47,7 +46,7 @@ async def l0_tcp(endpoints, cfg, cache, sem):
 
 
 async def l1_tls(items, cfg):
-    """items: [(key, host, port, sni)] -> {key: rtt|None}. Только TLS-конфиги."""
+    """items: [(key, host, port, sni)] -> {key: bool}. Только TLS-конфиги."""
     sem = asyncio.Semaphore(int(cfg.concurrency.tls))
     ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     ctx.check_hostname = False
@@ -115,13 +114,17 @@ async def _ensure_core(cfg, session):
 
 
 async def l2_core(named, cfg, session):
-    """named: [(name, clash_dict)] -> ({name: delay_ms}, {name: country}).
-    Любой сбой -> ({}, {}), пайплайн продолжает работу на L1."""
+    """named: [(name, clash_dict)] -> (delays, geo, l3_tg, l3_yt).
+
+    L2 — задержка через ядро (test_url).
+    L3 — доступность Telegram/YouTube через ТО ЖЕ ядро, отдельным url в /delay.
+    Любой сбой -> пустые словари, пайплайн продолжает работу на L1.
+    """
     if not named:
-        return {}, {}
+        return {}, {}, {}, {}
     binary = await _ensure_core(cfg, session)
     if not binary:
-        return {}, {}
+        return {}, {}, {}, {}
 
     tmp = Path(tempfile.mkdtemp(prefix='mihomo-'))
     conf = {
@@ -139,11 +142,12 @@ async def l2_core(named, cfg, session):
 
     proc = None
     delays, geo = {}, {}
+    l3_tg, l3_yt = {}, {}
     base = f"http://{cfg.verify.controller}"
     try:
         proc = subprocess.Popen([binary, '-d', str(tmp), '-f', str(tmp / 'config.yaml')],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=20)) as api:
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as api:
             for _ in range(40):
                 try:
                     async with api.get(base + '/version') as r:
@@ -154,20 +158,24 @@ async def l2_core(named, cfg, session):
                 await asyncio.sleep(0.25)
             else:
                 log.debug('⚠️ L2: ядро не поднялось')
-                return {}, {}
+                return {}, {}, {}, {}
 
             sem = asyncio.Semaphore(int(cfg.concurrency.core))
             test_url = cfg.verify.test_url
             tmo = int(cfg.timeouts.core_delay_ms)
 
+            async def _delay(name, url, timeout_ms):
+                u = f"{base}/proxies/{quote(name, safe='')}/delay"
+                async with api.get(u, params={'url': url, 'timeout': str(timeout_ms)}) as r:
+                    body = await r.json(content_type=None)
+                    d = body.get('delay') if isinstance(body, dict) else None
+                    return int(d) if isinstance(d, int) and d > 0 else None
+
+            # ---------- L2 ----------
             async def delay(name):
                 async with sem:
-                    url = f"{base}/proxies/{quote(name, safe='')}/delay"
                     try:
-                        async with api.get(url, params={'url': test_url, 'timeout': str(tmo)}) as r:
-                            body = await r.json()
-                            d = body.get('delay')
-                            return name, int(d) if isinstance(d, int) and d > 0 else None
+                        return name, await _delay(name, test_url, tmo)
                     except Exception:
                         return name, None
 
@@ -176,6 +184,34 @@ async def l2_core(named, cfg, session):
             ok = sum(1 for v in delays.values() if v)
             log.info(f'[L2] через ядро проверено {len(named)}, реально работают {ok}')
 
+            # ---------- L3: Telegram / YouTube ----------
+            l3cfg = getattr(cfg.verify, 'l3', None)
+            if l3cfg and getattr(l3cfg, 'enabled', False):
+                services = [('tg', getattr(l3cfg, 'telegram', '') or ''),
+                            ('yt', getattr(l3cfg, 'youtube', '') or '')]
+                services = [(k, u) for k, u in services if u]
+                l3tmo = int(getattr(l3cfg, 'timeout_ms', 6000))
+                only_alive = bool(getattr(l3cfg, 'only_alive', True))
+                targets = [n for n, _ in named if delays.get(n) or not only_alive]
+
+                async def probe(name, key, url):
+                    async with sem:
+                        try:
+                            d = await _delay(name, url, l3tmo)
+                            return name, key, d is not None
+                        except Exception:
+                            return name, key, False
+
+                if targets and services:
+                    jobs = [probe(n, k, u) for n in targets for k, u in services]
+                    for name, key, good in await asyncio.gather(*jobs):
+                        (l3_tg if key == 'tg' else l3_yt)[name] = good
+                    tg_ok = sum(1 for v in l3_tg.values() if v)
+                    yt_ok = sum(1 for v in l3_yt.values() if v)
+                    log.info(f'[L3] проверено {len(targets)} → '
+                             f'TG {tg_ok}/{len(l3_tg)} | YT {yt_ok}/{len(l3_yt)}')
+
+            # ---------- Geo (опционально) ----------
             top = int(cfg.verify.geo_top or 0)
             if top > 0:
                 alive = sorted([(n, d) for n, d in delays.items() if d], key=lambda x: x[1])[:top]
@@ -199,7 +235,7 @@ async def l2_core(named, cfg, session):
                         continue
                 log.debug(f'🌍 L2: страна определена для {len(geo)} прокси')
     except Exception as e:
-        log.debug(f'⚠️ L2: сбой ({type(e).__name__})')
+        log.debug(f'⚠️ L2/L3: сбой ({type(e).__name__})')
     finally:
         if proc:
             proc.terminate()
@@ -207,4 +243,4 @@ async def l2_core(named, cfg, session):
                 proc.wait(timeout=5)
             except Exception:
                 proc.kill()
-    return delays, geo
+    return delays, geo, l3_tg, l3_yt
