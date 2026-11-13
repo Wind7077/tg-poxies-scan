@@ -26,14 +26,16 @@ limits:
   max_attachment_mb: 2
   # Сколько всего конфигов прогоняем через ядро. 0 = все.
   core_max: 6000
-  # Размер пачки на один запуск mihomo. 6000 одним куском ядро не поднимает.
+  # Размер пачки на один запуск mihomo.
   core_batch: 800
+  # Сколько раз дробить упавшую пачку пополам (800→400→200).
+  core_retry_split: 2
 
 concurrency:
   http: 50
   ping: 500
   tls: 100
-  core: 48
+  core: 64
 
 timeouts:
   http_total: 12
@@ -88,13 +90,12 @@ verify:
   test_url: http://www.gstatic.com/generate_204
   geo_top: 0
   geo_url: https://api.ipify.org?format=json
-  # Сколько ждём подъёма ядра на пачку (сек)
   core_start_wait_s: 45
 
   l3:
     enabled: true
     telegram: "https://api.telegram.org/robots.txt"
-    youtube: "https://www.youtube.com/generate_204"
+    youtube: "httpv://www.youtube.com/generate_204"
     timeout_ms: 8000
     retries: 2
     only_alive: true
