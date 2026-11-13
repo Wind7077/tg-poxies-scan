@@ -356,21 +356,22 @@ async def run(config_path='config.yaml'):
     all_txt = sorted(set(all_txt))
     wl_txt = sorted({u for u, _ in wl_pairs})
 
-    # best: топ по реальной задержке среди проверенных (WL в приоритете)
+    # ---------- best: топ по реальной задержке (WL в приоритете) ----------
     verified = [(u, dict(p)) for u, p in wl_pairs if delays.get(u)]
     seen_v = {u for u, _ in verified}
-    for u, p in zip(all_txt, all_clash):
-        pass  # all_txt/all_clash разной длины — берём из all_pool ниже
     for u, p in all_pool:
-        if delays.get(u) and u not in seen_v and p.get('type') in all_proto and validate(p)[0]:
-            q = dict(p)
-            if tag_l3:
-                mk = _mark(l3_tg.get(u), l3_yt.get(u))
-                if mk:
-                    q['name'] = f"{mk} {q.get('name', '')}".strip()
-            q['name'] = f"{q.get('name', '')} · {delays[u]}ms".strip(' ·')
-            verified.append((u, q))
-            seen_v.add(u)
+        if not delays.get(u) or u in seen_v:
+            continue
+        if p.get('type') not in all_proto or not validate(p)[0]:
+            continue
+        q = dict(p)
+        if tag_l3:
+            mk = _mark(l3_tg.get(u), l3_yt.get(u))
+            if mk:
+                q['name'] = f"{mk} {q.get('name', '')}".strip()
+        q['name'] = f"{q.get('name', '')} · {delays[u]}ms".strip(' ·')
+        verified.append((u, q))
+        seen_v.add(u)
     best = sorted(verified, key=lambda up: (delays.get(up[0]) or 10 ** 9, up[0]))
     best = best[:int(cfg.limits.best)]
     best_txt = [u for u, _ in best]
