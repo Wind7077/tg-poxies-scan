@@ -23,7 +23,7 @@ _DEFAULTS = {
     'limits': {
         'tme_pages': 10, 'tme_sub_pages': 2, 'telethon_limit': 1000,
         'max_embed': 200, 'per_endpoint': 5, 'best': 50,
-        'max_attachment_mb': 2, 'core_max': 1500, 'core_priority_wl': True,
+        'max_attachment_mb': 2, 'core_max': 6000,
     },
     'concurrency': {'http': 50, 'ping': 500, 'tls': 100, 'core': 48},
     'timeouts': {
@@ -53,6 +53,8 @@ _DEFAULTS = {
             'require_mode_wl': 'off',
             'tag_names': True,
             'min_keep_pct': 15,
+            'all_keep_unchecked': True,
+            'all_drop_dead': True,
         },
     },
     'cache': {
