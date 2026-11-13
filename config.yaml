@@ -24,11 +24,9 @@ limits:
   per_endpoint: 5
   best: 50
   max_attachment_mb: 2
-  # Сколько конфигов максимум прогоняем через ядро за раз.
-  # 0 = без лимита (долго: 4900 × 3 запроса). 1500 ≈ 5–8 мин.
-  core_max: 1500
-  # Приоритет: сначала WL (дефицит), потом свежие ALL.
-  core_priority_wl: true
+  # Сколько конфигов прогоняем через ядро. 0 = все (долго).
+  # 6000 при ~10400 кандидатах ≈ 58% охват, +3-4 мин к прогону.
+  core_max: 6000
 
 concurrency:
   http: 50
@@ -81,7 +79,7 @@ whitelist:
   cidr: []
 
 verify:
-  # 0 = только TCP; 1 = +TLS для WL; 2 = +ядро (L2 delay + L3 сервисы) для ALL
+  # 0 = только TCP; 1 = +TLS для WL; 2 = +ядро (L2/L3) для ОБЩЕГО списка
   level: 2
   core_api: https://api.github.com/repos/MetaCubeX/mihomo/releases/latest
   controller: 127.0.0.1:19090
@@ -96,14 +94,18 @@ verify:
     youtube: "https://www.youtube.com/generate_204"
     timeout_ms: 8000
     retries: 2
-    only_alive: true          # L3 только для тех, кто прошёл L2 (экономия ~60%)
-    # ВАЖНО: режимы в кавычках! YAML парсит off/on/yes/no как булево.
-    require_mode_all: "both"  # both | any | telegram | youtube | off
-    require_mode_wl: "off"    # белые в дефиците — не режем
+    only_alive: true
+    # Режимы ОБЯЗАТЕЛЬНО в кавычках: YAML парсит off/on как булево.
+    require_mode_all: "both"   # both | any | telegram | youtube | off
+    require_mode_wl: "off"     # белые не режем никогда
     tag_names: true
-    # Страховка: если после фильтра ALL остаётся меньше этого % от
-    # проверенных — режим автоматически смягчается both→any→off.
     min_keep_pct: 15
+    # true  = непроверенные ядром остаются в ALL (список больше)
+    # false = в ALL только подтверждённые (список меньше, но чище)
+    all_keep_unchecked: true
+    # Выбрасывать из ALL тех, кого ядро признало мёртвыми (L2 fail).
+    # Это главный фильтр качества — не выключайте.
+    all_drop_dead: true
 
 cache:
   enabled: true
@@ -113,7 +115,7 @@ cache:
   ping_fail_ttl_hours: 3
   content_hash: true
 
-# Значения перекрываются переменными окружения
+# Перекрывается переменными окружения
 # TELEGRAM_API_ID / TELEGRAM_API_HASH / TELEGRAM_SESSION
 telegram:
   api_id: 0
@@ -123,7 +125,6 @@ telegram:
 telethon:
   all_channels: true
   attachments: true
-  # качать только текстовые вложения (не PDF/APK/картинки)
   attachment_ext: [".txt", ".json", ".yaml", ".yml", ".conf", ".list", ".sub", ""]
 
 guards:
@@ -137,7 +138,7 @@ logging:
   show_live_sources: true
   live_sources_top: 0
   progress_every: 200
-  diag_secrets: false        # печать диагностики секретов при старте
+  diag_secrets: false
 
 problem_domains:
   - kfwl.lol
