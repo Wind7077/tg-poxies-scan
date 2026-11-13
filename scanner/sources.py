@@ -1,11 +1,13 @@
-"""Источники: t.me/s с пагинацией, Telethon на все каналы + вложения, подписки (п.5)."""
-import asyncio
+"""Источники: t.me/s с пагинацией, Telethon (каналы + вложения), подписки."""
+import base64
+import os
 import re
+from datetime import timezone
 
 from . import log
-from .extract import (TME_RE, clean_url, from_subscription, is_useless_tme, messages,
-                      now_utc, sub_key, PROXY_SCHEMES, ISSUE_SCHEMES, ISSUE_RE,
-                      PROXY_RE, collect_url)
+from .extract import (ISSUE_RE, ISSUE_URLS, PROXY_RE, PROXY_SCHEMES, TME_RE,
+                      URL_RE, clean_url, collect_url, from_subscription,
+                      is_useless_tme, messages, now_utc, sub_key)
 from .net import fetch
 
 try:
@@ -51,34 +53,61 @@ async def web_channel(session, sem, channel_url, cutoff, pages, cfg):
 
 
 def _tg_available(cfg):
-    return TELETHON_OK and cfg.telegram.api_id and cfg.telegram.session_b64
+    return bool(TELETHON_OK and cfg.telegram.api_id and cfg.telegram.session_b64)
+
+
+def _attach_ok(msg, cfg, max_bytes):
+    """Качаем только текстовые документы разумного размера."""
+    doc = getattr(msg, 'document', None)
+    if not doc:
+        return False
+    size = getattr(doc, 'size', 0) or 0
+    if not (0 < size <= max_bytes):
+        return False
+    exts = [str(e).lower() for e in (cfg.telethon.attachment_ext or [])]
+    name = ''
+    for attr in getattr(doc, 'attributes', []) or []:
+        name = getattr(attr, 'file_name', '') or name
+    ext = os.path.splitext(name)[1].lower()
+    if ext and exts and ext not in exts:
+        return False
+    mime = (getattr(doc, 'mime_type', '') or '').lower()
+    if mime and not (mime.startswith('text/') or 'json' in mime or 'yaml' in mime
+                     or mime == 'application/octet-stream'):
+        return False
+    return True
 
 
 async def telethon_channels(sources, cutoff, cfg):
-    """Один клиент на все каналы; темы форумов; вложения-документы. -> (items, urls)"""
-    import base64
-    import os
-
+    """Один клиент на все каналы; темы форумов; вложения. -> (items, urls)"""
     if not _tg_available(cfg):
-        log.debug('Telethon: не настроен')
+        why = []
+        if not TELETHON_OK:
+            why.append('библиотека не импортирована')
+        if not cfg.telegram.api_id:
+            why.append('api_id пуст')
+        if not cfg.telegram.session_b64:
+            why.append('session_b64 пуст')
+        log.debug('Telethon: не настроен (' + '; '.join(why) + ')')
         return [], []
+
     sf = 'tg_session'
     try:
         with open(sf + '.session', 'wb') as f:
             f.write(base64.b64decode(cfg.telegram.session_b64))
-    except Exception:
-        log.debug('Telethon: ошибка сессии')
+    except Exception as e:
+        log.debug(f'Telethon: ошибка сессии ({type(e).__name__})')
         return [], []
 
     items, urls = [], []
     limit = int(cfg.limits.telethon_limit)
     max_bytes = int(cfg.limits.max_attachment_mb) * 1024 * 1024
     client = TelegramClient(sf, cfg.telegram.api_id, cfg.telegram.api_hash)
-    docs = 0
+    docs = docs_skip = 0
     try:
         await client.connect()
         if not await client.is_user_authorized():
-            log.debug('Telethon: сессия не авторизована')
+            log.info('⚠️ Telethon: сессия не авторизована (протухла?)')
             return [], []
         for src in sources:
             m = re.match(r'https?://t\.me/(?:c/)?([a-zA-Z0-9_]+)(?:/(\d+))?', src)
@@ -100,28 +129,28 @@ async def telethon_channels(sources, cutoff, cfg):
                 async for msg in client.iter_messages(entity, limit=limit, **kw):
                     if not msg.date:
                         continue
-                    dt = msg.date if msg.date.tzinfo else msg.date.replace(tzinfo=__import__('datetime').timezone.utc)
+                    dt = msg.date if msg.date.tzinfo else msg.date.replace(tzinfo=timezone.utc)
                     if dt < cutoff:
                         break
                     text = msg.text or msg.message or ''
                     for mm in PROXY_RE.finditer(text):
                         items.append((clean_url(mm.group(0)), dt, src))
                     for mm in ISSUE_RE.finditer(text):
-                        from .extract import ISSUE_URLS
                         ISSUE_URLS.add(clean_url(mm.group(0)))
-                    for mm in __import__('scanner.extract', fromlist=['URL_RE']).URL_RE.finditer(text):
+                    for mm in URL_RE.finditer(text):
                         collect_url(mm.group(0), urls, cfg)
                     for ent in (msg.entities or []):
                         if isinstance(ent, MessageEntityTextUrl) and ent.url:
                             u = clean_url(ent.url)
                             if any(u.lower().startswith(s + '://') for s in PROXY_SCHEMES):
                                 items.append((u, dt, src))
+                            elif any(u.lower().startswith(s + '://') for s in
+                                     ('csqtt', 'qwdtt', 'olcrtc', 'openflux')):
+                                ISSUE_URLS.add(u)
                             else:
                                 collect_url(ent.url, urls, cfg)
-                    # вложения: каналы часто выкладывают ключи .txt-файлом
-                    if cfg.telethon.attachments and getattr(msg, 'document', None):
-                        size = getattr(msg.document, 'size', 0) or 0
-                        if 0 < size <= max_bytes:
+                    if cfg.telethon.attachments:
+                        if _attach_ok(msg, cfg, max_bytes):
                             try:
                                 blob = await client.download_media(msg, bytes)
                                 if blob:
@@ -130,11 +159,13 @@ async def telethon_channels(sources, cutoff, cfg):
                                         items.append((u, dt, src))
                                     docs += 1
                             except Exception:
-                                pass
-            except Exception:
-                log.debug('Telethon: ошибка чтения источника')
-    except Exception:
-        log.debug('Telethon: ошибка соединения')
+                                docs_skip += 1
+                        elif getattr(msg, 'document', None):
+                            docs_skip += 1
+            except Exception as e:
+                log.debug(f'Telethon: ошибка чтения источника ({type(e).__name__})')
+    except Exception as e:
+        log.debug(f'Telethon: ошибка соединения ({type(e).__name__})')
     finally:
         try:
             await client.disconnect()
@@ -144,7 +175,8 @@ async def telethon_channels(sources, cutoff, cfg):
             os.remove(sf + '.session')
         except OSError:
             pass
-    log.debug(f'Telethon: источников {len(sources)}, ссылок {len(items)}, вложений {docs}')
+    log.debug(f'Telethon: источников {len(sources)}, ссылок {len(items)}, '
+              f'вложений {docs} (пропущено {docs_skip})')
     return items, urls
 
 
