@@ -1,6 +1,5 @@
 import base64
 import json
-import os
 from datetime import timedelta
 
 import pytest
@@ -133,7 +132,7 @@ def test_issue_glue():
     assert len(parts) == 2 and parts[1].startswith('olcrtc://')
 
 
-# ---------- конфиг: РЕГРЕССИИ ----------
+# ---------- конфиг ----------
 def test_yaml_off_is_bool_normalized():
     """YAML 1.1: require_mode: off -> False. Должно стать строкой 'off'."""
     assert _norm_mode(False, 'both') == 'off'
@@ -145,7 +144,7 @@ def test_yaml_off_is_bool_normalized():
 
 
 def test_env_overrides_telegram(monkeypatch, tmp_path):
-    """Главный баг: секреты из env должны попадать в cfg.telegram."""
+    """Секреты из env должны попадать в cfg.telegram."""
     monkeypatch.setenv('TELEGRAM_API_ID', '12345678')
     monkeypatch.setenv('TELEGRAM_API_HASH', 'h' * 32)
     monkeypatch.setenv('TELEGRAM_SESSION', 'c2Vzc2lvbg==')
@@ -155,12 +154,32 @@ def test_env_overrides_telegram(monkeypatch, tmp_path):
     assert cfg.telegram.session_b64 == 'c2Vzc2lvbg=='
 
 
-def test_defaults_have_telegram(tmp_path):
+def test_defaults_have_telegram(monkeypatch, tmp_path):
     for k in ('TELEGRAM_API_ID', 'TELEGRAM_API_HASH', 'TELEGRAM_SESSION'):
-        os.environ.pop(k, None)
+        monkeypatch.delenv(k, raising=False)
     cfg = load(str(tmp_path / 'absent.yaml'))
     assert cfg.telegram.api_id == 0
+    assert cfg.telegram.api_hash == ''
     assert cfg.telegram.session_b64 == ''
+
+
+def test_defaults_not_mutated_by_env(monkeypatch, tmp_path):
+    """РЕГРЕССИЯ: _deep_merge делал浅 копию, и _env_override писал в _DEFAULTS."""
+    absent = str(tmp_path / 'absent.yaml')
+    monkeypatch.setenv('TELEGRAM_API_ID', '99999999')
+    monkeypatch.setenv('VERIFY_LEVEL', '0')
+    monkeypatch.setenv('CORE_MAX', '7')
+    c1 = load(absent)
+    assert c1.telegram.api_id == 99999999
+    assert c1.verify.level == 0
+    assert c1.limits.core_max == 7
+
+    for k in ('TELEGRAM_API_ID', 'VERIFY_LEVEL', 'CORE_MAX'):
+        monkeypatch.delenv(k, raising=False)
+    c2 = load(absent)
+    assert c2.telegram.api_id == 0, 'дефолты протекли между load()'
+    assert c2.verify.level == 2
+    assert c2.limits.core_max == 1500
 
 
 def test_legacy_require_mode_migrates(tmp_path):
@@ -221,12 +240,20 @@ def test_guard_ok():
 
 
 def test_guard_uses_attempts_not_candidates():
-    """parse_rate считается от попыток после дедупа, не от сырых кандидатов."""
+    """parse_rate от попыток после дедупа, не от сырых кандидатов."""
     stats = {'candidates': 52384, 'reps': 24369, 'parsed': 23503,
              'parse_fails': {'x': 854}, 'wl': 500, 'all': 10000}
     out.guard(CFG, stats, {'wl': 500, 'all': 10000})
     assert stats['parse_attempts'] == 24357
     assert stats['parse_rate'] > 0.96
+
+
+def test_guard_fallback_to_reps():
+    """Нет parse_fails — берём reps, а не схлопываем в parsed."""
+    stats = {'candidates': 5000, 'reps': 1000, 'parsed': 100, 'wl': 5, 'all': 100}
+    problems = out.guard(CFG, stats, {'wl': 5, 'all': 100})
+    assert stats['parse_attempts'] == 1000
+    assert any('parse_rate' in p for p in problems)
 
 
 def test_messages_dates():
