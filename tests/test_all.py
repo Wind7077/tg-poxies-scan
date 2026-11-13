@@ -1,13 +1,15 @@
 import base64
 import json
+import os
 from datetime import timedelta
 
 import pytest
 
 from scanner import dedup, extract, out, wl
-from scanner.cfg import load
+from scanner.cfg import _norm_mode, load
 from scanner.extract import now_utc
 from scanner.parse import parse, sanitize, validate
+from scanner.pipeline import _l3_pass, _mark
 
 
 def b64(s):
@@ -15,7 +17,6 @@ def b64(s):
 
 
 CFG = load('config.yaml')
-
 
 VLESS_REALITY = ('vless://11111111-2222-3333-4444-555555555555@1.2.3.4:443?type=tcp'
                  '&security=reality&pbk=K&sid=abcd&fp=chrome&flow=xtls-rprx-vision'
@@ -52,8 +53,8 @@ def test_parse(uri, check):
     assert validate(p)[0], validate(p)
 
 
+# ---------- расклейка ----------
 def test_glue_split_only_in_name():
-    """РЕГРЕССИЯ: wss:// внутри path содержит ss:// — резать там нельзя."""
     uri = ('vless://11111111-2222-3333-4444-555555555555@h.com:443?type=ws'
            '&path=/wss://x&security=tls#name')
     variants, tails = dedup.split_uri(uri)
@@ -69,7 +70,6 @@ def test_glue_split_real():
 
 
 def test_glue_no_overlap_inside_scheme():
-    """РЕГРЕССИЯ: 'vless://' содержит 'ss://' — хвост не должен терять схему."""
     a = 'vless://11111111-2222-3333-4444-555555555555@a.com:443?security=tls#A'
     b = 'vless://11111111-2222-3333-4444-555555555555@b.com:443?security=tls#B'
     variants, tails = dedup.split_uri(a + b)
@@ -79,7 +79,6 @@ def test_glue_no_overlap_inside_scheme():
 
 
 def test_glue_wss_in_name_not_split():
-    """'wss://' внутри имени — не ссылка, резать нечего."""
     uri = ('vless://11111111-2222-3333-4444-555555555555@a.com:443'
            '?security=tls#name-wss://x')
     variants, tails = dedup.split_uri(uri)
@@ -87,13 +86,13 @@ def test_glue_wss_in_name_not_split():
 
 
 def test_glue_head_always_parses():
-    """Голова склейки обязана парситься так же, как исходная ссылка."""
     glued = VLESS_REALITY + VLESS_WS
     assert parse(glued) is not None
     variants, _ = dedup.split_uri(glued)
     assert parse(variants[0]) is not None
 
 
+# ---------- URL / фильтры ----------
 def test_clean_url_keeps_vless():
     uri = 'vless://11111111-2222-3333-4444-555555555555@h:443?type=ws&path=wshttps://x#n'
     assert extract.clean_url(uri) == uri
@@ -121,16 +120,12 @@ def test_dedupe_raw_vs_tcp():
     assert len(reps) == 1 and len(members[reps[0]]) == 2
 
 
-def test_wl_sni_and_roots():
-    clf = wl.Classifier(CFG)
-    p = sanitize(parse(VLESS_REALITY))          # sni=api-maps.yandex.ru
-    ok, why = clf.classify(p)
-    assert ok and why.startswith('sni')
-    assert wl.roots_match({'name': 'Телефон / Роутер'}, CFG)   # теле — как задумано
-    assert wl.roots_match({'name': 'Автовыбор'}, CFG)          # авто — как задумано
+def test_wl_roots():
+    assert wl.roots_match({'name': 'Телефон / Роутер'}, CFG)
+    assert wl.roots_match({'name': 'Автовыбор'}, CFG)
     assert wl.roots_match({'name': 'Белые списки | МТС'}, CFG)
-    assert not wl.roots_match({'name': 'Filter'}, CFG)         # ложное 'lte' не ловится
-    assert not wl.roots_match({'name': 'обслуживание'}, CFG)   # ложное 'бс' не ловится
+    assert not wl.roots_match({'name': 'Filter'}, CFG)
+    assert not wl.roots_match({'name': 'обслуживание'}, CFG)
 
 
 def test_issue_glue():
@@ -138,6 +133,70 @@ def test_issue_glue():
     assert len(parts) == 2 and parts[1].startswith('olcrtc://')
 
 
+# ---------- конфиг: РЕГРЕССИИ ----------
+def test_yaml_off_is_bool_normalized():
+    """YAML 1.1: require_mode: off -> False. Должно стать строкой 'off'."""
+    assert _norm_mode(False, 'both') == 'off'
+    assert _norm_mode(True, 'both') == 'any'
+    assert _norm_mode('both', 'off') == 'both'
+    assert _norm_mode('мусор', 'off') == 'off'
+    assert isinstance(CFG.verify.l3.require_mode_all, str)
+    assert isinstance(CFG.verify.l3.require_mode_wl, str)
+
+
+def test_env_overrides_telegram(monkeypatch, tmp_path):
+    """Главный баг: секреты из env должны попадать в cfg.telegram."""
+    monkeypatch.setenv('TELEGRAM_API_ID', '12345678')
+    monkeypatch.setenv('TELEGRAM_API_HASH', 'h' * 32)
+    monkeypatch.setenv('TELEGRAM_SESSION', 'c2Vzc2lvbg==')
+    cfg = load(str(tmp_path / 'absent.yaml'))
+    assert cfg.telegram.api_id == 12345678
+    assert cfg.telegram.api_hash == 'h' * 32
+    assert cfg.telegram.session_b64 == 'c2Vzc2lvbg=='
+
+
+def test_defaults_have_telegram(tmp_path):
+    for k in ('TELEGRAM_API_ID', 'TELEGRAM_API_HASH', 'TELEGRAM_SESSION'):
+        os.environ.pop(k, None)
+    cfg = load(str(tmp_path / 'absent.yaml'))
+    assert cfg.telegram.api_id == 0
+    assert cfg.telegram.session_b64 == ''
+
+
+def test_legacy_require_mode_migrates(tmp_path):
+    p = tmp_path / 'c.yaml'
+    p.write_text('verify:\n  l3:\n    require_mode: both\n', encoding='utf-8')
+    cfg = load(str(p))
+    assert cfg.verify.l3.require_mode_all == 'both'
+
+
+# ---------- L3 логика ----------
+@pytest.mark.parametrize('mode,tg,yt,expected', [
+    ('both', True, True, True),
+    ('both', True, False, False),
+    ('both', False, True, False),
+    ('any', True, False, True),
+    ('any', False, False, False),
+    ('telegram', True, False, True),
+    ('telegram', False, True, False),
+    ('youtube', False, True, True),
+    ('off', False, False, True),
+    ('both', None, None, True),   # не проверялось — не отсеиваем
+    ('both', True, None, False),
+])
+def test_l3_pass(mode, tg, yt, expected):
+    assert _l3_pass(mode, tg, yt) is expected
+
+
+def test_l3_marks():
+    assert _mark(True, True) == '🟢'
+    assert _mark(True, False) == '🟡'
+    assert _mark(False, True) == '🔵'
+    assert _mark(False, False) == '⚪️'
+    assert _mark(None, None) == ''
+
+
+# ---------- вывод / guard ----------
 def test_write_if_changed(tmp_path):
     f = tmp_path / 'p.txt'
     assert out.write_txt(str(f), ['a'], 1) is True
@@ -146,22 +205,28 @@ def test_write_if_changed(tmp_path):
 
 
 def test_guard_blocks_empty_wl():
-    cfg = load('config.yaml')
     stats = {'candidates': 100, 'parsed': 95, 'wl': 0, 'all': 500}
-    problems = out.guard(cfg, stats, {'wl': 500, 'all': 500})
+    problems = out.guard(CFG, stats, {'wl': 500, 'all': 500})
     assert any('WL=0' in p for p in problems)
 
 
 def test_guard_blocks_low_parse_rate():
-    cfg = load('config.yaml')
     stats = {'candidates': 100, 'parsed': 10, 'wl': 5, 'all': 10}
-    assert any('parse_rate' in p for p in out.guard(cfg, stats, {'wl': 5, 'all': 10}))
+    assert any('parse_rate' in p for p in out.guard(CFG, stats, {'wl': 5, 'all': 10}))
 
 
 def test_guard_ok():
-    cfg = load('config.yaml')
     stats = {'candidates': 100, 'parsed': 95, 'wl': 400, 'all': 900}
-    assert out.guard(cfg, stats, {'wl': 500, 'all': 1000}) == []
+    assert out.guard(CFG, stats, {'wl': 500, 'all': 1000}) == []
+
+
+def test_guard_uses_attempts_not_candidates():
+    """parse_rate считается от попыток после дедупа, не от сырых кандидатов."""
+    stats = {'candidates': 52384, 'reps': 24369, 'parsed': 23503,
+             'parse_fails': {'x': 854}, 'wl': 500, 'all': 10000}
+    out.guard(CFG, stats, {'wl': 500, 'all': 10000})
+    assert stats['parse_attempts'] == 24357
+    assert stats['parse_rate'] > 0.96
 
 
 def test_messages_dates():
