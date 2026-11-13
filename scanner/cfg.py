@@ -23,7 +23,7 @@ _DEFAULTS = {
     'limits': {
         'tme_pages': 10, 'tme_sub_pages': 2, 'telethon_limit': 1000,
         'max_embed': 200, 'per_endpoint': 5, 'best': 50,
-        'max_attachment_mb': 2, 'core_max': 6000,
+        'max_attachment_mb': 2, 'core_max': 6000, 'core_batch': 800,
     },
     'concurrency': {'http': 50, 'ping': 500, 'tls': 100, 'core': 48},
     'timeouts': {
@@ -42,6 +42,7 @@ _DEFAULTS = {
         'test_url': 'http://www.gstatic.com/generate_204',
         'geo_top': 0,
         'geo_url': 'https://api.ipify.org?format=json',
+        'core_start_wait_s': 45,
         'l3': {
             'enabled': False,
             'telegram': 'https://api.telegram.org/robots.txt',
@@ -153,6 +154,11 @@ def _env_override(cfg):
     if os.getenv('CORE_MAX', '').strip():
         try:
             cfg.setdefault('limits', {})['core_max'] = int(os.getenv('CORE_MAX'))
+        except ValueError:
+            pass
+    if os.getenv('CORE_BATCH', '').strip():
+        try:
+            cfg.setdefault('limits', {})['core_batch'] = int(os.getenv('CORE_BATCH'))
         except ValueError:
             pass
     return cfg
