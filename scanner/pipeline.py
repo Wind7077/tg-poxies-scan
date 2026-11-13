@@ -45,6 +45,20 @@ def _mark(tg, yt):
     return '⚪️'
 
 
+def _tag(u, p, delays, l3_tg, l3_yt, tag_l3):
+    """Имя прокси: метка сервисов + задержка. 🔴 = ядро сказало «мёртв»."""
+    q = dict(p)
+    if tag_l3:
+        mk = _mark(l3_tg.get(u), l3_yt.get(u))
+        if u in delays and not delays[u]:
+            mk = '🔴'
+        if mk:
+            q['name'] = f"{mk} {q.get('name', '')}".strip()
+    if delays.get(u):
+        q['name'] = f"{q.get('name', '')} · {delays[u]}ms".strip(' ·')
+    return q
+
+
 async def run(config_path='config.yaml'):
     cfg = load(config_path)
     log.init(cfg)
@@ -203,7 +217,7 @@ async def run(config_path='config.yaml'):
         alive.sort(key=lambda up: (up[1]['type'], up[1]['server'], up[1]['port'], up[0]))
         log.info(f'[L0] живых endpoint-пар: {len(alive)}')
 
-        # ---------- WL-кандидаты ----------
+        # ---------- WL: только L0 + классификатор + L1 ----------
         clf = Classifier(cfg)
         wl_proto = set(cfg.protocols.wl)
         wl_items, wl_reasons = [], {}
@@ -214,14 +228,12 @@ async def run(config_path='config.yaml'):
             if ok:
                 wl_items.append((u, p))
                 wl_reasons[why] = wl_reasons.get(why, 0) + 1
-        wl_set = {u for u, _ in wl_items}
         log.debug(f'🎯 WL до проверки: {len(wl_items)} {log.hist(wl_reasons)}')
 
         level = int(cfg.verify.level)
         delays, geo, l3_tg, l3_yt = {}, {}, {}, {}
         core_checked = 0
 
-        # ---------- L1: только WL (дёшево) ----------
         if level >= 1 and wl_items:
             tls_jobs = []
             for u, p in wl_items:
@@ -231,24 +243,17 @@ async def run(config_path='config.yaml'):
             if tls_jobs:
                 tls_ok = await l1_tls(tls_jobs, cfg)
                 wl_items = [(u, p) for u, p in wl_items if u not in tls_ok or tls_ok[u]]
-                wl_set = {u for u, _ in wl_items}
                 log.debug(f'🔐 после L1 осталось {len(wl_items)}')
 
-        # ---------- L2 + L3: ОБЪЕДИНЕНИЕ ALL ∪ WL ----------
+        # ---------- L2 + L3: ТОЛЬКО общий список ----------
+        # Белые через ядро не гоняем и не режем: с зарубежного раннера
+        # RU-only прокси рвут соединение, L2 убивал 96% белых.
         if level >= 2:
             all_proto = set(cfg.protocols.all)
-            pool = {}
-            for u, p in alive:
-                in_all = (dates.get(u, now_utc()) >= cutoff_all
-                          and p.get('type') in all_proto)
-                if in_all or u in wl_set:
-                    pool[u] = p
-            # приоритет: сначала белые (дефицит), затем свежие
-            prio_wl = bool(getattr(cfg.limits, 'core_priority_wl', True))
-            order = sorted(pool, key=lambda u: (
-                0 if (prio_wl and u in wl_set) else 1,
-                -(dates.get(u, now_utc()).timestamp()),
-                u))
+            pool = {u: p for u, p in alive
+                    if dates.get(u, now_utc()) >= cutoff_all
+                    and p.get('type') in all_proto}
+            order = sorted(pool, key=lambda u: (-dates.get(u, now_utc()).timestamp(), u))
             cap = int(getattr(cfg.limits, 'core_max', 0) or 0)
             if cap > 0 and len(order) > cap:
                 log.info(f'⚖️ ядро: лимит {cap} из {len(order)} кандидатов '
@@ -266,34 +271,41 @@ async def run(config_path='config.yaml'):
                 l3_tg = {idx[k]: v for k, v in tg_raw.items() if k in idx}
                 l3_yt = {idx[k]: v for k, v in yt_raw.items() if k in idx}
                 core_checked = len(order)
-                # WL режем только по L2 (рабочий через ядро), L3 для WL — теги
-                if delays:
-                    before = len(wl_items)
-                    wl_items = [(u, p) for u, p in wl_items
-                                if u not in delays or delays.get(u)]
-                    log.info(f'[L2] WL: {before} → {len(wl_items)} '
-                             f'(непроверенные ядром сохранены)')
 
         cache.save()
 
-    # ---------- фильтрация ALL по L3 ----------
+    # ---------- сборка ALL ----------
     l3cfg = getattr(cfg.verify, 'l3', None)
     l3_on = bool(l3cfg and getattr(l3cfg, 'enabled', False))
     mode_all = getattr(l3cfg, 'require_mode_all', 'off') if l3cfg else 'off'
     mode_wl = getattr(l3cfg, 'require_mode_wl', 'off') if l3cfg else 'off'
     tag_l3 = bool(l3cfg and getattr(l3cfg, 'tag_names', True))
+    keep_unchecked = bool(getattr(l3cfg, 'all_keep_unchecked', True)) if l3cfg else True
+    drop_dead = bool(getattr(l3cfg, 'all_drop_dead', True)) if l3cfg else True
 
     all_proto = set(cfg.protocols.all)
-    all_pool = [(u, p) for u, p in alive
-                if dates.get(u, now_utc()) >= cutoff_all]
+    all_pool = [(u, p) for u, p in alive if dates.get(u, now_utc()) >= cutoff_all]
+    n_before = len(all_pool)
 
-    all_dropped = 0
+    all_dead = all_dropped = all_unchecked = 0
     all_mode_used = mode_all
+
+    # 1) выбрасываем доказанных мертвецов (L2 fail) — главный фильтр качества
+    if drop_dead and delays:
+        kept = []
+        for u, p in all_pool:
+            if u in delays and not delays[u]:
+                all_dead += 1
+                continue
+            kept.append((u, p))
+        all_pool = kept
+        log.info(f'[L2] ALL: выброшено мёртвых {all_dead}, осталось {len(all_pool)}')
+
+    # 2) фильтр по сервисам (TG/YT) среди проверенных
     if l3_on and mode_all != 'off' and (l3_tg or l3_yt):
         checked = [(u, p) for u, p in all_pool
                    if l3_tg.get(u) is not None or l3_yt.get(u) is not None]
         floor = float(getattr(l3cfg, 'min_keep_pct', 15)) / 100.0
-        # страховка: both → any → off, если остаётся слишком мало
         for candidate in (mode_all, 'any', 'off'):
             kept_n = sum(1 for u, _ in checked
                          if _l3_pass(candidate, l3_tg.get(u), l3_yt.get(u)))
@@ -305,30 +317,30 @@ async def run(config_path='config.yaml'):
                      f'(страховка min_keep_pct)')
         kept = []
         for u, p in all_pool:
+            is_checked = l3_tg.get(u) is not None or l3_yt.get(u) is not None
+            if not is_checked:
+                if keep_unchecked:
+                    kept.append((u, p))
+                else:
+                    all_unchecked += 1
+                continue
             if _l3_pass(all_mode_used, l3_tg.get(u), l3_yt.get(u)):
                 kept.append((u, p))
             else:
                 all_dropped += 1
-        log.info(f'[L3] ALL режим={all_mode_used}: отсеяно {all_dropped}, '
-                 f'осталось {len(kept)} (непроверенные сохранены)')
         all_pool = kept
+        log.info(f'[L3] ALL режим={all_mode_used}: отсеяно по сервисам {all_dropped}, '
+                 f'непроверенных убрано {all_unchecked}, осталось {len(all_pool)}')
 
     all_txt, all_clash, all_src = [], [], {}
     for u, p in all_pool:
         all_txt.append(u)
         if p.get('type') in all_proto and validate(p)[0]:
-            q = dict(p)
-            if tag_l3:
-                mk = _mark(l3_tg.get(u), l3_yt.get(u))
-                if mk:
-                    q['name'] = f"{mk} {q.get('name', '')}".strip()
-            if delays.get(u):
-                q['name'] = f"{q.get('name', '')} · {delays[u]}ms".strip(' ·')
-            all_clash.append(q)
+            all_clash.append(_tag(u, p, delays, l3_tg, l3_yt, tag_l3))
         for s in prov.get(u, ()):
             all_src[s] = all_src.get(s, 0) + 1
 
-    # ---------- сборка WL ----------
+    # ---------- сборка WL (без фильтрации ядром) ----------
     wl_pairs, wl_src, wl_dropped = [], {}, 0
     for u, p in wl_items:
         if not validate(p)[0]:
@@ -336,15 +348,9 @@ async def run(config_path='config.yaml'):
         if l3_on and mode_wl != 'off' and not _l3_pass(mode_wl, l3_tg.get(u), l3_yt.get(u)):
             wl_dropped += 1
             continue
-        q = dict(p)
-        if tag_l3:
-            mk = _mark(l3_tg.get(u), l3_yt.get(u))
-            if mk:
-                q['name'] = f"{mk} {q.get('name', '')}".strip()
+        q = _tag(u, p, delays, l3_tg, l3_yt, tag_l3)
         if u in geo:
             q['name'] = f"{geo[u]} · {q.get('name', '')}".strip(' ·')
-        if delays.get(u):
-            q['name'] = f"{q.get('name', '')} · {delays[u]}ms".strip(' ·')
         wl_pairs.append((u, q))
         for s in prov.get(u, ()):
             wl_src[s] = wl_src.get(s, 0) + 1
@@ -356,7 +362,7 @@ async def run(config_path='config.yaml'):
     all_txt = sorted(set(all_txt))
     wl_txt = sorted({u for u, _ in wl_pairs})
 
-    # ---------- best: топ по реальной задержке (WL в приоритете) ----------
+    # ---------- best: топ по реальной задержке ----------
     verified = [(u, dict(p)) for u, p in wl_pairs if delays.get(u)]
     seen_v = {u for u, _ in verified}
     for u, p in all_pool:
@@ -364,27 +370,23 @@ async def run(config_path='config.yaml'):
             continue
         if p.get('type') not in all_proto or not validate(p)[0]:
             continue
-        q = dict(p)
-        if tag_l3:
-            mk = _mark(l3_tg.get(u), l3_yt.get(u))
-            if mk:
-                q['name'] = f"{mk} {q.get('name', '')}".strip()
-        q['name'] = f"{q.get('name', '')} · {delays[u]}ms".strip(' ·')
-        verified.append((u, q))
+        verified.append((u, _tag(u, p, delays, l3_tg, l3_yt, tag_l3)))
         seen_v.add(u)
     best = sorted(verified, key=lambda up: (delays.get(up[0]) or 10 ** 9, up[0]))
     best = best[:int(cfg.limits.best)]
     best_txt = [u for u, _ in best]
     best_clash = unique_names([dict(p) for _, p in best])
 
+    wl_verified = sum(1 for u, _ in wl_pairs if delays.get(u))
     stats = {
         'ts': now_utc().isoformat(),
         'raw': len(merged), 'candidates': len(fresh), 'reps': len(reps),
         'parsed': len(parsed), 'parse_fails': fails,
         'alive_l0': len(alive), 'core_checked': core_checked,
-        'all': len(all_txt), 'all_yaml': len(all_clash),
+        'all_before': n_before, 'all': len(all_txt), 'all_yaml': len(all_clash),
         'wl': len(wl_txt), 'wl_yaml': len(wl_clash), 'best': len(best_txt),
-        'wl_reasons': wl_reasons, 'verify_level': level,
+        'wl_reasons': wl_reasons, 'wl_verified': wl_verified,
+        'verify_level': level,
         'l3': {
             'checked_tg': len(l3_tg), 'checked_yt': len(l3_yt),
             'tg_ok': sum(1 for v in l3_tg.values() if v),
@@ -392,7 +394,8 @@ async def run(config_path='config.yaml'):
             'both_ok': sum(1 for u in l3_tg if l3_tg.get(u) and l3_yt.get(u)),
             'mode_all': mode_all, 'mode_all_used': all_mode_used,
             'mode_wl': mode_wl,
-            'dropped_all': all_dropped, 'dropped_wl': wl_dropped,
+            'dropped_dead': all_dead, 'dropped_all': all_dropped,
+            'dropped_unchecked': all_unchecked, 'dropped_wl': wl_dropped,
         },
         'http': dict(log.STATS), 'seconds': round(time.time() - start, 1),
         'sources_wl': len(wl_src), 'sources_all': len(all_src),
