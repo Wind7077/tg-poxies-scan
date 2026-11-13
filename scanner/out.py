@@ -136,21 +136,24 @@ def write_stats(path, stats):
 
 
 def guard(cfg, stats, prev):
-    """Circuit breaker (п.1): не публикуем сломанный результат."""
+    """Circuit breaker: не публикуем сломанный результат."""
     g = cfg.guards
     if not g.enabled:
         return []
     problems = []
     parsed = int(stats.get('parsed', 0))
-    # Знаменатель — ЧИСЛО ПОПЫТОК ПАРСИНГА (уникальные кандидаты после дедупа:
-    # распарсено + не распарсено), а не stats['candidates']: тот считается ДО
-    # дедупа и содержит одну и ту же ссылку из каждого источника (52 384 против
-    # 24 369 уникальных). Из-за этого здоровый прогон давал 0.45 и блокировал
-    # публикацию, хотя реальная доля была ~0.96.
-    fails = stats.get('parse_fails') or {}
-    attempts = parsed + sum(int(v) for v in fails.values())
+    # Знаменатель — ЧИСЛО ПОПЫТОК ПАРСИНГА, а не stats['candidates']:
+    # тот считается ДО дедупа и содержит одну и ту же ссылку из каждого
+    # источника (52 384 против 24 369 уникальных), из-за чего здоровый
+    # прогон давал 0.45 и блокировал публикацию.
+    # Цепочка: parse_fails (точнее всего) → reps → candidates.
+    fails = stats.get('parse_fails')
+    if fails is not None:
+        attempts = parsed + sum(int(v) for v in (fails or {}).values())
+    else:
+        attempts = int(stats.get('reps') or stats.get('candidates') or 0)
     if not attempts:
-        attempts = int(stats.get('reps') or 0)
+        attempts = parsed
     rate = (parsed / attempts) if attempts else 1.0
     stats['parse_attempts'] = attempts
     stats['parse_rate'] = round(rate, 4)
