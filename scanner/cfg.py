@@ -1,6 +1,8 @@
-import yaml
+"""Конфиг: YAML + дефолты + переменные окружения."""
+import os
 from pathlib import Path
 
+import yaml
 
 _DEFAULTS = {
     'sources_file': 'sources.txt',
@@ -19,9 +21,10 @@ _DEFAULTS = {
     'windows': {'wl_days': 50, 'all_days': 10},
     'limits': {
         'tme_pages': 10, 'tme_sub_pages': 2, 'telethon_limit': 1000,
-        'max_embed': 200, 'per_endpoint': 5, 'best': 50, 'max_attachment_mb': 2,
+        'max_embed': 200, 'per_endpoint': 5, 'best': 50,
+        'max_attachment_mb': 2, 'core_max': 1500, 'core_priority_wl': True,
     },
-    'concurrency': {'http': 50, 'ping': 500, 'tls': 100, 'core': 32},
+    'concurrency': {'http': 50, 'ping': 500, 'tls': 100, 'core': 48},
     'timeouts': {
         'http_total': 12, 'http_connect': 7, 'long_total': 30,
         'ping': 2.0, 'tls': 3.0, 'core_delay_ms': 5000,
@@ -42,11 +45,13 @@ _DEFAULTS = {
             'enabled': False,
             'telegram': 'https://api.telegram.org/robots.txt',
             'youtube': 'https://www.youtube.com/generate_204',
-            'timeout_ms': 12000,
+            'timeout_ms': 8000,
             'retries': 2,
             'only_alive': True,
-            'require_mode': 'telegram',
+            'require_mode_all': 'both',
+            'require_mode_wl': 'off',
             'tag_names': True,
+            'min_keep_pct': 15,
         },
     },
     'cache': {
@@ -54,14 +59,18 @@ _DEFAULTS = {
         'http_ttl_hours': 6, 'ping_ok_ttl_hours': 12,
         'ping_fail_ttl_hours': 3, 'content_hash': True,
     },
-    'telethon': {'all_channels': True, 'attachments': True},
+    'telegram': {'api_id': 0, 'api_hash': '', 'session_b64': ''},
+    'telethon': {
+        'all_channels': True, 'attachments': True,
+        'attachment_ext': ['.txt', '.json', '.yaml', '.yml', '.conf', '.list', '.sub', ''],
+    },
     'guards': {
         'enabled': True, 'min_parse_rate': 0.6,
         'forbid_empty_wl': True, 'max_all_drop_pct': 70,
     },
     'logging': {
         'debug': True, 'show_live_sources': True,
-        'live_sources_top': 0, 'progress_every': 200,
+        'live_sources_top': 0, 'progress_every': 200, 'diag_secrets': False,
     },
     'problem_domains': [],
     'blacklist_domains': [],
@@ -73,9 +82,14 @@ _DEFAULTS = {
     },
 }
 
+# YAML 1.1 превращает off/on/yes/no в bool. Возвращаем им строковый смысл.
+_BOOL_WORDS = {True: 'on', False: 'off'}
+_MODES = {'both', 'any', 'telegram', 'youtube', 'off', 'on'}
+
 
 class _Obj(dict):
-    """Dict с dot-доступом и дефолтами из _DEFAULTS."""
+    """Dict с dot-доступом."""
+
     def __getattr__(self, item):
         try:
             v = self[item]
@@ -100,11 +114,58 @@ def _deep_merge(defaults, overrides):
     return out
 
 
+def _norm_mode(v, fallback):
+    """require_mode может приехать как bool (YAML off/on) или строка."""
+    if isinstance(v, bool):
+        v = _BOOL_WORDS[v]
+    s = str(v or '').strip().lower()
+    if s in ('on', 'yes', 'true'):
+        s = 'any'
+    return s if s in _MODES else fallback
+
+
+def _env_override(cfg):
+    """Секреты и тюнинг из окружения. Именно этого не хватало Telethon."""
+    tg = cfg.setdefault('telegram', {})
+    raw_id = os.getenv('TELEGRAM_API_ID', '').strip()
+    if raw_id:
+        try:
+            tg['api_id'] = int(raw_id)
+        except ValueError:
+            tg['api_id'] = 0
+    if os.getenv('TELEGRAM_API_HASH', '').strip():
+        tg['api_hash'] = os.getenv('TELEGRAM_API_HASH').strip()
+    if os.getenv('TELEGRAM_SESSION', '').strip():
+        tg['session_b64'] = os.getenv('TELEGRAM_SESSION').strip()
+
+    if os.getenv('DEBUG') is not None:
+        cfg.setdefault('logging', {})['debug'] = os.getenv('DEBUG') == '1'
+    if os.getenv('VERIFY_LEVEL', '').strip():
+        try:
+            cfg.setdefault('verify', {})['level'] = int(os.getenv('VERIFY_LEVEL'))
+        except ValueError:
+            pass
+    if os.getenv('CORE_MAX', '').strip():
+        try:
+            cfg.setdefault('limits', {})['core_max'] = int(os.getenv('CORE_MAX'))
+        except ValueError:
+            pass
+    return cfg
+
+
 def load(path='config.yaml'):
     data = {}
     p = Path(path)
     if p.exists():
         with open(p, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f) or {}
-    merged = _deep_merge(_DEFAULTS, data)
+    merged = _env_override(_deep_merge(_DEFAULTS, data))
+
+    l3 = merged['verify']['l3']
+    # обратная совместимость со старым ключом require_mode
+    legacy = l3.pop('require_mode', None)
+    if legacy is not None:
+        l3.setdefault('require_mode_all', legacy)
+    l3['require_mode_all'] = _norm_mode(l3.get('require_mode_all'), 'both')
+    l3['require_mode_wl'] = _norm_mode(l3.get('require_mode_wl'), 'off')
     return _Obj(merged)
