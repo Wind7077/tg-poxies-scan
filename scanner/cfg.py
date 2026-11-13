@@ -1,4 +1,5 @@
 """Конфиг: YAML + дефолты + переменные окружения."""
+import copy
 import os
 from pathlib import Path
 
@@ -105,12 +106,14 @@ class _Obj(dict):
 
 
 def _deep_merge(defaults, overrides):
-    out = dict(defaults)
+    """Глубокая копия: иначе _env_override мутирует _DEFAULTS и портит
+    дефолты для всех последующих load() в том же процессе."""
+    out = copy.deepcopy(defaults)
     for k, v in overrides.items():
         if k in out and isinstance(out[k], dict) and isinstance(v, dict):
             out[k] = _deep_merge(out[k], v)
         else:
-            out[k] = v
+            out[k] = copy.deepcopy(v)
     return out
 
 
@@ -125,7 +128,7 @@ def _norm_mode(v, fallback):
 
 
 def _env_override(cfg):
-    """Секреты и тюнинг из окружения. Именно этого не хватало Telethon."""
+    """Секреты и тюнинг из окружения."""
     tg = cfg.setdefault('telegram', {})
     raw_id = os.getenv('TELEGRAM_API_ID', '').strip()
     if raw_id:
