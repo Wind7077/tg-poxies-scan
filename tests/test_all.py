@@ -5,7 +5,7 @@ from datetime import timedelta
 import pytest
 
 from scanner import dedup, extract, out, wl
-from scanner.cfg import _norm_mode, load
+from scanner.cfg import _DEFAULTS, _norm_mode, load
 from scanner.extract import now_utc
 from scanner.parse import parse, sanitize, validate
 from scanner.pipeline import _l3_pass, _mark
@@ -54,6 +54,7 @@ def test_parse(uri, check):
 
 # ---------- расклейка ----------
 def test_glue_split_only_in_name():
+    """РЕГРЕССИЯ: wss:// внутри path содержит ss:// — резать там нельзя."""
     uri = ('vless://11111111-2222-3333-4444-555555555555@h.com:443?type=ws'
            '&path=/wss://x&security=tls#name')
     variants, tails = dedup.split_uri(uri)
@@ -69,6 +70,7 @@ def test_glue_split_real():
 
 
 def test_glue_no_overlap_inside_scheme():
+    """РЕГРЕССИЯ: 'vless://' содержит 'ss://' — хвост не должен терять схему."""
     a = 'vless://11111111-2222-3333-4444-555555555555@a.com:443?security=tls#A'
     b = 'vless://11111111-2222-3333-4444-555555555555@b.com:443?security=tls#B'
     variants, tails = dedup.split_uri(a + b)
@@ -78,6 +80,7 @@ def test_glue_no_overlap_inside_scheme():
 
 
 def test_glue_wss_in_name_not_split():
+    """'wss://' внутри имени — не ссылка, резать нечего."""
     uri = ('vless://11111111-2222-3333-4444-555555555555@a.com:443'
            '?security=tls#name-wss://x')
     variants, tails = dedup.split_uri(uri)
@@ -85,6 +88,7 @@ def test_glue_wss_in_name_not_split():
 
 
 def test_glue_head_always_parses():
+    """Голова склейки обязана парситься так же, как исходная ссылка."""
     glued = VLESS_REALITY + VLESS_WS
     assert parse(glued) is not None
     variants, _ = dedup.split_uri(glued)
@@ -164,7 +168,10 @@ def test_defaults_have_telegram(monkeypatch, tmp_path):
 
 
 def test_defaults_not_mutated_by_env(monkeypatch, tmp_path):
-    """РЕГРЕССИЯ: _deep_merge делал浅 копию, и _env_override писал в _DEFAULTS."""
+    """РЕГРЕССИЯ: _deep_merge делал поверхностную копию, и _env_override
+    писал прямо в _DEFAULTS, портя дефолты для следующих load().
+    Значения сверяем с _DEFAULTS, а не с константами — чтобы тест
+    не ломался при настройке дефолтов."""
     absent = str(tmp_path / 'absent.yaml')
     monkeypatch.setenv('TELEGRAM_API_ID', '99999999')
     monkeypatch.setenv('VERIFY_LEVEL', '0')
@@ -177,9 +184,12 @@ def test_defaults_not_mutated_by_env(monkeypatch, tmp_path):
     for k in ('TELEGRAM_API_ID', 'VERIFY_LEVEL', 'CORE_MAX'):
         monkeypatch.delenv(k, raising=False)
     c2 = load(absent)
-    assert c2.telegram.api_id == 0, 'дефолты протекли между load()'
-    assert c2.verify.level == 2
-    assert c2.limits.core_max == 1500
+    assert c2.telegram.api_id == _DEFAULTS['telegram']['api_id'], 'дефолты протекли'
+    assert c2.verify.level == _DEFAULTS['verify']['level']
+    assert c2.limits.core_max == _DEFAULTS['limits']['core_max']
+    # и сами _DEFAULTS не должны были измениться
+    assert _DEFAULTS['telegram']['api_id'] == 0
+    assert _DEFAULTS['telegram']['session_b64'] == ''
 
 
 def test_legacy_require_mode_migrates(tmp_path):
