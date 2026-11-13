@@ -17,11 +17,45 @@ from .verify import l0_tcp, l1_tls, l2_core
 from .wl import Classifier
 
 
+def _l3_pass(mode, tg, yt):
+    """True/False/None(не проверялось). Непроверенное не отсеиваем."""
+    if tg is None and yt is None:
+        return True
+    if mode == 'both':
+        return tg is True and yt is True
+    if mode == 'any':
+        return tg is True or yt is True
+    if mode == 'telegram':
+        return tg is True
+    if mode == 'youtube':
+        return yt is True
+    return True  # off
+
+
+def _mark(tg, yt):
+    if tg is None and yt is None:
+        return ''
+    tg_ok, yt_ok = tg is True, yt is True
+    if tg_ok and yt_ok:
+        return '🟢'
+    if tg_ok:
+        return '🟡'
+    if yt_ok:
+        return '🔵'
+    return '⚪️'
+
+
 async def run(config_path='config.yaml'):
     cfg = load(config_path)
     log.init(cfg)
     start = time.time()
     o = cfg.outputs
+
+    if getattr(cfg.logging, 'diag_secrets', False):
+        tg = cfg.telegram
+        log.debug(f"секреты: api_id={'есть' if tg.api_id else 'ПУСТО'}, "
+                  f"api_hash={len(tg.api_hash or '')} симв, "
+                  f"session={len(tg.session_b64 or '')} симв")
 
     sf = Path(cfg.sources_file)
     if not sf.exists():
@@ -92,10 +126,10 @@ async def run(config_path='config.yaml'):
                     log.debug(f'⏭️ Embed-лимит: пропущено {len(drop)} чужих сообщений')
             log.info(f'[{time.time()-start:.1f}s] Подписок в очереди: {len(rows)}')
             for r in await asyncio.gather(*(subscription(u, session, http_sem, visited,
-                                                         cutoff_wl, cfg, cache) for u in rows)):
+                                                        cutoff_wl, cfg, cache) for u in rows)):
                 items.extend(r)
 
-        # дедуп по URI
+        # ---------- дедуп по URI ----------
         merged = {}
         for uri, dt, src in items:
             e = merged.get(uri)
@@ -180,13 +214,14 @@ async def run(config_path='config.yaml'):
             if ok:
                 wl_items.append((u, p))
                 wl_reasons[why] = wl_reasons.get(why, 0) + 1
+        wl_set = {u for u, _ in wl_items}
         log.debug(f'🎯 WL до проверки: {len(wl_items)} {log.hist(wl_reasons)}')
 
-        # ---------- L1 / L2 / L3 ----------
         level = int(cfg.verify.level)
         delays, geo, l3_tg, l3_yt = {}, {}, {}, {}
-        l3_dropped = 0
+        core_checked = 0
 
+        # ---------- L1: только WL (дёшево) ----------
         if level >= 1 and wl_items:
             tls_jobs = []
             for u, p in wl_items:
@@ -195,94 +230,117 @@ async def run(config_path='config.yaml'):
                     tls_jobs.append((u, p['server'], p['port'], sni))
             if tls_jobs:
                 tls_ok = await l1_tls(tls_jobs, cfg)
-                wl_items = [(u, p) for u, p in wl_items
-                            if u not in tls_ok or tls_ok[u]]
+                wl_items = [(u, p) for u, p in wl_items if u not in tls_ok or tls_ok[u]]
+                wl_set = {u for u, _ in wl_items}
                 log.debug(f'🔐 после L1 осталось {len(wl_items)}')
 
-        if level >= 2 and wl_items:
-            named = []
-            for i, (u, p) in enumerate(wl_items):
-                q = dict(p)
-                q['name'] = f'p{i}'
-                named.append((f'p{i}', q))
+        # ---------- L2 + L3: ОБЪЕДИНЕНИЕ ALL ∪ WL ----------
+        if level >= 2:
+            all_proto = set(cfg.protocols.all)
+            pool = {}
+            for u, p in alive:
+                in_all = (dates.get(u, now_utc()) >= cutoff_all
+                          and p.get('type') in all_proto)
+                if in_all or u in wl_set:
+                    pool[u] = p
+            # приоритет: сначала белые (дефицит), затем свежие
+            prio_wl = bool(getattr(cfg.limits, 'core_priority_wl', True))
+            order = sorted(pool, key=lambda u: (
+                0 if (prio_wl and u in wl_set) else 1,
+                -(dates.get(u, now_utc()).timestamp()),
+                u))
+            cap = int(getattr(cfg.limits, 'core_max', 0) or 0)
+            if cap > 0 and len(order) > cap:
+                log.info(f'⚖️ ядро: лимит {cap} из {len(order)} кандидатов '
+                         f'(остальные останутся в ALL без проверки)')
+                order = order[:cap]
 
-            res = await l2_core(named, cfg, session)
-            if len(res) == 2:
-                d, g = res
-                tg_raw, yt_raw = {}, {}
-            else:
-                d, g, tg_raw, yt_raw = res
-
-            if d:
-                idx = {f'p{i}': u for i, (u, _) in enumerate(wl_items)}
+            if order:
+                named = [(f'p{i}', dict(pool[u], name=f'p{i}'))
+                         for i, u in enumerate(order)]
+                idx = {f'p{i}': u for i, u in enumerate(order)}
+                res = await l2_core(named, cfg, session)
+                d, g, tg_raw, yt_raw = res if len(res) == 4 else (*res, {}, {})
                 delays = {idx[k]: v for k, v in d.items() if k in idx}
                 geo = {idx[k]: v for k, v in g.items() if k in idx}
                 l3_tg = {idx[k]: v for k, v in tg_raw.items() if k in idx}
                 l3_yt = {idx[k]: v for k, v in yt_raw.items() if k in idx}
-
-                wl_items = [(u, p) for u, p in wl_items if delays.get(u)]
-                log.info(f'[L2] подтверждено рабочих: {len(wl_items)}')
-
-                # ---------- L3 фильтрация ----------
-                l3cfg = getattr(cfg.verify, 'l3', None)
-                if l3cfg and getattr(l3cfg, 'enabled', False) and (l3_tg or l3_yt):
-                    mode = (getattr(l3cfg, 'require_mode', 'telegram') or 'off').lower()
-                    kept = []
-                    for u, p in wl_items:
-                        tg = l3_tg.get(u)   # True / False / None(не проверялось)
-                        yt = l3_yt.get(u)
-                        checked = (tg is not None) or (yt is not None)
-                        if checked:
-                            if mode == 'both':
-                                ok_l3 = (tg is True) and (yt is True)
-                            elif mode == 'any':
-                                ok_l3 = (tg is True) or (yt is True)
-                            elif mode == 'telegram':
-                                ok_l3 = (tg is True)
-                            elif mode == 'youtube':
-                                ok_l3 = (yt is True)
-                            else:  # off
-                                ok_l3 = True
-                        else:
-                            ok_l3 = True  # не проверялось — не отсеиваем
-                        if not ok_l3:
-                            l3_dropped += 1
-                            continue
-                        kept.append((u, p))
-                    wl_items = kept
-                    log.info(f'[L3] режим={mode}, отсеяно {l3_dropped}, '
-                             f'осталось {len(wl_items)}')
-            else:
-                log.debug('⚠️ L2 недоступен — остаёмся на L1')
+                core_checked = len(order)
+                # WL режем только по L2 (рабочий через ядро), L3 для WL — теги
+                if delays:
+                    before = len(wl_items)
+                    wl_items = [(u, p) for u, p in wl_items
+                                if u not in delays or delays.get(u)]
+                    log.info(f'[L2] WL: {before} → {len(wl_items)} '
+                             f'(непроверенные ядром сохранены)')
 
         cache.save()
 
-    # ---------- сборка списков ----------
+    # ---------- фильтрация ALL по L3 ----------
+    l3cfg = getattr(cfg.verify, 'l3', None)
+    l3_on = bool(l3cfg and getattr(l3cfg, 'enabled', False))
+    mode_all = getattr(l3cfg, 'require_mode_all', 'off') if l3cfg else 'off'
+    mode_wl = getattr(l3cfg, 'require_mode_wl', 'off') if l3cfg else 'off'
+    tag_l3 = bool(l3cfg and getattr(l3cfg, 'tag_names', True))
+
     all_proto = set(cfg.protocols.all)
+    all_pool = [(u, p) for u, p in alive
+                if dates.get(u, now_utc()) >= cutoff_all]
+
+    all_dropped = 0
+    all_mode_used = mode_all
+    if l3_on and mode_all != 'off' and (l3_tg or l3_yt):
+        checked = [(u, p) for u, p in all_pool
+                   if l3_tg.get(u) is not None or l3_yt.get(u) is not None]
+        floor = float(getattr(l3cfg, 'min_keep_pct', 15)) / 100.0
+        # страховка: both → any → off, если остаётся слишком мало
+        for candidate in (mode_all, 'any', 'off'):
+            kept_n = sum(1 for u, _ in checked
+                         if _l3_pass(candidate, l3_tg.get(u), l3_yt.get(u)))
+            if not checked or kept_n >= max(1, int(len(checked) * floor)) or candidate == 'off':
+                all_mode_used = candidate
+                break
+        if all_mode_used != mode_all:
+            log.info(f'⚠️ L3 ALL: режим смягчён {mode_all} → {all_mode_used} '
+                     f'(страховка min_keep_pct)')
+        kept = []
+        for u, p in all_pool:
+            if _l3_pass(all_mode_used, l3_tg.get(u), l3_yt.get(u)):
+                kept.append((u, p))
+            else:
+                all_dropped += 1
+        log.info(f'[L3] ALL режим={all_mode_used}: отсеяно {all_dropped}, '
+                 f'осталось {len(kept)} (непроверенные сохранены)')
+        all_pool = kept
+
     all_txt, all_clash, all_src = [], [], {}
-    for u, p in alive:
-        if dates.get(u, now_utc()) < cutoff_all:
-            continue
+    for u, p in all_pool:
         all_txt.append(u)
         if p.get('type') in all_proto and validate(p)[0]:
-            all_clash.append(dict(p))
+            q = dict(p)
+            if tag_l3:
+                mk = _mark(l3_tg.get(u), l3_yt.get(u))
+                if mk:
+                    q['name'] = f"{mk} {q.get('name', '')}".strip()
+            if delays.get(u):
+                q['name'] = f"{q.get('name', '')} · {delays[u]}ms".strip(' ·')
+            all_clash.append(q)
         for s in prov.get(u, ()):
             all_src[s] = all_src.get(s, 0) + 1
 
-    l3cfg = getattr(cfg.verify, 'l3', None)
-    tag_l3 = bool(l3cfg and getattr(l3cfg, 'enabled', False)
-                  and getattr(l3cfg, 'tag_names', True))
-
-    wl_pairs, wl_src = [], {}
+    # ---------- сборка WL ----------
+    wl_pairs, wl_src, wl_dropped = [], {}, 0
     for u, p in wl_items:
         if not validate(p)[0]:
             continue
+        if l3_on and mode_wl != 'off' and not _l3_pass(mode_wl, l3_tg.get(u), l3_yt.get(u)):
+            wl_dropped += 1
+            continue
         q = dict(p)
-        if tag_l3 and (u in l3_tg or u in l3_yt):
-            tg_ok = l3_tg.get(u) is True
-            yt_ok = l3_yt.get(u) is True
-            mark = '🟢' if (tg_ok and yt_ok) else ('🟡' if tg_ok else ('🔵' if yt_ok else '⚪️'))
-            q['name'] = f"{mark} {q.get('name', '')}".strip()
+        if tag_l3:
+            mk = _mark(l3_tg.get(u), l3_yt.get(u))
+            if mk:
+                q['name'] = f"{mk} {q.get('name', '')}".strip()
         if u in geo:
             q['name'] = f"{geo[u]} · {q.get('name', '')}".strip(' ·')
         if delays.get(u):
@@ -290,32 +348,50 @@ async def run(config_path='config.yaml'):
         wl_pairs.append((u, q))
         for s in prov.get(u, ()):
             wl_src[s] = wl_src.get(s, 0) + 1
+    if wl_dropped:
+        log.info(f'[L3] WL режим={mode_wl}: отсеяно {wl_dropped}')
 
     all_clash = unique_names(all_clash)
     wl_clash = unique_names([p for _, p in wl_pairs])
     all_txt = sorted(set(all_txt))
     wl_txt = sorted({u for u, _ in wl_pairs})
 
-    best = sorted(wl_pairs, key=lambda up: (delays.get(up[0]) or 10 ** 9, up[0]))[:int(cfg.limits.best)]
+    # best: топ по реальной задержке среди проверенных (WL в приоритете)
+    verified = [(u, dict(p)) for u, p in wl_pairs if delays.get(u)]
+    seen_v = {u for u, _ in verified}
+    for u, p in zip(all_txt, all_clash):
+        pass  # all_txt/all_clash разной длины — берём из all_pool ниже
+    for u, p in all_pool:
+        if delays.get(u) and u not in seen_v and p.get('type') in all_proto and validate(p)[0]:
+            q = dict(p)
+            if tag_l3:
+                mk = _mark(l3_tg.get(u), l3_yt.get(u))
+                if mk:
+                    q['name'] = f"{mk} {q.get('name', '')}".strip()
+            q['name'] = f"{q.get('name', '')} · {delays[u]}ms".strip(' ·')
+            verified.append((u, q))
+            seen_v.add(u)
+    best = sorted(verified, key=lambda up: (delays.get(up[0]) or 10 ** 9, up[0]))
+    best = best[:int(cfg.limits.best)]
     best_txt = [u for u, _ in best]
-    best_clash = [dict(p) for _, p in best]
+    best_clash = unique_names([dict(p) for _, p in best])
 
     stats = {
         'ts': now_utc().isoformat(),
         'raw': len(merged), 'candidates': len(fresh), 'reps': len(reps),
         'parsed': len(parsed), 'parse_fails': fails,
-        'alive_l0': len(alive), 'wl_l1l2': len(wl_items),
+        'alive_l0': len(alive), 'core_checked': core_checked,
         'all': len(all_txt), 'all_yaml': len(all_clash),
-        'wl': len(wl_txt), 'wl_yaml': len(wl_clash),
+        'wl': len(wl_txt), 'wl_yaml': len(wl_clash), 'best': len(best_txt),
         'wl_reasons': wl_reasons, 'verify_level': level,
         'l3': {
             'checked_tg': len(l3_tg), 'checked_yt': len(l3_yt),
             'tg_ok': sum(1 for v in l3_tg.values() if v),
             'yt_ok': sum(1 for v in l3_yt.values() if v),
             'both_ok': sum(1 for u in l3_tg if l3_tg.get(u) and l3_yt.get(u)),
-            'dropped': l3_dropped,
-            'mode': (getattr(cfg.verify.l3, 'require_mode', 'off')
-                     if l3cfg and getattr(l3cfg, 'enabled', False) else 'off'),
+            'mode_all': mode_all, 'mode_all_used': all_mode_used,
+            'mode_wl': mode_wl,
+            'dropped_all': all_dropped, 'dropped_wl': wl_dropped,
         },
         'http': dict(log.STATS), 'seconds': round(time.time() - start, 1),
         'sources_wl': len(wl_src), 'sources_all': len(all_src),
@@ -330,7 +406,7 @@ async def run(config_path='config.yaml'):
     write_stats(o.stats, stats)
 
     log.debug(f'📊 ALL: txt={len(all_txt)} yaml={len(all_clash)} | '
-              f'WL: txt={len(wl_txt)} yaml={len(wl_clash)}')
+              f'WL: txt={len(wl_txt)} yaml={len(wl_clash)} | best={len(best_txt)}')
 
     if problems:
         log.info('🛑 CIRCUIT BREAKER: ' + '; '.join(problems))
