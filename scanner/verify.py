@@ -1,4 +1,8 @@
-"""L0 TCP → L1 TLS → L2 ядро (delay) → L3 сервисы (Telegram/YouTube)."""
+"""L0 TCP → L1 TLS → L2 ядро (delay) → L3 сервисы (Telegram/YouTube).
+
+Ядро запускается ПАЧКАМИ: один процесс на 6000 конфигов не поднимается,
+и один битый конфиг убивал бы всю проверку. Пачка изолирует проблему.
+"""
 import asyncio
 import gzip
 import os
@@ -82,10 +86,18 @@ async def l1_tls(items, cfg):
 
 
 def _core_asset_prefix():
-    """mihomo-linux-amd64 / arm64 — чтобы не падать на arm-раннерах."""
     machine = (platform.machine() or '').lower()
     arch = 'arm64' if machine in ('aarch64', 'arm64') else 'amd64'
     return f'mihomo-linux-{arch}'
+
+
+def _binary_ok(path):
+    """Кэш мог принести битый/обрезанный бинарник."""
+    try:
+        r = subprocess.run([str(path), '-v'], capture_output=True, timeout=20)
+        return r.returncode == 0
+    except Exception:
+        return False
 
 
 async def _ensure_core(cfg, session):
@@ -93,8 +105,14 @@ async def _ensure_core(cfg, session):
     bindir = Path(cfg.cache.dir) / 'bin'
     bindir.mkdir(parents=True, exist_ok=True)
     binary = bindir / 'mihomo'
-    if binary.exists() and os.access(binary, os.X_OK):
-        return str(binary)
+    if binary.exists():
+        if os.access(binary, os.X_OK) and _binary_ok(binary):
+            return str(binary)
+        log.debug('⚠️ L2: сохранённый mihomo не запускается — перекачиваем')
+        try:
+            binary.unlink()
+        except OSError:
+            return None
     prefix = _core_asset_prefix()
     try:
         async with session.get(cfg.verify.core_api,
@@ -120,6 +138,9 @@ async def _ensure_core(cfg, session):
             blob = await r.read()
         binary.write_bytes(gzip.decompress(blob))
         binary.chmod(0o755)
+        if not _binary_ok(binary):
+            log.debug('⚠️ L2: скачанный mihomo не запускается')
+            return None
         log.debug(f'⬇️ L2: mihomo скачан ({prefix})')
         return str(binary)
     except Exception as e:
@@ -127,53 +148,91 @@ async def _ensure_core(cfg, session):
         return None
 
 
-async def l2_core(named, cfg, session):
-    """named: [(name, clash_dict)] -> (delays, geo, l3_tg, l3_yt).
+def _core_ok(p):
+    """Минимальная проверка: не отправляем в ядро заведомо битые конфиги."""
+    t = p.get('type')
+    if t not in ('vless', 'vmess', 'ss', 'trojan', 'hysteria2', 'tuic'):
+        return False
+    if not p.get('server') or not p.get('port'):
+        return False
+    if t in ('vless', 'vmess', 'tuic') and not p.get('uuid'):
+        return False
+    if t in ('ss', 'trojan', 'hysteria2') and not p.get('password'):
+        return False
+    if t == 'ss' and not p.get('cipher'):
+        return False
+    if t == 'tuic' and not p.get('password'):
+        return False
+    return True
 
-    L2 — задержка через ядро (test_url).
-    L3 — доступность Telegram/YouTube через ТО ЖЕ ядро, с ретраями.
-    Любой сбой -> пустые словари, пайплайн продолжает работу на L0/L1.
-    """
-    empty = ({}, {}, {}, {})
-    if not named:
-        return empty
-    binary = await _ensure_core(cfg, session)
-    if not binary:
-        return empty
 
+def _ctrl_parts(cfg):
+    s = str(cfg.verify.controller)
+    if ':' in s:
+        host, port = s.rsplit(':', 1)
+        try:
+            return host, int(port)
+        except ValueError:
+            pass
+    return '127.0.0.1', 19090
+
+
+async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port):
+    """Один запуск mihomo на пачку. -> (delays, geo, tg, yt, started)"""
     tmp = Path(tempfile.mkdtemp(prefix='mihomo-'))
     conf = {
-        'mixed-port': int(cfg.verify.mixed_port),
-        'external-controller': cfg.verify.controller,
+        'mixed-port': int(mixed_port),
+        'external-controller': f'{ctrl_host}:{ctrl_port}',
         'mode': 'global',
-        'log-level': 'silent',
+        'log-level': 'error',
         'ipv6': False,
-        'proxies': [p for _, p in named],
+        'proxies': [p for _, p in batch],
         'proxy-groups': [{'name': 'GLOBAL', 'type': 'select',
-                          'proxies': [n for n, _ in named]}],
+                          'proxies': [n for n, _ in batch]}],
         'rules': ['MATCH,GLOBAL'],
     }
     (tmp / 'config.yaml').write_text(
         yaml.dump(conf, allow_unicode=True, sort_keys=False), encoding='utf-8')
 
-    proc = None
+    base = f'http://{ctrl_host}:{ctrl_port}'
     delays, geo, l3_tg, l3_yt = {}, {}, {}, {}
-    base = f"http://{cfg.verify.controller}"
+    proc = None
+    started = False
+    err_path = tmp / 'stderr.log'
     try:
-        proc = subprocess.Popen([binary, '-d', str(tmp), '-f', str(tmp / 'config.yaml')],
-                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        errf = open(err_path, 'wb')
+        try:
+            proc = subprocess.Popen(
+                [binary, '-d', str(tmp), '-f', str(tmp / 'config.yaml')],
+                stdout=subprocess.DEVNULL, stderr=errf)
+        finally:
+            errf.close()   # дочерний процесс держит свой fd
+
         async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=40)) as api:
-            for _ in range(60):
+            wait_s = float(getattr(cfg.verify, 'core_start_wait_s', 45))
+            deadline = time.time() + wait_s
+            while time.time() < deadline:
+                if proc.poll() is not None:      # ядро уже упало — не ждём
+                    break
                 try:
                     async with api.get(base + '/version') as r:
                         if r.status == 200:
+                            started = True
                             break
                 except Exception:
                     pass
-                await asyncio.sleep(0.25)
-            else:
-                log.debug('⚠️ L2: ядро не поднялось')
-                return empty
+                await asyncio.sleep(0.3)
+
+            if not started:
+                tail = ''
+                try:
+                    tail = err_path.read_text(encoding='utf-8', errors='ignore')
+                    tail = tail.strip().replace('\n', ' | ')[-400:]
+                except Exception:
+                    pass
+                log.info(f'⚠️ L2: ядро не поднялось (пачка {len(batch)}, '
+                         f'exit={proc.poll()}) {tail}')
+                return delays, geo, l3_tg, l3_yt, False
 
             sem = asyncio.Semaphore(int(cfg.concurrency.core))
             test_url = cfg.verify.test_url
@@ -195,13 +254,12 @@ async def l2_core(named, cfg, session):
                         return name, None
 
             t0 = time.time()
-            for name, d in await asyncio.gather(*(delay(n) for n, _ in named)):
+            for name, d in await asyncio.gather(*(delay(n) for n, _ in batch)):
                 delays[name] = d
             ok = sum(1 for v in delays.values() if v)
-            log.info(f'[L2] через ядро проверено {len(named)}, '
-                     f'реально работают {ok} ({time.time()-t0:.0f}s)')
+            log.debug(f'[L2] пачка {len(batch)}: работают {ok} ({time.time()-t0:.0f}s)')
 
-            # ---------- L3: Telegram / YouTube ----------
+            # ---------- L3 ----------
             l3cfg = getattr(cfg.verify, 'l3', None)
             if l3cfg and getattr(l3cfg, 'enabled', False):
                 tg_url = getattr(l3cfg, 'telegram', '') or ''
@@ -209,7 +267,7 @@ async def l2_core(named, cfg, session):
                 l3_tmo = int(getattr(l3cfg, 'timeout_ms', 8000))
                 l3_retries = max(1, int(getattr(l3cfg, 'retries', 2)))
                 only_alive = bool(getattr(l3cfg, 'only_alive', True))
-                targets = [n for n, _ in named if delays.get(n) or not only_alive]
+                targets = [n for n, _ in batch if delays.get(n) or not only_alive]
 
                 async def probe_service(name, url):
                     for attempt in range(l3_retries):
@@ -229,24 +287,18 @@ async def l2_core(named, cfg, session):
                         return name, tg, yt
 
                 if targets and (tg_url or yt_url):
-                    t1 = time.time()
                     for name, tg, yt in await asyncio.gather(*(l3_check(n) for n in targets)):
                         if tg is not None:
                             l3_tg[name] = tg
                         if yt is not None:
                             l3_yt[name] = yt
-                    tg_ok = sum(1 for v in l3_tg.values() if v)
-                    yt_ok = sum(1 for v in l3_yt.values() if v)
-                    both = sum(1 for n in l3_tg if l3_tg.get(n) and l3_yt.get(n))
-                    log.info(f'[L3] проверено {len(targets)} → TG {tg_ok} | '
-                             f'YT {yt_ok} | оба {both} ({time.time()-t1:.0f}s)')
 
             # ---------- Geo (опционально) ----------
             top = int(cfg.verify.geo_top or 0)
             if top > 0:
                 alive = sorted([(n, d) for n, d in delays.items() if d],
                                key=lambda x: x[1])[:top]
-                proxy = f"http://127.0.0.1:{int(cfg.verify.mixed_port)}"
+                proxy = f'http://127.0.0.1:{int(mixed_port)}'
                 for name, _d in alive:
                     try:
                         async with api.put(base + '/proxies/GLOBAL', json={'name': name}):
@@ -263,9 +315,8 @@ async def l2_core(named, cfg, session):
                                     geo[name] = j2['countryCode']
                     except Exception:
                         continue
-                log.debug(f'🌍 страна определена для {len(geo)} прокси')
     except Exception as e:
-        log.debug(f'⚠️ L2/L3: сбой ({type(e).__name__})')
+        log.debug(f'⚠️ L2/L3: сбой пачки ({type(e).__name__})')
     finally:
         if proc:
             proc.terminate()
@@ -277,4 +328,54 @@ async def l2_core(named, cfg, session):
                 except Exception:
                     pass
         shutil.rmtree(tmp, ignore_errors=True)
+    return delays, geo, l3_tg, l3_yt, started
+
+
+async def l2_core(named, cfg, session):
+    """named: [(name, clash_dict)] -> (delays, geo, l3_tg, l3_yt).
+
+    Проверка идёт пачками по limits.core_batch. Пачка, которая не смогла
+    стартовать, пропускается — остальные продолжают работу.
+    """
+    empty = ({}, {}, {}, {})
+    if not named:
+        return empty
+    binary = await _ensure_core(cfg, session)
+    if not binary:
+        return empty
+
+    good = [(n, p) for n, p in named if _core_ok(p)]
+    skipped = len(named) - len(good)
+    if skipped:
+        log.debug(f'🧹 L2: отброшено непригодных для ядра {skipped}')
+    if not good:
+        return empty
+
+    size = max(50, int(getattr(cfg.limits, 'core_batch', 800) or 800))
+    batches = [good[i:i + size] for i in range(0, len(good), size)]
+    ctrl_host, ctrl_port = _ctrl_parts(cfg)
+    base_mixed = int(cfg.verify.mixed_port)
+
+    delays, geo, l3_tg, l3_yt = {}, {}, {}, {}
+    ok_batches = 0
+    t0 = time.time()
+    for i, batch in enumerate(batches):
+        d, g, tg, yt, started = await _core_batch(
+            batch, cfg, binary, base_mixed + i, ctrl_host, ctrl_port + i)
+        if started:
+            ok_batches += 1
+        delays.update(d)
+        geo.update(g)
+        l3_tg.update(tg)
+        l3_yt.update(yt)
+
+    alive = sum(1 for v in delays.values() if v)
+    log.info(f'[L2] через ядро проверено {len(delays)}/{len(good)}, '
+             f'реально работают {alive} '
+             f'(пачек {ok_batches}/{len(batches)}, {time.time()-t0:.0f}s)')
+    if l3_tg or l3_yt:
+        tg_ok = sum(1 for v in l3_tg.values() if v)
+        yt_ok = sum(1 for v in l3_yt.values() if v)
+        both = sum(1 for n in l3_tg if l3_tg.get(n) and l3_yt.get(n))
+        log.info(f'[L3] проверено {len(l3_tg)} → TG {tg_ok} | YT {yt_ok} | оба {both}')
     return delays, geo, l3_tg, l3_yt
