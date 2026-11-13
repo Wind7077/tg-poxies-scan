@@ -1,7 +1,9 @@
+"""L0 TCP → L1 TLS → L2 ядро (delay) → L3 сервисы (Telegram/YouTube)."""
 import asyncio
 import gzip
-import json
 import os
+import platform
+import shutil
 import ssl
 import subprocess
 import tempfile
@@ -23,7 +25,8 @@ async def l0_tcp(endpoints, cfg, cache, sem):
         e = cache.ping.get(f'{hp[0]}:{hp[1]}') if cache else None
         fresh = False
         if e:
-            ttl = float(cfg.cache.ping_ok_ttl_hours if e.get('ok') else cfg.cache.ping_fail_ttl_hours)
+            ttl = float(cfg.cache.ping_ok_ttl_hours if e.get('ok')
+                        else cfg.cache.ping_fail_ttl_hours)
             fresh = time.time() - e.get('ts', 0) <= ttl * 3600
         if fresh:
             out[hp] = e.get('rtt') if e.get('ok') else None
@@ -47,6 +50,8 @@ async def l0_tcp(endpoints, cfg, cache, sem):
 
 async def l1_tls(items, cfg):
     """items: [(key, host, port, sni)] -> {key: bool}. Только TLS-конфиги."""
+    if not items:
+        return {}
     sem = asyncio.Semaphore(int(cfg.concurrency.tls))
     ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     ctx.check_hostname = False
@@ -56,7 +61,8 @@ async def l1_tls(items, cfg):
         async with sem:
             try:
                 _, w = await asyncio.wait_for(
-                    asyncio.open_connection(host, int(port), ssl=ctx, server_hostname=sni or None),
+                    asyncio.open_connection(host, int(port), ssl=ctx,
+                                            server_hostname=sni or None),
                     timeout=float(cfg.timeouts.tls))
                 w.close()
                 try:
@@ -75,13 +81,21 @@ async def l1_tls(items, cfg):
     return dict(res)
 
 
+def _core_asset_prefix():
+    """mihomo-linux-amd64 / arm64 — чтобы не падать на arm-раннерах."""
+    machine = (platform.machine() or '').lower()
+    arch = 'arm64' if machine in ('aarch64', 'arm64') else 'amd64'
+    return f'mihomo-linux-{arch}'
+
+
 async def _ensure_core(cfg, session):
-    """Скачивает mihomo последней версии. Возвращает путь или None."""
+    """Скачивает mihomo. Возвращает путь или None (мягкий откат на L1)."""
     bindir = Path(cfg.cache.dir) / 'bin'
     bindir.mkdir(parents=True, exist_ok=True)
     binary = bindir / 'mihomo'
     if binary.exists() and os.access(binary, os.X_OK):
         return str(binary)
+    prefix = _core_asset_prefix()
     try:
         async with session.get(cfg.verify.core_api,
                                headers={'Accept': 'application/vnd.github+json'},
@@ -93,20 +107,20 @@ async def _ensure_core(cfg, session):
         asset = None
         for a in data.get('assets', []):
             n = a.get('name', '')
-            if n.startswith('mihomo-linux-amd64') and n.endswith('.gz') and 'compatible' not in n:
+            if n.startswith(prefix) and n.endswith('.gz') and 'compatible' not in n:
                 asset = a
                 break
         if not asset:
-            log.debug('⚠️ L2: подходящий бинарник не найден')
+            log.debug(f'⚠️ L2: бинарник {prefix} не найден в релизе')
             return None
         async with session.get(asset['browser_download_url'],
-                               timeout=aiohttp.ClientTimeout(total=120)) as r:
+                               timeout=aiohttp.ClientTimeout(total=180)) as r:
             if r.status != 200:
                 return None
             blob = await r.read()
         binary.write_bytes(gzip.decompress(blob))
         binary.chmod(0o755)
-        log.debug('⬇️ L2: mihomo скачан')
+        log.debug(f'⬇️ L2: mihomo скачан ({prefix})')
         return str(binary)
     except Exception as e:
         log.debug(f'⚠️ L2: не удалось получить ядро ({type(e).__name__})')
@@ -118,13 +132,14 @@ async def l2_core(named, cfg, session):
 
     L2 — задержка через ядро (test_url).
     L3 — доступность Telegram/YouTube через ТО ЖЕ ядро, с ретраями.
-    Любой сбой -> пустые словари, пайплайн продолжает работу на L1.
+    Любой сбой -> пустые словари, пайплайн продолжает работу на L0/L1.
     """
+    empty = ({}, {}, {}, {})
     if not named:
-        return {}, {}, {}, {}
+        return empty
     binary = await _ensure_core(cfg, session)
     if not binary:
-        return {}, {}, {}, {}
+        return empty
 
     tmp = Path(tempfile.mkdtemp(prefix='mihomo-'))
     conf = {
@@ -132,6 +147,7 @@ async def l2_core(named, cfg, session):
         'external-controller': cfg.verify.controller,
         'mode': 'global',
         'log-level': 'silent',
+        'ipv6': False,
         'proxies': [p for _, p in named],
         'proxy-groups': [{'name': 'GLOBAL', 'type': 'select',
                           'proxies': [n for n, _ in named]}],
@@ -141,14 +157,13 @@ async def l2_core(named, cfg, session):
         yaml.dump(conf, allow_unicode=True, sort_keys=False), encoding='utf-8')
 
     proc = None
-    delays, geo = {}, {}
-    l3_tg, l3_yt = {}, {}
+    delays, geo, l3_tg, l3_yt = {}, {}, {}, {}
     base = f"http://{cfg.verify.controller}"
     try:
         proc = subprocess.Popen([binary, '-d', str(tmp), '-f', str(tmp / 'config.yaml')],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as api:
-            for _ in range(40):
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=40)) as api:
+            for _ in range(60):
                 try:
                     async with api.get(base + '/version') as r:
                         if r.status == 200:
@@ -158,7 +173,7 @@ async def l2_core(named, cfg, session):
                 await asyncio.sleep(0.25)
             else:
                 log.debug('⚠️ L2: ядро не поднялось')
-                return {}, {}, {}, {}
+                return empty
 
             sem = asyncio.Semaphore(int(cfg.concurrency.core))
             test_url = cfg.verify.test_url
@@ -179,32 +194,32 @@ async def l2_core(named, cfg, session):
                     except Exception:
                         return name, None
 
+            t0 = time.time()
             for name, d in await asyncio.gather(*(delay(n) for n, _ in named)):
                 delays[name] = d
             ok = sum(1 for v in delays.values() if v)
-            log.info(f'[L2] через ядро проверено {len(named)}, реально работают {ok}')
+            log.info(f'[L2] через ядро проверено {len(named)}, '
+                     f'реально работают {ok} ({time.time()-t0:.0f}s)')
 
-            # ---------- L3: Telegram / YouTube с ретраями ----------
+            # ---------- L3: Telegram / YouTube ----------
             l3cfg = getattr(cfg.verify, 'l3', None)
             if l3cfg and getattr(l3cfg, 'enabled', False):
                 tg_url = getattr(l3cfg, 'telegram', '') or ''
                 yt_url = getattr(l3cfg, 'youtube', '') or ''
-                l3_tmo = int(getattr(l3cfg, 'timeout_ms', 12000))
+                l3_tmo = int(getattr(l3cfg, 'timeout_ms', 8000))
                 l3_retries = max(1, int(getattr(l3cfg, 'retries', 2)))
                 only_alive = bool(getattr(l3cfg, 'only_alive', True))
                 targets = [n for n, _ in named if delays.get(n) or not only_alive]
 
                 async def probe_service(name, url):
-                    """Один сервис, несколько попыток. Возвращает True/False."""
                     for attempt in range(l3_retries):
                         try:
-                            d = await _delay(name, url, l3_tmo)
-                            if d is not None:
+                            if await _delay(name, url, l3_tmo) is not None:
                                 return True
                         except Exception:
                             pass
                         if attempt < l3_retries - 1:
-                            await asyncio.sleep(0.5)
+                            await asyncio.sleep(0.4)
                     return False
 
                 async def l3_check(name):
@@ -214,6 +229,7 @@ async def l2_core(named, cfg, session):
                         return name, tg, yt
 
                 if targets and (tg_url or yt_url):
+                    t1 = time.time()
                     for name, tg, yt in await asyncio.gather(*(l3_check(n) for n in targets)):
                         if tg is not None:
                             l3_tg[name] = tg
@@ -221,13 +237,15 @@ async def l2_core(named, cfg, session):
                             l3_yt[name] = yt
                     tg_ok = sum(1 for v in l3_tg.values() if v)
                     yt_ok = sum(1 for v in l3_yt.values() if v)
-                    log.info(f'[L3] проверено {len(targets)} → '
-                             f'TG {tg_ok}/{len(l3_tg)} | YT {yt_ok}/{len(l3_yt)}')
+                    both = sum(1 for n in l3_tg if l3_tg.get(n) and l3_yt.get(n))
+                    log.info(f'[L3] проверено {len(targets)} → TG {tg_ok} | '
+                             f'YT {yt_ok} | оба {both} ({time.time()-t1:.0f}s)')
 
             # ---------- Geo (опционально) ----------
             top = int(cfg.verify.geo_top or 0)
             if top > 0:
-                alive = sorted([(n, d) for n, d in delays.items() if d], key=lambda x: x[1])[:top]
+                alive = sorted([(n, d) for n, d in delays.items() if d],
+                               key=lambda x: x[1])[:top]
                 proxy = f"http://127.0.0.1:{int(cfg.verify.mixed_port)}"
                 for name, _d in alive:
                     try:
@@ -241,12 +259,11 @@ async def l2_core(named, cfg, session):
                             async with api.get(f'http://ip-api.com/json/{ip}?fields=countryCode',
                                                timeout=aiohttp.ClientTimeout(total=10)) as r:
                                 j2 = await r.json(content_type=None)
-                                cc = j2.get('countryCode')
-                                if cc:
-                                    geo[name] = cc
+                                if j2.get('countryCode'):
+                                    geo[name] = j2['countryCode']
                     except Exception:
                         continue
-                log.debug(f'🌍 L2: страна определена для {len(geo)} прокси')
+                log.debug(f'🌍 страна определена для {len(geo)} прокси')
     except Exception as e:
         log.debug(f'⚠️ L2/L3: сбой ({type(e).__name__})')
     finally:
@@ -255,5 +272,9 @@ async def l2_core(named, cfg, session):
             try:
                 proc.wait(timeout=5)
             except Exception:
-                proc.kill()
+                try:
+                    proc.kill()
+                except Exception:
+                    pass
+        shutil.rmtree(tmp, ignore_errors=True)
     return delays, geo, l3_tg, l3_yt
