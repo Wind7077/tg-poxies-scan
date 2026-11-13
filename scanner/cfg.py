@@ -24,8 +24,9 @@ _DEFAULTS = {
         'tme_pages': 10, 'tme_sub_pages': 2, 'telethon_limit': 1000,
         'max_embed': 200, 'per_endpoint': 5, 'best': 50,
         'max_attachment_mb': 2, 'core_max': 6000, 'core_batch': 800,
+        'core_retry_split': 2,
     },
-    'concurrency': {'http': 50, 'ping': 500, 'tls': 100, 'core': 48},
+    'concurrency': {'http': 50, 'ping': 500, 'tls': 100, 'core': 64},
     'timeouts': {
         'http_total': 12, 'http_connect': 7, 'long_total': 30,
         'ping': 2.0, 'tls': 3.0, 'core_delay_ms': 5000,
@@ -46,7 +47,7 @@ _DEFAULTS = {
         'l3': {
             'enabled': False,
             'telegram': 'https://api.telegram.org/robots.txt',
-            'youtube': 'https://www.youtube.com/generate_204',
+            'youtube': 'httpv://www.youtube.com/generate_204',
             'timeout_ms': 8000,
             'retries': 2,
             'only_alive': True,
