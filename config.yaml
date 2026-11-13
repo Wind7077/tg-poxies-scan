@@ -24,12 +24,17 @@ limits:
   per_endpoint: 5
   best: 50
   max_attachment_mb: 2
+  # Сколько конфигов максимум прогоняем через ядро за раз.
+  # 0 = без лимита (долго: 4900 × 3 запроса). 1500 ≈ 5–8 мин.
+  core_max: 1500
+  # Приоритет: сначала WL (дефицит), потом свежие ALL.
+  core_priority_wl: true
 
 concurrency:
   http: 50
   ping: 500
   tls: 100
-  core: 32
+  core: 48
 
 timeouts:
   http_total: 12
@@ -76,23 +81,29 @@ whitelist:
   cidr: []
 
 verify:
-  level: 1
+  # 0 = только TCP; 1 = +TLS для WL; 2 = +ядро (L2 delay + L3 сервисы) для ALL
+  level: 2
   core_api: https://api.github.com/repos/MetaCubeX/mihomo/releases/latest
   controller: 127.0.0.1:19090
   mixed_port: 17890
   test_url: http://www.gstatic.com/generate_204
   geo_top: 0
   geo_url: https://api.ipify.org?format=json
-  
+
   l3:
     enabled: true
     telegram: "https://api.telegram.org/robots.txt"
     youtube: "https://www.youtube.com/generate_204"
-    timeout_ms: 12000
+    timeout_ms: 8000
     retries: 2
-    only_alive: true
-    require_mode: off     # both | any | telegram | youtube | off
+    only_alive: true          # L3 только для тех, кто прошёл L2 (экономия ~60%)
+    # ВАЖНО: режимы в кавычках! YAML парсит off/on/yes/no как булево.
+    require_mode_all: "both"  # both | any | telegram | youtube | off
+    require_mode_wl: "off"    # белые в дефиците — не режем
     tag_names: true
+    # Страховка: если после фильтра ALL остаётся меньше этого % от
+    # проверенных — режим автоматически смягчается both→any→off.
+    min_keep_pct: 15
 
 cache:
   enabled: true
@@ -102,7 +113,8 @@ cache:
   ping_fail_ttl_hours: 3
   content_hash: true
 
-# Блок нужен, чтобы pipeline.py не упал при проверке cfg.telegram.session_b64
+# Значения перекрываются переменными окружения
+# TELEGRAM_API_ID / TELEGRAM_API_HASH / TELEGRAM_SESSION
 telegram:
   api_id: 0
   api_hash: ""
@@ -111,6 +123,8 @@ telegram:
 telethon:
   all_channels: true
   attachments: true
+  # качать только текстовые вложения (не PDF/APK/картинки)
+  attachment_ext: [".txt", ".json", ".yaml", ".yml", ".conf", ".list", ".sub", ""]
 
 guards:
   enabled: true
@@ -123,6 +137,7 @@ logging:
   show_live_sources: true
   live_sources_top: 0
   progress_every: 200
+  diag_secrets: false        # печать диагностики секретов при старте
 
 problem_domains:
   - kfwl.lol
