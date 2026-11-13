@@ -4,749 +4,588 @@ mode: Rule
 log-level: info
 external-controller: 127.0.0.1:9090
 proxies:
-- name: '🇩🇪 Германия | 🔗 Каскад [#РКП] #2'
-  type: vless
-  server: 188.72.112.1
+- name: 🟢 ProxyRift 216 · 31ms
+  type: trojan
+  server: 216.152.155.176
   port: 443
-  uuid: 00018846-513b-6e3b-5301-9c9ff2d375a3
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: decdn.fius.dev
-  client-fingerprint: firefox
-  alpn:
-  - h2
-  - http/1.1
-  xhttp-opts:
-    path: /api-test
-    host: decdn.fius.dev
-- name: '🇪🇺🕊♥️ Европа [Обход БС | Все операторы] #32'
-  type: vless
-  server: 188.72.103.4
-  port: 443
-  uuid: 00a560f4-035e-48eb-b698-6f6be0b5e477
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: decdn2.bota7.com
-  client-fingerprint: chrome
-  alpn:
-  - h2
-  xhttp-opts:
-    path: /api/v4/lop/
-    host: decdn2.bota7.com
-- name: '🇪🇺🕊♥️ Европа [Обход БС | Все операторы | Реклама в YouTube] #37'
-  type: vless
-  server: 37.9.4.108
-  port: 8443
-  uuid: 02e7f01e-c9cf-4f96-816d-3b7cb97b289b
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
   network: tcp
   udp: true
   tls: true
-  server-name: warthunder.com
-  reality-opts:
-    public-key: -IKhpLdY0Xp8whf5GIZ8nLro_uDz9czGtkj1l2KWLVI
-    short-id: ced56b8e28517367
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #418'
-  type: vless
-  server: 83.166.255.72
-  port: 443
-  uuid: 03dd7e7c-8d2a-4cd2-b920-f5ed564fc8c4
-  network: grpc
-  udp: true
-  tls: true
-  server-name: api-maps.yandex.ru
-  reality-opts:
-    public-key: zkeQCEkz7LlrzwzeG26Ae_HEk3_QlgM9CbiWJx5iWh0
+  server-name: 216.152.155.176
   client-fingerprint: chrome
-- name: 'Телефон / Роутер [owpn.org] #12'
-  type: vless
-  server: 201.58.139.66
-  port: 443
-  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+  skip-cert-verify: true
+- name: 🟢 ProxyRift 1864 · 49ms
+  type: ss
+  server: 38.64.138.135
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 1616 · 58ms
+  type: ss
+  server: 137.184.174.93
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 1265 · 58ms
+  type: ss
+  server: 138.197.141.58
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 613 · 62ms
+  type: trojan
+  server: 66.23.203.21
+  port: 59689
+  password: ae7eb4dwyaz25pxwgq59
   network: tcp
   udp: true
   tls: true
-  server-name: 57aac2t.pl7.h1clayd.click
-  reality-opts:
-    public-key: LY0H47MWx87_L_JBzxFAuTzKZB53U7MrZQK8-dNnMxM
-    short-id: 6c5c7900406a1ae7
+  server-name: 66.23.203.21
+  skip-cert-verify: true
   client-fingerprint: chrome
-- name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #71'
-  type: vless
-  server: 263651t.fi3.h1clayd.click
-  port: 443
-  uuid: 056405e8-de9f-4d0d-8145-956f13cc34da
+- name: 🟢 ProxyRift 019 · 66ms
+  type: ss
+  server: 15.235.121.109
+  port: 8080
+  cipher: chacha20-ietf-poly1305
+  password: 575hiopq2h28yao6
+  udp: true
   network: tcp
+- name: 🟢 ProxyRift 1887 · 66ms
+  type: ss
+  server: 167.88.63.39
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
-  tls: true
-  server-name: 263651t.fi3.h1clayd.click
-  reality-opts:
-    public-key: nNe5Y8_G7L0_VO5lqlee3h5UmRH4RXjaRYGCDUkbQz4
-    short-id: 2892e611785bafd1
-  client-fingerprint: firefox
-- name: '🌀 CYBERPORTAL | White List #509'
+  network: tcp
+- name: 🟢 ProxyRift 1314 · 68ms
+  type: ss
+  server: 98.98.79.198
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 1885 · 69ms
+  type: ss
+  server: 172.111.36.123
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 115 · 70ms
+  type: ss
+  server: 54.39.96.233
+  port: 8080
+  cipher: chacha20-ietf-poly1305
+  password: 2cvhpvdg4x7mvbps
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 1873 · 72ms
+  type: ss
+  server: 38.22.17.214
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: '🟢 1211. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 74ms'
   type: vless
-  server: 139.59.168.171
+  server: 162.159.198.1
   port: 443
-  uuid: 08be5d08-de17-4bac-939d-d57a91028a60
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
   network: ws
   udp: true
   tls: true
-  server-name: api.avito.ru
-  ws-opts:
-    path: /uirexwws
-  client-fingerprint: chrome
-- name: 🇳🇱 LTE
-  type: vless
-  server: 81.94.148.144
-  port: 443
-  uuid: 0991b66c-e605-40f7-b017-7a3eb23f854c
-  network: ws
-  udp: true
-  tls: true
-  server-name: lenovo-112.zahar.top
-  client-fingerprint: firefox
-  alpn:
-  - http/1.1
-  ws-opts:
-    path: /websocket
-    headers:
-      Host: lenovo-112.zahar.top
-- name: '🇳🇱 LTE #2'
-  type: vless
-  server: 81.94.148.161
-  port: 443
-  uuid: 0991b66c-e605-40f7-b017-7a3eb23f854c
-  network: ws
-  udp: true
-  tls: true
-  server-name: lenovo-112.zahar.top
-  client-fingerprint: firefox
-  alpn:
-  - http/1.1
-  ws-opts:
-    path: /websocket
-    headers:
-      Host: lenovo-112.zahar.top
-- name: 🇸🇬 SG tls-0231
-  type: vless
-  server: 104.17.28.83
-  port: 2087
-  uuid: 099244b9-2168-4dbd-870e-cbbe9d6eb573
-  network: ws
-  udp: true
-  tls: true
-  server-name: whitecreeper.pages.dev
-  client-fingerprint: chrome
-  ws-opts:
-    path: /proxyip=ProxyIP.SG.CMLiussss.Net
-    headers:
-      Host: whitecreeper.pages.dev
-- name: 🇷🇺 AetrisVPN
-  type: vless
-  server: 104.17.28.83
-  port: 2087
-  uuid: 099244b9-2168-4dbd-870e-cbbe9d6eb573
-  network: ws
-  udp: true
-  tls: true
-  server-name: whitecreeper.pages.dev
+  server-name: fs.qicai99.com
   client-fingerprint: chrome
   ws-opts:
     path: /
     headers:
-      Host: whitecreeper.pages.dev
-- name: 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL]
+      Host: fs.qicai99.com
+- name: 🟢 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL] · 76ms
   type: vless
-  server: 172.67.75.194
-  port: 2096
-  uuid: 099244b9-2168-4dbd-870e-cbbe9d6eb573
+  server: 162.159.198.1
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
   network: ws
   udp: true
   tls: true
-  server-name: whitecreeper.pages.dev
+  server-name: fs.qicai99.com
   client-fingerprint: chrome
   ws-opts:
-    path: /proxyip=ProxyIP.SG.CMLiussss.Net
+    path: /?TELEGRAM--MARAMBASHI--MARAMBASHI--MARAMBASHI--MARAMBASHI?ed=2560
     headers:
-      Host: whitecreeper.pages.dev
-- name: 🇸🇬 SG tls-0292
-  type: vless
-  server: 8.39.125.213
+      Host: fs.qicai99.com
+- name: 🟢 ProxyRift 1890 · 77ms
+  type: ss
+  server: 167.88.63.39
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 006 · 77ms
+  type: ss
+  server: 107.151.182.197
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 012 · 78ms
+  type: ss
+  server: 15.235.57.6
+  port: 8080
+  cipher: chacha20-ietf-poly1305
+  password: kxhnt5jtykd328cg
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 215 · 78ms
+  type: ss
+  server: 107.151.182.253
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 217 · 78ms
+  type: trojan
+  server: 216.152.155.54
   port: 443
-  uuid: 099244b9-2168-4dbd-870e-cbbe9d6eb573
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 216.152.155.54
+  client-fingerprint: chrome
+  skip-cert-verify: true
+- name: 🟢 ProxyRift 013 · 79ms
+  type: ss
+  server: 198.100.154.175
+  port: 8080
+  cipher: chacha20-ietf-poly1305
+  password: 3h3hb2gptqz6suyt
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 1228 · 79ms
+  type: trojan
+  server: 216.152.155.131
+  port: 443
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: ekb.eg
+  client-fingerprint: chrome
+  skip-cert-verify: true
+- name: 🟢 ProxyRift 026 · 80ms
+  type: ss
+  server: 79.110.54.250
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 649 · 80ms
+  type: trojan
+  server: 216.152.155.54
+  port: 443
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 216.152.155.54
+  skip-cert-verify: true
+  client-fingerprint: chrome
+- name: 🟢 ProxyRift 244 · 83ms
+  type: ss
+  server: 107.151.182.253
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: '🟢 1220. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 87ms'
+  type: vless
+  server: 172.64.150.28
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
   network: ws
   udp: true
   tls: true
-  server-name: whitecreeper.pages.dev
-  client-fingerprint: chrome
+  server-name: fs.qicai99.com
   ws-opts:
-    path: /proxyip=ProxyIP.SG.CMLiussss.Net
+    path: /fp=chrome
     headers:
-      Host: whitecreeper.pages.dev
-- name: 'Автовыбор #4'
-  type: vless
-  server: 130.78.190.5
-  port: 443
-  uuid: 0a58282c-08c7-4d64-b8df-7014e703c3b3
-  network: tcp
-  udp: true
-  tls: true
-  server-name: play.murka.fun
-  reality-opts:
-    public-key: 1iDRaqLgk1t6J54DlCZP0AFfRv8KxUTEa3bpL5nJrD4
-    short-id: 1f82ac
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #475'
-  type: vless
-  server: 157.173.29.12
-  port: 443
-  uuid: 0b9bcbc1-b289-4a64-86fa-a5b731b65384
-  network: tcp
-  udp: true
-  tls: true
-  server-name: web.max.ru
-  reality-opts:
-    public-key: m0XH4zlwCTJGWoRT64dPgCg3gREZvEnwMPOzOiFengU
-    short-id: 45ba18f424ad1f21
+      Host: fs.qicai99.com
   client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #489'
-  type: vless
-  server: 185.159.108.42
+- name: 🟢 ProxyRift 1017 · 88ms
+  type: ss
+  server: 3.22.241.58
   port: 443
-  uuid: 0b9bcbc1-b289-4a64-86fa-a5b731b65384
-  network: tcp
+  cipher: aes-256-cfb
+  password: amazonskr05
   udp: true
-  tls: true
-  server-name: web.max.ru
-  reality-opts:
-    public-key: QocXHwad0mV7WA5jSAcqDac3uuVBEp1WF775-CilniE
-    short-id: 45ba18f429ad1f28
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #411'
+  network: tcp
+- name: '🟢 1183. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 89ms'
   type: vless
-  server: 5.129.193.147
+  server: 104.18.32.33
   port: 443
-  uuid: 0ce5c16f-ea7c-49fa-896d-2044acf172d2
-  network: tcp
-  udp: true
-  tls: true
-  server-name: eh.vk.com
-  reality-opts:
-    public-key: mza5Hn1aolSz65qu-UwvBP3oesxMe25r11o4nxvikF0
-    short-id: 64c1fe36c7846400
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '🇬🇧 Великобритания · LTE · ❔ · #19'
-  type: vless
-  server: 193.163.203.170
-  port: 443
-  uuid: 11aabba0-5fd1-4f15-8068-74c1a466cefc
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yandex.ru
-  reality-opts:
-    public-key: GCCZ1ZZjB_nj7yxqFi22bIIWWr_G6rnWUzDcssN_40o
-    short-id: b28db60d77c50b4f
-  client-fingerprint: ios
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #409'
-  type: vless
-  server: 193.163.203.170
-  port: 443
-  uuid: 11aabba0-5fd1-4f15-8068-74c1a466cefc
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yandex.ru
-  client-fingerprint: chrome
-- name: 🛡️+Белый+список+РФ+#01+•+VLESS+(1989ms)
-  type: vless
-  server: 189.74.117.29
-  port: 443
-  uuid: 122188c6-66ff-4f8d-a1b5-54280b4b106a
-  network: tcp
-  udp: true
-  tls: true
-  server-name: api.videodolina.cc
-  reality-opts:
-    public-key: r5WB5FnSCt4eeBC1FJMfkWHbzsMuabo0Rc6wuAhlZUs
-    short-id: a8
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Телефон / Роутер [owpn.org] #14'
-  type: vless
-  server: 217.60.27.117
-  port: 443
-  uuid: 12776e55-6230-48b9-b069-1bb8a04b4237
-  network: tcp
-  udp: true
-  tls: true
-  server-name: music.3apes.online
-  reality-opts:
-    public-key: q4_o7NvD6vQg4hYsyO29Q6PVufjTJHDUbQTqstre9EQ
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #390'
-  type: vless
-  server: 195.74.93.254
-  port: 443
-  uuid: 146eb6cf-a99c-4022-85ca-022cf81502dc
-  network: tcp
-  udp: true
-  tls: true
-  server-name: web.max.ru
-  reality-opts:
-    public-key: 7ReQIe2kMtP4rCrptgH5glkOM-JGcSAPzHNxOED-Z0s
-    short-id: 247fd6dab1a34a48
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #464'
-  type: vless
-  server: 93.114.194.131
-  port: 443
-  uuid: 146eb6cf-a99c-4022-85ca-022cf81502dc
-  network: tcp
-  udp: true
-  tls: true
-  server-name: web.max.ru
-  reality-opts:
-    public-key: 7ReQIe2kMtP4rCrptgH5glkOM-JGcSAPzHNxOED-Z0s
-    short-id: 247fd6dab1a34a48
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #7'
-  type: vless
-  server: 176.12.74.226
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: kz-first.yourzloy.site
-  reality-opts:
-    public-key: vL7_EY1_SpsyEROqEDtLaatpZEmna_VixzsEfWI5wDo
-    short-id: aef88ffbbfde7dea
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #9'
-  type: vless
-  server: 178.72.179.126
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: spb-sel.zloycloud.site
-  reality-opts:
-    public-key: FunyCRnU6YPBWd37aiGrpXKftztIQ8mlYhDXiolmFW8
-    short-id: 5dc99ae27daa42cf
-  client-fingerprint: qq
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #16'
-  type: vless
-  server: 195.123.212.251
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: lv-1.zvcorp24.com
-  reality-opts:
-    public-key: FdEgNJGj1-GFRBNlVZQkdsyJJ9DbZA03cPzYna_vdzA
-    short-id: 38ee41c50ce85881
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #25'
-  type: vless
-  server: 31.56.18.221
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: de-akn-1.movietop24.site
-  reality-opts:
-    public-key: yiy7iIhq-etTnvEN-HebXVJYOLzYHhiHZY6rKpcN6Ws
-    short-id: a1d94c46b05d3d0f
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #30'
-  type: vless
-  server: 31.77.29.47
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: jp-akn-1.movietop24.site
-  reality-opts:
-    public-key: ZrHDiON568oDDRIl0XXBL5kBK5bNnkadKFzt6UYIoUs
-    short-id: ee2fb8a902f1fa2b
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #36'
-  type: vless
-  server: 78.17.158.106
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: es-avps.zloysite.online
-  reality-opts:
-    public-key: gldVbmVCp5CIfpwComtOyiRMgEOmihQYTM4DPldHVXc
-    short-id: 114122d59279e380
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #37'
-  type: vless
-  server: 81.177.215.156
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: tr-4vps.yourzloy.site
-  reality-opts:
-    public-key: VNinTQ6vwOujTkrJgK_NPV4SpSBU6B7xG2tpM7prITQ
-    short-id: fd5b0def0660cdb1
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #38'
-  type: vless
-  server: 83.217.195.128
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: nl7.ngenix-cdn-cache.site
-  reality-opts:
-    public-key: RlmSSm1cMoLgu1Cc5zW_g42oMy-r1HHtxNwnw-kbQSY
-    short-id: a912f2bba75c4ffd
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #39'
-  type: vless
-  server: 83.217.195.232
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: nl8.ngenix-cdn-cache.site
-  reality-opts:
-    public-key: OBv3jyZqYGzDrRaltynBF0lmf4jcInBR2-78EcaCPkg
-    short-id: 341acc8f0f046ba7
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #43'
-  type: vless
-  server: 94.183.253.186
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: o5-hostes.x5-resourcehub.ru
-  reality-opts:
-    public-key: -_IAoGzzeqArUXch52oIxP1UCNnuI-fQcXZwCcvKUBo
-    short-id: c7b29bd3a89a1cc4
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 'Автовыбор #44'
-  type: vless
-  server: 94.249.148.222
-  port: 443
-  uuid: 186a7d6f-e360-4c5f-bafb-a816f79e231b
-  network: tcp
-  udp: true
-  tls: true
-  server-name: de-1-th.movietop24.site
-  reality-opts:
-    public-key: hZT-B8nuhk3Cu11GqYfgv-_P4kEqcUA_XptyivaMuzI
-    short-id: b3e87e92dd9ed49c
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #51'
-  type: vless
-  server: 45.128.60.127
-  port: 443
-  uuid: 1a11d3a8-f327-4f97-81b2-f776c138dec7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.nokia.com
-  reality-opts:
-    public-key: kb93iSFmgqH_hIEAL15LZdrB9E-QfGFYG1mspAYJUzI
-    short-id: 557d83da1a36996f
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #532'
-  type: vless
-  server: 84.200.81.229
-  port: 443
-  uuid: 1a539db6-d162-42f4-9b56-687bd57bfbc2
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ozon.ru
-  reality-opts:
-    public-key: eKglVNr1vCmVZxLeGS6_-sZWXEJLWckuzkpmox1-jQ8
-    short-id: b05bc387
-  client-fingerprint: chrome
-- name: '🌀 CYBERPORTAL | White List #360'
-  type: vless
-  server: 178.172.227.124
-  port: 10444
-  uuid: 1af36694-b548-4b18-89a0-bc076eab4ed7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
-    short-id: 8debcf36f1cc69ff
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🛡️+Белый+список+РФ+#03+•+VLESS+(379ms)
-  type: vless
-  server: 178.172.227.124
-  port: 10444
-  uuid: 1af36694-b548-4b18-89a0-bc076eab4ed7
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ads.x5.ru
-  reality-opts:
-    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
-    short-id: 8debcf36f1cc69ff
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🇪🇺 Автовыбор 🔍 (@vpnruss1) #65'
-  type: vless
-  server: 178.172.227.124
-  port: 14430
-  uuid: 1af36694-b548-4b18-89a0-bc076eab4ed7
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
   network: ws
   udp: true
+  tls: true
+  server-name: fs.qicai99.com
   ws-opts:
-    path: /vless
+    path: /
     headers:
-      Host: 178.172.227.124
-- name: '🌀 CYBERPORTAL | White List #474'
-  type: vless
-  server: 70.34.194.57
-  port: 443
-  uuid: 1b9e301d-cecd-4eb1-8b36-eef811c2696d
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yastatic.net
-  reality-opts:
-    public-key: F7NZa0wqjlz9zHlFUUW8rnh9j9GwX7e2rq3CynO3s1o
-    short-id: 5e841fab
-  client-fingerprint: firefox
-- name: '🌀 CYBERPORTAL | White List #397'
-  type: vless
-  server: 144.31.50.236
-  port: 443
-  uuid: 1c332eae-7e02-4acd-996d-4eb3e652401c
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yandex.ru
-  reality-opts:
-    public-key: uitO4Z8t9TplwwYaqwLqh5rfxDh_X8bOBiNuPbzvaEM
-    short-id: bbe46bd8f6b96839
+      Host: fs.qicai99.com
   client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #216'
+- name: '🟢 1200. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 89ms'
   type: vless
-  server: prep.wwwinternetvideo.click
+  server: 104.18.40.33
   port: 443
-  uuid: 1c332eae-7e02-4acd-996d-4eb3e652401c
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yandex.ru
-  reality-opts:
-    public-key: uitO4Z8t9TplwwYaqwLqh5rfxDh_X8bOBiNuPbzvaEM
-    short-id: bbe46bd8f6b96839
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #480'
-  type: vless
-  server: 158.160.146.238
-  port: 443
-  uuid: 1df924f8-2fd7-4623-a52e-be350a6905ca
-  network: tcp
-  udp: true
-  tls: true
-  server-name: yandex.ru
-  reality-opts:
-    public-key: CF49-iS9dsHBwvqYFoDs_T3Me8TT0FpNW2kibGBkVXY
-  client-fingerprint: safari
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #507'
-  type: vless
-  server: 194.135.32.169
-  port: 443
-  uuid: 1e691663-fd9f-4b50-b94e-24f5a15fb2ba
-  network: tcp
-  udp: true
-  tls: true
-  server-name: editorial4-3630bada21140b.rbc.ru
-  reality-opts:
-    public-key: CMkW1axrhEXoiJ6anMz9XEjlfqlAtEZya7L0b5ZPMyw
-    short-id: 69da7557f168a46a
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: 🇩🇪Обходы
-  type: vless
-  server: 91.215.43.80
-  port: 443
-  uuid: 1f4349be-c43d-4567-a078-2f4738653e4e
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
   network: ws
   udp: true
   tls: true
-  server-name: my.sand.api.downloader-pet.xyz
-  client-fingerprint: firefox
-  alpn:
-  - http/1.1
+  server-name: fs.qicai99.com
   ws-opts:
-    path: /gateway/v1/ws/74c4d5e82a8e50ccf09fc628c17dc9be
-- name: '🌀 CYBERPORTAL | White List #379'
-  type: vless
-  server: 185.95.231.156
-  port: 443
-  uuid: 1f8cf47a-b66a-4916-979f-26edfcf44eea
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.apple.com
-  reality-opts:
-    public-key: 8eXftARun6KH38UZhuqIfPR1VF2DLS9RMBZEnF5k6To
-    short-id: a3a578ab
+    path: /
+    headers:
+      Host: fs.qicai99.com
   client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '🇭🇰➜🇩🇪 GidroksiFree #8 | 🔗Каскад | 🔴WIFI | 1371ms | ↓0.0Mbps'
+- name: 🟢 [202ms|j220|rc1/1|7cat|TG+VLESS|@vlesstrojan] · 91ms
   type: vless
-  server: 31.58.213.235
+  server: 69.48.201.136
+  port: 30016
+  uuid: 03dc60cb-a8d4-4226-93fe-0e6cbf77fe5a
+  network: ws
+  udp: true
+  ws-opts:
+    path: /usserver
+    headers:
+      Host: zoom.us
+- name: 🟢 ProxyRift 657 · 92ms
+  type: trojan
+  server: 216.152.156.65
   port: 443
-  uuid: 2232d904-8e6a-4202-8240-6efd8aec02e9
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
   network: tcp
   udp: true
   tls: true
-  server-name: starter.jarbook.net
-  reality-opts:
-    public-key: yX-l9ntNogG7DJZjqbsQGfvfsvjAQVFqFLY-Zcc_qG0
-    short-id: 8de61902
+  server-name: 216.152.156.65
+  skip-cert-verify: true
+  client-fingerprint: chrome
+- name: '🟢 4764. TROJAN | SNI: findconnectwithemployersandbuildprofessionalnetwork.com
+    | TG: @wlrustg · 92ms'
+  type: trojan
+  server: 66.163.114.245
+  port: 443
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: findconnectwithemployersandbuildprofessionalnetwork.com
+  skip-cert-verify: true
+  client-fingerprint: chrome
+- name: '🟢 1187. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 93ms'
+  type: vless
+  server: 104.18.34.33
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
+  network: ws
+  udp: true
+  tls: true
+  server-name: fs.qicai99.com
+  ws-opts:
+    path: /
+    headers:
+      Host: fs.qicai99.com
+  client-fingerprint: chrome
+- name: 🟢 ProxyRift 644 · 94ms
+  type: trojan
+  server: 66.163.114.245
+  port: 443
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 66.163.114.245
+  skip-cert-verify: true
+  client-fingerprint: chrome
+- name: '🟢 1204. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 94ms'
+  type: vless
+  server: 104.21.41.243
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
+  network: ws
+  udp: true
+  tls: true
+  server-name: fs.qicai99.com
+  client-fingerprint: chrome
+  ws-opts:
+    path: /
+    headers:
+      Host: fs.qicai99.com
+- name: 🟢 ProxyRift 655 · 95ms
+  type: trojan
+  server: 216.152.156.49
+  port: 443
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: api.unlockyourfuturefindyourperfectcareer.com
+  skip-cert-verify: true
+  client-fingerprint: chrome
+- name: '🟢 1222. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 96ms'
+  type: vless
+  server: 172.64.152.33
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
+  network: ws
+  udp: true
+  tls: true
+  server-name: fs.qicai99.com
+  ws-opts:
+    path: /
+    headers:
+      Host: fs.qicai99.com
+  client-fingerprint: chrome
+- name: 🟢 ProxyRift 640 · 97ms
+  type: trojan
+  server: 66.163.114.114
+  port: 443
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 66.163.114.114
+  skip-cert-verify: true
+  client-fingerprint: chrome
+- name: 🟢 Телефон / Роутер [owpn.org] · 97ms
+  type: vless
+  server: 162.159.198.1
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
+  network: ws
+  udp: true
+  tls: true
+  server-name: fs.qicai99.com
   client-fingerprint: edge
-  flow: xtls-rprx-vision
-- name: '🌀 CYBERPORTAL | White List #518'
-  type: vless
-  server: 51.250.45.152
-  port: 443
-  uuid: 22e456e0-6538-4fb7-9c1a-70fb50514251
+  ws-opts:
+    path: /fp
+    headers:
+      Host: fs.qicai99.com
+- name: '🟢 4976. TROJAN | TG: @wlrustg · 98ms'
+  type: trojan
+  server: 69.164.240.85
+  port: 50875
+  password: nwilryafgkyvuxauc8pz
   network: tcp
   udp: true
   tls: true
-  server-name: api-maps.yandex.ru
-  reality-opts:
-    public-key: LfhByBSbDIPB1r6_nm1GFXiVMONHu6S3p4B2DEaJHHU
-    short-id: 8782473827bb6845
+  server-name: 69.164.240.85
   client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: '🇳🇱🕊♥️ Нидерланды [Обход БС] #30'
+  skip-cert-verify: true
+- name: 🟢 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL] · 98ms
   type: vless
-  server: 81.94.148.112
+  server: 104.26.6.109
+  port: 2053
+  uuid: 51a0af77-a60c-4d9b-81a4-f50e1b38d90b
+  network: ws
+  udp: true
+  tls: true
+  server-name: 104.26.6.109
+  client-fingerprint: chrome
+  ws-opts:
+    path: /
+    headers:
+      Host: pilot4f8f.pages.dev
+- name: 🟢 ProxyRift 661 · 99ms
+  type: trojan
+  server: 66.163.122.81
   port: 443
-  uuid: 255a8044-3337-473e-af26-46a37208adcc
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
   network: tcp
   udp: true
   tls: true
-  server-name: cdn4.anytube.ru
-  client-fingerprint: firefox
-  alpn:
-  - h2
-  - http/1.1
-- name: '🇨🇦➜🇬🇧 GidroksiFree #90 | 🔗Каскад | 🔴WIFI | 534ms | ↓0.0Mbps'
+  server-name: 66.163.122.81
+  skip-cert-verify: true
+  client-fingerprint: chrome
+- name: '🟢 1218. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 99ms'
   type: vless
-  server: 212.69.135.225
-  port: 8443
-  uuid: 25c52886-4cee-4d09-bbd4-f03dc524ec6b
+  server: 162.159.198.1
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
+  network: ws
+  udp: true
+  tls: true
+  server-name: fs.qicai99.com
+  client-fingerprint: android
+  ws-opts:
+    path: /fp=chrome
+    headers:
+      Host: fs.qicai99.com
+- name: 🟢 ProxyRift 1313 · 100ms
+  type: ss
+  server: 79.110.53.169
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 108 · 101ms
+  type: ss
+  server: 138.199.43.159
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 656 · 103ms
+  type: trojan
+  server: 216.152.156.42
+  port: 443
+  password: 0ab6c98dae3b48e8b9c4a776b6c9c19a
   network: tcp
   udp: true
   tls: true
-  server-name: uk-room05.filesnap.tech
-  reality-opts:
-    public-key: FdZlh9FC4ay9OGnKG6K_iNqhz1I3tWDfNZhxrDYuQl8
-    short-id: 7da3ba09a037e956
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
+  server-name: 216.152.156.42
+  skip-cert-verify: true
+  client-fingerprint: chrome
+- name: '🟢 1208. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 104ms'
+  type: vless
+  server: 104.26.13.54
+  port: 443
+  uuid: 99c5b713-dedf-4a10-8070-916ff3f49b0e
+  network: ws
+  udp: true
+  tls: true
+  server-name: fs.qicai99.com
+  ws-opts:
+    path: /
+    headers:
+      Host: fs.qicai99.com
+  client-fingerprint: chrome
+- name: 🟢 [104ms|j106|rc1/1|7cat|TG+VLESS|@vlesstrojan] · 106ms
+  type: vless
+  server: 69.48.201.136
+  port: 30016
+  uuid: 03dc60cb-a8d4-4226-93fe-0e6cbf77fe5a
+  network: ws
+  udp: true
+  ws-opts:
+    path: /usserver
+    headers:
+      Host: uspanel.unixzone.us
+- name: 🟢 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL] · 107ms
+  type: vless
+  server: 104.18.45.236
+  port: 2096
+  uuid: 51a0af77-a60c-4d9b-81a4-f50e1b38d90b
+  network: ws
+  udp: true
+  tls: true
+  server-name: mohammadhoseini4532.pages.dev
+  client-fingerprint: chrome
+  ws-opts:
+    path: /
+    headers:
+      Host: mohammadhoseini4532.pages.dev
+- name: 🟢 ProxyRift 335 · 108ms
+  type: hysteria2
+  server: 206.189.229.48
+  port: 443
+  udp: true
+  password: YV1sd3tfCZngTtnvRmy7
+  sni: www.microsoft.com
+  skip-cert-verify: true
+  obfs: salamander
+  obfs-password: ZuPf4OcXKvotJdDxlTus
+  network: tcp
+- name: 🟢 ProxyRift 1856 · 108ms
+  type: ss
+  server: 172.111.38.72
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 1897 · 108ms
+  type: ss
+  server: 38.143.66.146
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
 proxy-groups:
 - name: ♻️ Auto
   type: url-test
   proxies:
-  - '🇩🇪 Германия | 🔗 Каскад [#РКП] #2'
-  - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы] #32'
-  - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы | Реклама в YouTube] #37'
-  - '🌀 CYBERPORTAL | White List #418'
-  - 'Телефон / Роутер [owpn.org] #12'
-  - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #71'
-  - '🌀 CYBERPORTAL | White List #509'
-  - 🇳🇱 LTE
-  - '🇳🇱 LTE #2'
-  - 🇸🇬 SG tls-0231
-  - 🇷🇺 AetrisVPN
-  - 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL]
-  - 🇸🇬 SG tls-0292
-  - 'Автовыбор #4'
-  - '🌀 CYBERPORTAL | White List #475'
-  - '🌀 CYBERPORTAL | White List #489'
-  - '🌀 CYBERPORTAL | White List #411'
-  - '🇬🇧 Великобритания · LTE · ❔ · #19'
-  - '🌀 CYBERPORTAL | White List #409'
-  - 🛡️+Белый+список+РФ+#01+•+VLESS+(1989ms)
-  - 'Телефон / Роутер [owpn.org] #14'
-  - '🌀 CYBERPORTAL | White List #390'
-  - '🌀 CYBERPORTAL | White List #464'
-  - 'Автовыбор #7'
-  - 'Автовыбор #9'
-  - 'Автовыбор #16'
-  - 'Автовыбор #25'
-  - 'Автовыбор #30'
-  - 'Автовыбор #36'
-  - 'Автовыбор #37'
-  - 'Автовыбор #38'
-  - 'Автовыбор #39'
-  - 'Автовыбор #43'
-  - 'Автовыбор #44'
-  - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #51'
-  - '🌀 CYBERPORTAL | White List #532'
-  - '🌀 CYBERPORTAL | White List #360'
-  - 🛡️+Белый+список+РФ+#03+•+VLESS+(379ms)
-  - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #65'
-  - '🌀 CYBERPORTAL | White List #474'
-  - '🌀 CYBERPORTAL | White List #397'
-  - '🌀 CYBERPORTAL | White List #216'
-  - '🌀 CYBERPORTAL | White List #480'
-  - '🌀 CYBERPORTAL | White List #507'
-  - 🇩🇪Обходы
-  - '🌀 CYBERPORTAL | White List #379'
-  - '🇭🇰➜🇩🇪 GidroksiFree #8 | 🔗Каскад | 🔴WIFI | 1371ms | ↓0.0Mbps'
-  - '🌀 CYBERPORTAL | White List #518'
-  - '🇳🇱🕊♥️ Нидерланды [Обход БС] #30'
-  - '🇨🇦➜🇬🇧 GidroksiFree #90 | 🔗Каскад | 🔴WIFI | 534ms | ↓0.0Mbps'
+  - 🟢 ProxyRift 216 · 31ms
+  - 🟢 ProxyRift 1864 · 49ms
+  - 🟢 ProxyRift 1616 · 58ms
+  - 🟢 ProxyRift 1265 · 58ms
+  - 🟢 ProxyRift 613 · 62ms
+  - 🟢 ProxyRift 019 · 66ms
+  - 🟢 ProxyRift 1887 · 66ms
+  - 🟢 ProxyRift 1314 · 68ms
+  - 🟢 ProxyRift 1885 · 69ms
+  - 🟢 ProxyRift 115 · 70ms
+  - 🟢 ProxyRift 1873 · 72ms
+  - '🟢 1211. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 74ms'
+  - 🟢 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL] · 76ms
+  - 🟢 ProxyRift 1890 · 77ms
+  - 🟢 ProxyRift 006 · 77ms
+  - 🟢 ProxyRift 012 · 78ms
+  - 🟢 ProxyRift 215 · 78ms
+  - 🟢 ProxyRift 217 · 78ms
+  - 🟢 ProxyRift 013 · 79ms
+  - 🟢 ProxyRift 1228 · 79ms
+  - 🟢 ProxyRift 026 · 80ms
+  - 🟢 ProxyRift 649 · 80ms
+  - 🟢 ProxyRift 244 · 83ms
+  - '🟢 1220. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 87ms'
+  - 🟢 ProxyRift 1017 · 88ms
+  - '🟢 1183. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 89ms'
+  - '🟢 1200. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 89ms'
+  - 🟢 [202ms|j220|rc1/1|7cat|TG+VLESS|@vlesstrojan] · 91ms
+  - 🟢 ProxyRift 657 · 92ms
+  - '🟢 4764. TROJAN | SNI: findconnectwithemployersandbuildprofessionalnetwork.com
+    | TG: @wlrustg · 92ms'
+  - '🟢 1187. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 93ms'
+  - 🟢 ProxyRift 644 · 94ms
+  - '🟢 1204. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 94ms'
+  - 🟢 ProxyRift 655 · 95ms
+  - '🟢 1222. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 96ms'
+  - 🟢 ProxyRift 640 · 97ms
+  - 🟢 Телефон / Роутер [owpn.org] · 97ms
+  - '🟢 4976. TROJAN | TG: @wlrustg · 98ms'
+  - 🟢 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL] · 98ms
+  - 🟢 ProxyRift 661 · 99ms
+  - '🟢 1218. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 99ms'
+  - 🟢 ProxyRift 1313 · 100ms
+  - 🟢 ProxyRift 108 · 101ms
+  - 🟢 ProxyRift 656 · 103ms
+  - '🟢 1208. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 104ms'
+  - 🟢 [104ms|j106|rc1/1|7cat|TG+VLESS|@vlesstrojan] · 106ms
+  - 🟢 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL] · 107ms
+  - 🟢 ProxyRift 335 · 108ms
+  - 🟢 ProxyRift 1856 · 108ms
+  - 🟢 ProxyRift 1897 · 108ms
   url: http://www.gstatic.com/generate_204
   interval: 300
   tolerance: 50
@@ -754,55 +593,56 @@ proxy-groups:
   type: select
   proxies:
   - ♻️ Auto
-  - '🇩🇪 Германия | 🔗 Каскад [#РКП] #2'
-  - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы] #32'
-  - '🇪🇺🕊♥️ Европа [Обход БС | Все операторы | Реклама в YouTube] #37'
-  - '🌀 CYBERPORTAL | White List #418'
-  - 'Телефон / Роутер [owpn.org] #12'
-  - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #71'
-  - '🌀 CYBERPORTAL | White List #509'
-  - 🇳🇱 LTE
-  - '🇳🇱 LTE #2'
-  - 🇸🇬 SG tls-0231
-  - 🇷🇺 AetrisVPN
-  - 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL]
-  - 🇸🇬 SG tls-0292
-  - 'Автовыбор #4'
-  - '🌀 CYBERPORTAL | White List #475'
-  - '🌀 CYBERPORTAL | White List #489'
-  - '🌀 CYBERPORTAL | White List #411'
-  - '🇬🇧 Великобритания · LTE · ❔ · #19'
-  - '🌀 CYBERPORTAL | White List #409'
-  - 🛡️+Белый+список+РФ+#01+•+VLESS+(1989ms)
-  - 'Телефон / Роутер [owpn.org] #14'
-  - '🌀 CYBERPORTAL | White List #390'
-  - '🌀 CYBERPORTAL | White List #464'
-  - 'Автовыбор #7'
-  - 'Автовыбор #9'
-  - 'Автовыбор #16'
-  - 'Автовыбор #25'
-  - 'Автовыбор #30'
-  - 'Автовыбор #36'
-  - 'Автовыбор #37'
-  - 'Автовыбор #38'
-  - 'Автовыбор #39'
-  - 'Автовыбор #43'
-  - 'Автовыбор #44'
-  - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #51'
-  - '🌀 CYBERPORTAL | White List #532'
-  - '🌀 CYBERPORTAL | White List #360'
-  - 🛡️+Белый+список+РФ+#03+•+VLESS+(379ms)
-  - '🇪🇺 Автовыбор 🔍 (@vpnruss1) #65'
-  - '🌀 CYBERPORTAL | White List #474'
-  - '🌀 CYBERPORTAL | White List #397'
-  - '🌀 CYBERPORTAL | White List #216'
-  - '🌀 CYBERPORTAL | White List #480'
-  - '🌀 CYBERPORTAL | White List #507'
-  - 🇩🇪Обходы
-  - '🌀 CYBERPORTAL | White List #379'
-  - '🇭🇰➜🇩🇪 GidroksiFree #8 | 🔗Каскад | 🔴WIFI | 1371ms | ↓0.0Mbps'
-  - '🌀 CYBERPORTAL | White List #518'
-  - '🇳🇱🕊♥️ Нидерланды [Обход БС] #30'
-  - '🇨🇦➜🇬🇧 GidroksiFree #90 | 🔗Каскад | 🔴WIFI | 534ms | ↓0.0Mbps'
+  - 🟢 ProxyRift 216 · 31ms
+  - 🟢 ProxyRift 1864 · 49ms
+  - 🟢 ProxyRift 1616 · 58ms
+  - 🟢 ProxyRift 1265 · 58ms
+  - 🟢 ProxyRift 613 · 62ms
+  - 🟢 ProxyRift 019 · 66ms
+  - 🟢 ProxyRift 1887 · 66ms
+  - 🟢 ProxyRift 1314 · 68ms
+  - 🟢 ProxyRift 1885 · 69ms
+  - 🟢 ProxyRift 115 · 70ms
+  - 🟢 ProxyRift 1873 · 72ms
+  - '🟢 1211. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 74ms'
+  - 🟢 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL] · 76ms
+  - 🟢 ProxyRift 1890 · 77ms
+  - 🟢 ProxyRift 006 · 77ms
+  - 🟢 ProxyRift 012 · 78ms
+  - 🟢 ProxyRift 215 · 78ms
+  - 🟢 ProxyRift 217 · 78ms
+  - 🟢 ProxyRift 013 · 79ms
+  - 🟢 ProxyRift 1228 · 79ms
+  - 🟢 ProxyRift 026 · 80ms
+  - 🟢 ProxyRift 649 · 80ms
+  - 🟢 ProxyRift 244 · 83ms
+  - '🟢 1220. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 87ms'
+  - 🟢 ProxyRift 1017 · 88ms
+  - '🟢 1183. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 89ms'
+  - '🟢 1200. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 89ms'
+  - 🟢 [202ms|j220|rc1/1|7cat|TG+VLESS|@vlesstrojan] · 91ms
+  - 🟢 ProxyRift 657 · 92ms
+  - '🟢 4764. TROJAN | SNI: findconnectwithemployersandbuildprofessionalnetwork.com
+    | TG: @wlrustg · 92ms'
+  - '🟢 1187. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 93ms'
+  - 🟢 ProxyRift 644 · 94ms
+  - '🟢 1204. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 94ms'
+  - 🟢 ProxyRift 655 · 95ms
+  - '🟢 1222. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 96ms'
+  - 🟢 ProxyRift 640 · 97ms
+  - 🟢 Телефон / Роутер [owpn.org] · 97ms
+  - '🟢 4976. TROJAN | TG: @wlrustg · 98ms'
+  - 🟢 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL] · 98ms
+  - 🟢 ProxyRift 661 · 99ms
+  - '🟢 1218. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 99ms'
+  - 🟢 ProxyRift 1313 · 100ms
+  - 🟢 ProxyRift 108 · 101ms
+  - 🟢 ProxyRift 656 · 103ms
+  - '🟢 1208. 🇨🇦 VLESS | SNI: fs.qicai99.com | TG: @wlrustg · 104ms'
+  - 🟢 [104ms|j106|rc1/1|7cat|TG+VLESS|@vlesstrojan] · 106ms
+  - 🟢 🌐 Anycast-IP | 🇨🇦 🇫🇮 | [BL] · 107ms
+  - 🟢 ProxyRift 335 · 108ms
+  - 🟢 ProxyRift 1856 · 108ms
+  - 🟢 ProxyRift 1897 · 108ms
 rules:
 - MATCH,🚀 Proxy
