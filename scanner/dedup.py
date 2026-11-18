@@ -6,7 +6,12 @@ from .wl import roots_match
 
 IGNORED = {'fp', 'alpn', 'extra', 'headertype', 'encryption', 'allowinsecure',
            'insecure', 'fm', 'packetencoding', 'spx', 'ed'}
-DEDUP_SCHEMES = {'vless', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic'}
+# ss добавлен: раньше ss/vmess дедуплицировались только по точному URI,
+# из-за чего один сервер с разными именами (ProxyRift / 2618. SS / @SylphNet)
+# попадал в списки по 3-4 раза. Для ss://base64@host:port urlsplit даёт
+# hostname, и ключ конфига работает. Для legacy ss://base64 hostname=None
+# → ключ падает back на URI, поведение не меняется.
+DEDUP_SCHEMES = {'vless', 'ss', 'trojan', 'hysteria', 'hysteria2', 'hy2', 'tuic'}
 
 # Расклейка ТОЛЬКО внутри имени (фрагмента). Тело и запрос не режем никогда.
 # ВАЖНО: finditer (неперекрывающиеся матчи), а не zero-width split:
