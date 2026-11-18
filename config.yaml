@@ -23,12 +23,12 @@ limits:
   max_embed: 200
   per_endpoint: 5
   best: 50
+  # Откуда брать proxy-best: wl = только белые, all = только общий,
+  # both = белые в приоритете + добор из общего.
+  best_source: "wl"
   max_attachment_mb: 2
-  # Сколько всего конфигов прогоняем через ядро. 0 = все.
   core_max: 6000
-  # Размер пачки на один запуск mihomo.
   core_batch: 800
-  # Сколько раз дробить упавшую пачку пополам (800→400→200).
   core_retry_split: 2
 
 concurrency:
@@ -94,18 +94,13 @@ verify:
 
   l3:
     enabled: true
-    # Основной URL + резервы. Берётся ПЕРВЫЙ, доступный напрямую с раннера.
-    # www.youtube.com с датацентровых IP часто отдаёт 403/consent-редирект,
-    # поэтому i.ytimg.com (CDN YouTube, чистый 204) — обязательный резерв.
     telegram:
       - "https://api.telegram.org/robots.txt"
       - "https://api.telegram.org/"
     youtube:
-      - "httpv://www.youtube.com/generate_204"
+      - "https://www.youtube.com/generate_204"
       - "https://i.ytimg.com/generate_204"
       - "https://yt3.ggpht.com/generate_204"
-    # Один прямой запрос перед прогоном: если эндпоинт сам недоступен —
-    # сервис отключается, а не помечает все прокси как мёртвые.
     sanity_check: true
     timeout_ms: 8000
     retries: 2
