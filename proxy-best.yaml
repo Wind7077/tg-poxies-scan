@@ -4,87 +4,7 @@ mode: Rule
 log-level: info
 external-controller: 127.0.0.1:9090
 proxies:
-- name: 🟢 cool [white] 🌐 |#13| · 337ms
-  type: vless
-  server: 104.21.58.37
-  port: 2053
-  uuid: e3149c82-00f6-4227-b2c0-b78f1dd81279
-  network: ws
-  udp: true
-  tls: true
-  server-name: fast.145779.xyz
-  client-fingerprint: ios
-  ws-opts:
-    path: /ws-tesla
-    headers:
-      Host: fast.145779.xyz
-- name: 🟢 cool [white] 🌐 |#31| · 393ms
-  type: vless
-  server: fast.145779.xyz
-  port: 2053
-  uuid: c83f15bf-1817-4ec8-a19f-6393d226434c
-  network: ws
-  udp: true
-  tls: true
-  server-name: fast.145779.xyz
-  client-fingerprint: edge
-  ws-opts:
-    path: /ws-tesla
-- name: 🟢 cool [white] 🌐 |#12| · 436ms
-  type: vless
-  server: fast.145779.xyz
-  port: 2053
-  uuid: e3149c82-00f6-4227-b2c0-b78f1dd81279
-  network: ws
-  udp: true
-  tls: true
-  server-name: fast.145779.xyz
-  client-fingerprint: android
-  ws-opts:
-    path: /ws-tesla
-    headers:
-      Host: fast.145779.xyz
-- name: 🟢 Телефон / Роутер [owpn.org] · 661ms
-  type: vless
-  server: 201.34.142.108
-  port: 443
-  uuid: 4777d90d-265b-4927-a0d1-63f36ed1421c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: 201.34.142.108
-  xhttp-opts:
-    path: /assets/nlrelay01/
-  client-fingerprint: chrome
-- name: 🟢 cool [white] 🌐 |#4| · 812ms
-  type: vless
-  server: 104.21.23.29
-  port: 443
-  uuid: 48eb716d-6121-43c1-9dd2-9a2a25bf3178
-  network: ws
-  udp: true
-  tls: true
-  server-name: ws137.mydosss.ccwu.cc
-  client-fingerprint: edge
-  ws-opts:
-    path: /3b575ddc8596
-    headers:
-      Host: ws137.mydosss.ccwu.cc
-- name: 🟢 cool [white] 🌐 |#24| · 815ms
-  type: vless
-  server: 104.16.10.56
-  port: 443
-  uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
-  network: ws
-  udp: true
-  tls: true
-  server-name: jp3.yohototo.top
-  client-fingerprint: android
-  ws-opts:
-    path: /tyxyws
-    headers:
-      Host: jp3.yohototo.top
-- name: 🟢 Notorgames_0 · 887ms
+- name: 🟢 Notorgames_0 · 439ms
   type: vless
   server: 92.223.84.254
   port: 443
@@ -100,49 +20,113 @@ proxies:
     path: /t.me-SubGift
     headers:
       Host: subgift.gcorecdn.com
-- name: 🟢 cool [white] 🇺🇸 |#25| · 1663ms
+- name: 🟢 🇧🇾 Беларусь 2 · 445ms
   type: vless
-  server: www.zoom.us
+  server: 178.172.227.124
+  port: 10443
+  uuid: 1af36694-b548-4b18-89a0-bc076eab4ed7
+  network: tcp
+  udp: true
+- name: '🟢 🇦🇪 ОАЭ OT@Hy2UDP (WIFI/LTE) #162 · 524ms'
+  type: vless
+  server: 95.174.68.188
+  port: 14430
+  uuid: 965ffbbe-c6b6-4d5f-8dea-6d8abc55d9c0
+  network: ws
+  udp: true
+  ws-opts:
+    path: /vless
+    headers:
+      Host: 95.174.68.188
+- name: 🟢 cool [white] 🌐 |#57| · 562ms
+  type: vless
+  server: 172.67.208.118
   port: 443
-  uuid: b19c62cc-f2c2-4895-aee1-978a0f58f8c8
+  uuid: 48eb716d-6121-43c1-9dd2-9a2a25bf3178
   network: ws
   udp: true
   tls: true
-  server-name: matrix.phonicsindia.mobi
+  server-name: ws137.mydosss.ccwu.cc
+  client-fingerprint: android
+  ws-opts:
+    path: /3b575ddc8596
+    headers:
+      Host: ws137.mydosss.ccwu.cc
+- name: 🟢 cool [white] 🌐 |#13| · 586ms
+  type: vless
+  server: 104.21.23.29
+  port: 443
+  uuid: 48eb716d-6121-43c1-9dd2-9a2a25bf3178
+  network: ws
+  udp: true
+  tls: true
+  server-name: ws137.mydosss.ccwu.cc
+  client-fingerprint: android
+  ws-opts:
+    path: /3b575ddc8596
+    headers:
+      Host: ws137.mydosss.ccwu.cc
+- name: '🟢 🌀 CYBERPORTAL | White Keys #16 t.me/rjsxrd · 690ms'
+  type: vless
+  server: 4935e4t.de25.h1clayd.click
+  port: 443
+  uuid: 4201786b-d99b-4147-a5f0-20d47acddb81
+  network: tcp
+  udp: true
+  tls: true
+  server-name: 4935e4t.de25.h1clayd.click
+  reality-opts:
+    public-key: MzgB17ZFbKqs8pbC3EscTzHid_ENc-k_Cp6nXl-2knw
+    short-id: 6976d670818644cc
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 🟢 Телефон / Роутер [owpn.org] · 882ms
+  type: vless
+  server: 717252g.nl8.h1clayd.click
+  port: 443
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: grpc
+  udp: true
+  tls: true
+  server-name: 717252g.nl8.h1clayd.click
+  reality-opts:
+    public-key: PD8Jdlg3xB9QY--jwQjp8PFPzCS8-Oryw6-HWBcHMFU
+    short-id: d3bd772514c87d28
+  client-fingerprint: ios
+  grpc-opts:
+    grpc-service-name: 204adda7e3da
+- name: 🟢 cool [white] 🌐 |#50| · 920ms
+  type: vless
+  server: 188.114.97.6
+  port: 443
+  uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
+  network: ws
+  udp: true
+  tls: true
+  server-name: jp3.yohototo.top
   client-fingerprint: chrome
-  ws-opts:
-    path: /
-    headers:
-      Host: matrix.phonicsindia.mobi
-- name: 🟢 cool [white] 🌐 |#43| · 2081ms
-  type: vless
-  server: 104.18.42.98
-  port: 443
-  uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
-  network: ws
-  udp: true
-  tls: true
-  server-name: jp3.yohototo.top
-  client-fingerprint: safari
+  alpn:
+  - http/1.1
   ws-opts:
     path: /tyxyws
     headers:
       Host: jp3.yohototo.top
-- name: 🟢 cool [white] 🌐 |#42| · 2702ms
+- name: 🟢 Телефон / Роутер [owpn.org] · 947ms
   type: vless
-  server: 104.16.0.1
+  server: 80cb66x.nl17.h1clayd.click
   port: 443
-  uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
-  network: ws
+  uuid: cda0862a-0f87-4be9-8ed8-1d0c9e382839
+  network: xhttp
   udp: true
   tls: true
-  server-name: jp3.yohototo.top
-  client-fingerprint: qq
-  ws-opts:
-    path: /tyxyws
-    headers:
-      Host: jp3.yohototo.top
-- name: 🟢 cool [white] 🌐 |#10| · 2771ms
+  server-name: 80cb66x.nl17.h1clayd.click
+  reality-opts:
+    public-key: jhVdP7NFUaEXGfrmOqJlMCHTvqn3fymbzPfPT6NO4i0
+    short-id: f72d4a2c7cbbacb1
+  client-fingerprint: chrome
+  xhttp-opts:
+    path: /d610f026b146
+- name: 🟢 cool [white] 🌐 |#39| · 1305ms
   type: vless
   server: 104.17.70.206
   port: 8443
@@ -152,26 +136,41 @@ proxies:
   tls: true
   server-name: free.sahanwickramasinghe.com
   client-fingerprint: edge
-  alpn:
-  - http/1.1
   ws-opts:
     path: /
     headers:
       Host: free.sahanwickramasinghe.com
-- name: 🟢 🇧🇾 Беларусь 3 · 4417ms
+- name: 🟢 cool [white] 🇺🇸 |#19| · 1416ms
   type: vless
-  server: 178.172.227.124
-  port: 14430
-  uuid: 1af36694-b548-4b18-89a0-bc076eab4ed7
+  server: www.zoom.us
+  port: 443
+  uuid: b19c62cc-f2c2-4895-aee1-978a0f58f8c8
   network: ws
   udp: true
+  tls: true
+  server-name: matrix.phonicsindia.mobi
+  client-fingerprint: android
   ws-opts:
-    path: /vless
+    path: /
     headers:
-      Host: 178.172.227.124
-- name: 🔵 cool [white] 🌐 |#6| · 680ms
+      Host: matrix.phonicsindia.mobi
+- name: 🟢 cool [white] 🌐 |#14| · 1532ms
   type: vless
-  server: 104.24.31.89
+  server: 104.19.48.107
+  port: 443
+  uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
+  network: ws
+  udp: true
+  tls: true
+  server-name: jp3.yohototo.top
+  client-fingerprint: firefox
+  ws-opts:
+    path: /tyxyws
+    headers:
+      Host: jp3.yohototo.top
+- name: 🟢 cool [white] 🌐 |#68| · 1794ms
+  type: vless
+  server: 104.17.210.74
   port: 443
   uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
   network: ws
@@ -183,172 +182,123 @@ proxies:
     path: /tyxyws
     headers:
       Host: jp3.yohototo.top
-- name: 🔵 Телефон / Роутер [owpn.org] · 1101ms
+- name: 🟢 cool [white] 🌐 |#27| · 2853ms
   type: vless
-  server: 147.45.175.81
-  port: 443
-  uuid: c90395e6-2140-47ad-a54d-9b166729d3ef
-  network: ws
-  udp: true
-  tls: true
-  server-name: xsru1.ddnsfree.com
-  client-fingerprint: edge
-  ws-opts:
-    path: /wsru
-    headers:
-      Host: xsru1.ddnsfree.com
-- name: 🔵 cool [white] 🌐 |#45| · 1312ms
-  type: vless
-  server: 188.114.97.6
+  server: 104.24.31.89
   port: 443
   uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
   network: ws
   udp: true
   tls: true
   server-name: jp3.yohototo.top
-  client-fingerprint: edge
+  client-fingerprint: chrome
   ws-opts:
     path: /tyxyws
     headers:
       Host: jp3.yohototo.top
-- name: '🔴 19 🇪🇺обход глушилок | БС #45'
+- name: 🟢 cool [white] 🌐 |#54| · 3618ms
   type: vless
-  server: 45.135.235.255
+  server: 104.17.50.53
   port: 443
-  uuid: 0b7337bf-dcff-432b-9ec6-b4fb6d22fc92
+  uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
   network: ws
   udp: true
   tls: true
-  server-name: worker3.fivon81984.workers.dev
-  client-fingerprint: firefox
+  server-name: jp3.yohototo.top
+  client-fingerprint: qq
   ws-opts:
-    path: /NxEvrDKOG7eWhZ20?ed=2560
-- name: '🔴 18 🇪🇺обход глушилок | БС #43'
-  type: vless
-  server: 31.43.179.0
-  port: 443
-  uuid: 1bc29b34-0a7d-4252-97bb-1cc3514e7d42
-  network: ws
-  udp: true
-  tls: true
-  server-name: worker3.xomoh98816.workers.dev
-  client-fingerprint: firefox
-  ws-opts:
-    path: /LF5LdoZelHLG07nl
+    path: /tyxyws
     headers:
-      Host: worker3.xomoh98816.workers.dev
-- name: '🔴 16 🇪🇺обход глушилок | БС #37'
+      Host: jp3.yohototo.top
+- name: 🔵 cool [white] 🌐 |#40| · 1623ms
   type: vless
-  server: 50.7.95.230
+  server: 104.27.46.35
   port: 443
-  uuid: 2232d904-8e6a-4202-8240-6efd8aec02e9
-  network: tcp
-  udp: true
-  tls: true
-  server-name: main.jarbook.net
-  reality-opts:
-    public-key: gJoMHh97teLxW92Z_3DI8qdSulqBlb9sW6mthYPEEBk
-    short-id: d889ac17
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🔴 Notorgames_0 #21'
-  type: vless
-  server: 191.217.217.82
-  port: 443
-  uuid: 372931d3-91c5-4564-b79c-041302de9a17
-  network: tcp
-  udp: true
-  tls: true
-  server-name: nl6.soshelper.space
-  reality-opts:
-    public-key: 9UG9zvrDpiPgY_J0dvB-n10ygEw3FzJ2qT8PFtITUBE
-    short-id: e06e30590f288e0f
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🔴 Notorgames_0 #42'
-  type: vless
-  server: 31.77.28.173
-  port: 443
-  uuid: 372931d3-91c5-4564-b79c-041302de9a17
-  network: tcp
-  udp: true
-  tls: true
-  server-name: nl4.soshelper.space
-  reality-opts:
-    public-key: 9UG9zvrDpiPgY_J0dvB-n10ygEw3FzJ2qT8PFtITUBE
-    short-id: e06e30590f288e0f
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🔴 13 🇪🇺обход глушилок | Эстония #03'
-  type: vless
-  server: 185.155.55.12
-  port: 8443
-  uuid: 5c09e56b-f97f-4360-8f01-eb4d39202095
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ee-nf.reddotcorp.org
-  reality-opts:
-    public-key: ApMfbcEyBOve6DxXoBNVu3bCCzQ7XCEYB4ummsDtTBE
-    short-id: 661766b2bcef440a
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🔴 Notorgames_0 #49'
-  type: vless
-  server: 5.253.86.3
-  port: 443
-  uuid: 8197b9b9-8945-460f-99c9-325ef8a8a7c3
-  network: tcp
-  udp: true
-  tls: true
-  server-name: nl3.gofizz.in
-  reality-opts:
-    public-key: 51ZCyVOxvcD_smARtd9mV-3Rh_WurOzMGRFxk9u2Kgo
-    short-id: fa1754221e4c5f9e
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🔴 17 🇪🇺обход глушилок | БС #39'
-  type: vless
-  server: 185.18.250.2
-  port: 443
-  uuid: c07a5829-7555-48ac-a08a-0799332b32e1
+  uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
   network: ws
   udp: true
   tls: true
-  server-name: worker3.kexaxik407.workers.dev
+  server-name: jp3.yohototo.top
   client-fingerprint: firefox
   ws-opts:
-    path: /6q9UJmS2CckAEFb1?ed=2560
-- name: '🔴 15 🇪🇺обход глушилок | БС #36'
+    path: /tyxyws
+    headers:
+      Host: jp3.yohototo.top
+- name: 🔵 cool [white] 🌐 |#61| · 2817ms
   type: vless
-  server: 194.55.239.51
+  server: 104.18.42.98
   port: 443
-  uuid: df03600f-f20a-4b8c-955c-cdcf96b1a4b2
+  uuid: 4e4f1f70-5e56-4a76-bb9d-db087f4690c4
+  network: ws
+  udp: true
+  tls: true
+  server-name: jp3.yohototo.top
+  client-fingerprint: chrome
+  ws-opts:
+    path: /tyxyws
+    headers:
+      Host: jp3.yohototo.top
+- name: LTE/5G [owpn.org]
+  type: vless
+  server: 176.108.245.115
+  port: 443
+  uuid: f2788ea1-92c8-468a-97a0-6c89d8981a1e
   network: tcp
   udp: true
   tls: true
-  server-name: 7xncdn.shardtech.pro
+  server-name: e.mail.ru
   reality-opts:
-    public-key: exMJ2DIglSgZ7Ly4qR83kRJs6RGzVk-qJMg7Qz-kCRs
-    short-id: 55901e05c3d5dfd3
+    public-key: zUoZY6itMFK6fVuQHj2VSEqe4T9-nUW4ZOvlMOMjhjY
+    short-id: 79658bb84b7162e8
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: '🔴 Notorgames_0 #56'
+- name: 🇩🇪Обходы
   type: vless
-  server: 85.14.243.91
-  port: 8443
-  uuid: e75ad2eb-6c1f-45ce-8023-f5f10875df66
-  network: grpc
+  server: 91.215.43.80
+  port: 443
+  uuid: 1f4349be-c43d-4567-a078-2f4738653e4e
+  network: ws
   udp: true
   tls: true
-  server-name: edge-7577e858223c.eu-cdn539.com
-  reality-opts:
-    public-key: dPnrpjfG_vzjH20n0W7qNbWB5-dMxNSjeo2BpIsrXAE
-    short-id: bca958b54462eba5
+  server-name: my.sand.api.downloader-pet.xyz
   client-fingerprint: firefox
-  grpc-opts:
-    grpc-service-name: workspace6c036b2914c6
-- name: '🔴 🌀 CYBERPORTAL | White Keys #61 t.me/rjsxrd'
+  alpn:
+  - http/1.1
+  ws-opts:
+    path: /gateway/v1/ws/74c4d5e82a8e50ccf09fc628c17dc9be
+- name: 🇵🇱Обходы
+  type: vless
+  server: 91.215.42.63
+  port: 443
+  uuid: 937bbf39-1a17-4cab-a571-675b31a7130b
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: me.nehtar.ru
+  client-fingerprint: firefox
+  alpn:
+  - h2
+  - http/1.1
+  xhttp-opts:
+    path: /api/users/loadChunk/
+    host: me.nehtar.ru
+- name: '🇵🇱Обходы #2'
+  type: vless
+  server: 95.129.236.171
+  port: 443
+  uuid: 937bbf39-1a17-4cab-a571-675b31a7130b
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: my.console.pc-club.app
+  client-fingerprint: firefox
+  alpn:
+  - h2
+  - http/1.1
+  xhttp-opts:
+    path: /api/users/loadChunk/
+    host: my.console.pc-club.app
+- name: '🌀 CYBERPORTAL | White Keys #61 t.me/rjsxrd'
   type: vless
   server: 95.129.234.113
   port: 8443
@@ -363,178 +313,21 @@ proxies:
   xhttp-opts:
     path: /ccxf5snr06b8xxb6
     host: is-tw-relay.cdn.cachefleet.com
-- name: '🔴 🌀 CYBERPORTAL | White Keys #123 t.me/rjsxrd'
+- name: 'BUNKER ⚡ | Канада 🇨🇦 #05 | YT×TG×GPT×GEM | 186ms'
   type: vless
-  server: 95.129.234.108
+  server: dfsto.whitenw.net
   port: 8443
-  uuid: b229d38c-35ec-4a0b-9c86-8fceba243d6c
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: linden-crest.cdn.cachefleet.com
-  client-fingerprint: firefox
-  alpn:
-  - h2
-  xhttp-opts:
-    path: /ccxf5snr06b8xxb6
-    host: fafeqdhlett2p5la6d.cdn.cachefleet.com
-- name: 🔴 🇷🇺Россия • Белый список 2 ▶️
-  type: vless
-  server: 129.101.98.60
-  port: 443
-  uuid: e75ad2eb-6c1f-45ce-8023-f5f10875df66
+  uuid: b432a23a-acff-425c-bf69-70480cd6ed09
   network: tcp
   udp: true
   tls: true
-  server-name: ru7e2bab87cc39.eu-cdn539.com
+  server-name: passport.yandex.ru
   reality-opts:
-    public-key: lews1n_fypGexd_dMofEO4Vy1ULsFeVIFa90MMY3pm4
-    short-id: 3992cc7fb9fcbe58
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 🇩🇪 LTE - Обход глушилок №32 | @vpnruss1
-  type: vless
-  server: 167.17.69.171
-  port: 443
-  uuid: 00144519-7e0d-476b-8d28-435576af9262
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.cloudflare.com
-  reality-opts:
-    public-key: ALT8hIGeZEhi0sQFbXP_ntBg8Xo-v7i0YCLrqTnBxRk
-    short-id: 0990d22f
-  client-fingerprint: edge
-  flow: xtls-rprx-vision
-- name: 'Notorgames_0 #4'
-  type: vless
-  server: 199.232.249.182
-  port: 443
-  uuid: 003ec416-45f0-462a-8030-016fe0a71703
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: huesos.fastly.com
-  xhttp-opts:
-    path: /
-    host: v2.global.ssl.fastly.net
-  client-fingerprint: chrome
-- name: 🇩🇪 LTE - Обход глушилок №14 | @vpnruss1
-  type: vless
-  server: 195.123.213.28
-  port: 443
-  uuid: 02fcc1a4-ee90-4970-8bbb-4ffaa8109d24
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.cloudflare.com
-  reality-opts:
-    public-key: NMgy1XgCSXExOg6Tg8xG9lCWttMF6sjdpB41lZy6FWo
-    short-id: 5c256336e3b673fa
-  client-fingerprint: chrome
-  flow: xtls-rprx-vision
-- name: 'Notorgames_0 #5'
-  type: vless
-  server: 80.243.228.13
-  port: 2085
-  uuid: 034c3011-c422-45bf-ad79-987ba3aa559e
-  network: grpc
-  udp: true
-  grpc-opts:
-    grpc-service-name: vless
-- name: 'Notorgames_0 #6'
-  type: vless
-  server: 80.243.228.4
-  port: 2085
-  uuid: 034c3011-c422-45bf-ad79-987ba3aa559e
-  network: grpc
-  udp: true
-  grpc-opts:
-    grpc-service-name: vless
-- name: 'Notorgames_0 #9'
-  type: vless
-  server: 93.190.9.115
-  port: 3090
-  uuid: 034c3011-c422-45bf-ad79-987ba3aa559e
-  network: grpc
-  udp: true
-  grpc-opts:
-    grpc-service-name: vless
-- name: 'Notorgames_0 #10'
-  type: vless
-  server: 93.190.9.142
-  port: 3090
-  uuid: 034c3011-c422-45bf-ad79-987ba3aa559e
-  network: grpc
-  udp: true
-  grpc-opts:
-    grpc-service-name: vless
-- name: 'Notorgames_0 #11'
-  type: vless
-  server: 93.190.9.85
-  port: 3090
-  uuid: 034c3011-c422-45bf-ad79-987ba3aa559e
-  network: grpc
-  udp: true
-  grpc-opts:
-    grpc-service-name: vless
-- name: 'Notorgames_0 #8'
-  type: vless
-  server: 89.125.175.24
-  port: 8443
-  uuid: 052d73c9-1735-4008-b58c-e3a085dc2a37
-  network: tcp
-  udp: true
-  tls: true
-  server-name: uk-room07.filesnap.tech
-  reality-opts:
-    public-key: 48j01Jsa4o8zfmCGEFoVjn-YeALM80-DSG_-nAZUBDM
-    short-id: dbef98744832b751
+    public-key: pNj1rPSs9XjNpf30e8DjGbNBU1fp58CzFrxP36_D42U
+    short-id: b470934eb6924098
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🇩🇪 LTE - Обход глушилок №19 | @vpnruss1
-  type: vless
-  server: 47.253.226.114
-  port: 443
-  uuid: 055a1ce8-2a16-4a0d-a2c2-22826c9b2413
-  network: tcp
-  udp: true
-  tls: true
-  server-name: www.cloudflare.com
-  reality-opts:
-    public-key: Svl81isn16RPAFnjtmYw7A6TPnsEPLHuYYaJht65Rzc
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '2563. 🇸🇬 VLESS | SNI: whitecreeper.pages.dev | TG: @wlrustg'
-  type: vless
-  server: 172.67.65.56
-  port: 2053
-  uuid: 099244b9-2168-4dbd-870e-cbbe9d6eb573
-  network: ws
-  udp: true
-  tls: true
-  server-name: whitecreeper.pages.dev
-  client-fingerprint: chrome
-  ws-opts:
-    path: /proxyip
-    headers:
-      Host: whitecreeper.pages.dev
-- name: 'Notorgames_0 #7'
-  type: vless
-  server: 80.96.108.29
-  port: 8443
-  uuid: 11512726-b692-406f-ab49-7b28f44a8294
-  network: xhttp
-  udp: true
-  tls: true
-  server-name: md.gorobsub.com
-  reality-opts:
-    public-key: _LNT4Kf7pPmeEBAnmJ7xsBu3y6Kih0Ew9AFVoDa3QSg
-  client-fingerprint: chrome
-  xhttp-opts:
-    path: /ae1b809ceb77
-    host: 80.96.108.29
-- name: 🇩🇪 LTE - Обход глушилок №20 | @vpnruss1
+- name: 🇩🇪 LTE - Обход глушилок №21 №1 | @vpnruss1
   type: vless
   server: 193.163.203.170
   port: 443
@@ -548,178 +341,425 @@ proxies:
     short-id: b28db60d77c50b4f
   client-fingerprint: chrome
   flow: xtls-rprx-vision
-- name: '🔴 Notorgames_0 #20'
+- name: '🇺🇸 США | 🔗 Каскад [#РКП] #2'
   type: vless
-  server: 188.166.182.158
+  server: 95.129.236.50
   port: 443
-  uuid: 1ab92b9c-9a46-4a06-9a12-1c118fd138f6
+  uuid: 1547ed3d-3bb7-4153-afdc-8eb3e9373c84
+  network: ws
+  udp: true
+  tls: true
+  server-name: video.get.downloader-pet.xyz
+  client-fingerprint: firefox
+  ws-opts:
+    path: /gateway/v1/ws/de963c1a03a37c66383da198813099b1
+    headers:
+      Host: video.get.downloader-pet.xyz
+- name: '🔴 🇰🇿 Казахстан OT@Hy2UDP (WIFI/LTE) #205'
+  type: vless
+  server: 176.12.79.242
+  port: 443
+  uuid: 3cd95e58-9f0a-47e1-9937-64a58e949aa5
   network: tcp
   udp: true
   tls: true
-  server-name: www.bing.com
+  server-name: stats.vk-portal.net
   reality-opts:
-    public-key: 8aRRz5a2rhOHIRjE3o3qckxmQNWh-IVGTv16Snyze2M
-    short-id: c44f5e04e67b2c74
+    public-key: 6eN2NciEaZis5J4muRRqpfLQ1OglI3A8lNSTmAGo6Do
+    short-id: 3c6fc84d
+  client-fingerprint: firefox
   flow: xtls-rprx-vision
+- name: 🔴 🇷🇺Универсальный Lte 📶 0.3
+  type: vless
+  server: 91.185.83.91
+  port: 3443
+  uuid: 49b42507-8781-46a4-8fcc-0b404690c85d
+  network: tcp
+  udp: true
+  tls: true
+  server-name: max.ru
+  reality-opts:
+    public-key: xRukBdpLBrpjscF9MQHksxhY5VsD-8w_LiR-8dW733c
+    short-id: ba6c54703a6b7626
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 🔴 [458ms
+  type: vless
+  server: russia.whitenet.online
+  port: 443
+  uuid: 4ce38652-b84c-5aab-8b2c-f897a217b41b
+  network: tcp
+  udp: true
+  tls: true
+  server-name: vk.com
+  reality-opts:
+    public-key: xdNyDss0OLTu3z6kcdg8X2wfTOLtmDTobE2on3vKe34
+    short-id: ab1cd2
   client-fingerprint: chrome
-- name: '🔴 Notorgames_0 #33'
+  flow: xtls-rprx-vision
+- name: 🔴 🇩🇪 LTE - Обход глушилок №15 №1 | @vpnruss1
   type: vless
-  server: 212.69.135.27
+  server: 217.60.25.100
   port: 8443
-  uuid: 1b8a6692-d057-41f8-a108-7a02daefcfd6
+  uuid: 5dd429fa-3fa6-44d0-bce6-01b84ce846f1
   network: tcp
   udp: true
   tls: true
-  server-name: uk-room05.filesnap.tech
+  server-name: max.ru
   reality-opts:
-    public-key: FdZlh9FC4ay9OGnKG6K_iNqhz1I3tWDfNZhxrDYuQl8
-    short-id: 7da3ba09a037e956
+    public-key: wh9zHZTegXrUKKsAKvM7habKnQ7QK3ii71NRjlKVLWc
+    short-id: 76f3d7039ad727bf
+  client-fingerprint: qq
+  flow: xtls-rprx-vision
+- name: 🔴 Автоподбор
+  type: vless
+  server: 185.220.223.25
+  port: 443
+  uuid: 6338c01a-310e-42c3-bf4f-2a20e161054b
+  network: tcp
+  udp: true
+  tls: true
+  server-name: lv.aiage.work
+  reality-opts:
+    public-key: ds-U8G06uZvV9qFhAeO16dwS9Nkcw_coYr_4puEUGFg
+    short-id: 3c6afdc4124d0560
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🔴 🇳🇱 Нидерланды [🏳️LTE] | 🥭🔧
+- name: '🔴 🇳🇱 Нидерланды · LTE · ❔ · #20'
   type: vless
-  server: 201.51.11.65
+  server: 213.165.39.134
   port: 443
-  uuid: 1e2b9c0c-4f9b-56f5-a062-1c4f2d2aa200
+  uuid: 6a251a93-8eee-43b5-92ed-ecadedcfd0a8
   network: tcp
   udp: true
   tls: true
-  server-name: absolute-disaster.org
+  server-name: platform-api.max.ru
   reality-opts:
-    public-key: GiDgVRVYrTkv1mZJeFVWkr736Iey2kqLM6L0eUbffV8
-  client-fingerprint: firefox
-  flow: xtls-rprx-vision
-- name: '🔴 Notorgames_0 #37'
-  type: vless
-  server: 212.87.190.249
-  port: 443
-  uuid: 2208b003-78b1-453c-b5ca-ce847ff0efd6
-  network: grpc
-  udp: true
-  tls: true
-  server-name: 557e58g.pl8.h1clayd.click
-  reality-opts:
-    public-key: ms5yeTlBCbAEEeWIbn_bV72Q9SQfpcJz6_VqNgF7ABY
-    short-id: 43a5ba8f49a5e91a
-  client-fingerprint: firefox
-- name: '🔴 Notorgames_0 #52'
-  type: vless
-  server: 557e58g.pl8.h1clayd.click
-  port: 443
-  uuid: 2208b003-78b1-453c-b5ca-ce847ff0efd6
-  network: grpc
-  udp: true
-  tls: true
-  server-name: 557e58g.pl8.h1clayd.click
-  reality-opts:
-    public-key: ms5yeTlBCbAEEeWIbn_bV72Q9SQfpcJz6_VqNgF7ABY
-    short-id: 43a5ba8f49a5e91a
-  client-fingerprint: firefox
-- name: '🔴 🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #48'
-  type: vless
-  server: 177.177.215.45
-  port: 444
-  uuid: 254f28cb-d0c1-41e9-a06b-f2155213ff04
-  network: tcp
-  udp: true
-  tls: true
-  server-name: ams2.shtil.io
+    public-key: Gtz3xOdQdWSocdx4NNie6s-bsa9VDiG6thqanJ4h31s
+    short-id: 6f3332a09b0ab6d1
   client-fingerprint: chrome
-- name: '🔴 Notorgames_0 #13'
+  flow: xtls-rprx-vision
+- name: '🔴 🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #170'
   type: vless
-  server: 153.56.229.218
+  server: 78.17.178.125
   port: 443
-  uuid: 26843758-24de-4f76-b5d0-624038e353c4
+  uuid: 6c713691-3ca2-4446-ad25-113d1bed6b03
   network: tcp
   udp: true
   tls: true
-  server-name: 71b840t.de7.h1clayd.click
+  server-name: cdn.tbank.ru
   reality-opts:
-    public-key: 3wFF83gtIA0sXj-6GGCAa--oQbSr0MVUj0FBc-0QmiE
-    short-id: e572b6579ea525d4
-  client-fingerprint: firefox
-- name: '🔴 Notorgames_0 #7'
+    public-key: jcp4Lj_qYzxtkalm_XFjrmvqEMGRG7sb19yMwLe16WE
+    short-id: e0215064d8d1fd7c
+  client-fingerprint: qq
+  flow: xtls-rprx-vision
+- name: 🔴 РФ LTE bestcdn
   type: vless
-  server: 147.45.47.101
-  port: 8443
-  uuid: 27f26dee-9cf1-4cca-93f8-9ac23d311408
+  server: 188.72.110.51
+  port: 443
+  uuid: 9590c31e-e9bb-45fa-b8e5-01f3647fa8cc
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: bestcdn.subantistress.tech
+  client-fingerprint: firefox
+  alpn:
+  - h2
+  - http/1.1
+  xhttp-opts:
+    path: /api/v2/feed/posts/
+    host: bestcdn.subantistress.tech
+- name: '🔴 Notorgames_0 #53'
+  type: vless
+  server: 88.216.214.159
+  port: 443
+  uuid: a30903dc-1bf0-4be5-8b1b-603a3a56211c
   network: tcp
   udp: true
   tls: true
-  server-name: apple.com
+  server-name: api-svc-mgr.galioncc.com
   reality-opts:
-    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
-    short-id: 6ba85179e30d4fc2
+    public-key: drl7nndYdfzZY1aQ0eUAWmNV0nsHig2uDnu9siy9biQ
+    short-id: a7c92e4b10d6f835
+  client-fingerprint: firefox
+- name: 🔴 🇵🇱Обходы
+  type: vless
+  server: 91.215.43.248
+  port: 443
+  uuid: a5893c8b-28a2-4947-9a1c-708db25506c3
+  network: ws
+  udp: true
+  tls: true
+  server-name: my.kempekl.online
+  client-fingerprint: chrome
+  ws-opts:
+    path: /gateway/v1/ws/a64eb463966ba9c4bfd628f1de0362ae
+    headers:
+      Host: my.kempekl.online
+- name: '🔴 Notorgames_0 #34'
+  type: vless
+  server: 213.176.92.168
+  port: 10444
+  uuid: ba52cc43-700d-4040-9444-29214c98e6e0
+  network: tcp
+  udp: true
+  tls: true
+  server-name: video.yandex.ru
+  reality-opts:
+    public-key: 0oTkcqwLTUNLnSOP-VUWErmy6usAIg-biBE6ioZO-Vo
+    short-id: 8debcf36f1cc69ff
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 🔴 🇩🇪 LTE - Обход глушилок №41 №1 | @vpnruss1
+  type: vless
+  server: 45.38.143.210
+  port: 30584
+  uuid: cebc5f19-18d9-48e6-9029-fb4b04caf393
+  network: tcp
+  udp: true
+  tls: true
+  server-name: m.vk.com
+  reality-opts:
+    public-key: 2hV4TY2ygvQ7ISa5o4u_FUKXzlIhLgbsScE8M1h0m3Y
+    short-id: 67ece882d65d0f1a
+  client-fingerprint: chrome
+- name: 🔴 🇩🇪Обходы
+  type: vless
+  server: 95.129.236.149
+  port: 443
+  uuid: efa160b9-7267-4fa4-8698-711503cc9482
+  network: ws
+  udp: true
+  tls: true
+  server-name: d.nehtar.ru
+  client-fingerprint: firefox
+  alpn:
+  - http/1.1
+  ws-opts:
+    path: /gateway/v1/ws/74c4d5e82a8e50ccf09fc628c17dc9be
+- name: 🔴 🇫🇮 Финляндия [🏳️LTE] | 🥭🔧
+  type: vless
+  server: 109.71.245.99
+  port: 443
+  uuid: f09ca6e3-c547-4f91-95f5-77f34c4282ac
+  network: tcp
+  udp: true
+  tls: true
+  server-name: www.yandex.ru
+  reality-opts:
+    public-key: zICjcFkqI720WzWpHXRLjSFYmcu4Hd0jk1iDEo1nUAU
+    short-id: c27a26812e5d2208
   client-fingerprint: firefox
   flow: xtls-rprx-vision
-- name: 🔴 🇷🇺+RU+#01+•+VLESS+Reality+[Белый+список]+(3519ms)
+- name: '🔴 🇫🇮 Финляндия [🏳️LTE] | 🥭🔧 #2'
   type: vless
-  server: 37.235.247.81
+  server: 109.71.245.99
   port: 8443
-  uuid: 2ae0670d-0bdf-409e-9a55-4e970252d378
+  uuid: f09ca6e3-c547-4f91-95f5-77f34c4282ac
+  network: xhttp
+  udp: true
+  tls: true
+  server-name: music.yandex.ru
+  reality-opts:
+    public-key: oeaOjlr45iDKroH7RIhUq-epbwnRAmG7jeXZHlbSzj4
+    short-id: 835bff7d47836e88
+  client-fingerprint: firefox
+  xhttp-opts:
+    path: /029d7a23f5ba
+- name: '🔴 Notorgames_0 #17'
+  type: vless
+  server: 185.86.147.211
+  port: 443
+  uuid: fd90e601-a56c-42b8-aab7-aa02d26fcb04
+  network: ws
+  udp: true
+  tls: true
+  server-name: 185.86.147.211
+  ws-opts:
+    path: /assets/chunk/AFaAJmUwqcwd
+    headers:
+      Host: 185.86.147.211
+  client-fingerprint: chrome
+- name: 🔴 🇩🇪 LTE - Обход глушилок №29 №1 | @vpnruss1
+  type: vless
+  server: 15.204.97.195
+  port: 23576
+  uuid: 48ff2b70-e180-582f-8866-d9a2edeed5f5
   network: tcp
   udp: true
   tls: true
-  server-name: apple.com
+  server-name: fuck.rkn
   reality-opts:
-    public-key: SbVKOEMjK0sIlbwg4akyBg5mL5KZwwB-ed4eEE7YnRc
-    short-id: 6ba85179e30d4fc2
+    public-key: 1y5h2FGWKXTJ9xLPCqPo6Mw7RxoZzh6fGkEQKNxpZ3s
+    short-id: '01'
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 🔴 🇩🇪 LTE - Обход глушилок №25 №1 | @vpnruss1
+  type: vless
+  server: 15.204.97.197
+  port: 23576
+  uuid: 48ff2b70-e180-582f-8866-d9a2edeed5f5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: fuck.rkn
+  reality-opts:
+    public-key: 1y5h2FGWKXTJ9xLPCqPo6Mw7RxoZzh6fGkEQKNxpZ3s
+    short-id: '01'
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 🔴 🇩🇪 LTE - Обход глушилок №32 №1 | @vpnruss1
+  type: vless
+  server: 15.204.97.198
+  port: 23576
+  uuid: 48ff2b70-e180-582f-8866-d9a2edeed5f5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: fuck.rkn
+  reality-opts:
+    public-key: 1y5h2FGWKXTJ9xLPCqPo6Mw7RxoZzh6fGkEQKNxpZ3s
+    short-id: '01'
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 🔴 🇩🇪 LTE - Обход глушилок №30 №1 | @vpnruss1
+  type: vless
+  server: 15.204.97.206
+  port: 23576
+  uuid: 48ff2b70-e180-582f-8866-d9a2edeed5f5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: fuck.rkn
+  reality-opts:
+    public-key: 1y5h2FGWKXTJ9xLPCqPo6Mw7RxoZzh6fGkEQKNxpZ3s
+    short-id: '01'
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 🔴 🇩🇪 LTE - Обход глушилок №31 №1 | @vpnruss1
+  type: vless
+  server: 15.204.97.214
+  port: 23576
+  uuid: 48ff2b70-e180-582f-8866-d9a2edeed5f5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: fuck.rkn
+  reality-opts:
+    public-key: 1y5h2FGWKXTJ9xLPCqPo6Mw7RxoZzh6fGkEQKNxpZ3s
+    short-id: '01'
+  client-fingerprint: firefox
+  flow: xtls-rprx-vision
+- name: 🔴 🇩🇪 LTE - Обход глушилок №28 №1 | @vpnruss1
+  type: vless
+  server: 15.204.97.216
+  port: 23576
+  uuid: 48ff2b70-e180-582f-8866-d9a2edeed5f5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: fuck.rkn
+  reality-opts:
+    public-key: 1y5h2FGWKXTJ9xLPCqPo6Mw7RxoZzh6fGkEQKNxpZ3s
+    short-id: '01'
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 🔴 🇩🇪 LTE - Обход глушилок №27 №1 | @vpnruss1
+  type: vless
+  server: 15.204.97.219
+  port: 23576
+  uuid: 48ff2b70-e180-582f-8866-d9a2edeed5f5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: fuck.rkn
+  reality-opts:
+    public-key: 1y5h2FGWKXTJ9xLPCqPo6Mw7RxoZzh6fGkEQKNxpZ3s
+    short-id: '01'
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 🔴 🇩🇪 LTE - Обход глушилок №3 №1 | @vpnruss1
+  type: vless
+  server: 51.158.206.103
+  port: 23576
+  uuid: 48ff2b70-e180-582f-8866-d9a2edeed5f5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: fuck.rkn
+  reality-opts:
+    public-key: 1y5h2FGWKXTJ9xLPCqPo6Mw7RxoZzh6fGkEQKNxpZ3s
+    short-id: '01'
+  client-fingerprint: chrome
+  flow: xtls-rprx-vision
+- name: 🔴 🇩🇪 LTE - Обход глушилок №4 №1 | @vpnruss1
+  type: vless
+  server: 51.158.206.19
+  port: 23576
+  uuid: 48ff2b70-e180-582f-8866-d9a2edeed5f5
+  network: tcp
+  udp: true
+  tls: true
+  server-name: fuck.rkn
+  reality-opts:
+    public-key: 1y5h2FGWKXTJ9xLPCqPo6Mw7RxoZzh6fGkEQKNxpZ3s
+    short-id: '01'
   client-fingerprint: firefox
   flow: xtls-rprx-vision
 proxy-groups:
 - name: ♻️ Auto
   type: url-test
   proxies:
-  - 🟢 cool [white] 🌐 |#13| · 337ms
-  - 🟢 cool [white] 🌐 |#31| · 393ms
-  - 🟢 cool [white] 🌐 |#12| · 436ms
-  - 🟢 Телефон / Роутер [owpn.org] · 661ms
-  - 🟢 cool [white] 🌐 |#4| · 812ms
-  - 🟢 cool [white] 🌐 |#24| · 815ms
-  - 🟢 Notorgames_0 · 887ms
-  - 🟢 cool [white] 🇺🇸 |#25| · 1663ms
-  - 🟢 cool [white] 🌐 |#43| · 2081ms
-  - 🟢 cool [white] 🌐 |#42| · 2702ms
-  - 🟢 cool [white] 🌐 |#10| · 2771ms
-  - 🟢 🇧🇾 Беларусь 3 · 4417ms
-  - 🔵 cool [white] 🌐 |#6| · 680ms
-  - 🔵 Телефон / Роутер [owpn.org] · 1101ms
-  - 🔵 cool [white] 🌐 |#45| · 1312ms
-  - '🔴 19 🇪🇺обход глушилок | БС #45'
-  - '🔴 18 🇪🇺обход глушилок | БС #43'
-  - '🔴 16 🇪🇺обход глушилок | БС #37'
-  - '🔴 Notorgames_0 #21'
-  - '🔴 Notorgames_0 #42'
-  - '🔴 13 🇪🇺обход глушилок | Эстония #03'
-  - '🔴 Notorgames_0 #49'
-  - '🔴 17 🇪🇺обход глушилок | БС #39'
-  - '🔴 15 🇪🇺обход глушилок | БС #36'
-  - '🔴 Notorgames_0 #56'
-  - '🔴 🌀 CYBERPORTAL | White Keys #61 t.me/rjsxrd'
-  - '🔴 🌀 CYBERPORTAL | White Keys #123 t.me/rjsxrd'
-  - 🔴 🇷🇺Россия • Белый список 2 ▶️
-  - 🇩🇪 LTE - Обход глушилок №32 | @vpnruss1
-  - 'Notorgames_0 #4'
-  - 🇩🇪 LTE - Обход глушилок №14 | @vpnruss1
-  - 'Notorgames_0 #5'
-  - 'Notorgames_0 #6'
-  - 'Notorgames_0 #9'
-  - 'Notorgames_0 #10'
-  - 'Notorgames_0 #11'
-  - 'Notorgames_0 #8'
-  - 🇩🇪 LTE - Обход глушилок №19 | @vpnruss1
-  - '2563. 🇸🇬 VLESS | SNI: whitecreeper.pages.dev | TG: @wlrustg'
-  - 'Notorgames_0 #7'
-  - 🇩🇪 LTE - Обход глушилок №20 | @vpnruss1
-  - '🔴 Notorgames_0 #20'
-  - '🔴 Notorgames_0 #33'
-  - 🔴 🇳🇱 Нидерланды [🏳️LTE] | 🥭🔧
-  - '🔴 Notorgames_0 #37'
-  - '🔴 Notorgames_0 #52'
-  - '🔴 🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #48'
-  - '🔴 Notorgames_0 #13'
-  - '🔴 Notorgames_0 #7'
-  - 🔴 🇷🇺+RU+#01+•+VLESS+Reality+[Белый+список]+(3519ms)
+  - 🟢 Notorgames_0 · 439ms
+  - 🟢 🇧🇾 Беларусь 2 · 445ms
+  - '🟢 🇦🇪 ОАЭ OT@Hy2UDP (WIFI/LTE) #162 · 524ms'
+  - 🟢 cool [white] 🌐 |#57| · 562ms
+  - 🟢 cool [white] 🌐 |#13| · 586ms
+  - '🟢 🌀 CYBERPORTAL | White Keys #16 t.me/rjsxrd · 690ms'
+  - 🟢 Телефон / Роутер [owpn.org] · 882ms
+  - 🟢 cool [white] 🌐 |#50| · 920ms
+  - 🟢 Телефон / Роутер [owpn.org] · 947ms
+  - 🟢 cool [white] 🌐 |#39| · 1305ms
+  - 🟢 cool [white] 🇺🇸 |#19| · 1416ms
+  - 🟢 cool [white] 🌐 |#14| · 1532ms
+  - 🟢 cool [white] 🌐 |#68| · 1794ms
+  - 🟢 cool [white] 🌐 |#27| · 2853ms
+  - 🟢 cool [white] 🌐 |#54| · 3618ms
+  - 🔵 cool [white] 🌐 |#40| · 1623ms
+  - 🔵 cool [white] 🌐 |#61| · 2817ms
+  - LTE/5G [owpn.org]
+  - 🇩🇪Обходы
+  - 🇵🇱Обходы
+  - '🇵🇱Обходы #2'
+  - '🌀 CYBERPORTAL | White Keys #61 t.me/rjsxrd'
+  - 'BUNKER ⚡ | Канада 🇨🇦 #05 | YT×TG×GPT×GEM | 186ms'
+  - 🇩🇪 LTE - Обход глушилок №21 №1 | @vpnruss1
+  - '🇺🇸 США | 🔗 Каскад [#РКП] #2'
+  - '🔴 🇰🇿 Казахстан OT@Hy2UDP (WIFI/LTE) #205'
+  - 🔴 🇷🇺Универсальный Lte 📶 0.3
+  - 🔴 [458ms
+  - 🔴 🇩🇪 LTE - Обход глушилок №15 №1 | @vpnruss1
+  - 🔴 Автоподбор
+  - '🔴 🇳🇱 Нидерланды · LTE · ❔ · #20'
+  - '🔴 🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #170'
+  - 🔴 РФ LTE bestcdn
+  - '🔴 Notorgames_0 #53'
+  - 🔴 🇵🇱Обходы
+  - '🔴 Notorgames_0 #34'
+  - 🔴 🇩🇪 LTE - Обход глушилок №41 №1 | @vpnruss1
+  - 🔴 🇩🇪Обходы
+  - 🔴 🇫🇮 Финляндия [🏳️LTE] | 🥭🔧
+  - '🔴 🇫🇮 Финляндия [🏳️LTE] | 🥭🔧 #2'
+  - '🔴 Notorgames_0 #17'
+  - 🔴 🇩🇪 LTE - Обход глушилок №29 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №25 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №32 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №30 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №31 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №28 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №27 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №3 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №4 №1 | @vpnruss1
   url: http://www.gstatic.com/generate_204
   interval: 300
   tolerance: 50
@@ -727,55 +767,55 @@ proxy-groups:
   type: select
   proxies:
   - ♻️ Auto
-  - 🟢 cool [white] 🌐 |#13| · 337ms
-  - 🟢 cool [white] 🌐 |#31| · 393ms
-  - 🟢 cool [white] 🌐 |#12| · 436ms
-  - 🟢 Телефон / Роутер [owpn.org] · 661ms
-  - 🟢 cool [white] 🌐 |#4| · 812ms
-  - 🟢 cool [white] 🌐 |#24| · 815ms
-  - 🟢 Notorgames_0 · 887ms
-  - 🟢 cool [white] 🇺🇸 |#25| · 1663ms
-  - 🟢 cool [white] 🌐 |#43| · 2081ms
-  - 🟢 cool [white] 🌐 |#42| · 2702ms
-  - 🟢 cool [white] 🌐 |#10| · 2771ms
-  - 🟢 🇧🇾 Беларусь 3 · 4417ms
-  - 🔵 cool [white] 🌐 |#6| · 680ms
-  - 🔵 Телефон / Роутер [owpn.org] · 1101ms
-  - 🔵 cool [white] 🌐 |#45| · 1312ms
-  - '🔴 19 🇪🇺обход глушилок | БС #45'
-  - '🔴 18 🇪🇺обход глушилок | БС #43'
-  - '🔴 16 🇪🇺обход глушилок | БС #37'
-  - '🔴 Notorgames_0 #21'
-  - '🔴 Notorgames_0 #42'
-  - '🔴 13 🇪🇺обход глушилок | Эстония #03'
-  - '🔴 Notorgames_0 #49'
-  - '🔴 17 🇪🇺обход глушилок | БС #39'
-  - '🔴 15 🇪🇺обход глушилок | БС #36'
-  - '🔴 Notorgames_0 #56'
-  - '🔴 🌀 CYBERPORTAL | White Keys #61 t.me/rjsxrd'
-  - '🔴 🌀 CYBERPORTAL | White Keys #123 t.me/rjsxrd'
-  - 🔴 🇷🇺Россия • Белый список 2 ▶️
-  - 🇩🇪 LTE - Обход глушилок №32 | @vpnruss1
-  - 'Notorgames_0 #4'
-  - 🇩🇪 LTE - Обход глушилок №14 | @vpnruss1
-  - 'Notorgames_0 #5'
-  - 'Notorgames_0 #6'
-  - 'Notorgames_0 #9'
-  - 'Notorgames_0 #10'
-  - 'Notorgames_0 #11'
-  - 'Notorgames_0 #8'
-  - 🇩🇪 LTE - Обход глушилок №19 | @vpnruss1
-  - '2563. 🇸🇬 VLESS | SNI: whitecreeper.pages.dev | TG: @wlrustg'
-  - 'Notorgames_0 #7'
-  - 🇩🇪 LTE - Обход глушилок №20 | @vpnruss1
-  - '🔴 Notorgames_0 #20'
-  - '🔴 Notorgames_0 #33'
-  - 🔴 🇳🇱 Нидерланды [🏳️LTE] | 🥭🔧
-  - '🔴 Notorgames_0 #37'
-  - '🔴 Notorgames_0 #52'
-  - '🔴 🇳🇱 Нидерланды OT@Hy2UDP (WIFI/LTE) #48'
-  - '🔴 Notorgames_0 #13'
-  - '🔴 Notorgames_0 #7'
-  - 🔴 🇷🇺+RU+#01+•+VLESS+Reality+[Белый+список]+(3519ms)
+  - 🟢 Notorgames_0 · 439ms
+  - 🟢 🇧🇾 Беларусь 2 · 445ms
+  - '🟢 🇦🇪 ОАЭ OT@Hy2UDP (WIFI/LTE) #162 · 524ms'
+  - 🟢 cool [white] 🌐 |#57| · 562ms
+  - 🟢 cool [white] 🌐 |#13| · 586ms
+  - '🟢 🌀 CYBERPORTAL | White Keys #16 t.me/rjsxrd · 690ms'
+  - 🟢 Телефон / Роутер [owpn.org] · 882ms
+  - 🟢 cool [white] 🌐 |#50| · 920ms
+  - 🟢 Телефон / Роутер [owpn.org] · 947ms
+  - 🟢 cool [white] 🌐 |#39| · 1305ms
+  - 🟢 cool [white] 🇺🇸 |#19| · 1416ms
+  - 🟢 cool [white] 🌐 |#14| · 1532ms
+  - 🟢 cool [white] 🌐 |#68| · 1794ms
+  - 🟢 cool [white] 🌐 |#27| · 2853ms
+  - 🟢 cool [white] 🌐 |#54| · 3618ms
+  - 🔵 cool [white] 🌐 |#40| · 1623ms
+  - 🔵 cool [white] 🌐 |#61| · 2817ms
+  - LTE/5G [owpn.org]
+  - 🇩🇪Обходы
+  - 🇵🇱Обходы
+  - '🇵🇱Обходы #2'
+  - '🌀 CYBERPORTAL | White Keys #61 t.me/rjsxrd'
+  - 'BUNKER ⚡ | Канада 🇨🇦 #05 | YT×TG×GPT×GEM | 186ms'
+  - 🇩🇪 LTE - Обход глушилок №21 №1 | @vpnruss1
+  - '🇺🇸 США | 🔗 Каскад [#РКП] #2'
+  - '🔴 🇰🇿 Казахстан OT@Hy2UDP (WIFI/LTE) #205'
+  - 🔴 🇷🇺Универсальный Lte 📶 0.3
+  - 🔴 [458ms
+  - 🔴 🇩🇪 LTE - Обход глушилок №15 №1 | @vpnruss1
+  - 🔴 Автоподбор
+  - '🔴 🇳🇱 Нидерланды · LTE · ❔ · #20'
+  - '🔴 🇩🇪 Германия OT@Hy2UDP (WIFI/LTE) #170'
+  - 🔴 РФ LTE bestcdn
+  - '🔴 Notorgames_0 #53'
+  - 🔴 🇵🇱Обходы
+  - '🔴 Notorgames_0 #34'
+  - 🔴 🇩🇪 LTE - Обход глушилок №41 №1 | @vpnruss1
+  - 🔴 🇩🇪Обходы
+  - 🔴 🇫🇮 Финляндия [🏳️LTE] | 🥭🔧
+  - '🔴 🇫🇮 Финляндия [🏳️LTE] | 🥭🔧 #2'
+  - '🔴 Notorgames_0 #17'
+  - 🔴 🇩🇪 LTE - Обход глушилок №29 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №25 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №32 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №30 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №31 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №28 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №27 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №3 №1 | @vpnruss1
+  - 🔴 🇩🇪 LTE - Обход глушилок №4 №1 | @vpnruss1
 rules:
 - MATCH,🚀 Proxy
