@@ -59,6 +59,12 @@ def _tag(u, p, delays, l3_tg, l3_yt, tag_l3):
     return q
 
 
+def _srv_key(p):
+    """Один сервер = одна строка в best, независимо от имени в ссылке."""
+    return (p.get('type'), str(p.get('server', '')).lower(), p.get('port'),
+            p.get('uuid') or p.get('password') or '', p.get('cipher') or '')
+
+
 async def run(config_path='config.yaml'):
     cfg = load(config_path)
     log.init(cfg)
@@ -290,7 +296,7 @@ async def run(config_path='config.yaml'):
     all_dead = all_dropped = all_unchecked = 0
     all_mode_used = mode_all
 
-    # 1) выбрасываем доказанных мертвецов (L2 fail) — главный фильтр качества
+    # 1) выбрасываем доказанных мертвецов (L2 fail)
     if drop_dead and delays:
         kept = []
         for u, p in all_pool:
@@ -362,20 +368,54 @@ async def run(config_path='config.yaml'):
     all_txt = sorted(set(all_txt))
     wl_txt = sorted({u for u, _ in wl_pairs})
 
-    # ---------- best: топ по реальной задержке ----------
-    verified = [(u, dict(p)) for u, p in wl_pairs if delays.get(u)]
-    seen_v = {u for u, _ in verified}
-    for u, p in all_pool:
-        if not delays.get(u) or u in seen_v:
+    # ---------- best: по умолчанию ТОЛЬКО белый список ----------
+    best_source = str(getattr(cfg.limits, 'best_source', 'wl') or 'wl').lower()
+
+    def _all_candidates():
+        return [(u, _tag(u, p, delays, l3_tg, l3_yt, tag_l3))
+                for u, p in all_pool
+                if p.get('type') in all_proto and validate(p)[0]]
+
+    if best_source == 'all':
+        cand_best = _all_candidates()
+    elif best_source == 'both':
+        cand_best = list(wl_pairs)
+        seen_b = {u for u, _ in cand_best}
+        cand_best += [(u, q) for u, q in _all_candidates() if u not in seen_b]
+    else:  # wl
+        cand_best = list(wl_pairs)
+
+    def _tier(u):
+        """Доказательства важнее пинга: замер с US-раннера смещён в пользу US."""
+        d = delays.get(u)
+        tg, yt = l3_tg.get(u), l3_yt.get(u)
+        if d and tg is True and yt is True:
+            return 0
+        if d and tg is True:
+            return 1
+        if d:
+            return 2
+        return 3
+
+    cand_best.sort(key=lambda up: (_tier(up[0]),
+                                   delays.get(up[0]) or 10 ** 9,
+                                   -dates.get(up[0], now_utc()).timestamp(),
+                                   up[0]))
+    best, seen_srv = [], set()
+    limit_best = int(cfg.limits.best)
+    for u, p in cand_best:
+        k = _srv_key(p)
+        if k in seen_srv:
             continue
-        if p.get('type') not in all_proto or not validate(p)[0]:
-            continue
-        verified.append((u, _tag(u, p, delays, l3_tg, l3_yt, tag_l3)))
-        seen_v.add(u)
-    best = sorted(verified, key=lambda up: (delays.get(up[0]) or 10 ** 9, up[0]))
-    best = best[:int(cfg.limits.best)]
+        seen_srv.add(k)
+        best.append((u, p))
+        if len(best) >= limit_best:
+            break
     best_txt = [u for u, _ in best]
     best_clash = unique_names([dict(p) for _, p in best])
+    best_verified = sum(1 for u, _ in best if delays.get(u))
+    log.info(f'⭐ best: источник={best_source}, отобрано {len(best)} '
+             f'(подтверждено ядром {best_verified}, уникальных серверов {len(seen_srv)})')
 
     wl_verified = sum(1 for u, _ in wl_pairs if delays.get(u))
     stats = {
@@ -384,8 +424,10 @@ async def run(config_path='config.yaml'):
         'parsed': len(parsed), 'parse_fails': fails,
         'alive_l0': len(alive), 'core_checked': core_checked,
         'all_before': n_before, 'all': len(all_txt), 'all_yaml': len(all_clash),
-        'wl': len(wl_txt), 'wl_yaml': len(wl_clash), 'best': len(best_txt),
+        'wl': len(wl_txt), 'wl_yaml': len(wl_clash),
         'wl_reasons': wl_reasons, 'wl_verified': wl_verified,
+        'best': len(best_txt), 'best_source': best_source,
+        'best_verified': best_verified,
         'verify_level': level,
         'l3': {
             'checked_tg': len(l3_tg), 'checked_yt': len(l3_yt),
