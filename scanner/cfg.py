@@ -22,7 +22,7 @@ _DEFAULTS = {
     'windows': {'wl_days': 50, 'all_days': 10},
     'limits': {
         'tme_pages': 10, 'tme_sub_pages': 2, 'telethon_limit': 1000,
-        'max_embed': 200, 'per_endpoint': 5, 'best': 50,
+        'max_embed': 200, 'per_endpoint': 5, 'best': 50, 'best_source': 'wl',
         'max_attachment_mb': 2, 'core_max': 6000, 'core_batch': 800,
         'core_retry_split': 2,
     },
@@ -48,7 +48,7 @@ _DEFAULTS = {
             'enabled': False,
             'telegram': ['https://api.telegram.org/robots.txt',
                          'https://api.telegram.org/'],
-            'youtube': ['httpv://www.youtube.com/generate_204',
+            'youtube': ['https://www.youtube.com/generate_204',
                         'https://i.ytimg.com/generate_204',
                         'https://yt3.ggpht.com/generate_204'],
             'sanity_check': True,
@@ -94,6 +94,7 @@ _DEFAULTS = {
 # YAML 1.1 превращает off/on/yes/no в bool. Возвращаем им строковый смысл.
 _BOOL_WORDS = {True: 'on', False: 'off'}
 _MODES = {'both', 'any', 'telegram', 'youtube', 'off', 'on'}
+_BEST_SOURCES = {'wl', 'all', 'both'}
 
 
 class _Obj(dict):
@@ -166,6 +167,8 @@ def _env_override(cfg):
             cfg.setdefault('limits', {})['core_batch'] = int(os.getenv('CORE_BATCH'))
         except ValueError:
             pass
+    if os.getenv('BEST_SOURCE', '').strip():
+        cfg.setdefault('limits', {})['best_source'] = os.getenv('BEST_SOURCE').strip().lower()
     return cfg
 
 
@@ -184,4 +187,7 @@ def load(path='config.yaml'):
         l3.setdefault('require_mode_all', legacy)
     l3['require_mode_all'] = _norm_mode(l3.get('require_mode_all'), 'both')
     l3['require_mode_wl'] = _norm_mode(l3.get('require_mode_wl'), 'off')
+
+    bs = str(merged['limits'].get('best_source', 'wl') or 'wl').strip().lower()
+    merged['limits']['best_source'] = bs if bs in _BEST_SOURCES else 'wl'
     return _Obj(merged)
