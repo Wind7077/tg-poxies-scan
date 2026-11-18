@@ -4,15 +4,15 @@ mode: Rule
 log-level: info
 external-controller: 127.0.0.1:9090
 proxies:
-- name: '🟢 2618. 🇺🇸 SS | TG: @wlrustg · 20ms'
+- name: 🟢 ProxyRift 1536 · 23ms
   type: ss
-  server: 38.128.66.32
+  server: 38.64.138.135
   port: 19999
   cipher: aes-256-gcm
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: 🟢 ProxyRift 013 · 26ms
+- name: 🟢 ProxyRift 113 · 25ms
   type: ss
   server: 138.199.42.68
   port: 8080
@@ -20,28 +20,28 @@ proxies:
   password: 14fFPrbezE3HDZzsMOr6
   udp: true
   network: tcp
-- name: '🟢 2612. 🇺🇸 SS | TG: @wlrustg · 38ms'
-  type: ss
-  server: 216.106.178.169
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: '🟢 2880. SS | TG: @wlrustg · 40ms'
-  type: ss
-  server: 67.220.73.178
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: 🟢 🇺🇸 AetrisVPN · 40ms
+- name: 🟢 ProxyRift 007 · 29ms
   type: ss
   server: 138.199.42.68
   port: 8080
   cipher: rc4-md5
   password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: 🟢 🇺🇸 · 36ms
+  type: ss
+  server: 167.88.62.56
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 1526 · 38ms
+  type: ss
+  server: 167.88.62.56
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
 - name: '🟢 2617. 🇺🇸 SS | TG: @wlrustg · 41ms'
@@ -52,7 +52,7 @@ proxies:
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: '🟢 7085. 🇺🇸 SS | TG: @wlrustg · 42ms'
+- name: '🟢 2618. 🇺🇸 SS | TG: @wlrustg · 42ms'
   type: ss
   server: 38.128.66.32
   port: 19999
@@ -60,33 +60,45 @@ proxies:
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: 🟢 🇺🇸 · 42ms
-  type: ss
-  server: 167.88.62.56
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
+- name: '🟢 6734. VMESS | SNI: 23.162.200.198 | TG: @wlrustg · 47ms'
+  type: vmess
+  server: 23.162.200.198
+  port: 18000
+  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
+  alterId: 0
+  cipher: auto
+  tls: false
   network: tcp
-- name: 🟢 ProxyRift 1887 · 43ms
-  type: ss
-  server: 167.88.62.56
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
-  network: tcp
-- name: '🟢 2619. 🇺🇸 SS | TG: @wlrustg · 43ms'
-  type: ss
-  server: 38.128.66.32
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: '🟢 7100. 🇺🇸 SS | TG: @wlrustg · 52ms'
+- name: '🟢 2682. SS | TG: @wlrustg · 48ms'
   type: ss
   server: 167.88.62.203
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 38.128.66.32) | @RaViraNet
+    · 48ms
+  type: ss
+  server: 38.128.66.32
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: '🟢 2880. SS | TG: @wlrustg · 51ms'
+  type: ss
+  server: 67.220.73.178
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 216.106.178.169) | @RaViraNet
+    t.me/rjsxrd · 52ms
+  type: ss
+  server: 216.106.178.169
   port: 19999
   cipher: aes-256-gcm
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
@@ -94,13 +106,63 @@ proxies:
   network: tcp
 - name: 🟢 🇺🇸 · 53ms
   type: ss
-  server: 135.148.42.13
+  server: 40.160.86.43
   port: 8388
   cipher: aes-256-gcm
   password: itzvpn@321
   udp: true
   network: tcp
-- name: '🟢 2680. SS | TG: @wlrustg · 54ms'
+- name: 🟢 ProxyRift 100 · 53ms
+  type: vmess
+  server: 134.195.196.211
+  port: 18000
+  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
+  alterId: 0
+  cipher: auto
+  tls: false
+  network: tcp
+  udp: true
+- name: '🟢 2878. SS | TG: @wlrustg · 55ms'
+  type: ss
+  server: 67.220.73.178
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 036 · 56ms
+  type: ss
+  server: 137.184.174.93
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 302 · 56ms
+  type: ss
+  server: 138.197.141.58
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: '🟢 7123. 🇺🇸 SS | TG: @wlrustg · 58ms'
+  type: ss
+  server: 38.91.100.39
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: '🟢 2879. SS | TG: @wlrustg · 58ms'
+  type: ss
+  server: 67.220.73.178
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: '🟢 2680. SS | TG: @wlrustg · 59ms'
   type: ss
   server: 167.17.67.171
   port: 19999
@@ -108,20 +170,20 @@ proxies:
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: '🟢 2682. SS | TG: @wlrustg · 56ms'
+- name: '🟢 6881. SS | TG: @wlrustg · 59ms'
   type: ss
-  server: 167.88.62.203
-  port: 19999
+  server: 15.204.246.108
+  port: 8881
   cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  password: kDWvXYZoTBcGkC4
   udp: true
   network: tcp
-- name: 🟢 ProxyRift 1891 · 57ms
+- name: 🟢 🇺🇸 · 59ms
   type: ss
-  server: 38.64.138.135
-  port: 19999
+  server: 135.148.42.13
+  port: 8388
   cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  password: itzvpn@321
   udp: true
   network: tcp
 - name: 🟢 🇨🇦 · 60ms
@@ -132,23 +194,24 @@ proxies:
   password: itzvpn@321
   udp: true
   network: tcp
-- name: '🟢 2879. SS | TG: @wlrustg · 61ms'
+- name: 🟢 ProxyRift 083 · 61ms
   type: ss
-  server: 67.220.73.178
+  server: 185.215.132.9
   port: 19999
   cipher: aes-256-gcm
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: '🟢 @SylphNet | 1405-08-27 #69 · 61ms'
+- name: '🟢 7122. 🇨🇦 SS | TG: @wlrustg · 62ms'
   type: ss
-  server: 184.107.106.78
-  port: 8388
-  cipher: aes-256-gcm
-  password: itzvpn@321
+  server: 137.184.174.93
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
   udp: true
   network: tcp
-- name: '🟢 2614. 🇺🇸 SS | TG: @wlrustg · 62ms'
+- name: 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 216.106.178.169) | @RaViraNet
+    · 63ms
   type: ss
   server: 216.106.178.169
   port: 19999
@@ -156,46 +219,12 @@ proxies:
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: 🟢 🇺🇸 🔓PLAIN · 67.220.85.46:18000 · 🌐GL · 62ms
-  type: vmess
-  server: 67.220.85.46
-  port: 18000
-  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
-  alterId: 0
-  cipher: auto
-  tls: false
-  network: tcp
-  udp: true
-- name: 🟢 ProxyRift 1897 · 63ms
+- name: '🟢 2995. SS | TG: @wlrustg · 63ms'
   type: ss
-  server: 167.88.63.39
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: '🟢 2832. SS | TG: @wlrustg · 63ms'
-  type: ss
-  server: 38.121.43.225
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: 🟢 🇺🇸 США [#РКП] · 64ms
-  type: ss
-  server: 13.221.89.140
-  port: 12484
-  cipher: 2022-blake3-aes-128-gcm
-  password: BNhhskYHimA5UahLI2p2xA==
-  udp: true
-  network: tcp
-- name: '🟢 2613. 🇺🇸 SS | TG: @wlrustg · 64ms'
-  type: ss
-  server: 216.106.178.169
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  server: 98.98.79.198
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
   udp: true
   network: tcp
 - name: '🟢 7154. 🇺🇸 SS | TG: @wlrustg · 64ms'
@@ -206,30 +235,6 @@ proxies:
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: 🟢 ProxyRift 1906 · 64ms
-  type: ss
-  server: 184.107.106.77
-  port: 8388
-  cipher: aes-256-gcm
-  password: itzvpn@321
-  udp: true
-  network: tcp
-- name: 🟢 🇺🇸 · 64ms
-  type: ss
-  server: 40.160.86.43
-  port: 8388
-  cipher: aes-256-gcm
-  password: itzvpn@321
-  udp: true
-  network: tcp
-- name: '🟢 2996. SS | TG: @wlrustg · 64ms'
-  type: ss
-  server: 98.98.79.198
-  port: 8080
-  cipher: rc4-md5
-  password: 14fFPrbezE3HDZzsMOr6
-  udp: true
-  network: tcp
 - name: '🟢 2998. SS | TG: @wlrustg · 64ms'
   type: ss
   server: 98.98.79.198
@@ -238,7 +243,15 @@ proxies:
   password: 14fFPrbezE3HDZzsMOr6
   udp: true
   network: tcp
-- name: '🟢 7132. 🇺🇸 SS | TG: @wlrustg · 65ms'
+- name: '🟢 2997. SS | TG: @wlrustg · 65ms'
+  type: ss
+  server: 98.98.79.198
+  port: 8080
+  cipher: rc4-md5
+  password: 14fFPrbezE3HDZzsMOr6
+  udp: true
+  network: tcp
+- name: '🟢 2839. SS | TG: @wlrustg · 66ms'
   type: ss
   server: 38.22.17.129
   port: 19999
@@ -246,39 +259,15 @@ proxies:
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: '🟢 @SylphNet | 1405-08-27 #235 · 65ms'
+- name: '🟢 @SylphNet | 1405-08-27 #75 · 66ms'
   type: ss
-  server: 167.88.63.99
-  port: 19999
+  server: 184.107.106.77
+  port: 8388
   cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  password: itzvpn@321
   udp: true
   network: tcp
-- name: '🟢 2830. 🇺🇸 SS | TG: @wlrustg · 65ms'
-  type: ss
-  server: 38.121.43.18
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: 🟢 ProxyRift 1902 · 65ms
-  type: ss
-  server: 38.22.17.139
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: 🟢 ProxyRift 1896 · 65ms
-  type: ss
-  server: 38.22.17.214
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: '🟢 @SylphNet | 1405-08-27 #63 · 65ms'
+- name: 🟢 ProxyRift 029 · 66ms
   type: ss
   server: 40.160.86.43
   port: 8388
@@ -286,7 +275,7 @@ proxies:
   password: itzvpn@321
   udp: true
   network: tcp
-- name: '🟢 2995. SS | TG: @wlrustg · 65ms'
+- name: '🟢 2996. SS | TG: @wlrustg · 66ms'
   type: ss
   server: 98.98.79.198
   port: 8080
@@ -294,26 +283,15 @@ proxies:
   password: 14fFPrbezE3HDZzsMOr6
   udp: true
   network: tcp
-- name: 🟢 ProxyRift 773 · 65ms
-  type: trojan
-  server: 66.23.203.21
-  port: 59689
-  password: ae7eb4dwyaz25pxwgq59
-  network: tcp
-  udp: true
-  tls: true
-  server-name: 66.23.203.21
-  skip-cert-verify: true
-  client-fingerprint: chrome
-- name: '🟢 7227. 🇨🇦 SS | TG: @wlrustg · 66ms'
+- name: '🟢 7095. 🇺🇸 SS | TG: @wlrustg · 67ms'
   type: ss
-  server: 15.235.57.6
-  port: 8080
-  cipher: chacha20-ietf-poly1305
-  password: kxhnt5jtykd328cg
+  server: 38.121.43.225
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: '🟢 2620. SS | TG: @wlrustg · 66ms'
+- name: '🟢 7132. 🇺🇸 SS | TG: @wlrustg · 67ms'
   type: ss
   server: 38.22.17.129
   port: 19999
@@ -321,7 +299,72 @@ proxies:
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: '🟢 7097. 🇺🇸 SS | TG: @wlrustg · 66ms'
+- name: 🟢 ProxyRift 1559 · 67ms
+  type: ss
+  server: 135.148.42.13
+  port: 8388
+  cipher: aes-256-gcm
+  password: itzvpn@321
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 1548 · 67ms
+  type: ss
+  server: 184.107.106.77
+  port: 8388
+  cipher: aes-256-gcm
+  password: itzvpn@321
+  udp: true
+  network: tcp
+- name: '🟢 2961. SS | TG: @wlrustg · 67ms'
+  type: ss
+  server: 200.102.179.179
+  port: 8388
+  cipher: aes-256-gcm
+  password: itzvpn@321
+  udp: true
+  network: tcp
+- name: '🟢 2962. 🇺🇸 SS | TG: @wlrustg · 67ms'
+  type: ss
+  server: 200.102.179.179
+  port: 8388
+  cipher: aes-256-gcm
+  password: itzvpn@321
+  udp: true
+  network: tcp
+- name: '🟢 @SylphNet | 1405-08-27 #110 · 68ms'
+  type: ss
+  server: 54.39.96.233
+  port: 8080
+  cipher: chacha20-ietf-poly1305
+  password: 2cvhpvdg4x7mvbps
+  udp: true
+  network: tcp
+- name: 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 216.106.178.169) | @RaViraNet
+    · 68ms
+  type: ss
+  server: 216.106.178.169
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 1535 · 68ms
+  type: ss
+  server: 38.22.17.214
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 🇨🇦 · 68ms
+  type: ss
+  server: 192.99.151.230
+  port: 8388
+  cipher: aes-256-gcm
+  password: itzvpn@321
+  udp: true
+  network: tcp
+- name: '🟢 7097. 🇺🇸 SS | TG: @wlrustg · 69ms'
   type: ss
   server: 38.22.17.219
   port: 19999
@@ -329,63 +372,7 @@ proxies:
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: '🟢 2835. SS | TG: @wlrustg · 66ms'
-  type: ss
-  server: 38.121.43.231
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: 🟢 ProxyRift 133 · 66ms
-  type: ss
-  server: 185.215.132.9
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: '🟢 2973. 🇨🇦 SS | TG: @wlrustg · 66ms'
-  type: ss
-  server: 51.222.12.127
-  port: 445
-  cipher: aes-256-gcm
-  password: zDNVedRFPQexG9v
-  udp: true
-  network: tcp
-- name: '🟢 2997. SS | TG: @wlrustg · 66ms'
-  type: ss
-  server: 98.98.79.198
-  port: 8080
-  cipher: rc4-md5
-  password: 14fFPrbezE3HDZzsMOr6
-  udp: true
-  network: tcp
-- name: '🟢 2846. SS | TG: @wlrustg · 67ms'
-  type: ss
-  server: 38.91.100.39
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: '🟢 7093. 🇺🇸 SS | TG: @wlrustg · 68ms'
-  type: ss
-  server: 167.88.63.99
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: '🟢 @SylphNet | 1405-08-27 #95 · 68ms'
-  type: ss
-  server: 185.215.132.9
-  port: 19999
-  cipher: aes-256-gcm
-  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
-  udp: true
-  network: tcp
-- name: '🟢 2827. SS | TG: @wlrustg · 68ms'
+- name: '🟢 2830. 🇺🇸 SS | TG: @wlrustg · 69ms'
   type: ss
   server: 38.121.43.18
   port: 19999
@@ -393,17 +380,35 @@ proxies:
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: '🟢 2845. SS | TG: @wlrustg · 68ms'
+- name: '🟢 2834. SS | TG: @wlrustg · 69ms'
   type: ss
-  server: 38.22.17.139
+  server: 38.121.43.231
   port: 19999
   cipher: aes-256-gcm
   password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
   udp: true
   network: tcp
-- name: '🟢 2962. 🇺🇸 SS | TG: @wlrustg · 68ms'
+- name: '🟢 6483. VMESS | SNI: 67.220.85.46 | TG: @wlrustg · 69ms'
+  type: vmess
+  server: 67.220.85.46
+  port: 18000
+  uuid: f8c8dc3d-0d37-46b0-8b34-a7232882fcfe
+  alterId: 0
+  cipher: aes-128-gcm
+  tls: false
+  network: tcp
+  udp: true
+- name: '🟢 2832. SS | TG: @wlrustg · 70ms'
   type: ss
-  server: 200.102.179.179
+  server: 38.121.43.225
+  port: 19999
+  cipher: aes-256-gcm
+  password: ZRpgaBeGxtENIXgvhpkZBKz9GnWRS2dYcx9O+a2iwN4=
+  udp: true
+  network: tcp
+- name: 🟢 ProxyRift 112 · 70ms
+  type: ss
+  server: 40.160.86.43
   port: 8388
   cipher: aes-256-gcm
   password: itzvpn@321
@@ -413,56 +418,60 @@ proxy-groups:
 - name: ♻️ Auto
   type: url-test
   proxies:
-  - '🟢 2618. 🇺🇸 SS | TG: @wlrustg · 20ms'
-  - 🟢 ProxyRift 013 · 26ms
-  - '🟢 2612. 🇺🇸 SS | TG: @wlrustg · 38ms'
-  - '🟢 2880. SS | TG: @wlrustg · 40ms'
-  - 🟢 🇺🇸 AetrisVPN · 40ms
+  - 🟢 ProxyRift 1536 · 23ms
+  - 🟢 ProxyRift 113 · 25ms
+  - 🟢 ProxyRift 007 · 29ms
+  - 🟢 🇺🇸 · 36ms
+  - 🟢 ProxyRift 1526 · 38ms
   - '🟢 2617. 🇺🇸 SS | TG: @wlrustg · 41ms'
-  - '🟢 7085. 🇺🇸 SS | TG: @wlrustg · 42ms'
-  - 🟢 🇺🇸 · 42ms
-  - 🟢 ProxyRift 1887 · 43ms
-  - '🟢 2619. 🇺🇸 SS | TG: @wlrustg · 43ms'
-  - '🟢 7100. 🇺🇸 SS | TG: @wlrustg · 52ms'
+  - '🟢 2618. 🇺🇸 SS | TG: @wlrustg · 42ms'
+  - '🟢 6734. VMESS | SNI: 23.162.200.198 | TG: @wlrustg · 47ms'
+  - '🟢 2682. SS | TG: @wlrustg · 48ms'
+  - 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 38.128.66.32) | @RaViraNet
+    · 48ms
+  - '🟢 2880. SS | TG: @wlrustg · 51ms'
+  - 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 216.106.178.169) | @RaViraNet
+    t.me/rjsxrd · 52ms
   - 🟢 🇺🇸 · 53ms
-  - '🟢 2680. SS | TG: @wlrustg · 54ms'
-  - '🟢 2682. SS | TG: @wlrustg · 56ms'
-  - 🟢 ProxyRift 1891 · 57ms
+  - 🟢 ProxyRift 100 · 53ms
+  - '🟢 2878. SS | TG: @wlrustg · 55ms'
+  - 🟢 ProxyRift 036 · 56ms
+  - 🟢 ProxyRift 302 · 56ms
+  - '🟢 7123. 🇺🇸 SS | TG: @wlrustg · 58ms'
+  - '🟢 2879. SS | TG: @wlrustg · 58ms'
+  - '🟢 2680. SS | TG: @wlrustg · 59ms'
+  - '🟢 6881. SS | TG: @wlrustg · 59ms'
+  - 🟢 🇺🇸 · 59ms
   - 🟢 🇨🇦 · 60ms
-  - '🟢 2879. SS | TG: @wlrustg · 61ms'
-  - '🟢 @SylphNet | 1405-08-27 #69 · 61ms'
-  - '🟢 2614. 🇺🇸 SS | TG: @wlrustg · 62ms'
-  - 🟢 🇺🇸 🔓PLAIN · 67.220.85.46:18000 · 🌐GL · 62ms
-  - 🟢 ProxyRift 1897 · 63ms
-  - '🟢 2832. SS | TG: @wlrustg · 63ms'
-  - 🟢 🇺🇸 США [#РКП] · 64ms
-  - '🟢 2613. 🇺🇸 SS | TG: @wlrustg · 64ms'
+  - 🟢 ProxyRift 083 · 61ms
+  - '🟢 7122. 🇨🇦 SS | TG: @wlrustg · 62ms'
+  - 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 216.106.178.169) | @RaViraNet
+    · 63ms
+  - '🟢 2995. SS | TG: @wlrustg · 63ms'
   - '🟢 7154. 🇺🇸 SS | TG: @wlrustg · 64ms'
-  - 🟢 ProxyRift 1906 · 64ms
-  - 🟢 🇺🇸 · 64ms
-  - '🟢 2996. SS | TG: @wlrustg · 64ms'
   - '🟢 2998. SS | TG: @wlrustg · 64ms'
-  - '🟢 7132. 🇺🇸 SS | TG: @wlrustg · 65ms'
-  - '🟢 @SylphNet | 1405-08-27 #235 · 65ms'
-  - '🟢 2830. 🇺🇸 SS | TG: @wlrustg · 65ms'
-  - 🟢 ProxyRift 1902 · 65ms
-  - 🟢 ProxyRift 1896 · 65ms
-  - '🟢 @SylphNet | 1405-08-27 #63 · 65ms'
-  - '🟢 2995. SS | TG: @wlrustg · 65ms'
-  - 🟢 ProxyRift 773 · 65ms
-  - '🟢 7227. 🇨🇦 SS | TG: @wlrustg · 66ms'
-  - '🟢 2620. SS | TG: @wlrustg · 66ms'
-  - '🟢 7097. 🇺🇸 SS | TG: @wlrustg · 66ms'
-  - '🟢 2835. SS | TG: @wlrustg · 66ms'
-  - 🟢 ProxyRift 133 · 66ms
-  - '🟢 2973. 🇨🇦 SS | TG: @wlrustg · 66ms'
-  - '🟢 2997. SS | TG: @wlrustg · 66ms'
-  - '🟢 2846. SS | TG: @wlrustg · 67ms'
-  - '🟢 7093. 🇺🇸 SS | TG: @wlrustg · 68ms'
-  - '🟢 @SylphNet | 1405-08-27 #95 · 68ms'
-  - '🟢 2827. SS | TG: @wlrustg · 68ms'
-  - '🟢 2845. SS | TG: @wlrustg · 68ms'
-  - '🟢 2962. 🇺🇸 SS | TG: @wlrustg · 68ms'
+  - '🟢 2997. SS | TG: @wlrustg · 65ms'
+  - '🟢 2839. SS | TG: @wlrustg · 66ms'
+  - '🟢 @SylphNet | 1405-08-27 #75 · 66ms'
+  - 🟢 ProxyRift 029 · 66ms
+  - '🟢 2996. SS | TG: @wlrustg · 66ms'
+  - '🟢 7095. 🇺🇸 SS | TG: @wlrustg · 67ms'
+  - '🟢 7132. 🇺🇸 SS | TG: @wlrustg · 67ms'
+  - 🟢 ProxyRift 1559 · 67ms
+  - 🟢 ProxyRift 1548 · 67ms
+  - '🟢 2961. SS | TG: @wlrustg · 67ms'
+  - '🟢 2962. 🇺🇸 SS | TG: @wlrustg · 67ms'
+  - '🟢 @SylphNet | 1405-08-27 #110 · 68ms'
+  - 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 216.106.178.169) | @RaViraNet
+    · 68ms
+  - 🟢 ProxyRift 1535 · 68ms
+  - 🟢 🇨🇦 · 68ms
+  - '🟢 7097. 🇺🇸 SS | TG: @wlrustg · 69ms'
+  - '🟢 2830. 🇺🇸 SS | TG: @wlrustg · 69ms'
+  - '🟢 2834. SS | TG: @wlrustg · 69ms'
+  - '🟢 6483. VMESS | SNI: 67.220.85.46 | TG: @wlrustg · 69ms'
+  - '🟢 2832. SS | TG: @wlrustg · 70ms'
+  - 🟢 ProxyRift 112 · 70ms
   url: http://www.gstatic.com/generate_204
   interval: 300
   tolerance: 50
@@ -470,55 +479,59 @@ proxy-groups:
   type: select
   proxies:
   - ♻️ Auto
-  - '🟢 2618. 🇺🇸 SS | TG: @wlrustg · 20ms'
-  - 🟢 ProxyRift 013 · 26ms
-  - '🟢 2612. 🇺🇸 SS | TG: @wlrustg · 38ms'
-  - '🟢 2880. SS | TG: @wlrustg · 40ms'
-  - 🟢 🇺🇸 AetrisVPN · 40ms
+  - 🟢 ProxyRift 1536 · 23ms
+  - 🟢 ProxyRift 113 · 25ms
+  - 🟢 ProxyRift 007 · 29ms
+  - 🟢 🇺🇸 · 36ms
+  - 🟢 ProxyRift 1526 · 38ms
   - '🟢 2617. 🇺🇸 SS | TG: @wlrustg · 41ms'
-  - '🟢 7085. 🇺🇸 SS | TG: @wlrustg · 42ms'
-  - 🟢 🇺🇸 · 42ms
-  - 🟢 ProxyRift 1887 · 43ms
-  - '🟢 2619. 🇺🇸 SS | TG: @wlrustg · 43ms'
-  - '🟢 7100. 🇺🇸 SS | TG: @wlrustg · 52ms'
+  - '🟢 2618. 🇺🇸 SS | TG: @wlrustg · 42ms'
+  - '🟢 6734. VMESS | SNI: 23.162.200.198 | TG: @wlrustg · 47ms'
+  - '🟢 2682. SS | TG: @wlrustg · 48ms'
+  - 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 38.128.66.32) | @RaViraNet
+    · 48ms
+  - '🟢 2880. SS | TG: @wlrustg · 51ms'
+  - 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 216.106.178.169) | @RaViraNet
+    t.me/rjsxrd · 52ms
   - 🟢 🇺🇸 · 53ms
-  - '🟢 2680. SS | TG: @wlrustg · 54ms'
-  - '🟢 2682. SS | TG: @wlrustg · 56ms'
-  - 🟢 ProxyRift 1891 · 57ms
+  - 🟢 ProxyRift 100 · 53ms
+  - '🟢 2878. SS | TG: @wlrustg · 55ms'
+  - 🟢 ProxyRift 036 · 56ms
+  - 🟢 ProxyRift 302 · 56ms
+  - '🟢 7123. 🇺🇸 SS | TG: @wlrustg · 58ms'
+  - '🟢 2879. SS | TG: @wlrustg · 58ms'
+  - '🟢 2680. SS | TG: @wlrustg · 59ms'
+  - '🟢 6881. SS | TG: @wlrustg · 59ms'
+  - 🟢 🇺🇸 · 59ms
   - 🟢 🇨🇦 · 60ms
-  - '🟢 2879. SS | TG: @wlrustg · 61ms'
-  - '🟢 @SylphNet | 1405-08-27 #69 · 61ms'
-  - '🟢 2614. 🇺🇸 SS | TG: @wlrustg · 62ms'
-  - 🟢 🇺🇸 🔓PLAIN · 67.220.85.46:18000 · 🌐GL · 62ms
-  - 🟢 ProxyRift 1897 · 63ms
-  - '🟢 2832. SS | TG: @wlrustg · 63ms'
-  - 🟢 🇺🇸 США [#РКП] · 64ms
-  - '🟢 2613. 🇺🇸 SS | TG: @wlrustg · 64ms'
+  - 🟢 ProxyRift 083 · 61ms
+  - '🟢 7122. 🇨🇦 SS | TG: @wlrustg · 62ms'
+  - 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 216.106.178.169) | @RaViraNet
+    · 63ms
+  - '🟢 2995. SS | TG: @wlrustg · 63ms'
   - '🟢 7154. 🇺🇸 SS | TG: @wlrustg · 64ms'
-  - 🟢 ProxyRift 1906 · 64ms
-  - 🟢 🇺🇸 · 64ms
-  - '🟢 2996. SS | TG: @wlrustg · 64ms'
   - '🟢 2998. SS | TG: @wlrustg · 64ms'
-  - '🟢 7132. 🇺🇸 SS | TG: @wlrustg · 65ms'
-  - '🟢 @SylphNet | 1405-08-27 #235 · 65ms'
-  - '🟢 2830. 🇺🇸 SS | TG: @wlrustg · 65ms'
-  - 🟢 ProxyRift 1902 · 65ms
-  - 🟢 ProxyRift 1896 · 65ms
-  - '🟢 @SylphNet | 1405-08-27 #63 · 65ms'
-  - '🟢 2995. SS | TG: @wlrustg · 65ms'
-  - 🟢 ProxyRift 773 · 65ms
-  - '🟢 7227. 🇨🇦 SS | TG: @wlrustg · 66ms'
-  - '🟢 2620. SS | TG: @wlrustg · 66ms'
-  - '🟢 7097. 🇺🇸 SS | TG: @wlrustg · 66ms'
-  - '🟢 2835. SS | TG: @wlrustg · 66ms'
-  - 🟢 ProxyRift 133 · 66ms
-  - '🟢 2973. 🇨🇦 SS | TG: @wlrustg · 66ms'
-  - '🟢 2997. SS | TG: @wlrustg · 66ms'
-  - '🟢 2846. SS | TG: @wlrustg · 67ms'
-  - '🟢 7093. 🇺🇸 SS | TG: @wlrustg · 68ms'
-  - '🟢 @SylphNet | 1405-08-27 #95 · 68ms'
-  - '🟢 2827. SS | TG: @wlrustg · 68ms'
-  - '🟢 2845. SS | TG: @wlrustg · 68ms'
-  - '🟢 2962. 🇺🇸 SS | TG: @wlrustg · 68ms'
+  - '🟢 2997. SS | TG: @wlrustg · 65ms'
+  - '🟢 2839. SS | TG: @wlrustg · 66ms'
+  - '🟢 @SylphNet | 1405-08-27 #75 · 66ms'
+  - 🟢 ProxyRift 029 · 66ms
+  - '🟢 2996. SS | TG: @wlrustg · 66ms'
+  - '🟢 7095. 🇺🇸 SS | TG: @wlrustg · 67ms'
+  - '🟢 7132. 🇺🇸 SS | TG: @wlrustg · 67ms'
+  - 🟢 ProxyRift 1559 · 67ms
+  - 🟢 ProxyRift 1548 · 67ms
+  - '🟢 2961. SS | TG: @wlrustg · 67ms'
+  - '🟢 2962. 🇺🇸 SS | TG: @wlrustg · 67ms'
+  - '🟢 @SylphNet | 1405-08-27 #110 · 68ms'
+  - 🟢 🇺🇸 United States (сервер) | 🇺🇸 United States (выход 216.106.178.169) | @RaViraNet
+    · 68ms
+  - 🟢 ProxyRift 1535 · 68ms
+  - 🟢 🇨🇦 · 68ms
+  - '🟢 7097. 🇺🇸 SS | TG: @wlrustg · 69ms'
+  - '🟢 2830. 🇺🇸 SS | TG: @wlrustg · 69ms'
+  - '🟢 2834. SS | TG: @wlrustg · 69ms'
+  - '🟢 6483. VMESS | SNI: 67.220.85.46 | TG: @wlrustg · 69ms'
+  - '🟢 2832. SS | TG: @wlrustg · 70ms'
+  - 🟢 ProxyRift 112 · 70ms
 rules:
 - MATCH,🚀 Proxy
