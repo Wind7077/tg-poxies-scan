@@ -1,4 +1,5 @@
 import base64
+import html as html_mod
 import re
 from datetime import datetime, timezone
 from urllib.parse import parse_qsl, quote, urlencode, urlparse, urlsplit, urlunsplit
@@ -24,6 +25,12 @@ PROXY_RE = re.compile(r'(?:' + SCHEMES_ALT + r')://' + _URL_BODY + r'+(?:#[^\s"<
 URL_RE = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.I)
 ISSUE_RE = re.compile(r'(?:' + ISSUE_ALT + r')://' + _URL_BODY + r'+(?:#[^\s"<>]*)?', re.I)
 
+# Панели подписок (Remnawave/Marzban) отдают HTML: ключи лежат в атрибутах
+# кнопок «скопировать» или base64-блоком внутри <textarea>.
+_HTML_HINT = re.compile(r'<\s*(?:!doctype|html|body|div|script|textarea)', re.I)
+_URI_IN_HTML = re.compile(r'(?:' + SCHEMES_ALT + r')://[^\s"\'<>\\]+', re.I)
+_B64_BLOB = re.compile(r'[A-Za-z0-9+/=_-]{200,}')
+
 ISSUE_URLS = set()
 
 _AMP_RE = re.compile(r'&(?:amp|#0*38|#x0*26);', re.I)
@@ -31,6 +38,10 @@ _TRACK_KEYS = {'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_cont
                'fbclid', 'gclid', 'yclid', 'ysclid', 'ref_type', 'erid'}
 _STICKY = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 TME_RE = re.compile(r'https?://(?:t\.me|telegram\.me)/(?:s/)?([a-zA-Z0-9_]+)(?:/(\d+))?')
+
+# Обёртки-прокси: без подсказки клиента отдают HTML вместо подписки
+_KFWL_RE = re.compile(r'^(https?://p\.kfwl\.lol/)(.*)$', re.I)
+_KFWL_HINT = 'ua=happ/os=android/'
 
 # Голые TLD/суффиксы, которые regex выхватывает из обрезанных ссылок
 _BARE_TLDS = {'co.uk', 'org.uk', 'com', 'net', 'org', 'ru', 'su', 'io', 'dev', 'me',
@@ -118,6 +129,13 @@ def _sticky(url):
 def normalize_sub_url(url):
     if 'hub.mos.ru/' in url:
         url = url.replace('/-/raw/', '/raw/')
+    # p.kfwl.lol/<target> без опций отдаёт HTML-панель.
+    # Рабочий формат из проверенных подписок: /ua=happ/os=android/<target>
+    m = _KFWL_RE.match(url)
+    if m:
+        head, tail = m.group(1), m.group(2)
+        if tail.startswith(('http://', 'https://')):
+            url = head + _KFWL_HINT + tail
     try:
         p = urlsplit(url)
         if p.query:
@@ -237,10 +255,36 @@ def messages(html_text, cutoff, cfg):
     return out, urls, min_id
 
 
+def _from_html(body):
+    """Ключи из HTML-панели: атрибуты кнопок + base64-блоки."""
+    raw = html_mod.unescape(body)
+    out, seen = [], set()
+    for m in _URI_IN_HTML.finditer(raw):
+        u = clean_url(m.group(0))
+        if u and u not in seen:
+            seen.add(u)
+            out.append(u)
+    if not out:
+        for m in _B64_BLOB.finditer(raw):
+            dec = decode_base64(m.group(0))
+            if not dec:
+                continue
+            for p in PROXY_RE.findall(dec):
+                u = clean_url(p)
+                if u and u not in seen:
+                    seen.add(u)
+                    out.append(u)
+    return out
+
+
 def from_subscription(text, cfg):
     decoded = decode_base64(text)
     body = decoded if decoded and len(decoded) > 50 else text
     found = [clean_url(p) for p in PROXY_RE.findall(body)]
+    if not found and _HTML_HINT.search(body):
+        found = _from_html(body)
+        if found:
+            log.debug(f'🧩 ключи извлечены из HTML-панели: {len(found)}')
     for m in ISSUE_RE.finditer(body):
         ISSUE_URLS.add(clean_url(m.group(0)))
     log.STATS['sub_links'] += len(found)
