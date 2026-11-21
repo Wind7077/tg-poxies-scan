@@ -36,6 +36,19 @@ def classify_sources(lines, cfg):
     return web, embed, tg, subs
 
 
+def as_web(sources):
+    """Telethon-источники -> (web, embed) для чтения через t.me/s/."""
+    web, embed = [], []
+    for src in sources:
+        if re.search(r'/\d+$', src):
+            embed.append(src)
+        else:
+            chan = re.sub(r'^https?://(t\.me|telegram\.me)/(s/)?', '', src).strip('/')
+            if chan:
+                web.append(f'https://t.me/s/{chan}')
+    return web, embed
+
+
 async def web_channel(session, sem, channel_url, cutoff, pages, cfg):
     out, urls, before = [], [], None
     for _ in range(int(pages)):
@@ -79,7 +92,10 @@ def _attach_ok(msg, cfg, max_bytes):
 
 
 async def telethon_channels(sources, cutoff, cfg):
-    """Один клиент на все каналы; темы форумов; вложения. -> (items, urls)"""
+    """Один клиент на все каналы; темы форумов; вложения.
+    -> (items, urls, failed). failed — что НЕ удалось прочитать: пайплайн
+    доберёт эти каналы через t.me/s/. Раньше частичный отказ терялся молча.
+    """
     if not _tg_available(cfg):
         why = []
         if not TELETHON_OK:
@@ -89,7 +105,7 @@ async def telethon_channels(sources, cutoff, cfg):
         if not cfg.telegram.session_b64:
             why.append('session_b64 пуст')
         log.debug('Telethon: не настроен (' + '; '.join(why) + ')')
-        return [], []
+        return [], [], list(sources)
 
     sf = 'tg_session'
     try:
@@ -97,9 +113,9 @@ async def telethon_channels(sources, cutoff, cfg):
             f.write(base64.b64decode(cfg.telegram.session_b64))
     except Exception as e:
         log.debug(f'Telethon: ошибка сессии ({type(e).__name__})')
-        return [], []
+        return [], [], list(sources)
 
-    items, urls = [], []
+    items, urls, failed = [], [], []
     limit = int(cfg.limits.telethon_limit)
     max_bytes = int(cfg.limits.max_attachment_mb) * 1024 * 1024
     client = TelegramClient(sf, cfg.telegram.api_id, cfg.telegram.api_hash)
@@ -108,10 +124,11 @@ async def telethon_channels(sources, cutoff, cfg):
         await client.connect()
         if not await client.is_user_authorized():
             log.info('⚠️ Telethon: сессия не авторизована (протухла?)')
-            return [], []
+            return [], [], list(sources)
         for src in sources:
             m = re.match(r'https?://t\.me/(?:c/)?([a-zA-Z0-9_]+)(?:/(\d+))?', src)
             if not m:
+                failed.append(src)
                 continue
             chat, topic = m.group(1), int(m.group(2)) if m.group(2) else None
             if '/c/' in src:
@@ -121,10 +138,12 @@ async def telethon_channels(sources, cutoff, cfg):
                     pass
             try:
                 entity = await client.get_entity(chat)
-            except Exception:
-                log.debug('Telethon: источник недоступен')
+            except Exception as e:
+                log.debug(f'Telethon: недоступен {src} ({type(e).__name__})')
+                failed.append(src)
                 continue
             kw = {'reply_to': topic} if topic and getattr(entity, 'forum', False) else {}
+            got = 0
             try:
                 async for msg in client.iter_messages(entity, limit=limit, **kw):
                     if not msg.date:
@@ -132,6 +151,7 @@ async def telethon_channels(sources, cutoff, cfg):
                     dt = msg.date if msg.date.tzinfo else msg.date.replace(tzinfo=timezone.utc)
                     if dt < cutoff:
                         break
+                    got += 1
                     text = msg.text or msg.message or ''
                     for mm in PROXY_RE.finditer(text):
                         items.append((clean_url(mm.group(0)), dt, src))
@@ -163,9 +183,12 @@ async def telethon_channels(sources, cutoff, cfg):
                         elif getattr(msg, 'document', None):
                             docs_skip += 1
             except Exception as e:
-                log.debug(f'Telethon: ошибка чтения источника ({type(e).__name__})')
+                log.debug(f'Telethon: ошибка чтения {src} ({type(e).__name__})')
+                if not got:
+                    failed.append(src)
     except Exception as e:
         log.debug(f'Telethon: ошибка соединения ({type(e).__name__})')
+        return items, urls, list(sources)
     finally:
         try:
             await client.disconnect()
@@ -176,8 +199,8 @@ async def telethon_channels(sources, cutoff, cfg):
         except OSError:
             pass
     log.debug(f'Telethon: источников {len(sources)}, ссылок {len(items)}, '
-              f'вложений {docs} (пропущено {docs_skip})')
-    return items, urls
+              f'вложений {docs} (пропущено {docs_skip}), недоступно {len(failed)}')
+    return items, urls, failed
 
 
 async def subscription(url, session, sem, visited, cutoff, cfg, cache):
