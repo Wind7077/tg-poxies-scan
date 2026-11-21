@@ -39,6 +39,12 @@ def _bad_server(host):
     return any(ip in n for n in _BAD_NETS)
 
 
+def _health_trackable(url):
+    """Telegram-каналы не штрафуем: они возвращают [] из-за дедупликации
+    по visited, а не потому что источник пустой."""
+    return 't.me/' not in url and 'telegram.me/' not in url
+
+
 def _l3_pass(mode, tg, yt):
     """True/False/None(не проверялось). Непроверенное не отсеиваем."""
     if tg is None and yt is None:
@@ -173,6 +179,7 @@ async def run(config_path='config.yaml'):
             log.debug(f'⏭️ Пропущено ссылок на уже прочитанные каналы: {n0 - len(subs)}')
 
         empty_subs = []
+        health_skipped = 0
         if subs:
             rows = sorted({u.rstrip('/') for u in subs if u})
             cap = int(cfg.limits.max_embed)
@@ -182,6 +189,19 @@ async def run(config_path='config.yaml'):
                     drop = set(embeds[cap:])
                     rows = [u for u in rows if u not in drop]
                     log.debug(f'⏭️ Embed-лимит: пропущено {len(drop)} чужих сообщений')
+
+            # трекер здоровья: давно пустые подписки не качаем до перепроверки
+            if cache:
+                fresh_rows = []
+                for u in rows:
+                    if _health_trackable(u) and cache.source_skip(u):
+                        health_skipped += 1
+                    else:
+                        fresh_rows.append(u)
+                rows = fresh_rows
+            if health_skipped:
+                log.info(f'💤 пропущено давно пустых подписок: {health_skipped}')
+
             log.info(f'[{time.time()-start:.1f}s] Подписок в очереди: {len(rows)}')
             results = await asyncio.gather(*(subscription(u, session, http_sem, visited,
                                                          cutoff_wl, cfg, cache) for u in rows))
@@ -189,12 +209,14 @@ async def run(config_path='config.yaml'):
                 items.extend(r)
                 if not r:
                     empty_subs.append(u)
+                if cache and _health_trackable(u):
+                    cache.source_mark(u, not r)
             if empty_subs:
                 log.debug(f'🈳 подписок без прокси: {len(empty_subs)} (первые 30):')
                 for u in empty_subs[:30]:
                     log.debug(f'   ↳ {u}')
 
-            # точечный отчёт по наблюдаемым источникам — не тонет в 415 пустых
+            # точечный отчёт по наблюдаемым источникам — не тонет в списке пустых
             for w in watch:
                 hits = [(u, len(r)) for u, r in zip(rows, results) if w in u]
                 if not hits:
@@ -504,7 +526,7 @@ async def run(config_path='config.yaml'):
         'best': len(best_txt), 'best_source': best_source,
         'best_verified': best_verified,
         'verify_level': level,
-        'empty_subs': len(empty_subs),
+        'empty_subs': len(empty_subs), 'health_skipped': health_skipped,
         'watch': watch_report,
         'l3': {
             'checked_tg': len(l3_tg), 'checked_yt': len(l3_yt),
