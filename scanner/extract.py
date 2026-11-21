@@ -46,15 +46,11 @@ def decode_base64(s):
     s = s.strip().replace('-', '+').replace('_', '/')
     pad = len(s) % 4
     if pad:
-        s += '=' * (4 - padding_len(s))
+        s += '=' * (4 - pad)
     try:
         return base64.b64decode(s).decode('utf-8', errors='ignore')
     except Exception:
         return ""
-
-
-def padding_len(s):
-    return len(s) % 4
 
 
 def is_useless_tme(url):
