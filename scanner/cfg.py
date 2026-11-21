@@ -23,7 +23,7 @@ _DEFAULTS = {
     'limits': {
         'tme_pages': 10, 'tme_sub_pages': 2, 'telethon_limit': 1000,
         'max_embed': 200, 'per_endpoint': 5, 'best': 50, 'best_source': 'wl',
-        'max_attachment_mb': 2, 'core_max': 6000, 'core_batch': 800,
+        'max_attachment_mb': 2, 'core_max': 9000, 'core_batch': 800,
         'core_retry_split': 2,
     },
     'concurrency': {'http': 50, 'ping': 500, 'tls': 100, 'core': 64},
@@ -68,6 +68,10 @@ _DEFAULTS = {
         'http_ttl_hours': 6, 'ping_ok_ttl_hours': 12,
         'ping_fail_ttl_hours': 3, 'content_hash': True,
     },
+    # Трекер здоровья: подписка, пустая N прогонов подряд, пропускается
+    # на recheck_hours. Telegram-каналы не участвуют (у них [] бывает
+    # из-за дедупликации, а не из-за пустоты).
+    'source_health': {'enabled': True, 'after_empty': 10, 'recheck_hours': 24},
     'telegram': {'api_id': 0, 'api_hash': '', 'session_b64': ''},
     'telethon': {
         'all_channels': True, 'attachments': True,
