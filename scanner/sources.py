@@ -17,6 +17,10 @@ try:
 except ImportError:
     TELETHON_OK = False
 
+# ВАЖНО: (?:c/|s/)? — без s/ адрес https://t.me/s/kfwlsub давал chat='s'
+# и get_entity('s') падал ValueError для ВСЕХ веб-каналов.
+_TG_SRC_RE = re.compile(r'https?://(?:t\.me|telegram\.me)/(?:c/|s/)?([a-zA-Z0-9_]+)(?:/(\d+))?')
+
 
 def classify_sources(lines, cfg):
     web, embed, tg, subs = [], [], [], set()
@@ -94,7 +98,7 @@ def _attach_ok(msg, cfg, max_bytes):
 async def telethon_channels(sources, cutoff, cfg):
     """Один клиент на все каналы; темы форумов; вложения.
     -> (items, urls, failed). failed — что НЕ удалось прочитать: пайплайн
-    доберёт эти каналы через t.me/s/. Раньше частичный отказ терялся молча.
+    доберёт эти каналы через t.me/s/.
     """
     if not _tg_available(cfg):
         why = []
@@ -126,7 +130,7 @@ async def telethon_channels(sources, cutoff, cfg):
             log.info('⚠️ Telethon: сессия не авторизована (протухла?)')
             return [], [], list(sources)
         for src in sources:
-            m = re.match(r'https?://t\.me/(?:c/)?([a-zA-Z0-9_]+)(?:/(\d+))?', src)
+            m = _TG_SRC_RE.match(src)
             if not m:
                 failed.append(src)
                 continue
