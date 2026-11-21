@@ -321,6 +321,8 @@ async def run(config_path='config.yaml'):
                 log.debug(f'🔐 после L1 осталось {len(wl_items)}')
 
         # ---------- L2 + L3: ТОЛЬКО общий список ----------
+        # Белые через ядро не гоняем и не режем: с зарубежного раннера
+        # RU-only прокси рвут соединение, L2 убивал 96% белых.
         if level >= 2:
             all_proto = set(cfg.protocols.all)
             pool = {u: p for u, p in alive
@@ -363,6 +365,7 @@ async def run(config_path='config.yaml'):
     all_dead = all_dropped = all_unchecked = 0
     all_mode_used = mode_all
 
+    # 1) выбрасываем доказанных мертвецов (L2 fail)
     if drop_dead and delays:
         kept = []
         for u, p in all_pool:
@@ -373,6 +376,7 @@ async def run(config_path='config.yaml'):
         all_pool = kept
         log.info(f'[L2] ALL: выброшено мёртвых {all_dead}, осталось {len(all_pool)}')
 
+    # 2) фильтр по сервисам (TG/YT) среди проверенных
     if l3_on and mode_all != 'off' and (l3_tg or l3_yt):
         checked = [(u, p) for u, p in all_pool
                    if l3_tg.get(u) is not None or l3_yt.get(u) is not None]
@@ -434,8 +438,6 @@ async def run(config_path='config.yaml'):
     wl_txt = sorted({u for u, _ in wl_pairs})
 
     for w in watch:
-        nw = sum(1 for _, q in wl_pairs
-                 if any(w in s for s in prov.get(_, ()))) if False else 0
         nw = sum(1 for u, _ in wl_pairs if any(w in s for s in prov.get(u, ())))
         na = sum(1 for u in all_txt if any(w in s for s in prov.get(u, ())))
         log.info(f'🔍 watch «{w}»: в proxy.txt {nw}, в proxy-all.txt {na}')
