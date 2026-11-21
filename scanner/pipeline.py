@@ -1,4 +1,6 @@
 import asyncio
+import ipaddress
+import re
 import time
 from datetime import timedelta
 from pathlib import Path
@@ -12,9 +14,26 @@ from .net import make_session
 from .out import (guard, prev_count, unique_names, write_base64, write_issue,
                   write_live_sources, write_stats, write_txt, write_yaml)
 from .parse import fail_reason, parse, sanitize, validate
-from .sources import classify_sources, subscription, telethon_channels, web_channel
+from .sources import (as_web, classify_sources, subscription, telethon_channels,
+                      web_channel)
 from .verify import l0_tcp, l1_tls, l2_core
 from .wl import Classifier
+
+# Заглушки вроде 0.0.0.0:443 из панелей подписок: L0-пинг «подключается»
+# к самому себе и считает их живыми. Выбрасываем до пинга.
+_BAD_NETS = [ipaddress.ip_network(c) for c in (
+    '0.0.0.0/8', '127.0.0.0/8', '10.0.0.0/8', '172.16.0.0/12',
+    '192.168.0.0/16', '169.254.0.0/16', '224.0.0.0/4', '255.255.255.255/32',
+    '::1/128', 'fc00::/7', 'fe80::/10',
+)]
+
+
+def _bad_server(host):
+    try:
+        ip = ipaddress.ip_address(str(host))
+    except ValueError:
+        return False
+    return any(ip in n for n in _BAD_NETS)
 
 
 def _l3_pass(mode, tg, yt):
@@ -90,7 +109,6 @@ async def run(config_path='config.yaml'):
 
     web, embed, tg, subs = classify_sources(lines, cfg)
     use_tg = bool(cfg.telethon.all_channels) and cfg.telegram.session_b64
-    tg_fallback_web, tg_fallback_embed = list(web), list(embed)
     if use_tg:
         tg = tg + web + embed
         web, embed = [], []
@@ -111,18 +129,26 @@ async def run(config_path='config.yaml'):
             log.debug(f'Каналы: ссылок {len(items)}, найдено подписок {len(subs)}')
 
         if tg:
-            p, urls = await telethon_channels(tg, cutoff_wl, cfg)
-            if not p and (tg_fallback_web or tg_fallback_embed):
-                log.info('⚠️ Telethon ничего не дал — откат на t.me/s/')
-                web, embed = tg_fallback_web, tg_fallback_embed
-                p2, urls2 = await _read_web(session, http_sem, web, embed, cutoff_wl, cfg)
+            p, urls, tg_failed = await telethon_channels(tg, cutoff_wl, cfg)
+            items.extend(p)
+            subs.update(clean_url(x) for x in urls)
+            # Добираем КАЖДЫЙ упавший канал через t.me/s/, а не только
+            # при полном нуле — иначе 9 из 15 терялись молча.
+            if tg_failed:
+                log.info(f'⚠️ Telethon: {len(tg_failed)} источников не прочитаны — '
+                         f'добираем через t.me/s/')
+                for s in tg_failed[:20]:
+                    log.debug(f'   ↳ fallback {s}')
+                fb_web, fb_embed = as_web(tg_failed)
+                p2, urls2 = await _read_web(session, http_sem, fb_web, fb_embed,
+                                            cutoff_wl, cfg)
                 items.extend(p2)
                 subs.update(clean_url(x) for x in urls2)
-                for w in web:
+                web += fb_web
+                embed += fb_embed
+                for w in fb_web:
                     visited.add(sub_key(w))
-            else:
-                items.extend(p)
-            subs.update(clean_url(x) for x in urls)
+                log.info(f'↩️ fallback дал {len(p2)} ссылок, подписок {len(urls2)}')
 
         known = set()
         for src in web + embed + tg:
@@ -135,6 +161,7 @@ async def run(config_path='config.yaml'):
                     if not ((m := TME_RE.match(u)) and m.group(1).lower() in known)}
             log.debug(f'⏭️ Пропущено ссылок на уже прочитанные каналы: {n0 - len(subs)}')
 
+        empty_subs = []
         if subs:
             rows = sorted({u.rstrip('/') for u in subs if u})
             cap = int(cfg.limits.max_embed)
@@ -145,9 +172,16 @@ async def run(config_path='config.yaml'):
                     rows = [u for u in rows if u not in drop]
                     log.debug(f'⏭️ Embed-лимит: пропущено {len(drop)} чужих сообщений')
             log.info(f'[{time.time()-start:.1f}s] Подписок в очереди: {len(rows)}')
-            for r in await asyncio.gather(*(subscription(u, session, http_sem, visited,
-                                                        cutoff_wl, cfg, cache) for u in rows)):
+            results = await asyncio.gather(*(subscription(u, session, http_sem, visited,
+                                                         cutoff_wl, cfg, cache) for u in rows))
+            for u, r in zip(rows, results):
                 items.extend(r)
+                if not r:
+                    empty_subs.append(u)
+            if empty_subs:
+                log.debug(f'🈳 подписок без прокси: {len(empty_subs)} (первые 30):')
+                for u in empty_subs[:30]:
+                    log.debug(f'   ↳ {u}')
 
         # ---------- дедуп по URI ----------
         merged = {}
@@ -182,7 +216,7 @@ async def run(config_path='config.yaml'):
         if glued:
             log.debug(f'🧩 расклеено ссылок {glued}')
 
-        parsed, prov, dates, fails, rescued = {}, {}, {}, {}, 0
+        parsed, prov, dates, fails, rescued, bogus = {}, {}, {}, {}, 0, 0
         for rep in reps:
             if rep.lower().startswith('happ://'):
                 continue
@@ -194,6 +228,9 @@ async def run(config_path='config.yaml'):
                     p, used = p2, fallback[rep]
                     rescued += 1
             if p and p.get('server') and p.get('port'):
+                if _bad_server(p['server']):
+                    bogus += 1
+                    continue
                 p = sanitize(p)
                 parsed[used] = p
                 srcs, dts = set(), []
@@ -211,6 +248,8 @@ async def run(config_path='config.yaml'):
 
         if rescued:
             log.debug(f'🛟 спасено фолбэком на оригинал {rescued}')
+        if bogus:
+            log.debug(f'🚫 отброшено заглушек (0.0.0.0/localhost/LAN): {bogus}')
         if fails:
             log.debug(f'⚠️ не распарсено {sum(fails.values())} {log.hist(fails)}')
         log.debug(f'✅ распарсено {len(parsed)} {log.scheme_hist(parsed)}')
@@ -252,8 +291,6 @@ async def run(config_path='config.yaml'):
                 log.debug(f'🔐 после L1 осталось {len(wl_items)}')
 
         # ---------- L2 + L3: ТОЛЬКО общий список ----------
-        # Белые через ядро не гоняем и не режем: с зарубежного раннера
-        # RU-only прокси рвут соединение, L2 убивал 96% белых.
         if level >= 2:
             all_proto = set(cfg.protocols.all)
             pool = {u: p for u, p in alive
@@ -296,7 +333,6 @@ async def run(config_path='config.yaml'):
     all_dead = all_dropped = all_unchecked = 0
     all_mode_used = mode_all
 
-    # 1) выбрасываем доказанных мертвецов (L2 fail)
     if drop_dead and delays:
         kept = []
         for u, p in all_pool:
@@ -307,7 +343,6 @@ async def run(config_path='config.yaml'):
         all_pool = kept
         log.info(f'[L2] ALL: выброшено мёртвых {all_dead}, осталось {len(all_pool)}')
 
-    # 2) фильтр по сервисам (TG/YT) среди проверенных
     if l3_on and mode_all != 'off' and (l3_tg or l3_yt):
         checked = [(u, p) for u, p in all_pool
                    if l3_tg.get(u) is not None or l3_yt.get(u) is not None]
@@ -421,7 +456,7 @@ async def run(config_path='config.yaml'):
     stats = {
         'ts': now_utc().isoformat(),
         'raw': len(merged), 'candidates': len(fresh), 'reps': len(reps),
-        'parsed': len(parsed), 'parse_fails': fails,
+        'parsed': len(parsed), 'parse_fails': fails, 'bogus_servers': bogus,
         'alive_l0': len(alive), 'core_checked': core_checked,
         'all_before': n_before, 'all': len(all_txt), 'all_yaml': len(all_clash),
         'wl': len(wl_txt), 'wl_yaml': len(wl_clash),
@@ -429,6 +464,7 @@ async def run(config_path='config.yaml'):
         'best': len(best_txt), 'best_source': best_source,
         'best_verified': best_verified,
         'verify_level': level,
+        'empty_subs': len(empty_subs),
         'l3': {
             'checked_tg': len(l3_tg), 'checked_yt': len(l3_yt),
             'tg_ok': sum(1 for v in l3_tg.values() if v),
