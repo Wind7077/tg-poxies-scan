@@ -87,6 +87,7 @@ def is_valid_url(url, cfg):
             if host == d or host.endswith('.' + d):
                 return False
         path = r.path.lower()
+        # служебные URL из тел конфигов — не подписки
         if 'generate_204' in path or '/dns-query' in path:
             return False
         if host == 'github.com' and '/releases' in path:
@@ -95,6 +96,7 @@ def is_valid_url(url, cfg):
             return False
         if host == 'pozor.bond' and path.startswith('/status/'):
             return False
+        # обёртка без целевого адреса (обрезанная ссылка)
         if host in ('p.kfwl.lol', 'ghfast.top', 'happy-decoder.cc') and len(r.path.strip('/')) < 8:
             return False
         return True
@@ -127,7 +129,8 @@ def _sticky(url):
 def normalize_sub_url(url):
     if 'hub.mos.ru/' in url:
         url = url.replace('/-/raw/', '/raw/')
-    # p.kfwl.lol/<target> без опций отдаёт HTML-панель вместо подписки
+    # p.kfwl.lol/<target> без опций отдаёт HTML-панель вместо подписки.
+    # Рабочий формат: /ua=happ/os=android/<target>
     m = _KFWL_RE.match(url)
     if m:
         head, tail = m.group(1), m.group(2)
@@ -161,6 +164,7 @@ def clean_url(url):
     while url.endswith(')') and url.count(')') > url.count('('):
         url = url[:-1]
     url = url.rstrip('.,;:!?')
+    # склейки чиним только у http(s): иначе режутся легитимные vless://...path=...https://...
     if url.startswith(('http://', 'https://')):
         url = normalize_sub_url(_sticky(_split_glued_http(url)))
     return url
@@ -251,7 +255,7 @@ def messages(html_text, cutoff, cfg):
     return out, urls, min_id
 
 
-# ---------------------------------------------------------------- структурные конфиги
+# ------------------------------------------------- структурные конфиги (JSON/YAML)
 
 def _qs(params):
     return urlencode({k: str(v) for k, v in params.items() if v not in (None, '', [])})
@@ -262,6 +266,7 @@ def _b64u(s):
 
 
 def _walk(obj):
+    """Все dict-узлы дерева."""
     if isinstance(obj, dict):
         yield obj
         for v in obj.values():
@@ -392,7 +397,8 @@ def _xray_to_uris(ob):
             method, pwd = s.get('method'), s.get('password')
             if not (addr and port and method and pwd):
                 continue
-            out.append(f'ss://{_b64u(f"{method}:{pwd}")}@{addr}:{port}#{quote(name)}')
+            ui = _b64u('{}:{}'.format(method, pwd))
+            out.append(f'ss://{ui}@{addr}:{port}#{quote(name)}')
     return out
 
 
@@ -453,8 +459,9 @@ def _singbox_to_uris(ob):
         pr = dict(params)
         pr.setdefault('security', 'tls')
         return [f"trojan://{quote(str(ob['password']), safe='')}@{addr}:{port}?{_qs(pr)}#{quote(name)}"]
-    if t == 'shadowsocks' and ob.get('password'):
-        return [f"ss://{_b64u(f'{ob.get(chr(109) + chr(101) + chr(116) + chr(104) + chr(111) + chr(100))}:{ob[chr(112) + chr(97) + chr(115) + chr(115) + chr(119) + chr(111) + chr(114) + chr(100)]}')}@{addr}:{port}#{quote(name)}"]
+    if t == 'shadowsocks' and ob.get('password') and ob.get('method'):
+        ui = _b64u('{}:{}'.format(ob['method'], ob['password']))
+        return [f'ss://{ui}@{addr}:{port}#{quote(name)}']
     if t == 'hysteria2' and ob.get('password'):
         pr = {'sni': sni}
         if tls.get('insecure'):
@@ -544,7 +551,8 @@ def _clash_to_uris(p):
         pr.setdefault('security', 'tls')
         return [f"trojan://{quote(str(p['password']), safe='')}@{addr}:{port}?{_qs(pr)}#{quote(name)}"]
     if t == 'ss' and p.get('password') and p.get('cipher'):
-        return [f"ss://{_b64u(f'{p[chr(99) + chr(105) + chr(112) + chr(104) + chr(101) + chr(114)]}:{p[chr(112) + chr(97) + chr(115) + chr(115) + chr(119) + chr(111) + chr(114) + chr(100)]}')}@{addr}:{port}#{quote(name)}"]
+        ui = _b64u('{}:{}'.format(p['cipher'], p['password']))
+        return [f'ss://{ui}@{addr}:{port}#{quote(name)}']
     if t in ('hysteria2', 'hy2') and p.get('password'):
         pr = {'sni': sni}
         if p.get('skip-cert-verify'):
@@ -583,7 +591,7 @@ def _from_structured(body):
         return []
 
     out = []
-    # 1) готовые URI и base64-блоки внутри строк
+    # 1) готовые URI и base64-блоки внутри строковых значений
     for v in _strings(data):
         if '://' in v and PROXY_RE.search(v):
             out.extend(clean_url(m.group(0)) for m in PROXY_RE.finditer(v))
@@ -591,14 +599,15 @@ def _from_structured(body):
             dec = decode_base64(v)
             if dec:
                 out.extend(clean_url(m.group(0)) for m in PROXY_RE.finditer(dec))
-    # 2) конвертация описаний нод
+    # 2) конвертация описаний нод в URI
     for ob in _walk(data):
         for fn in (_xray_to_uris, _singbox_to_uris, _clash_to_uris):
             try:
-                out.extend(fn(ob))
+                got = fn(ob)
             except Exception:
-                pass
-            if out:
+                got = []
+            if got:
+                out.extend(got)
                 break
     seen, uniq = set(), []
     for u in out:
