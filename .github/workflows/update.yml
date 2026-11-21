@@ -42,10 +42,14 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: pip
+
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -r requirements.txt
 
@@ -66,16 +70,56 @@ jobs:
       - name: Commit and push
         if: always()
         run: |
+          set -eu
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          for f in proxy.txt proxy.yaml proxy-all.txt proxy-all.yaml \
-                   proxy-best.txt proxy-best.yaml proxy-base64.txt \
-                   issue.txt stats.json sources-live.txt; do
-            [ -f "$f" ] && git add "$f"
+
+          FILES="proxy.txt proxy.yaml proxy-all.txt proxy-all.yaml \
+                 proxy-best.txt proxy-best.yaml proxy-base64.txt \
+                 issue.txt stats.json sources-live.txt"
+
+          # 1. Сохраняем ТОЛЬКО реально изменённые артефакты вне репозитория.
+          #    Если сработал guard и файлы не тронуты — сохранять нечего,
+          #    и мы не откатим чужие более свежие списки.
+          TMP=$(mktemp -d)
+          n=0
+          for f in $FILES; do
+            [ -f "$f" ] || continue
+            if [ -n "$(git status --porcelain -- "$f")" ]; then
+              cp "$f" "$TMP/"
+              n=$((n + 1))
+            fi
           done
-          if ! git diff --staged --quiet; then
-            git commit -m "🤖 Auto-update proxies [skip ci]"
-            git push || (git pull --rebase && git push)
-          else
-            echo "Нет изменений"
+          if [ "$n" -eq 0 ]; then
+            echo "Артефакты не изменились — коммит не нужен"
+            exit 0
           fi
+          echo "Сохранено изменённых артефактов: $n"
+
+          # 2. Встаём на актуальный main (с вашими правками кода),
+          #    кладём свои файлы поверх, коммитим. Никаких merge/rebase.
+          attempt=1
+          while [ "$attempt" -le 3 ]; do
+            git fetch origin main
+            git checkout -f -B main origin/main
+            for f in $FILES; do
+              [ -f "$TMP/$f" ] && cp "$TMP/$f" "$f"
+            done
+            for f in $FILES; do
+              [ -f "$f" ] && git add "$f"
+            done
+            if git diff --staged --quiet; then
+              echo "После синхронизации изменений нет — коммит не нужен"
+              exit 0
+            fi
+            git commit -m "🤖 Auto-update proxies [skip ci]"
+            if git push origin main; then
+              echo "✅ запушено с попытки $attempt"
+              exit 0
+            fi
+            echo "⚠️ push отклонён (попытка $attempt) — обновляемся и повторяем"
+            attempt=$((attempt + 1))
+            sleep 5
+          done
+          echo "❌ не удалось запушить за 3 попытки"
+          exit 1
