@@ -32,6 +32,11 @@ _TRACK_KEYS = {'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_cont
 _STICKY = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 TME_RE = re.compile(r'https?://(?:t\.me|telegram\.me)/(?:s/)?([a-zA-Z0-9_]+)(?:/(\d+))?')
 
+# Голые TLD/суффиксы, которые regex выхватывает из обрезанных ссылок
+_BARE_TLDS = {'co.uk', 'org.uk', 'com', 'net', 'org', 'ru', 'su', 'io', 'dev', 'me',
+              'top', 'xyz', 'lol', 'gay', 'win', 'cc', 'tv', 'one', 'beer', 'page',
+              'ai', 'uk', 'pro', 'fun', 'site', 'online', 'space', 'click', 'host'}
+
 
 def now_utc():
     return datetime.now(timezone.utc)
@@ -41,11 +46,15 @@ def decode_base64(s):
     s = s.strip().replace('-', '+').replace('_', '/')
     pad = len(s) % 4
     if pad:
-        s += '=' * (4 - pad)
+        s += '=' * (4 - padding_len(s))
     try:
         return base64.b64decode(s).decode('utf-8', errors='ignore')
     except Exception:
         return ""
+
+
+def padding_len(s):
+    return len(s) % 4
 
 
 def is_useless_tme(url):
@@ -65,15 +74,23 @@ def is_valid_url(url, cfg):
         if not all([r.scheme, r.netloc]) or r.scheme == 'tg':
             return False
         host = (r.hostname or '').lower()
+        if not host or host in _BARE_TLDS:
+            return False
         for d in list(cfg.blacklist_domains) + list(cfg.junk_domains):
             if host == d or host.endswith('.' + d):
                 return False
         path = r.path.lower()
+        # служебные URL из тел конфигов — не подписки
+        if 'generate_204' in path or '/dns-query' in path:
+            return False
         if host == 'github.com' and '/releases' in path:
             return False
         if path.endswith('.md'):
             return False
         if host == 'pozor.bond' and path.startswith('/status/'):
+            return False
+        # обёртка без целевого адреса (обрезанная ссылка)
+        if host in ('p.kfwl.lol', 'ghfast.top', 'happy-decoder.cc') and len(r.path.strip('/')) < 8:
             return False
         return True
     except Exception:
@@ -193,7 +210,9 @@ def from_element(el, cfg):
                 ISSUE_URLS.add(clean_url(href))
             elif href.startswith('http'):
                 collect_url(href, urls, cfg)
-    text = el.get_text() if hasattr(el, 'get_text') else str(el)
+    # separator обязателен: без него <br> склеивался и URL получал
+    # прилипший текст следующего блока — bit.ly/LimeVPN + "2 дня" -> LimeVPN2
+    text = el.get_text(separator='\n') if hasattr(el, 'get_text') else str(el)
     p, u = from_text(text, cfg)
     return list(set(proxies + p)), list(set(urls + u))
 
