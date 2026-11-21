@@ -3,7 +3,9 @@
 Ядро запускается ПАЧКАМИ. Упавшая пачка дробится пополам, а при ошибке
 REALITY short ID — повторяется без short-id (он опционален в REALITY).
 Битые ss-2022 ключи и непригодные конфиги отсеиваются ДО запуска ядра.
-Логи ядра (stdout+stderr) пишутся в файл: mihomo печатает ошибки в stdout.
+Обновление ядра атомарное: рабочий бинарник не удаляется, пока новый
+не скачан и не проверен. Запрос к GitHub API авторизуется GITHUB_TOKEN,
+иначе анонимный лимит 60/час на общий IP раннера даёт 403.
 """
 import asyncio
 import base64
@@ -42,7 +44,7 @@ _SS2022_LEN = {
     '2022-blake3-chacha20-poly1305': 32,
 }
 _SID_STRICT = re.compile(r'^(?:[0-9a-f]{2}){1,8}$')
-_CORE_MAX_AGE = 7 * 86400
+_CORE_MAX_AGE = 30 * 86400
 
 
 async def l0_tcp(endpoints, cfg, cache, sem):
@@ -123,33 +125,48 @@ def _binary_ok(path):
 
 
 async def _ensure_core(cfg, session):
-    """Скачивает mihomo. Возвращает путь или None (мягкий откат на L1).
-    Бинарник старше недели перекачиваем: старая версия отвергает конфиги,
-    которые новая принимает, а кэш тянет его из прогона в прогон вечно.
+    """Скачивает mihomo. Возвращает путь или None.
+
+    Рабочий бинарник НИКОГДА не удаляется до успешной проверки нового:
+    отказ GitHub API иначе оставляет кэш без ядра и молча отключает
+    L2/L3 на все последующие прогоны.
     """
     bindir = Path(cfg.cache.dir) / 'bin'
     bindir.mkdir(parents=True, exist_ok=True)
     binary = bindir / 'mihomo'
-    if binary.exists():
+    tmp_bin = bindir / 'mihomo.new'
+
+    old_ok = binary.exists() and os.access(binary, os.X_OK) and _binary_ok(binary)
+    if old_ok:
         try:
             age = time.time() - binary.stat().st_mtime
         except OSError:
-            age = _CORE_MAX_AGE + 1
-        if age < _CORE_MAX_AGE and os.access(binary, os.X_OK) and _binary_ok(binary):
+            age = 0.0
+        if age < _CORE_MAX_AGE:
             return str(binary)
-        log.debug('⚠️ L2: mihomo устарел или не запускается — перекачиваем')
-        try:
-            binary.unlink()
-        except OSError:
-            return None
+        log.debug(f'ℹ️ L2: mihomo возрастом {age / 86400:.0f} дн — пробуем обновить')
+
+    def fallback(reason):
+        if old_ok:
+            log.info(f'⚠️ L2: {reason} — работаем на сохранённой версии ядра')
+            return str(binary)
+        log.info(f'⚠️ L2: {reason} — ядра нет, L2/L3 пропущены')
+        return None
+
+    headers = {'Accept': 'application/vnd.github+json'}
+    token = (os.getenv('GITHUB_TOKEN') or os.getenv('GH_TOKEN') or '').strip()
+    if token:
+        headers['Authorization'] = f'Bearer {token}'
+        log.debug('🔑 L2: GITHUB_TOKEN подхвачен (лимит 1000/час)')
+    else:
+        log.debug('🔑 L2: без токена — анонимный лимит 60/час на IP раннера')
+
     prefix = _core_asset_prefix()
     try:
-        async with session.get(cfg.verify.core_api,
-                               headers={'Accept': 'application/vnd.github+json'},
+        async with session.get(cfg.verify.core_api, headers=headers,
                                timeout=aiohttp.ClientTimeout(total=30)) as r:
             if r.status != 200:
-                log.debug(f'⚠️ L2: релиз mihomo недоступен ({r.status})')
-                return None
+                return fallback(f'релиз mihomo недоступен ({r.status})')
             data = await r.json()
         asset = None
         for a in data.get('assets', []):
@@ -158,23 +175,27 @@ async def _ensure_core(cfg, session):
                 asset = a
                 break
         if not asset:
-            log.debug(f'⚠️ L2: бинарник {prefix} не найден в релизе')
-            return None
+            return fallback(f'бинарник {prefix} не найден в релизе')
+        # скачивание ассета — без Authorization: редирект на CDN его ломает
         async with session.get(asset['browser_download_url'],
                                timeout=aiohttp.ClientTimeout(total=180)) as r:
             if r.status != 200:
-                return None
+                return fallback(f'скачивание ядра не удалось ({r.status})')
             blob = await r.read()
-        binary.write_bytes(gzip.decompress(blob))
-        binary.chmod(0o755)
-        if not _binary_ok(binary):
-            log.debug('⚠️ L2: скачанный mihomo не запускается')
-            return None
-        log.debug(f'⬇️ L2: mihomo скачан ({prefix})')
+        tmp_bin.write_bytes(gzip.decompress(blob))
+        tmp_bin.chmod(0o755)
+        if not _binary_ok(tmp_bin):
+            return fallback('новый mihomo не запускается')
+        os.replace(tmp_bin, binary)
+        log.debug(f'⬇️ L2: mihomo обновлён ({prefix})')
         return str(binary)
     except Exception as e:
-        log.debug(f'⚠️ L2: не удалось получить ядро ({type(e).__name__})')
-        return None
+        return fallback(f'обновление ядра не удалось ({type(e).__name__})')
+    finally:
+        try:
+            tmp_bin.unlink()
+        except OSError:
+            pass
 
 
 def _b64_bytes(s):
@@ -466,6 +487,7 @@ async def l2_core(named, cfg, session):
         return empty
     binary = await _ensure_core(cfg, session)
     if not binary:
+        log.info('⚠️ L2/L3 пропущены целиком: ядро недоступно')
         return empty
 
     good = [(n, p) for n, p in named if _core_ok(p)]
@@ -473,6 +495,7 @@ async def l2_core(named, cfg, session):
     if skipped:
         log.debug(f'🧹 L2: отброшено непригодных для ядра {skipped}')
     if not good:
+        log.info('⚠️ L2/L3 пропущены: нет пригодных конфигов')
         return empty
 
     svc = await _pick_services(cfg, session)
