@@ -1,15 +1,14 @@
 """L0 TCP → L1 TLS → L2 ядро (delay) → L3 сервисы (Telegram/YouTube).
 
-Ядро запускается ПАЧКАМИ: один процесс на 6000 конфигов не поднимается.
-Упавшая пачка дробится пополам — один битый конфиг не должен уносить 800 хороших.
-Логи ядра (stdout+stderr) пишутся в файл: mihomo печатает ошибки конфига в stdout.
-Перед L3 эндпоинты проверяются напрямую: если YouTube недоступен с раннера,
-это не должно выглядеть как «все 967 прокси не тянут YouTube».
+Ядро запускается ПАЧКАМИ. Упавшая пачка дробится пополам, а при ошибке
+REALITY short ID — повторяется без short-id (он опционален в REALITY).
+Логи ядра (stdout+stderr) пишутся в файл: mihomo печатает ошибки в stdout.
 """
 import asyncio
 import gzip
 import os
 import platform
+import re
 import shutil
 import ssl
 import subprocess
@@ -24,8 +23,6 @@ import yaml
 from . import log
 from .net import ping
 
-# Шифры ss, которые понимает mihomo. none/plain/dummy/auto он не знает
-# и падает на этапе разбора конфига — вся пачка не стартует.
 _MIHOMO_SS_CIPHERS = {
     'aes-128-gcm', 'aes-192-gcm', 'aes-256-gcm',
     'aes-128-ctr', 'aes-192-ctr', 'aes-256-ctr',
@@ -35,6 +32,7 @@ _MIHOMO_SS_CIPHERS = {
     '2022-blake3-aes-128-gcm', '2022-blake3-aes-256-gcm',
     '2022-blake3-chacha20-poly1305',
 }
+_SID_STRICT = re.compile(r'^(?:[0-9a-f]{2}){1,8}$')
 
 
 async def l0_tcp(endpoints, cfg, cache, sem):
@@ -107,7 +105,6 @@ def _core_asset_prefix():
 
 
 def _binary_ok(path):
-    """Кэш мог принести битый/обрезанный бинарник."""
     try:
         r = subprocess.run([str(path), '-v'], capture_output=True, timeout=20)
         return r.returncode == 0
@@ -182,6 +179,21 @@ def _core_ok(p):
     return True
 
 
+def _core_cfg(p, strip_sid=False):
+    """Нормализуем REALITY short-id: mihomo капризен к регистру/формату."""
+    q = dict(p)
+    ro = q.get('reality-opts')
+    if isinstance(ro, dict):
+        ro = dict(ro)
+        sid = str(ro.get('short-id', '') or '').strip().lower()
+        if strip_sid or not _SID_STRICT.match(sid):
+            ro.pop('short-id', None)
+        else:
+            ro['short-id'] = sid
+        q['reality-opts'] = ro
+    return q
+
+
 def _ctrl_parts(cfg):
     s = str(cfg.verify.controller)
     if ':' in s:
@@ -212,7 +224,7 @@ async def _service_alive(session, url):
 
 
 async def _pick_services(cfg, session):
-    """-> {'tg': url|absent, 'yt': url|absent}. Отключает недоступные сервисы."""
+    """-> {'tg': url, 'yt': url}. Отключает недоступные с раннера сервисы."""
     l3cfg = getattr(cfg.verify, 'l3', None)
     if not (l3cfg and getattr(l3cfg, 'enabled', False)):
         return {}
@@ -236,8 +248,7 @@ async def _pick_services(cfg, session):
                 break
         if key not in out:
             log.info(f'⚠️ L3: {field} недоступен напрямую с раннера '
-                     f'(проверено {len(cand)} URL) — сервис НЕ проверяем, '
-                     f'прокси по нему не отсеиваются')
+                     f'(проверено {len(cand)} URL) — сервис НЕ проверяем')
     return out
 
 
@@ -253,8 +264,9 @@ def _log_tail(path, limit=500):
     return ' | '.join(pick)[:limit]
 
 
-async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port, svc):
-    """Один запуск mihomo на пачку. -> (delays, geo, tg, yt, started)"""
+async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port, svc,
+                      strip_sid=False):
+    """Один запуск mihomo на пачку. -> (delays, geo, tg, yt, started, err)"""
     tmp = Path(tempfile.mkdtemp(prefix='mihomo-'))
     conf = {
         'mixed-port': int(mixed_port),
@@ -262,7 +274,7 @@ async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port, svc)
         'mode': 'global',
         'log-level': 'error',
         'ipv6': False,
-        'proxies': [p for _, p in batch],
+        'proxies': [_core_cfg(p, strip_sid) for _, p in batch],
         'proxy-groups': [{'name': 'GLOBAL', 'type': 'select',
                           'proxies': [n for n, _ in batch]}],
         'rules': ['MATCH,GLOBAL'],
@@ -274,9 +286,9 @@ async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port, svc)
     delays, geo, l3_tg, l3_yt = {}, {}, {}, {}
     proc = None
     started = False
+    tail = ''
     log_path = tmp / 'core.log'
     try:
-        # mihomo пишет ошибки разбора конфига в STDOUT — ловим оба потока
         lf = open(log_path, 'wb')
         try:
             proc = subprocess.Popen(
@@ -289,7 +301,7 @@ async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port, svc)
             wait_s = float(getattr(cfg.verify, 'core_start_wait_s', 45))
             deadline = time.time() + wait_s
             while time.time() < deadline:
-                if proc.poll() is not None:      # ядро уже упало — не ждём
+                if proc.poll() is not None:
                     break
                 try:
                     async with api.get(base + '/version') as r:
@@ -301,9 +313,10 @@ async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port, svc)
                 await asyncio.sleep(0.3)
 
             if not started:
+                tail = _log_tail(log_path)
                 log.info(f'⚠️ L2: ядро не поднялось (пачка {len(batch)}, '
-                         f'exit={proc.poll()}) {_log_tail(log_path)}')
-                return delays, geo, l3_tg, l3_yt, False
+                         f'exit={proc.poll()}) {tail}')
+                return delays, geo, l3_tg, l3_yt, False, tail
 
             sem = asyncio.Semaphore(int(cfg.concurrency.core))
             test_url = cfg.verify.test_url
@@ -316,7 +329,6 @@ async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port, svc)
                     d = body.get('delay') if isinstance(body, dict) else None
                     return int(d) if isinstance(d, int) and d > 0 else None
 
-            # ---------- L2 ----------
             async def delay(name):
                 async with sem:
                     try:
@@ -330,7 +342,6 @@ async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port, svc)
             ok = sum(1 for v in delays.values() if v)
             log.debug(f'[L2] пачка {len(batch)}: работают {ok} ({time.time()-t0:.0f}s)')
 
-            # ---------- L3 ----------
             l3cfg = getattr(cfg.verify, 'l3', None)
             if l3cfg and getattr(l3cfg, 'enabled', False) and svc:
                 tg_url = svc.get('tg')
@@ -364,7 +375,6 @@ async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port, svc)
                         if yt is not None:
                             l3_yt[name] = yt
 
-            # ---------- Geo (опционально) ----------
             top = int(cfg.verify.geo_top or 0)
             if top > 0:
                 alive = sorted([(n, d) for n, d in delays.items() if d],
@@ -399,15 +409,11 @@ async def _core_batch(batch, cfg, binary, mixed_port, ctrl_host, ctrl_port, svc)
                 except Exception:
                     pass
         shutil.rmtree(tmp, ignore_errors=True)
-    return delays, geo, l3_tg, l3_yt, started
+    return delays, geo, l3_tg, l3_yt, started, tail
 
 
 async def l2_core(named, cfg, session):
-    """named: [(name, clash_dict)] -> (delays, geo, l3_tg, l3_yt).
-
-    Пачки по limits.core_batch. Упавшая пачка дробится пополам
-    (core_retry_split уровней), чтобы один битый конфиг не уносил сотни хороших.
-    """
+    """named: [(name, clash_dict)] -> (delays, geo, l3_tg, l3_yt)."""
     empty = ({}, {}, {}, {})
     if not named:
         return empty
@@ -431,14 +437,24 @@ async def l2_core(named, cfg, session):
     base_mixed = int(cfg.verify.mixed_port)
 
     port_idx = 0
-    ok_batches = fail_batches = 0
+    ok_batches = fail_batches = sid_repairs = 0
 
     async def run(batch, depth):
-        nonlocal port_idx, ok_batches, fail_batches
+        nonlocal port_idx, ok_batches, fail_batches, sid_repairs
         i = port_idx
         port_idx += 1
-        d, g, tg, yt, started = await _core_batch(
+        d, g, tg, yt, started, err = await _core_batch(
             batch, cfg, binary, base_mixed + i, ctrl_host, ctrl_port + i, svc)
+        # целевой ремонт: mihomo отверг short-id — повторяем без него
+        if not started and 'short id' in err.lower():
+            j = port_idx
+            port_idx += 1
+            log.info(f'↻ L2: битый REALITY short-id — повтор пачки {len(batch)} без short-id')
+            d, g, tg, yt, started, err = await _core_batch(
+                batch, cfg, binary, base_mixed + j, ctrl_host, ctrl_port + j, svc,
+                strip_sid=True)
+            if started:
+                sid_repairs += 1
         if started:
             ok_batches += 1
             return d, g, tg, yt
@@ -467,7 +483,8 @@ async def l2_core(named, cfg, session):
     alive = sum(1 for v in delays.values() if v)
     log.info(f'[L2] через ядро проверено {len(delays)}/{len(good)}, '
              f'реально работают {alive} '
-             f'(пачек ok {ok_batches}, потеряно {fail_batches}, {time.time()-t0:.0f}s)')
+             f'(пачек ok {ok_batches}, потеряно {fail_batches}, '
+             f'sid-ремонт {sid_repairs}, {time.time()-t0:.0f}s)')
     if l3_tg or l3_yt:
         tg_ok = sum(1 for v in l3_tg.values() if v)
         yt_ok = sum(1 for v in l3_yt.values() if v)
