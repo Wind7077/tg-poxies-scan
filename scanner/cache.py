@@ -1,10 +1,13 @@
-"""ETag/Last-Modified + кэш распарсенных ссылок + пинг-кэш + контент-хэш (п.4)."""
+"""ETag/Last-Modified + кэш распарсенных ссылок + пинг-кэш + контент-хэш
+   + трекер здоровья источников (давно пустые подписки пропускаются)."""
 import hashlib
 import json
 import time
 from pathlib import Path
 
 from . import log
+
+_SOURCE_TTL = 30 * 86400
 
 
 class Cache:
@@ -15,10 +18,18 @@ class Cache:
         self.http = {}
         self.ping = {}
         self.hashes = {}
+        self.sources = {}
+
+        sh = getattr(cfg, 'source_health', None)
+        self.sh_enabled = bool(self.enabled and sh and getattr(sh, 'enabled', False))
+        self.sh_after = max(1, int(getattr(sh, 'after_empty', 10) or 10))
+        self.sh_recheck = max(1.0, float(getattr(sh, 'recheck_hours', 24) or 24))
+
         if self.enabled:
             self.dir.mkdir(parents=True, exist_ok=True)
             self.http = self._read('http.json')
             self.ping = self._read('ping.json')
+            self.sources = self._read('sources.json')
 
     def _read(self, name):
         p = self.dir / name
@@ -34,7 +45,13 @@ class Cache:
             return
         (self.dir / 'http.json').write_text(json.dumps(self.http, ensure_ascii=False), encoding='utf-8')
         (self.dir / 'ping.json').write_text(json.dumps(self.ping), encoding='utf-8')
-        log.debug(f"💾 кэш: http {len(self.http)}, ping {len(self.ping)}")
+        cutoff = time.time() - _SOURCE_TTL
+        self.sources = {u: e for u, e in self.sources.items()
+                        if e.get('ts', 0) >= cutoff}
+        (self.dir / 'sources.json').write_text(json.dumps(self.sources, ensure_ascii=False),
+                                               encoding='utf-8')
+        log.debug(f"💾 кэш: http {len(self.http)}, ping {len(self.ping)}, "
+                  f"источников {len(self.sources)}")
 
     # ---------- HTTP ----------
     def validators(self, url):
@@ -95,3 +112,24 @@ class Cache:
     def ping_put(self, host, port, rtt):
         if self.enabled:
             self.ping[f'{host}:{port}'] = {'ok': rtt is not None, 'rtt': rtt, 'ts': time.time()}
+
+    # ---------- здоровье источников ----------
+    def source_skip(self, url):
+        """True — источник пуст N прогонов подряд, ждём часа перепроверки."""
+        if not self.sh_enabled:
+            return False
+        e = self.sources.get(url)
+        if not e:
+            return False
+        if int(e.get('empty', 0)) < self.sh_after:
+            return False
+        return (time.time() - float(e.get('ts', 0))) < self.sh_recheck * 3600
+
+    def source_mark(self, url, empty):
+        if not self.sh_enabled:
+            return
+        e = self.sources.get(url) or {}
+        n = int(e.get('empty', 0))
+        e['empty'] = n + 1 if empty else 0
+        e['ts'] = time.time()
+        self.sources[url] = e
