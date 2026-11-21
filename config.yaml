@@ -23,8 +23,6 @@ limits:
   max_embed: 200
   per_endpoint: 5
   best: 50
-  # Откуда брать proxy-best: wl = только белые, all = только общий,
-  # both = белые в приоритете + добор из общего.
   best_source: "wl"
   max_attachment_mb: 2
   core_max: 6000
@@ -52,33 +50,266 @@ protocols:
 whitelist:
   roots: "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс каскад"
   use_roots: true
-  use_sni: true
+  use_sni: true          # включено: список ниже покрывает поддомены автоматически
   use_cidr: false
   require_tls: false
   sni_domains:
+    # --- Яндекс ---
     - yandex.ru
     - yandex.net
+    - yandex.com
     - yandexcloud.net
     - yastatic.net
     - ya.ru
+    - yandex
+    # --- VK / Mail / OK / MAX ---
     - vk.com
     - vk.ru
+    - vk.me
+    - vkvideo.ru
+    - vkuser.net
+    - vkuseraudio.net
+    - vk-portal.net
+    - userapi.com
+    - mail.ru
+    - imgsmail.ru
+    - mradx.net
+    - mycdn.me
     - ok.ru
     - okcdn.ru
     - max.ru
-    - avito.ru
-    - rutube.ru
     - dzen.ru
-    - x5.ru
-    - tbank.ru
-    - sberbank.ru
-    - gosuslugi.ru
+    - dzeninfra.ru
+    # --- Маркетплейсы и ритейл ---
     - ozon.ru
+    - ozonusercontent.com
+    - ozon-dostavka.ru
     - wildberries.ru
-    - mail.ru
+    - wb.ru
+    - wbbasket.ru
+    - wbstatic.net
+    - avito.ru
+    - avito.st
+    - megamarket.ru
+    - sbermegamarket.ru
+    - sbermarket.ru
+    - samokat.ru
+    - vprok.ru
+    - x5.ru
+    - x5club.ru
+    - perekrestok.ru
+    - pyaterochka.ru
+    - magnit.ru
+    - lenta.com
+    - vkusvill.ru
+    - auchan.ru
+    - metro-cc.ru
+    - detmir.ru
+    - lamoda.ru
+    - mvideo.ru
+    - eldorado.ru
+    - citilink.ru
+    - dns-shop.ru
+    - technopark.ru
+    - hoff.ru
+    - sportmaster.ru
+    - letu.ru
+    - goldapple.ru
+    - rivegauche.ru
+    - chitai-gorod.ru
+    - labirint.ru
+    - book24.ru
+    - litres.ru
+    - vseigry.ru
+    # --- Банки и финансы ---
+    - sberbank.ru
+    - sberbank.com
+    - sber.ru
+    - sber
+    - tbank.ru
+    - tinkoff.ru
+    - t-static.ru
+    - vtb.ru
+    - vtbbank.ru
+    - alfabank.ru
+    - gazprombank.ru
+    - gpb.ru
+    - psbank.ru
+    - sovcombank.ru
+    - rshb.ru
+    - pochtabank.ru
+    - raiffeisen.ru
+    - rosbank.com
+    - mkb.ru
+    - akbars.ru
+    - uralsib.ru
+    - domrfbank.ru
+    - bspb.ru
+    - mtsbank.ru
+    - nspk.ru
+    - mironline.ru
+    - yoomoney.ru
+    - yookassa.ru
+    - domclick.ru
+    - sravni.ru
+    - banki.ru
+    - finuslugi.ru
+    - cbr.ru
+    # --- Госсервисы (gov.ru накрывает все министерства и ведомства) ---
+    - gosuslugi.ru
+    - gov.ru
+    - government.ru
+    - kremlin.ru
+    - mos.ru
+    - mosreg.ru
+    - nalog.ru
+    - pfr.ru
+    - fss.ru
+    - mvd.ru
+    - gibdd.ru
+    - sudrf.ru
+    - arbitr.ru
+    - zakupki.gov.ru
+    - mosenergosbyt.ru
+    - mosobleirc.ru
+    - trudvsem.ru
+    - emias.info
+    - mosparking.ru
+    - mosmetro.ru
+    - mosgortrans.ru
+    # --- Операторы связи ---
+    - mts.ru
+    - megafon.ru
+    - beeline.ru
+    - tele2.ru
+    - t2.ru
+    - yota.ru
+    - rostelecom.ru
+    - rt.ru
+    - tattelecom.ru
+    # --- Медиа и видео ---
     - kinopoisk.ru
+    - rutube.ru
+    - okko.tv
+    - ivi.ru
+    - ivi.tv
+    - wink.ru
+    - kion.ru
+    - premier.one
+    - start.ru
+    - more.tv
+    - amediateka.ru
+    - smotrim.ru
+    - vgtrk.ru
+    - 1tv.ru
+    - ntv.ru
+    - ren.tv
+    - ctc.ru
+    - tvzvezda.ru
+    - 5tv.ru
+    - mir24.tv
+    - 360tv.ru
+    - zvuk.com
     - rbc.ru
     - kommersant.ru
+    - vedomosti.ru
+    - tass.ru
+    - ria.ru
+    - interfax.ru
+    - rg.ru
+    - iz.ru
+    - lenta.ru
+    - gazeta.ru
+    - kp.ru
+    - aif.ru
+    - mk.ru
+    - fontanka.ru
+    - e1.ru
+    - ngs.ru
+    - nn.ru
+    - championat.com
+    - sports.ru
+    - sport24.ru
+    - matchtv.ru
+    - khl.ru
+    # --- Транспорт и доставка ---
+    - rzd.ru
+    - aeroflot.ru
+    - s7.ru
+    - utair.ru
+    - flypobeda.ru
+    - pobeda.aero
+    - rossiya-airlines.ru
+    - tutu.ru
+    - onetwotrip.com
+    - aviasales.ru
+    - ostrovok.ru
+    - 101hotels.com
+    - pochta.ru
+    - cdek.ru
+    - boxberry.ru
+    - dpd.ru
+    - dellin.ru
+    - pecom.ru
+    # --- Классифайды, авто, работа, карты ---
+    - auto.ru
+    - drom.ru
+    - drive2.ru
+    - cian.ru
+    - hh.ru
+    - superjob.ru
+    - 2gis.ru
+    - 2gis.com
+    # --- Здоровье ---
+    - apteka.ru
+    - eapteka.ru
+    - zdravcity.ru
+    - rigla.ru
+    - asna.ru
+    - invitro.ru
+    - gemotest.ru
+    - helix.ru
+    - prodoctorov.ru
+    - sberhealth.ru
+    - docdoc.ru
+    - napopravku.ru
+    # --- Образование ---
+    - dnevnik.ru
+    - uchi.ru
+    - yaklass.ru
+    - foxford.ru
+    - skyeng.ru
+    - skysmart.ru
+    - sdamgia.ru
+    - interneturok.ru
+    - resh.edu.ru
+    - hse.ru
+    - msu.ru
+    - spbu.ru
+    - mipt.ru
+    - itmo.ru
+    - bmstu.ru
+    - mirea.ru
+    - ranepa.ru
+    - mgimo.ru
+    - urfu.ru
+    - kpfu.ru
+    - sfu-kras.ru
+    - nsu.ru
+    - susu.ru
+    - tsu.ru
+    - dvfu.ru
+    - sechenov.ru
+    # --- Магазины приложений и устройства ---
+    - rustore.ru
+    - nashstore.ru
+    - sberdevices.ru
+    - salutejazz.ru
+    # --- Зарубежные SNI, реально встречающиеся в белых подписках ---
+    # (kfwl/clippyx маскируются под DeepL и Mistral — проверено 21.11)
+    - deepl.com
+    - mistral.ai
+    - minifermer.ru
   cidr: []
 
 verify:
@@ -98,7 +329,7 @@ verify:
       - "https://api.telegram.org/robots.txt"
       - "https://api.telegram.org/"
     youtube:
-      - "https://www.youtube.com/generate_204"
+      - "httpv://www.youtube.com/generate_204"
       - "https://i.ytimg.com/generate_204"
       - "https://yt3.ggpht.com/generate_204"
     sanity_check: true
@@ -153,7 +384,12 @@ problem_domains:
   - astra-sub.com
   - taurus-sync.com
   - net4.su
+  - clippyx.net
+  - sub.vobla.cc
+  - lucky.lte-subs.com
 
+# ВНИМАНИЕ: это фильтр URL ПОДПИСОК (соцсети/СМИ не отдают конфиги).
+# К whitelist.sni_domains отношения не имеет — там SNI самих прокси.
 blacklist_domains:
   - youtube.com
   - youtu.be
@@ -197,3 +433,4 @@ junk_domains:
   - telegram.org
   - telega.in
   - tgproxy.pink
+  - translate.yandex.ru
