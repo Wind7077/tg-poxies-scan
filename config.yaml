@@ -25,7 +25,8 @@ limits:
   best: 50
   best_source: "wl"
   max_attachment_mb: 2
-  core_max: 6000
+  # Полный охват: кандидатов ~9200, проверяем всех. 0 = без лимита.
+  core_max: 9000
   core_batch: 800
   core_retry_split: 2
 
@@ -50,7 +51,7 @@ protocols:
 whitelist:
   roots: "бел спис обход авто глушил lte 4g 5g mobil white notorgames бс теле мтс каскад"
   use_roots: true
-  use_sni: true          # включено: список ниже покрывает поддомены автоматически
+  use_sni: true
   use_cidr: false
   require_tls: false
   sni_domains:
@@ -61,7 +62,6 @@ whitelist:
     - yandexcloud.net
     - yastatic.net
     - ya.ru
-    - yandex
     # --- VK / Mail / OK / MAX ---
     - vk.com
     - vk.ru
@@ -125,7 +125,6 @@ whitelist:
     - sberbank.ru
     - sberbank.com
     - sber.ru
-    - sber
     - tbank.ru
     - tinkoff.ru
     - t-static.ru
@@ -155,7 +154,7 @@ whitelist:
     - banki.ru
     - finuslugi.ru
     - cbr.ru
-    # --- Госсервисы (gov.ru накрывает все министерства и ведомства) ---
+    # --- Госсервисы (gov.ru накрывает все министерства) ---
     - gosuslugi.ru
     - gov.ru
     - government.ru
@@ -305,8 +304,7 @@ whitelist:
     - nashstore.ru
     - sberdevices.ru
     - salutejazz.ru
-    # --- Зарубежные SNI, реально встречающиеся в белых подписках ---
-    # (kfwl/clippyx маскируются под DeepL и Mistral — проверено 21.11)
+    # --- Зарубежные SNI из реальных белых подписок ---
     - deepl.com
     - mistral.ai
     - minifermer.ru
@@ -329,7 +327,7 @@ verify:
       - "https://api.telegram.org/robots.txt"
       - "https://api.telegram.org/"
     youtube:
-      - "httpv://www.youtube.com/generate_204"
+      - "https://www.youtube.com/generate_204"
       - "https://i.ytimg.com/generate_204"
       - "https://yt3.ggpht.com/generate_204"
     sanity_check: true
@@ -338,7 +336,7 @@ verify:
     only_alive: true
     # Режимы ОБЯЗАТЕЛЬНО в кавычках: YAML парсит off/on как булево.
     require_mode_all: "both"
-    require_mode_wl: "off"      # белые не режем никогда
+    require_mode_wl: "off"
     tag_names: true
     min_keep_pct: 15
     all_keep_unchecked: true
@@ -351,6 +349,13 @@ cache:
   ping_ok_ttl_hours: 12
   ping_fail_ttl_hours: 3
   content_hash: true
+
+# Подписка, пустая after_empty прогонов подряд, пропускается на recheck_hours.
+# Telegram-каналы не участвуют.
+source_health:
+  enabled: true
+  after_empty: 10
+  recheck_hours: 24
 
 # Перекрывается переменными окружения
 # TELEGRAM_API_ID / TELEGRAM_API_HASH / TELEGRAM_SESSION
@@ -388,7 +393,7 @@ problem_domains:
   - sub.vobla.cc
   - lucky.lte-subs.com
 
-# ВНИМАНИЕ: это фильтр URL ПОДПИСОК (соцсети/СМИ не отдают конфиги).
+# Фильтр URL ПОДПИСОК (соцсети/СМИ не отдают конфиги).
 # К whitelist.sni_domains отношения не имеет — там SNI самих прокси.
 blacklist_domains:
   - youtube.com
