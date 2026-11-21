@@ -1,6 +1,5 @@
 import asyncio
 import ipaddress
-import re
 import time
 from datetime import timedelta
 from pathlib import Path
@@ -26,6 +25,10 @@ _BAD_NETS = [ipaddress.ip_network(c) for c in (
     '192.168.0.0/16', '169.254.0.0/16', '224.0.0.0/4', '255.255.255.255/32',
     '::1/128', 'fc00::/7', 'fe80::/10',
 )]
+
+# Точечная трассировка: список подстрок, чью судьбу логируем отдельно.
+# Переопределяется через logging.watch_sources в config.yaml.
+_WATCH_DEFAULT = ('p.kfwl.lol', 'clippyx', 'kfwlsub')
 
 
 def _bad_server(host):
@@ -90,6 +93,9 @@ async def run(config_path='config.yaml'):
     start = time.time()
     o = cfg.outputs
 
+    watch = tuple(getattr(cfg.logging, 'watch_sources', None) or _WATCH_DEFAULT)
+    watch_report = {}
+
     if getattr(cfg.logging, 'diag_secrets', False):
         tg = cfg.telegram
         log.debug(f"секреты: api_id={'есть' if tg.api_id else 'ПУСТО'}, "
@@ -132,8 +138,6 @@ async def run(config_path='config.yaml'):
             p, urls, tg_failed = await telethon_channels(tg, cutoff_wl, cfg)
             items.extend(p)
             subs.update(clean_url(x) for x in urls)
-            # Добираем КАЖДЫЙ упавший канал через t.me/s/, а не только
-            # при полном нуле — иначе 9 из 15 терялись молча.
             if tg_failed:
                 log.info(f'⚠️ Telethon: {len(tg_failed)} источников не прочитаны — '
                          f'добираем через t.me/s/')
@@ -149,6 +153,13 @@ async def run(config_path='config.yaml'):
                 for w in fb_web:
                     visited.add(sub_key(w))
                 log.info(f'↩️ fallback дал {len(p2)} ссылок, подписок {len(urls2)}')
+
+        # сколько ссылок пришло прямо из наблюдаемых каналов
+        for w in watch:
+            n = sum(1 for _, _, src in items if src and w in src)
+            if n:
+                watch_report.setdefault(w, {})['links_from_channel'] = n
+                log.info(f'🔍 watch «{w}»: ссылок напрямую из источника {n}')
 
         known = set()
         for src in web + embed + tg:
@@ -182,6 +193,20 @@ async def run(config_path='config.yaml'):
                 log.debug(f'🈳 подписок без прокси: {len(empty_subs)} (первые 30):')
                 for u in empty_subs[:30]:
                     log.debug(f'   ↳ {u}')
+
+            # точечный отчёт по наблюдаемым источникам — не тонет в 415 пустых
+            for w in watch:
+                hits = [(u, len(r)) for u, r in zip(rows, results) if w in u]
+                if not hits:
+                    log.info(f'🔍 watch «{w}»: НЕ попал в очередь подписок')
+                    watch_report.setdefault(w, {})['queued'] = 0
+                    continue
+                tot = sum(n for _, n in hits)
+                watch_report.setdefault(w, {}).update(
+                    {'queued': len(hits), 'links': tot})
+                log.info(f'🔍 watch «{w}»: в очереди {len(hits)} URL, ключей {tot}')
+                for u, n in sorted(hits, key=lambda x: -x[1])[:6]:
+                    log.info(f'   ↳ {n:>5}  {u}')
 
         # ---------- дедуп по URI ----------
         merged = {}
@@ -261,6 +286,11 @@ async def run(config_path='config.yaml'):
                  if ping_map.get((p['server'], p['port'])) is not None]
         alive.sort(key=lambda up: (up[1]['type'], up[1]['server'], up[1]['port'], up[0]))
         log.info(f'[L0] живых endpoint-пар: {len(alive)}')
+
+        for w in watch:
+            n = sum(1 for u, _ in alive if any(w in s for s in prov.get(u, ())))
+            log.info(f'🔍 watch «{w}»: живых прокси с этого источника {n}')
+            watch_report.setdefault(w, {})['alive'] = n
 
         # ---------- WL: только L0 + классификатор + L1 ----------
         clf = Classifier(cfg)
@@ -403,6 +433,14 @@ async def run(config_path='config.yaml'):
     all_txt = sorted(set(all_txt))
     wl_txt = sorted({u for u, _ in wl_pairs})
 
+    for w in watch:
+        nw = sum(1 for _, q in wl_pairs
+                 if any(w in s for s in prov.get(_, ()))) if False else 0
+        nw = sum(1 for u, _ in wl_pairs if any(w in s for s in prov.get(u, ())))
+        na = sum(1 for u in all_txt if any(w in s for s in prov.get(u, ())))
+        log.info(f'🔍 watch «{w}»: в proxy.txt {nw}, в proxy-all.txt {na}')
+        watch_report.setdefault(w, {}).update({'wl': nw, 'all': na})
+
     # ---------- best: по умолчанию ТОЛЬКО белый список ----------
     best_source = str(getattr(cfg.limits, 'best_source', 'wl') or 'wl').lower()
 
@@ -465,6 +503,7 @@ async def run(config_path='config.yaml'):
         'best_verified': best_verified,
         'verify_level': level,
         'empty_subs': len(empty_subs),
+        'watch': watch_report,
         'l3': {
             'checked_tg': len(l3_tg), 'checked_yt': len(l3_yt),
             'tg_ok': sum(1 for v in l3_tg.values() if v),
