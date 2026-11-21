@@ -1,9 +1,11 @@
 import base64
 import html as html_mod
+import json
 import re
 from datetime import datetime, timezone
 from urllib.parse import parse_qsl, quote, urlencode, urlparse, urlsplit, urlunsplit
 
+import yaml
 from bs4 import BeautifulSoup
 
 from . import log
@@ -25,11 +27,10 @@ PROXY_RE = re.compile(r'(?:' + SCHEMES_ALT + r')://' + _URL_BODY + r'+(?:#[^\s"<
 URL_RE = re.compile(r'https?://[a-zA-Z0-9\-._~:/?#\[\]@!$&\'()*+,;=%]+', re.I)
 ISSUE_RE = re.compile(r'(?:' + ISSUE_ALT + r')://' + _URL_BODY + r'+(?:#[^\s"<>]*)?', re.I)
 
-# Панели подписок (Remnawave/Marzban) отдают HTML: ключи лежат в атрибутах
-# кнопок «скопировать» или base64-блоком внутри <textarea>.
 _HTML_HINT = re.compile(r'<\s*(?:!doctype|html|body|div|script|textarea)', re.I)
 _URI_IN_HTML = re.compile(r'(?:' + SCHEMES_ALT + r')://[^\s"\'<>\\]+', re.I)
 _B64_BLOB = re.compile(r'[A-Za-z0-9+/=_-]{200,}')
+_B64_FULL = re.compile(r'^[A-Za-z0-9+/=_-]+$')
 
 ISSUE_URLS = set()
 
@@ -43,7 +44,6 @@ TME_RE = re.compile(r'https?://(?:t\.me|telegram\.me)/(?:s/)?([a-zA-Z0-9_]+)(?:/
 _KFWL_RE = re.compile(r'^(https?://p\.kfwl\.lol/)(.*)$', re.I)
 _KFWL_HINT = 'ua=happ/os=android/'
 
-# Голые TLD/суффиксы, которые regex выхватывает из обрезанных ссылок
 _BARE_TLDS = {'co.uk', 'org.uk', 'com', 'net', 'org', 'ru', 'su', 'io', 'dev', 'me',
               'top', 'xyz', 'lol', 'gay', 'win', 'cc', 'tv', 'one', 'beer', 'page',
               'ai', 'uk', 'pro', 'fun', 'site', 'online', 'space', 'click', 'host'}
@@ -87,7 +87,6 @@ def is_valid_url(url, cfg):
             if host == d or host.endswith('.' + d):
                 return False
         path = r.path.lower()
-        # служебные URL из тел конфигов — не подписки
         if 'generate_204' in path or '/dns-query' in path:
             return False
         if host == 'github.com' and '/releases' in path:
@@ -96,7 +95,6 @@ def is_valid_url(url, cfg):
             return False
         if host == 'pozor.bond' and path.startswith('/status/'):
             return False
-        # обёртка без целевого адреса (обрезанная ссылка)
         if host in ('p.kfwl.lol', 'ghfast.top', 'happy-decoder.cc') and len(r.path.strip('/')) < 8:
             return False
         return True
@@ -129,8 +127,7 @@ def _sticky(url):
 def normalize_sub_url(url):
     if 'hub.mos.ru/' in url:
         url = url.replace('/-/raw/', '/raw/')
-    # p.kfwl.lol/<target> без опций отдаёт HTML-панель.
-    # Рабочий формат из проверенных подписок: /ua=happ/os=android/<target>
+    # p.kfwl.lol/<target> без опций отдаёт HTML-панель вместо подписки
     m = _KFWL_RE.match(url)
     if m:
         head, tail = m.group(1), m.group(2)
@@ -164,7 +161,6 @@ def clean_url(url):
     while url.endswith(')') and url.count(')') > url.count('('):
         url = url[:-1]
     url = url.rstrip('.,;:!?')
-    # склейки чиним только у http(s): иначе режутся легитимные vless://...path=...https://...
     if url.startswith(('http://', 'https://')):
         url = normalize_sub_url(_sticky(_split_glued_http(url)))
     return url
@@ -255,6 +251,363 @@ def messages(html_text, cutoff, cfg):
     return out, urls, min_id
 
 
+# ---------------------------------------------------------------- структурные конфиги
+
+def _qs(params):
+    return urlencode({k: str(v) for k, v in params.items() if v not in (None, '', [])})
+
+
+def _b64u(s):
+    return base64.b64encode(s.encode('utf-8')).decode('ascii').rstrip('=')
+
+
+def _walk(obj):
+    if isinstance(obj, dict):
+        yield obj
+        for v in obj.values():
+            yield from _walk(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            yield from _walk(v)
+
+
+def _strings(obj):
+    if isinstance(obj, str):
+        yield obj
+    elif isinstance(obj, dict):
+        for v in obj.values():
+            yield from _strings(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            yield from _strings(v)
+
+
+def _alpn(v):
+    if isinstance(v, (list, tuple)):
+        return ','.join(str(x) for x in v if x)
+    return str(v or '')
+
+
+def _vmess_uri(name, addr, port, uid, aid, scy, net, host, path, sec, sni, fp, alpn):
+    d = {'v': '2', 'ps': name, 'add': str(addr), 'port': str(port), 'id': str(uid),
+         'aid': str(aid or 0), 'scy': scy or 'auto', 'net': net, 'type': 'none',
+         'host': host or sni or '', 'path': path or '',
+         'tls': 'tls' if sec in ('tls', 'reality') else '', 'sni': sni or '', 'fp': fp or ''}
+    if alpn:
+        d['alpn'] = alpn
+    return 'vmess://' + _b64u(json.dumps(d, ensure_ascii=False))
+
+
+def _xray_to_uris(ob):
+    """Xray JSON: outbounds[] с protocol/settings/streamSettings."""
+    proto = str(ob.get('protocol') or '').lower()
+    if proto not in ('vless', 'vmess', 'trojan', 'shadowsocks'):
+        return []
+    settings = ob.get('settings') or {}
+    if not isinstance(settings, dict):
+        return []
+    st = ob.get('streamSettings') or {}
+    net = str(st.get('network') or 'tcp').lower()
+    if net == 'raw':
+        net = 'tcp'
+    sec = str(st.get('security') or '').lower()
+    tls = st.get('tlsSettings') or {}
+    real = st.get('realitySettings') or {}
+    ws = st.get('wsSettings') or {}
+    grpc = st.get('grpcSettings') or {}
+    hu = st.get('httpupgradeSettings') or {}
+    xh = st.get('xhttpSettings') or {}
+    name = str(ob.get('tag') or ob.get('remarks') or '')
+    sni = real.get('serverName') or tls.get('serverName') or ''
+    fp = real.get('fingerprint') or tls.get('fingerprint') or ''
+    alpn = _alpn(tls.get('alpn'))
+    host = path = ''
+    if net == 'ws':
+        path = ws.get('path') or ''
+        host = (ws.get('headers') or {}).get('Host') or ''
+    elif net == 'httpupgrade':
+        path = hu.get('path') or ''
+        host = hu.get('host') or (hu.get('headers') or {}).get('Host') or ''
+    elif net == 'xhttp':
+        path = xh.get('path') or ''
+        host = xh.get('host') or ''
+
+    params = {'type': net}
+    if sec in ('tls', 'reality'):
+        params['security'] = sec
+        if sni:
+            params['sni'] = sni
+        if fp:
+            params['fp'] = fp
+        if alpn:
+            params['alpn'] = alpn
+        if tls.get('allowInsecure'):
+            params['allowInsecure'] = '1'
+    if sec == 'reality':
+        if real.get('publicKey'):
+            params['pbk'] = real['publicKey']
+        if real.get('shortId'):
+            params['sid'] = real['shortId']
+    if path:
+        params['path'] = path
+    if host:
+        params['host'] = host
+    if net == 'grpc':
+        if grpc.get('serviceName'):
+            params['serviceName'] = grpc['serviceName']
+        if grpc.get('multiMode'):
+            params['mode'] = 'multi'
+    elif net == 'xhttp' and xh.get('mode'):
+        params['mode'] = xh['mode']
+
+    out = []
+    if proto in ('vless', 'vmess'):
+        for v in settings.get('vnext') or []:
+            addr, port = v.get('address'), v.get('port')
+            if not addr or not port:
+                continue
+            for u in v.get('users') or []:
+                uid = u.get('id')
+                if not uid:
+                    continue
+                if proto == 'vless':
+                    pr = dict(params, encryption='none')
+                    if u.get('flow'):
+                        pr['flow'] = u['flow']
+                    out.append(f'vless://{uid}@{addr}:{port}?{_qs(pr)}#{quote(name)}')
+                else:
+                    out.append(_vmess_uri(name, addr, port, uid, u.get('alterId'),
+                                          u.get('security'), net, host, path, sec, sni, fp, alpn))
+    elif proto == 'trojan':
+        for s in settings.get('servers') or []:
+            addr, port, pwd = s.get('address'), s.get('port'), s.get('password')
+            if not (addr and port and pwd):
+                continue
+            pr = dict(params)
+            pr.setdefault('security', 'tls')
+            out.append(f"trojan://{quote(str(pwd), safe='')}@{addr}:{port}?{_qs(pr)}#{quote(name)}")
+    elif proto == 'shadowsocks':
+        for s in settings.get('servers') or []:
+            addr, port = s.get('address'), s.get('port')
+            method, pwd = s.get('method'), s.get('password')
+            if not (addr and port and method and pwd):
+                continue
+            out.append(f'ss://{_b64u(f"{method}:{pwd}")}@{addr}:{port}#{quote(name)}')
+    return out
+
+
+def _singbox_to_uris(ob):
+    """sing-box JSON: outbounds[] с type/server/server_port/tls/transport."""
+    t = str(ob.get('type') or '').lower()
+    addr, port = ob.get('server'), ob.get('server_port')
+    if not (t and addr and port) or 'settings' in ob:
+        return []
+    if t in ('direct', 'block', 'dns', 'selector', 'urltest', 'hysteria'):
+        return []
+    tls = ob.get('tls') or {}
+    tr = ob.get('transport') or {}
+    net = str(tr.get('type') or 'tcp').lower()
+    if net == 'raw':
+        net = 'tcp'
+    real = tls.get('reality') or {}
+    sec = 'reality' if real.get('enabled') else ('tls' if tls.get('enabled') else '')
+    sni = tls.get('server_name') or ''
+    fp = (tls.get('utls') or {}).get('fingerprint') or ''
+    alpn = _alpn(tls.get('alpn'))
+    host = (tr.get('headers') or {}).get('Host') or ''
+    path = tr.get('path') or ''
+    name = str(ob.get('tag') or '')
+
+    params = {'type': net}
+    if sec:
+        params['security'] = sec
+        if sni:
+            params['sni'] = sni
+        if fp:
+            params['fp'] = fp
+        if alpn:
+            params['alpn'] = alpn
+        if tls.get('insecure'):
+            params['allowInsecure'] = '1'
+    if sec == 'reality':
+        if real.get('public_key'):
+            params['pbk'] = real['public_key']
+        if real.get('short_id'):
+            params['sid'] = real['short_id']
+    if path:
+        params['path'] = path
+    if host:
+        params['host'] = host
+    if net == 'grpc' and tr.get('service_name'):
+        params['serviceName'] = tr['service_name']
+
+    if t == 'vless' and ob.get('uuid'):
+        pr = dict(params, encryption='none')
+        if ob.get('flow'):
+            pr['flow'] = ob['flow']
+        return [f"vless://{ob['uuid']}@{addr}:{port}?{_qs(pr)}#{quote(name)}"]
+    if t == 'vmess' and ob.get('uuid'):
+        return [_vmess_uri(name, addr, port, ob['uuid'], ob.get('alter_id'),
+                           ob.get('security'), net, host, path, sec, sni, fp, alpn)]
+    if t == 'trojan' and ob.get('password'):
+        pr = dict(params)
+        pr.setdefault('security', 'tls')
+        return [f"trojan://{quote(str(ob['password']), safe='')}@{addr}:{port}?{_qs(pr)}#{quote(name)}"]
+    if t == 'shadowsocks' and ob.get('password'):
+        return [f"ss://{_b64u(f'{ob.get(chr(109) + chr(101) + chr(116) + chr(104) + chr(111) + chr(100))}:{ob[chr(112) + chr(97) + chr(115) + chr(115) + chr(119) + chr(111) + chr(114) + chr(100)]}')}@{addr}:{port}#{quote(name)}"]
+    if t == 'hysteria2' and ob.get('password'):
+        pr = {'sni': sni}
+        if tls.get('insecure'):
+            pr['insecure'] = '1'
+        obfs = ob.get('obfs') or {}
+        if obfs.get('type'):
+            pr['obfs'] = obfs['type']
+            pr['obfs-password'] = obfs.get('password') or ''
+        return [f"hysteria2://{quote(str(ob['password']), safe='')}@{addr}:{port}?{_qs(pr)}#{quote(name)}"]
+    if t == 'tuic' and ob.get('uuid'):
+        pr = {'sni': sni, 'congestion_control': ob.get('congestion_control') or 'bbr',
+              'udp_relay_mode': ob.get('udp_relay_mode') or 'native'}
+        if tls.get('insecure'):
+            pr['allow_insecure'] = '1'
+        if alpn:
+            pr['alpn'] = alpn
+        pwd = ob.get('password') or ''
+        return [f"tuic://{ob['uuid']}:{quote(str(pwd), safe='')}@{addr}:{port}?{_qs(pr)}#{quote(name)}"]
+    return []
+
+
+def _clash_to_uris(p):
+    """Clash YAML/JSON: proxies[] с type/server/port."""
+    t = str(p.get('type') or '').lower()
+    addr, port = p.get('server'), p.get('port')
+    if not (t and addr and port) or 'protocol' in p:
+        return []
+    name = str(p.get('name') or '')
+    net = str(p.get('network') or 'tcp').lower()
+    if net == 'raw':
+        net = 'tcp'
+    ro = p.get('reality-opts') or {}
+    sec = 'reality' if ro else ('tls' if p.get('tls') else '')
+    sni = p.get('servername') or p.get('server-name') or p.get('sni') or ''
+    fp = p.get('client-fingerprint') or ''
+    alpn = _alpn(p.get('alpn'))
+    ws = p.get('ws-opts') or {}
+    grpc = p.get('grpc-opts') or {}
+    hu = p.get('http-upgrade-opts') or {}
+    xh = p.get('xhttp-opts') or {}
+    host = path = ''
+    if net == 'ws':
+        path = ws.get('path') or ''
+        host = (ws.get('headers') or {}).get('Host') or ''
+    elif net == 'httpupgrade':
+        path = hu.get('path') or ''
+        host = (hu.get('headers') or {}).get('Host') or ''
+    elif net == 'xhttp':
+        path = xh.get('path') or ''
+        host = xh.get('host') or ''
+
+    params = {'type': net}
+    if sec:
+        params['security'] = sec
+        if sni:
+            params['sni'] = sni
+        if fp:
+            params['fp'] = fp
+        if alpn:
+            params['alpn'] = alpn
+        if p.get('skip-cert-verify'):
+            params['allowInsecure'] = '1'
+    if ro:
+        if ro.get('public-key'):
+            params['pbk'] = ro['public-key']
+        if ro.get('short-id'):
+            params['sid'] = ro['short-id']
+    if path:
+        params['path'] = path
+    if host:
+        params['host'] = host
+    if net == 'grpc' and grpc.get('grpc-service-name'):
+        params['serviceName'] = grpc['grpc-service-name']
+        if grpc.get('grpc-mode') == 'multi':
+            params['mode'] = 'multi'
+
+    if t == 'vless' and p.get('uuid'):
+        pr = dict(params, encryption='none')
+        if p.get('flow'):
+            pr['flow'] = p['flow']
+        return [f"vless://{p['uuid']}@{addr}:{port}?{_qs(pr)}#{quote(name)}"]
+    if t == 'vmess' and p.get('uuid'):
+        return [_vmess_uri(name, addr, port, p['uuid'], p.get('alterId'),
+                           p.get('cipher'), net, host, path, sec, sni, fp, alpn)]
+    if t == 'trojan' and p.get('password'):
+        pr = dict(params)
+        pr.setdefault('security', 'tls')
+        return [f"trojan://{quote(str(p['password']), safe='')}@{addr}:{port}?{_qs(pr)}#{quote(name)}"]
+    if t == 'ss' and p.get('password') and p.get('cipher'):
+        return [f"ss://{_b64u(f'{p[chr(99) + chr(105) + chr(112) + chr(104) + chr(101) + chr(114)]}:{p[chr(112) + chr(97) + chr(115) + chr(115) + chr(119) + chr(111) + chr(114) + chr(100)]}')}@{addr}:{port}#{quote(name)}"]
+    if t in ('hysteria2', 'hy2') and p.get('password'):
+        pr = {'sni': sni}
+        if p.get('skip-cert-verify'):
+            pr['insecure'] = '1'
+        if p.get('obfs'):
+            pr['obfs'] = p['obfs']
+            pr['obfs-password'] = p.get('obfs-password') or ''
+        return [f"hysteria2://{quote(str(p['password']), safe='')}@{addr}:{port}?{_qs(pr)}#{quote(name)}"]
+    if t == 'tuic' and p.get('uuid'):
+        pr = {'sni': sni, 'congestion_control': p.get('congestion-controller') or 'bbr',
+              'udp_relay_mode': p.get('udp-relay-mode') or 'native'}
+        if p.get('skip-cert-verify'):
+            pr['allow_insecure'] = '1'
+        if alpn:
+            pr['alpn'] = alpn
+        pwd = p.get('password') or ''
+        return [f"tuic://{p['uuid']}:{quote(str(pwd), safe='')}@{addr}:{port}?{_qs(pr)}#{quote(name)}"]
+    return []
+
+
+def _from_structured(body):
+    """Xray / Clash / sing-box конфиги -> список URI."""
+    s = body.lstrip()
+    data = None
+    if s.startswith('{') or s.startswith('['):
+        try:
+            data = json.loads(s)
+        except Exception:
+            data = None
+    if data is None and ('proxies:' in body or 'outbounds:' in body):
+        try:
+            data = yaml.safe_load(body)
+        except Exception:
+            data = None
+    if data is None:
+        return []
+
+    out = []
+    # 1) готовые URI и base64-блоки внутри строк
+    for v in _strings(data):
+        if '://' in v and PROXY_RE.search(v):
+            out.extend(clean_url(m.group(0)) for m in PROXY_RE.finditer(v))
+        elif len(v) > 100 and _B64_FULL.match(v):
+            dec = decode_base64(v)
+            if dec:
+                out.extend(clean_url(m.group(0)) for m in PROXY_RE.finditer(dec))
+    # 2) конвертация описаний нод
+    for ob in _walk(data):
+        for fn in (_xray_to_uris, _singbox_to_uris, _clash_to_uris):
+            try:
+                out.extend(fn(ob))
+            except Exception:
+                pass
+            if out:
+                break
+    seen, uniq = set(), []
+    for u in out:
+        if u and u not in seen:
+            seen.add(u)
+            uniq.append(u)
+    return uniq
+
+
 def _from_html(body):
     """Ключи из HTML-панели: атрибуты кнопок + base64-блоки."""
     raw = html_mod.unescape(body)
@@ -281,6 +634,10 @@ def from_subscription(text, cfg):
     decoded = decode_base64(text)
     body = decoded if decoded and len(decoded) > 50 else text
     found = [clean_url(p) for p in PROXY_RE.findall(body)]
+    if not found:
+        found = _from_structured(body)
+        if found:
+            log.debug(f'🧩 ключи из структурного конфига (Xray/Clash/sing-box): {len(found)}')
     if not found and _HTML_HINT.search(body):
         found = _from_html(body)
         if found:
