@@ -2,9 +2,11 @@
 
 Ядро запускается ПАЧКАМИ. Упавшая пачка дробится пополам, а при ошибке
 REALITY short ID — повторяется без short-id (он опционален в REALITY).
+Битые ss-2022 ключи и непригодные конфиги отсеиваются ДО запуска ядра.
 Логи ядра (stdout+stderr) пишутся в файл: mihomo печатает ошибки в stdout.
 """
 import asyncio
+import base64
 import gzip
 import os
 import platform
@@ -32,7 +34,15 @@ _MIHOMO_SS_CIPHERS = {
     '2022-blake3-aes-128-gcm', '2022-blake3-aes-256-gcm',
     '2022-blake3-chacha20-poly1305',
 }
+# Для 2022-blake3 PSK обязан быть base64 ровно этой длины в байтах,
+# иначе mihomo падает на разборе конфига и уносит всю пачку.
+_SS2022_LEN = {
+    '2022-blake3-aes-128-gcm': 16,
+    '2022-blake3-aes-256-gcm': 32,
+    '2022-blake3-chacha20-poly1305': 32,
+}
 _SID_STRICT = re.compile(r'^(?:[0-9a-f]{2}){1,8}$')
+_CORE_MAX_AGE = 7 * 86400
 
 
 async def l0_tcp(endpoints, cfg, cache, sem):
@@ -113,14 +123,21 @@ def _binary_ok(path):
 
 
 async def _ensure_core(cfg, session):
-    """Скачивает mihomo. Возвращает путь или None (мягкий откат на L1)."""
+    """Скачивает mihomo. Возвращает путь или None (мягкий откат на L1).
+    Бинарник старше недели перекачиваем: старая версия отвергает конфиги,
+    которые новая принимает, а кэш тянет его из прогона в прогон вечно.
+    """
     bindir = Path(cfg.cache.dir) / 'bin'
     bindir.mkdir(parents=True, exist_ok=True)
     binary = bindir / 'mihomo'
     if binary.exists():
-        if os.access(binary, os.X_OK) and _binary_ok(binary):
+        try:
+            age = time.time() - binary.stat().st_mtime
+        except OSError:
+            age = _CORE_MAX_AGE + 1
+        if age < _CORE_MAX_AGE and os.access(binary, os.X_OK) and _binary_ok(binary):
             return str(binary)
-        log.debug('⚠️ L2: сохранённый mihomo не запускается — перекачиваем')
+        log.debug('⚠️ L2: mihomo устарел или не запускается — перекачиваем')
         try:
             binary.unlink()
         except OSError:
@@ -160,6 +177,36 @@ async def _ensure_core(cfg, session):
         return None
 
 
+def _b64_bytes(s):
+    s = str(s or '').strip().replace('-', '+').replace('_', '/')
+    pad = len(s) % 4
+    if pad:
+        s += '=' * (4 - pad)
+    try:
+        return base64.b64decode(s, validate=True)
+    except Exception:
+        return None
+
+
+def _ss_key_ok(cipher, password):
+    """2022-blake3 требует PSK точной длины; иначе ядро падает на разборе."""
+    c = str(cipher or '').lower()
+    if c not in _MIHOMO_SS_CIPHERS:
+        return False
+    need = _SS2022_LEN.get(c)
+    if not need:
+        return bool(password)
+    # EIH-формат: "server_psk:user_psk" — обе части должны быть валидны
+    parts = str(password or '').split(':')
+    if not parts or len(parts) > 2:
+        return False
+    for part in parts:
+        raw = _b64_bytes(part)
+        if raw is None or len(raw) != need:
+            return False
+    return True
+
+
 def _core_ok(p):
     """Не отправляем в ядро конфиги, на которых оно падает при разборе."""
     t = p.get('type')
@@ -171,7 +218,7 @@ def _core_ok(p):
         return False
     if t in ('ss', 'trojan', 'hysteria2', 'tuic') and not p.get('password'):
         return False
-    if t == 'ss' and str(p.get('cipher', '')).lower() not in _MIHOMO_SS_CIPHERS:
+    if t == 'ss' and not _ss_key_ok(p.get('cipher'), p.get('password')):
         return False
     ro = p.get('reality-opts')
     if ro is not None and not ro.get('public-key'):
