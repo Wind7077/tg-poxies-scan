@@ -37,6 +37,10 @@ ISSUE_URLS = set()
 _AMP_RE = re.compile(r'&(?:amp|#0*38|#x0*26);', re.I)
 _TRACK_KEYS = {'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
                'fbclid', 'gclid', 'yclid', 'ysclid', 'ref_type', 'erid'}
+# Антикэш-параметры: один и тот же файл приходил как ?ts=1792368845,
+# ?ts=1792459069, ... — 6 копий одного источника. Срезаем ТОЛЬКО если
+# значение числовое, чтобы не сломать подписки, где ts — часть токена.
+_CACHE_KEYS = {'ts', '_', 'cb', 'nocache', 'rand', 'timestamp', 'cachebuster'}
 _STICKY = ['Gemini', 'Gemini:', 'Claude', 'ChatGPT']
 TME_RE = re.compile(r'https?://(?:t\.me|telegram\.me)/(?:s/)?([a-zA-Z0-9_]+)(?:/(\d+))?')
 
@@ -126,6 +130,13 @@ def _sticky(url):
     return url.rstrip('/')
 
 
+def _drop_param(k, v):
+    kl = k.lower()
+    if kl in _TRACK_KEYS:
+        return True
+    return kl in _CACHE_KEYS and str(v).isdigit()
+
+
 def normalize_sub_url(url):
     if 'hub.mos.ru/' in url:
         url = url.replace('/-/raw/', '/raw/')
@@ -140,8 +151,8 @@ def normalize_sub_url(url):
         p = urlsplit(url)
         if p.query:
             pairs = parse_qsl(p.query, keep_blank_values=True)
-            if any(k.lower() in _TRACK_KEYS for k, _ in pairs):
-                kept = [(k, v) for k, v in pairs if k.lower() not in _TRACK_KEYS]
+            if any(_drop_param(k, v) for k, v in pairs):
+                kept = [(k, v) for k, v in pairs if not _drop_param(k, v)]
                 url = urlunsplit((p.scheme, p.netloc, p.path, urlencode(kept), p.fragment))
     except Exception:
         pass
