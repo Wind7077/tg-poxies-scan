@@ -3,10 +3,17 @@
 Читает proxy.txt (+ proxy-best.txt в приоритете), собирает полный конфиг
 с fakedns, DoH, фрагментацией, observatory и balancer'ом leastPing.
 
+DNS: NextDNS и Яндекс.DoH первыми в списке, дальше резерв. По умолчанию
+запросы идут параллельно — побеждает быстрейший. Флаг --sequential-dns
+включает строгий приоритет по порядку (медленнее, но NextDNS определяющий).
+
 Запуск:
-    python make_streisand.py                      # proxy.txt -> proxy-streisand.json
-    python make_streisand.py --max 300 --tcp      # старые имена network/settings
-    python make_streisand.py --mode all_proxy     # весь трафик через туннель
+    python make_streisand.py                          # NextDNS ac3755 + Яндекс
+    python make_streisand.py --nextdns abc123         # свой профиль NextDNS
+    python make_streisand.py --nextdns ''             # без NextDNS
+    python make_streisand.py --sequential-dns         # строгий приоритет DNS
+    python make_streisand.py --max 300 --tcp          # старые имена network/settings
+    python make_streisand.py --mode all_proxy         # весь трафик через туннель
     python make_streisand.py --input proxy-all.txt --out all-streisand.json
 """
 import argparse
@@ -19,8 +26,15 @@ from scanner.parse import parse, sanitize, validate
 # Xray не поддерживает эти протоколы — в экспорт не берём
 SUPPORTED = {'vless', 'vmess', 'trojan', 'ss'}
 
+NEXTDNS_IPS = ['45.90.28.73', '45.90.30.73']
+YANDEX_IPS = ['77.88.8.8', '77.88.8.1']
+YANDEX_DOH = 'https://common.dot.dns.yandex.net/dns-query'
+
+# Бутстрап-IP DoH-хостов: без них DoH не сможет сам себя отрезолвить
 DNS_HOSTS = {
     'localhost': '127.0.0.1',
+    'dns.nextdns.io': NEXTDNS_IPS,
+    'common.dot.dns.yandex.net': YANDEX_IPS,
     'dns.google': ['8.8.8.8', '8.8.4.4'],
     'cloudflare-dns.com': ['1.1.1.1', '1.0.0.1'],
     'dns.quad9.net': ['9.9.9.9', '149.112.112.112'],
@@ -32,9 +46,17 @@ DNS_HOSTS = {
     'dns.hostux.net': ['46.226.108.173', '46.226.109.82'],
     'blank.dnsforge.de': ['138.199.149.249', '78.47.71.194'],
 }
-DOH_URLS = [
-    'https://dns.google/dns-query',
+
+# Порядок важен при --sequential-dns; в параллельном режиме — просто список
+BOOTSTRAP_IPS = (
+    NEXTDNS_IPS + YANDEX_IPS +
+    ['1.1.1.1', '8.8.8.8', '9.9.9.9', '94.140.14.14', '208.67.222.222']
+)
+
+# Общие резолверы: NextDNS и Яндекс первыми, дальше резерв
+RESERVE_DOH = [
     'https://cloudflare-dns.com/dns-query',
+    'https://dns.google/dns-query',
     'https://dns.quad9.net/dns-query',
     'https://dns.adguard-dns.com/dns-query',
     'https://freedns.controld.com/p0',
@@ -43,10 +65,6 @@ DOH_URLS = [
     'https://doh.libredns.gr/dns-query',
     'https://dns.hostux.net/dns-query',
     'https://blank.dnsforge.de/dns-query',
-]
-BOOTSTRAP_IPS = [
-    '8.8.8.8', '8.8.4.4', '1.1.1.1', '1.0.0.1',
-    '9.9.9.9', '94.140.14.14', '76.76.2.0', '208.67.222.222',
 ]
 
 
@@ -186,18 +204,28 @@ def outbound(p, tag, args):
             'streamSettings': _stream(p, args)}
 
 
-def build_dns():
-    full = [f'full:{h}' for h in DNS_HOSTS if h != 'localhost']
+def build_dns(args):
+    hosts = dict(DNS_HOSTS)
+    if not args.nextdns:
+        hosts.pop('dns.nextdns.io', None)
+    full = [f'full:{h}' for h in hosts if h != 'localhost']
+
     servers = ['fakedns']
+    #平原-резолверы только для имён самих DoH-хостов (skipFallback)
     for ip in BOOTSTRAP_IPS:
         servers.append({'address': f'tcp+local://{ip}:53', 'domains': full,
                         'skipFallback': True, 'queryStrategy': 'UseIPv4',
                         'timeoutMs': 4000})
-    servers.extend(DOH_URLS)
-    return {'hosts': DNS_HOSTS, 'servers': servers, 'queryStrategy': 'UseIPv4',
+    # общие резолверы
+    if args.nextdns:
+        servers.append(f'https://dns.nextdns.io/{args.nextdns}')
+    servers.append(YANDEX_DOH)
+    servers.extend(RESERVE_DOH)
+
+    return {'hosts': hosts, 'servers': servers, 'queryStrategy': 'UseIPv4',
             'disableCache': False, 'serveStale': True, 'useSystemHosts': True,
-            'enableParallelQuery': True, 'tag': 'dns-remote',
-            'disableFallbackIfMatch': True}
+            'enableParallelQuery': bool(args.parallel_dns),
+            'tag': 'dns-remote', 'disableFallbackIfMatch': True}
 
 
 def build_routing(prefix, first_tag, mode):
@@ -251,7 +279,7 @@ def build(proxies, args):
              'metadataOnly': False}
     return {
         'log': {'loglevel': 'warning'},
-        'dns': build_dns(),
+        'dns': build_dns(args),
         'fakedns': [{'ipPool': '198.18.0.0/16', 'poolSize': 65535}],
         'inbounds': [
             {'tag': 'socks-in', 'listen': '127.0.0.1', 'port': 10808,
@@ -280,6 +308,12 @@ def main():
     ap.add_argument('--max', type=int, default=200, help='лимит нод (0 = без лимита)')
     ap.add_argument('--mode', choices=['ru_direct', 'all_proxy'], default='ru_direct')
     ap.add_argument('--prefix', default='wl-node-')
+    ap.add_argument('--nextdns', default='ac3755',
+                    help='ID профиля NextDNS (пустая строка — не использовать)')
+    ap.add_argument('--parallel-dns', dest='parallel_dns', action='store_true',
+                    default=True, help='DNS параллельно, побеждает быстрейший (по умолчанию)')
+    ap.add_argument('--sequential-dns', dest='parallel_dns', action='store_false',
+                    help='строгий приоритет по порядку: NextDNS → Яндекс → резерв')
     ap.add_argument('--no-fragment', dest='fragment', action='store_false')
     ap.add_argument('--tcp', action='store_true',
                     help='старые имена network=tcp/tcpSettings вместо raw/rawSettings')
@@ -300,9 +334,12 @@ def main():
     for p in proxies:
         types[p['type']] = types.get(p['type'], 0) + 1
     kb = Path(args.out).stat().st_size / 1024
+    dns_order = [s for s in cfg['dns']['servers'] if isinstance(s, str) and s != 'fakedns']
     print(f'✅ {args.out}: {len(proxies)} нод {types}, {kb:.0f} КБ, '
           f'режим={args.mode}, фрагмент={"вкл" if args.fragment else "выкл"}, '
           f'network={"tcp" if args.tcp else "raw"}')
+    print(f'   DNS: {"параллельно" if args.parallel_dns else "по приоритету"} → '
+          + ' → '.join(dns_order[:3]) + ' …')
     return 0
 
 
