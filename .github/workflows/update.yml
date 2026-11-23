@@ -10,7 +10,6 @@ on:
       - 'tests/**'
       - 'config.yaml'
       - 'main.py'
-      - 'make_streisand.py'
       - 'conftest.py'
       - 'pytest.ini'
       - 'requirements.txt'
@@ -69,10 +68,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python main.py
 
-      - name: Build Streisand export
-        if: always()
-        run: python make_streisand.py --max 200
-
       - name: Commit and push
         if: always()
         run: |
@@ -82,7 +77,6 @@ jobs:
 
           FILES="proxy.txt proxy.yaml proxy-all.txt proxy-all.yaml \
                  proxy-best.txt proxy-best.yaml proxy-base64.txt \
-                 proxy-streisand.json \
                  issue.txt stats.json sources-live.txt"
 
           # Сохраняем ТОЛЬКО реально изменённые артефакты вне репозитория.
